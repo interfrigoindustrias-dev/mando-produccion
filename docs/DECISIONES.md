@@ -158,6 +158,18 @@ worker y todas las cachés y vuelve a descargar la aplicación.
 **Lección:** en una herramienta de producción, ver el dato correcto pesa más que
 ahorrar milisegundos de carga.
 
+**Y aun así volvió a pasar dos veces más.** Red primero no basta: el service
+worker antiguo sigue mandando hasta que se reemplaza, y el navegador tiene su
+propia caché. Por eso `deploy.sh` sella ahora el mismo identificador en tres
+sitios —`sw.js`, `js/modulo.js` y `version.json`— y la aplicación compara al
+arrancar el sello que trae su JS con el de `version.json`, que se pide siempre
+fresco. Si no coinciden, la copia guardada está caducada: se descarta y se
+recarga, **una sola vez por sesión** para no entrar en bucle.
+
+Diagnosticar esto cuesta caro: el código publicado es correcto, las
+comprobaciones pasan, y aun así el usuario ve el fallo. Ante un «no funciona»
+que no reproduces, comprueba primero **qué versión está ejecutando su navegador**.
+
 ## 15. La configuración no puede vivir solo en cada navegador
 
 El Client ID y el ID de la hoja se guardaban únicamente en `localStorage`, que es

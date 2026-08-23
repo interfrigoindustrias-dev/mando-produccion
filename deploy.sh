@@ -48,6 +48,12 @@ sed "s/^const VERSION = .*/const VERSION = \"${SELLO}\";/" "$SRC/sw.js" > "$TMP_
 "${SCP[@]}" "$TMP_SW" "${USUARIO}@${HOST}:${DESTINO}/sw.js"
 rm -f "$TMP_SW"
 
+
+echo "  · service worker sellado como ${SELLO}"
+"${SCP[@]}" "$SRC"/css/*.css   "${USUARIO}@${HOST}:${DESTINO}/css/"
+"${SCP[@]}" "$SRC"/js/*.js     "${USUARIO}@${HOST}:${DESTINO}/js/"
+"${SCP[@]}" "$SRC"/img/*       "${USUARIO}@${HOST}:${DESTINO}/img/"
+
 # El mismo sello dentro del JS, y en un archivo que se pide siempre fresco.
 # Si no coinciden, el equipo esta ejecutando codigo viejo y se actualiza solo.
 TMP_MOD="$(mktemp)"
@@ -60,10 +66,6 @@ printf '{"build":"%s"}
 ' "${SELLO}" > "$TMP_VER"
 "${SCP[@]}" "$TMP_VER" "${USUARIO}@${HOST}:${DESTINO}/version.json"
 rm -f "$TMP_VER"
-echo "  · service worker sellado como ${SELLO}"
-"${SCP[@]}" "$SRC"/css/*.css   "${USUARIO}@${HOST}:${DESTINO}/css/"
-"${SCP[@]}" "$SRC"/js/*.js     "${USUARIO}@${HOST}:${DESTINO}/js/"
-"${SCP[@]}" "$SRC"/img/*       "${USUARIO}@${HOST}:${DESTINO}/img/"
 
 # Redirección desde la ruta antigua, para los enlaces ya repartidos
 "${SCP[@]}" "$AQUI/redirect.html" "${USUARIO}@${HOST}:${REDIR}"
