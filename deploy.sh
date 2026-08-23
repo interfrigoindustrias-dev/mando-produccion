@@ -47,6 +47,19 @@ TMP_SW="$(mktemp)"
 sed "s/^const VERSION = .*/const VERSION = \"${SELLO}\";/" "$SRC/sw.js" > "$TMP_SW"
 "${SCP[@]}" "$TMP_SW" "${USUARIO}@${HOST}:${DESTINO}/sw.js"
 rm -f "$TMP_SW"
+
+# El mismo sello dentro del JS, y en un archivo que se pide siempre fresco.
+# Si no coinciden, el equipo esta ejecutando codigo viejo y se actualiza solo.
+TMP_MOD="$(mktemp)"
+sed "s/^const BUILD = .*/const BUILD = \"${SELLO}\";/" "$SRC/js/modulo.js" > "$TMP_MOD"
+"${SCP[@]}" "$TMP_MOD" "${USUARIO}@${HOST}:${DESTINO}/js/modulo.js"
+rm -f "$TMP_MOD"
+
+TMP_VER="$(mktemp)"
+printf '{"build":"%s"}
+' "${SELLO}" > "$TMP_VER"
+"${SCP[@]}" "$TMP_VER" "${USUARIO}@${HOST}:${DESTINO}/version.json"
+rm -f "$TMP_VER"
 echo "  · service worker sellado como ${SELLO}"
 "${SCP[@]}" "$SRC"/css/*.css   "${USUARIO}@${HOST}:${DESTINO}/css/"
 "${SCP[@]}" "$SRC"/js/*.js     "${USUARIO}@${HOST}:${DESTINO}/js/"

@@ -124,3 +124,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const b = document.getElementById("c-actualizar");
   if(b) b.onclick = forzarActualizacion;
 });
+
+/* ---------- detección de copia caducada ----------
+   El armazón puede quedarse guardado por el service worker o por el propio
+   navegador. Sin esto, una corrección publicada podía tardar en llegar o no
+   llegar nunca, y desde fuera parecía que el arreglo no funcionaba. */
+async function comprobarVersion(){
+  if(location.protocol === "file:") return;
+  try{
+    const r = await fetch("version.json?t=" + Date.now(), {cache:"no-store"});
+    if(!r.ok) return;
+    const {build} = await r.json();
+    if(!build || build === BUILD) return;
+
+    // Una sola vez por sesión: si tras recargar sigue sin coincidir, algo más
+    // pasa y no tiene sentido entrar en un bucle de recargas.
+    if(sessionStorage.getItem("puertas.curado") === build) {
+      console.warn("version desincronizada:", BUILD, "->", build);
+      return;
+    }
+    sessionStorage.setItem("puertas.curado", build);
+    console.warn("copia caducada (" + BUILD + " -> " + build + "), actualizando");
+    await forzarActualizacion();
+  }catch(e){ /* sin red: se sigue con lo que haya */ }
+}
+window.addEventListener("load", ()=>{ setTimeout(comprobarVersion, 800); });

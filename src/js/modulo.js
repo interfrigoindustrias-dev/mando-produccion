@@ -10,6 +10,12 @@
    archivo; si no dice nada, se asume "puertas". */
 "use strict";
 
+/* Sello de la publicación. deploy.sh lo reescribe al subir. Sirve para detectar
+   que el navegador está ejecutando archivos viejos: si este valor no coincide
+   con el de version.json (que se pide siempre fresco), la copia guardada está
+   caducada y se descarta sola. */
+const BUILD = "dev";
+
 const MODULO_ID = (typeof window.MODULO === "string" && window.MODULO) || "puertas";
 
 /* Identidad visual de cada módulo. El color es lo primero que ve el operario:

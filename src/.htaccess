@@ -37,6 +37,12 @@ AddType image/x-icon              .ico
   <FilesMatch "sw\.js$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
+
+  # El sello de version se pide siempre fresco: es lo que permite detectar que
+  # un equipo esta ejecutando codigo viejo.
+  <FilesMatch "version\.json$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
 </IfModule>
 
 # --- Compresión -----------------------------------------------------------
