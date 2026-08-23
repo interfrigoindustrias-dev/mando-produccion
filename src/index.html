@@ -336,6 +336,7 @@
 <!-- ============================== MODAL CONFIG ============================== -->
 <div class="ov hide" id="ov-cfg"><div class="mod" style="max-width:560px">
   <header style="display:flex;align-items:center"><h1 class="grow" style="margin:0;font-size:17px">Configuración</h1><button class="x" data-close>×</button></header>
+  <div id="c-origen" class="aviso"></div>
   <label class="f" style="margin-bottom:12px"><span class="req">Google OAuth Client ID</span>
     <input class="inp" id="c-cid" placeholder="1234567890-abc....apps.googleusercontent.com"></label>
   <label class="f" style="margin-bottom:12px"><span class="req">ID de la Google Sheet</span>
@@ -361,6 +362,7 @@
     autorizado en el Client ID, y la hoja compartida con permiso de edición a cada usuario.
   </p>
   <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
+    <button class="btn" id="c-empresa" title="Descarta lo guardado en este equipo y usa la configuración común">⟲ Usar la de la empresa</button>
     <button class="btn" id="c-enlace" title="Copia un enlace que deja configurado cualquier celular o equipo con solo abrirlo">🔗 Enlace para otros equipos</button>
     <button class="btn" id="c-actualizar" title="Descarta la copia guardada y vuelve a descargar la aplicación">↻ Forzar actualización</button>
     <div class="grow"></div>

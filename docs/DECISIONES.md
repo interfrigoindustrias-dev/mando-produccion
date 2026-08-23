@@ -165,10 +165,15 @@ propio de cada dispositivo. Decisión razonable al principio —el mismo archivo
 servía en cualquier dominio sin editarlo— y molesta después: cada celular que
 entraba pedía configurarse.
 
-**Solución en dos capas:** `config-app.js` viaja con la instalación y sirve de
-valor por defecto para todos; y **⚙ › Enlace para otros equipos** genera un
-enlace que configura cualquier dispositivo con solo abrirlo. Lo guardado en el
-navegador sigue teniendo prioridad, por si hay que apuntar a otra hoja.
+**Solución en dos capas:** `config-app.js` viaja con la instalación y **manda
+sobre lo guardado en cada navegador**; y **⚙ › Enlace para otros equipos** genera
+un enlace que configura cualquier dispositivo con solo abrirlo.
+
+La prioridad iba al revés en la primera versión, y era un error serio: un equipo
+con datos antiguos seguía apuntando a la hoja anterior **sin que nadie lo notara**.
+Cambiar de hoja a mano sigue siendo posible, pero queda marcado como `manual` —
+una decisión explícita, no un resto olvidado— y el panel de configuración avisa
+de que ese equipo se ha desviado, con un botón para volver a lo común.
 
 El enlace lleva los datos en base64. No son secretos: sin la hoja compartida y
 sin el origen autorizado en Google, no dan acceso a nada.

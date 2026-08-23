@@ -16,12 +16,25 @@ function parseSheetId(s){
 }
 const looksLikeId = s => /^[a-zA-Z0-9-_]{20,}$/.test(s);
 
+/* Qué identifica a la instalación. Estos tres campos los fija la empresa. */
+const CAMPOS_EMPRESA = ["clientId","sheetId","tab","dominio"];
+
 function loadCfg(){
-  // 1) Lo que trae la instalación (config-app.js), si existe: así ningún equipo
-  //    ni celular tiene que configurar nada la primera vez.
-  if(window.CONFIG_SERVIDOR) Object.assign(CFG, window.CONFIG_SERVIDOR);
-  // 2) Lo guardado en este navegador manda sobre lo anterior.
-  try{ Object.assign(CFG, JSON.parse(localStorage.getItem(CFG_KEY)||"{}")); }catch(e){}
+  // 1) Preferencias del equipo: tema, refresco, formato de fecha, encabezado…
+  let guardado = {};
+  try{ guardado = JSON.parse(localStorage.getItem(CFG_KEY)||"{}"); }catch(e){}
+  Object.assign(CFG, guardado);
+
+  // 2) La configuración de la empresa MANDA sobre lo guardado en el navegador.
+  //    Antes era al revés, y un equipo con datos viejos seguía apuntando a la
+  //    hoja anterior sin que nadie se diera cuenta. Solo cede si alguien pidió
+  //    expresamente otra hoja desde ⚙ (queda marcado como manual).
+  if(window.CONFIG_SERVIDOR && !guardado.manual){
+    CAMPOS_EMPRESA.forEach(k=>{
+      if(window.CONFIG_SERVIDOR[k] !== undefined) CFG[k] = window.CONFIG_SERVIDOR[k];
+    });
+  }
+
   // 3) Un enlace con ?cfg=... configura el dispositivo de una vez.
   aplicarCfgDeEnlace();
   const clean = parseSheetId(CFG.sheetId);         // repara IDs guardados con /edit?gid=…
@@ -56,8 +69,36 @@ function openCfg(){
   $("#c-cid").value=CFG.clientId; $("#c-sid").value=CFG.sheetId; $("#c-tab").value=CFG.tab;
   $("#c-poll").value=String(CFG.poll); $("#c-df").value=CFG.dateFmt; $("#c-brand").value=CFG.brand||"";
   $("#c-auto").checked = CFG.auto!==false;
+  const emp = window.CONFIG_SERVIDOR;
+  const av = $("#c-origen");
+  if(av){
+    if(emp && !CFG.manual){
+      av.className = "aviso ok";
+      av.innerHTML = `Esta instalación viene <b>configurada de fábrica</b>: el Client ID y la
+        hoja los fija la empresa y se aplican en todos los equipos. No hace falta tocar nada.`;
+    } else if(emp && CFG.manual){
+      av.className = "aviso";
+      av.innerHTML = `Este equipo apunta a una hoja <b>distinta de la de la empresa</b>.
+        Pulsa «Usar la de la empresa» para volver a la configuración común.`;
+    } else {
+      av.className = "aviso";
+      av.innerHTML = `Esta instalación no trae configuración propia: hay que introducir
+        el Client ID y la hoja a mano, o abrir un enlace de configuración.`;
+    }
+  }
   $("#ov-cfg").classList.remove("hide");
 }
+$("#c-empresa").onclick = ()=>{
+  if(!window.CONFIG_SERVIDOR){ toast("Esta instalación no trae configuración propia","err"); return; }
+  delete CFG.manual;
+  CAMPOS_EMPRESA.forEach(k=>{
+    if(window.CONFIG_SERVIDOR[k]!==undefined) CFG[k]=window.CONFIG_SERVIDOR[k];
+  });
+  saveCfg();
+  toast("Restaurada la configuración de la empresa","ok");
+  location.reload();
+};
+
 $("#c-enlace").onclick = async ()=>{
   if(!cfgOk()){ toast("Primero completa el Client ID y el ID de la hoja","err"); return; }
   const url = enlaceDeConfiguracion();
@@ -84,6 +125,10 @@ $("#c-save").onclick = ()=>{
   CFG.clientId=$("#c-cid").value.trim(); CFG.sheetId=sid; CFG.tab=$("#c-tab").value.trim()||"OP PUERTA";
   CFG.poll=parseInt($("#c-poll").value,10); CFG.dateFmt=$("#c-df").value; CFG.brand=$("#c-brand").value.trim();
   CFG.auto=$("#c-auto").checked;
+  // Cambiar la hoja o el Client ID a mano es una decisión explícita: queda
+  // marcada para que la configuración de la empresa no la pise en cada carga.
+  const emp = window.CONFIG_SERVIDOR;
+  CFG.manual = !!(emp && (CFG.clientId!==emp.clientId || CFG.sheetId!==emp.sheetId || CFG.tab!==emp.tab));
   saveCfg(); $("#ov-cfg").classList.add("hide");
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
   $("#g-sheet").textContent = CFG.tab;
