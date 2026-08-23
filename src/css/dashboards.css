@@ -52,3 +52,11 @@
 .expl b{color:var(--tx);font-weight:650}
 .dash-h + .expl{margin-top:2px}
 .sec .expl{margin:0 0 12px}
+
+/* Tarjeta auditable: se abre para ver qué puertas la componen */
+.kpi.clic{cursor:pointer;position:relative;transition:.12s border-color,.12s transform}
+.kpi.clic:hover{border-color:var(--acc);transform:translateY(-1px)}
+.kpi.clic:active{transform:none}
+.kpi .lupa{position:absolute;top:8px;right:10px;font-size:9.5px;font-style:normal;
+  font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);opacity:0;transition:.12s}
+.kpi.clic:hover .lupa{opacity:1;color:var(--acc)}

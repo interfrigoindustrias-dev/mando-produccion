@@ -68,13 +68,19 @@ async function autoFechas(){
   }catch(e){ console.warn("auto fechas:", e.message); return 0; }
 }
 
-/** Al tocar CUALQUIER proceso, la fecha de proceso pasa al día actual.
- *  Se llama justo después de guardar un cambio de procesos. Si con ese cambio
- *  la puerta llegó al 100%, ésta es la fecha que queda congelada. */
-async function tocarFechaProceso(r){
+/** Al tocar un proceso, la fecha de proceso pasa al día actual.
+ *
+ *  Excepción que manda sobre todo lo demás: una puerta que YA estaba al 100%
+ *  tiene la fecha congelada — es su fecha real de fabricación. Retocar un
+ *  proceso suyo (una corrección, un dato que faltaba) no puede reescribirla,
+ *  o la puerta aparecería como fabricada hoy y falsearía la producción del día.
+ *
+ *  @param estabaCompleta  si la puerta estaba al 100% ANTES de este cambio. */
+async function tocarFechaProceso(r, estabaCompleta){
   if(CFG.auto===false) return;
   const row = ROWS.find(x=>x.r===r);
   if(!row || anulada(row.c)) return;
+  if(estabaCompleta && completa(row.c)) return;   // seguía terminada: fecha congelada
 
   const h = hoy(), antes = fmtDate(row.c[C.FPROC]);
   if(antes === h) return;
@@ -83,4 +89,54 @@ async function tocarFechaProceso(r){
     await writeCells([{a1:`X${r}`, v:[[h]]}]);
     logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r, campo:"Fecha proceso", antes, despues:h}]);
   }catch(e){ row.c[C.FPROC] = antes; console.warn("fecha proceso:", e.message); }
+}
+
+/* Nombres de los procesos, para reconocerlos en el historial. */
+const CAMPOS_PROCESO = new Set(PROCS.map(p => p.k));
+
+/** Deshace las fechas de proceso que se reescribieron sin que hubiera trabajo.
+ *
+ *  Una versión anterior ponía la fecha de hoy al tocar cualquier proceso, aunque
+ *  la puerta ya estuviera al 100%. Eso hacía que puertas fabricadas hace semanas
+ *  aparecieran como producción del día.
+ *
+ *  El historial permite repararlo sin adivinar: para cada puerta terminada cuya
+ *  fecha se cambió hoy de forma automática, si NO hubo ningún cambio de proceso
+ *  ese mismo día, entonces no se trabajó en ella y se restaura el valor anterior. */
+async function repairFechasFalsas(){
+  if(!LOG.length) return 0;
+  const h = hoy();
+
+  const porFila = new Map();
+  for(const e of LOG){
+    if(e.fecha.slice(0, h.length) !== h) continue;      // solo lo de hoy
+    const f = String(e.fila);
+    const d = porFila.get(f) || {fechas: [], procesos: 0};
+    if(e.campo === "Fecha proceso" && e.accion === "AUTO") d.fechas.push(e);
+    if(CAMPOS_PROCESO.has(e.campo)) d.procesos++;
+    porFila.set(f, d);
+  }
+
+  const ups = [], logs = [];
+  for(const [fila, d] of porFila){
+    if(!d.fechas.length || d.procesos > 0) continue;    // hubo trabajo real: se respeta
+    const row = ROWS.find(x => String(x.r) === fila);
+    if(!row || !completa(row.c)) continue;              // solo puertas ya terminadas
+    if(fmtDate(row.c[C.FPROC]) !== h) continue;         // ya no tiene la fecha de hoy
+
+    // El valor más antiguo de la cadena de hoy es el original.
+    const original = d.fechas[d.fechas.length - 1].antes;
+    if(original === h) continue;
+    ups.push({a1: `X${row.r}`, v: [[original]]});
+    logs.push({accion: "AUTO", op: row.c[C.OP], fila: row.r,
+               campo: "Fecha proceso (restaurada)", antes: h, despues: original});
+    row.c[C.FPROC] = original;
+  }
+  if(!ups.length) return 0;
+  try{
+    await writeCells(ups);
+    logBulk(logs);
+    render(); renderDashVisible();
+    return ups.length;
+  }catch(e){ console.warn("restaurar fechas:", e.message); return 0; }
 }

@@ -61,7 +61,9 @@ function fillLists(){
   const A = ROWS.filter(r=>rowActive(r.c));
   const uniq = (f,ord) => [...new Set(A.map(r=>String(f(r.c)??"").trim()).filter(Boolean))].sort(ord||NUMORD);
   const col = i => uniq(c=>c[i]);
-  const fill = (sel,vals,all,extra)=>{ const cur=sel.value;
+  const fill = (sel,vals,all,extra)=>{
+    if(!sel) return;                       // el filtro ya no está en el HTML
+    const cur=sel.value;
     sel.innerHTML = `<option value="">${all}</option>`+(extra||"")+
       vals.map(v=>`<option>${esc(v)}</option>`).join("");
     sel.value = [...sel.options].some(o=>o.value===cur) ? cur : "";
@@ -73,7 +75,6 @@ function fillLists(){
   fill($("#f-ap"),   col(C.AP),     "Todas");
   fill($("#f-med"),  uniq(medidaDe),"Todas");
   // filtros de los otros tableros
-  fill($("#a-mat"),  col(C.MAT),    "Todos");
   fill($("#a-tipo"), col(C.TIPO),   "Todos");
   fill($("#a-esp"),  col(C.ESP),    "Todos");
   fill($("#a-ap"),   col(C.AP),     "Todas");
@@ -229,6 +230,7 @@ function paintRow(r){
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const estabaCompleta = completa(row.c);
   const prev = row.c[i];
   writeSeq++;                                    // invalida lecturas en vuelo
   row.c[i] = next===null ? "" : next;            // optimista
@@ -244,7 +246,7 @@ async function setProc(r, i, next){
     const nom = v => v===true?"hecho" : v===false?"pendiente" : "no aplica";
     logChanges("EDITA", row.c[C.OP], r, [{campo:PROCS.find(p=>p.i===i).k,
       antes:nom(tri(prev)), despues:nom(next)}]);
-    await tocarFechaProceso(r);                  // cualquier proceso tocado ⇒ fecha de hoy
+    await tocarFechaProceso(r, estabaCompleta);  // fecha de hoy, salvo si ya estaba terminada
   }catch(e){ row.c[i]=prev; paintRow(r); toast(e.message,"err"); }
 }
 $("#tb").addEventListener("click", ev=>{

@@ -21,7 +21,14 @@ async function refresh(silent){
     const h = JSON.stringify(rows.filter(r=>rowActive(r.c)).map(r=>r.c));
     const changed = h!==lastHash;
     lastHash=h; ROWS=rows;
-    if(changed || !silent){ fillLists(); render(); renderDashVisible(); }
+    if(changed || !silent){
+      // Cada paso va aislado: si uno falla, los demás siguen pintando y el
+      // error se ve, en vez de dejar la pantalla vacía sin explicación.
+      for(const [nombre, fn] of [["filtros",fillLists],["tabla",render],["tablero",renderDashVisible]]){
+        try{ fn(); }
+        catch(e){ console.error("render/"+nombre, e); toast("Fallo al pintar "+nombre+": "+e.message,"err"); }
+      }
+    }
     autoFechas();                                // reprograma si cambió el día o la prioridad
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){

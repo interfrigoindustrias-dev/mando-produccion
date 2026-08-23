@@ -11,15 +11,32 @@ faltaba código.
 ## Cómo correrla
 
 1. Levantar la app en local: `python -m http.server 8080 --directory src`
-2. Entrar y esperar a que cargue.
-3. Abrir la consola (F12) y pegar el bloque de abajo.
+2. Entrar y **recargar la página** (F5).
+3. Sin tocar nada más, abrir la consola (F12) y pegar el bloque de abajo.
 4. Debe responder `"fallos": []`.
+
+> ⚠️ **Recargar antes de correrla no es opcional.** Un filtro que dejó de existir
+> en el HTML rompió `fillLists()`, y con él todo el pintado de Control de OPs.
+> La comprobación no lo detectó porque mis propios pasos previos habían llamado a
+> `render()` a mano y la tabla estaba llena por esa vía. Desde entonces el primer
+> punto que revisa es que la tabla se llene **sola**, en la carga natural.
 
 ## El bloque
 
 ```js
 (async()=>{
  const fallos=[];
+ // 0 · La carga natural debe dejar la tabla llena, sin ayuda
+ if(!document.querySelectorAll('#tb tr').length) fallos.push("Control de OPs vacio al arrancar");
+ if(/error/i.test(document.getElementById('sync-t').innerText)) fallos.push("indicador en error");
+
+ // 0b · Todo elemento que el JS busca debe existir en el HTML
+ ["tb","kpis","f-prog","f-mat","f-tipo","f-esp","f-ap","f-med","a-tipo","a-esp","a-ap","a-est",
+  "s-mat","s-tipo","s-esp","s-ap","s-est","s-av","p-q","p-prio","p-est","p-ord","r-dia","r-prod",
+  "r-inv","r-ritmo","r-14d","r-clientes","r-listos","m-tabla","a-tabla","s-tabla","dl-cli",
+  "ov-kpi","k-tabla","print"].forEach(i=>{
+   if(!document.getElementById(i)) fallos.push("falta elemento #"+i); });
+
  // 1 · Todas las funciones principales deben existir
  const nombres=["progreso","statusValue","tri","toDate","fmtDate","autoFechas",
   "fechaProgramada","congelarSiCompleta","repairStatus","repairNumeros","ensureRows",
@@ -29,7 +46,8 @@ faltaba código.
   "renderHist","logChanges","logBulk","loadLog","setProc","paintRow","render","kpis",
   "filtered","fillLists","selPrio","selAp","selDesp","targetRows","nextOp","contador",
   "aplicaTema","numCell","anulada","stockBase","kpiCards","barras","tablaMini",
-  "activas","completa","desp","enProduccion","almacenBase","goto"];
+  "activas","completa","desp","enProduccion","almacenBase","goto","verDetalleKpi",
+  "tocarFechaProceso","repairFechasFalsas"];
  nombres.forEach(n=>{ try{ if(typeof eval(n)!=="function") fallos.push("no es funcion: "+n); }
                       catch(e){ fallos.push("falta: "+n); } });
 

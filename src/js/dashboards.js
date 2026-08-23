@@ -12,36 +12,38 @@ function renderResumen(){
   $("#r-sem").value = `${fmt(l)} – ${fmt(d7)}`;
   $("#r-mes").value = dia.toLocaleDateString("es",{month:"long",year:"numeric"});
 
-  const A = activas().map(x=>x.c);
+  const F = activas();                       // filas {r,c}, para poder auditarlas
+  const A = F.map(x=>x.c);
   const entre = (v,a,b)=>{ const d=toDate(v); return d && d>=a && d<=b; };
-  const fabDia = A.filter(c=>completa(c) && sameDay(toDate(c[C.FPROC]),dia));
-  const fabSem = A.filter(c=>completa(c) && entre(c[C.FPROC],l,d7));
+  const fabDia = F.filter(({c})=>completa(c) && sameDay(toDate(c[C.FPROC]),dia));
+  const fabSem = F.filter(({c})=>completa(c) && entre(c[C.FPROC],l,d7));
   const m0=new Date(dia.getFullYear(),dia.getMonth(),1), m1=new Date(dia.getFullYear(),dia.getMonth()+1,0);
-  const fabMes = A.filter(c=>completa(c) && entre(c[C.FPROC],m0,m1));
-  const despDia= A.filter(c=>desp(c)==="Despachado" && sameDay(toDate(c[C.FDESP]),dia));
-  const sum = l2 => l2.reduce((s,c)=>s+puntos(c),0);
+  const fabMes = F.filter(({c})=>completa(c) && entre(c[C.FPROC],m0,m1));
+  const despDia= F.filter(({c})=>desp(c)==="Despachado" && sameDay(toDate(c[C.FDESP]),dia));
+  const sum = l2 => l2.reduce((a,x)=>a+puntos(x.c),0);
 
   kpiCards("#r-prod",[
-    ["Fabricadas día",  fabDia.length, "Avance 100% y fecha de proceso = día de referencia", 1],
-    ["Puntos día",      sum(fabDia),   "Suma de PUNTOS de las fabricadas ese día"],
-    ["Fabricadas semana",fabSem.length,"Avance 100% con fecha de proceso dentro de la semana", 1],
-    ["Puntos semana",   sum(fabSem),   "Suma de PUNTOS de la semana"],
-    ["Fabricadas mes",  fabMes.length, "Avance 100% con fecha de proceso dentro del mes", 1],
-    ["Puntos mes",      sum(fabMes),   "Suma de PUNTOS del mes"],
-    ["Despachadas día", despDia.length,"Estado Despachado con fecha de despacho = día"]
+    ["Fabricadas día",  fabDia.length, "Puertas al 100% cuya fecha de proceso es el día de referencia", 1, fabDia],
+    ["Puntos día",      sum(fabDia),   "Suma de PUNTOS de las fabricadas ese día", 0, fabDia],
+    ["Fabricadas semana",fabSem.length,"Al 100% con fecha de proceso dentro de la semana", 1, fabSem],
+    ["Puntos semana",   sum(fabSem),   "Suma de PUNTOS de la semana", 0, fabSem],
+    ["Fabricadas mes",  fabMes.length, "Al 100% con fecha de proceso dentro del mes", 1, fabMes],
+    ["Puntos mes",      sum(fabMes),   "Suma de PUNTOS del mes", 0, fabMes],
+    ["Despachadas día", despDia.length,"Estado Despachado con fecha de despacho = día", 0, despDia]
   ]);
 
-  const alm = A.filter(c=>completa(c) && desp(c)==="En Almacén");
-  const prod= A.filter(enProduccion);
-  const stk = A.filter(enStock);
-  const avg = prod.length ? Math.round(prod.reduce((s,c)=>s+progreso(c).pct,0)/prod.length*100) : 0;
+  const alm = F.filter(({c})=>completa(c) && desp(c)==="En Almacén");
+  const prod= F.filter(({c})=>enProduccion(c));
+  const stk = F.filter(({c})=>enStock(c));
+  const abiertasTodas = F.filter(({c})=>!completa(c));
+  const avg = prod.length ? Math.round(prod.reduce((a,x)=>a+progreso(x.c).pct,0)/prod.length*100) : 0;
   kpiCards("#r-inv",[
-    ["En almacén",      alm.length,  "Terminadas (100%) con estado En Almacén"],
-    ["En producción",   prod.length, "Avance <100% y sin despachar ni almacenar", 1],
-    ["Stock total",     stk.length,  "Marcadas STOCK, en almacén o sin estado"],
-    ["Avance promedio", avg+"%",     "Promedio de avance de las que están en producción"],
+    ["En almacén",      alm.length,  "Terminadas (100%) con estado En Almacén", 0, alm],
+    ["En producción",   prod.length, "Avance <100%, sin despachar ni almacenar, no anuladas", 1, prod],
+    ["Stock total",     stk.length,  "Marcadas STOCK, en almacén o sin estado", 0, stk],
+    ["Avance promedio", avg+"%",     "Promedio de avance de las que están en producción", 0, prod],
     // El Excel suma PUNTOS de TODA fila con avance <100%, sin excluir almacén ni despacho
-    ["Puntos en prod.", sum(A.filter(c=>!completa(c))), "Suma de PUNTOS de toda puerta con avance menor al 100%"],
+    ["Puntos en prod.", sum(abiertasTodas), "Suma de PUNTOS de toda puerta con avance menor al 100%", 0, abiertasTodas],
     ["Total en empresa",alm.length+prod.length, "En almacén + en producción"]
   ]);
 
@@ -52,36 +54,45 @@ function renderResumen(){
   const hoy0 = new Date(); hoy0.setHours(0,0,0,0);
   const dias = (a,b) => Math.round((b-a)/DIA);
   const d30 = new Date(hoy0); d30.setDate(d30.getDate()-29);
-  const term30 = A.filter(c=>completa(c) && entre(c[C.FPROC],d30,hoy0));
+  const term30 = F.filter(({c})=>completa(c) && entre(c[C.FPROC],d30,hoy0));
   const ritmo = +(term30.length/30).toFixed(1);
   const cola  = ritmo>0 ? Math.ceil(prod.length/ritmo) : null;
 
-  const edades = prod.map(c=>{ const f=toDate(c[C.FECHA]); return f?dias(f,hoy0):null; })
-                     .filter(x=>x!==null && x>=0);
-  const edadMedia = edades.length ? Math.round(edades.reduce((a,b)=>a+b,0)/edades.length) : 0;
-  const edadMax   = edades.length ? Math.max(...edades) : 0;
-  const viejas    = edades.filter(d=>d>30).length;
+  // Solo cuentan las que tienen fecha de creación legible: las filas antiguas la
+  // traen como texto («MAYO») y de ahí no se puede calcular una antigüedad.
+  const conEdad = prod.map(x=>{ const f=toDate(x.c[C.FECHA]); return {x, d: f?dias(f,hoy0):null}; })
+                      .filter(o=>o.d!==null && o.d>=0);
+  const sinFecha = prod.length - conEdad.length;
+  const cobertura = sinFecha ? ` · ${sinFecha} sin fecha de creación legible quedan fuera` : "";
+  const edadMedia = conEdad.length ? Math.round(conEdad.reduce((a,o)=>a+o.d,0)/conEdad.length) : 0;
+  const masVieja  = conEdad.length ? conEdad.reduce((a,b)=>b.d>a.d?b:a) : null;
+  const viejas    = conEdad.filter(o=>o.d>30);
 
   // tiempo de fabricación: días entre creación y fecha de proceso en las terminadas
-  const ciclos = A.filter(completa).map(c=>{
-    const f=toDate(c[C.FECHA]), p2=toDate(c[C.FPROC]);
-    return (f&&p2) ? dias(f,p2) : null;
-  }).filter(x=>x!==null && x>=0 && x<400);
-  const ciclo = ciclos.length ? Math.round(ciclos.reduce((a,b)=>a+b,0)/ciclos.length) : null;
+  const conCiclo = F.filter(({c})=>completa(c)).map(x=>{
+    const f=toDate(x.c[C.FECHA]), p2=toDate(x.c[C.FPROC]);
+    return {x, d: (f&&p2) ? dias(f,p2) : null};
+  }).filter(o=>o.d!==null && o.d>=0 && o.d<400);
+  const ciclo = conCiclo.length ? Math.round(conCiclo.reduce((a,o)=>a+o.d,0)/conCiclo.length) : null;
 
   // en almacén esperando despacho hace más de 30 días
-  const estancadas = A.filter(c=>completa(c) && desp(c)==="En Almacén")
-    .filter(c=>{ const f=toDate(c[C.FPROC]); return f && dias(f,hoy0)>30; }).length;
+  const estancadas = alm.filter(({c})=>{ const f=toDate(c[C.FPROC]); return f && dias(f,hoy0)>30; });
 
   kpiCards("#r-ritmo",[
-    ["Puertas por día",  ritmo, "Terminadas en los últimos 30 días dividido entre 30", 1],
-    ["Días para vaciar cola", cola??"—", `Las ${prod.length} en producción al ritmo actual`, 1],
-    ["Terminadas 30 días", term30.length, "Avance 100% con fecha de proceso en los últimos 30 días"],
-    ["Antigüedad media",  edadMedia+" d", "Días promedio desde la creación de las puertas en producción"],
-    ["La más antigua",    edadMax+" d",   "Días de la puerta en producción más antigua"],
-    ["Abiertas +30 días", viejas, "Puertas en producción creadas hace más de 30 días"],
-    ["Ciclo de fabricación", ciclo!==null?ciclo+" d":"—", "Promedio de días entre creación y fecha de proceso en las terminadas"],
-    ["Almacén +30 días",  estancadas, "Terminadas y en almacén hace más de 30 días sin despachar"]
+    ["Puertas por día",  ritmo, "Terminadas en los últimos 30 días dividido entre 30", 1, term30],
+    ["Días para vaciar cola", cola??"—", `Las ${prod.length} en producción al ritmo actual (${ritmo}/día)`, 1, prod],
+    ["Terminadas 30 días", term30.length, "Al 100% con fecha de proceso en los últimos 30 días", 0, term30],
+    ["Antigüedad media",  edadMedia+" d",
+      `Días promedio desde la creación, sobre ${conEdad.length} puertas en producción${cobertura}`,
+      0, conEdad.map(o=>o.x)],
+    ["La más antigua",    masVieja ? masVieja.d+" d" : "—",
+      masVieja ? `OP ${masVieja.x.c[C.OP]}, creada el ${fmtDate(masVieja.x.c[C.FECHA])}` : "Sin datos",
+      0, masVieja ? [masVieja.x] : []],
+    ["Abiertas +30 días", viejas.length, "En producción, creadas hace más de 30 días", 0, viejas.map(o=>o.x)],
+    ["Ciclo de fabricación", ciclo!==null ? ciclo+" d" : "—",
+      `Promedio de días entre creación y fabricación, sobre ${conCiclo.length} puertas terminadas`,
+      0, conCiclo.map(o=>o.x)],
+    ["Almacén +30 días",  estancadas.length, "Terminadas y en almacén hace más de 30 días sin despachar", 0, estancadas]
   ]);
 
   // producción de los últimos 14 días
@@ -115,14 +126,14 @@ function renderResumen(){
 
   // clientes con más puertas en producción
   const porCli={};
-  prod.forEach(c=>{ const k=String(c[C.CLI]??"—").trim()||"—"; porCli[k]=(porCli[k]||0)+1; });
+  prod.forEach(({c})=>{ const k=String(c[C.CLI]??"—").trim()||"—"; porCli[k]=(porCli[k]||0)+1; });
   barras("#r-clientes", Object.entries(porCli).sort((a,b)=>b[1]-a[1]).slice(0,8), prod.length);
 
   const porTipo={};
   A.forEach(c=>{ const t=String(c[C.TIPO]??"—").trim()||"—"; porTipo[t]=(porTipo[t]||0)+1; });
   barras("#r-tipos", Object.entries(porTipo).sort((a,b)=>b[1]-a[1]), A.length);
 
-  const carga = PROCS.map(p=>[p.k, prod.filter(c=>tri(c[p.i])===false).length]);
+  const carga = PROCS.map(p=>[p.k, prod.filter(({c})=>tri(c[p.i])===false).length]);
   barras("#r-carga", carga, undefined, true);
 
   const lista = activas().filter(x=>enProduccion(x.c))

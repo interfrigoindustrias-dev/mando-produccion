@@ -108,3 +108,34 @@ detectó: no había error, solo código ausente.
 
 **Solución:** la comprobación de humo de [PRUEBAS.md](PRUEBAS.md) verifica que
 **existan** todas las funciones principales, no solo que el archivo compile.
+
+## 12. Un filtro borrado del HTML puede tumbar toda una vista
+
+`fillLists()` seguía llamando a `$("#a-mat")` después de que ese filtro se quitara
+del HTML. `$()` devuelve `null`, `sel.value` lanza, y como `fillLists()` corre
+**antes** de `render()` en cada refresco, Control de OPs quedaba en blanco.
+
+**Soluciones:** `fill()` ignora los elementos que no existen, y cada paso del
+pintado va en su propio `try` para que un fallo no arrastre a los demás y se vea
+el error en pantalla en vez de una tabla vacía.
+
+**Lección de método:** la comprobación de humo no lo detectó porque mis pasos de
+prueba llamaban a `render()` a mano. Ahora lo primero que revisa es que la tabla
+se llene sola tras recargar.
+
+## 13. La fecha de proceso no puede reescribirse en puertas terminadas
+
+Al ligar la fecha al trabajo («cualquier proceso tocado ⇒ fecha de hoy»), retocar
+un proceso de una puerta ya terminada le ponía la fecha de hoy — y esa puerta
+aparecía en «Fabricadas día», falseando la producción del día.
+
+**Solución:** `tocarFechaProceso(r, estabaCompleta)` no toca la fecha si la puerta
+ya estaba al 100% y sigue estándolo. `repairFechasFalsas()` deshace las que ya se
+escribieron, usando el historial: si ese día no hubo ningún cambio de proceso en
+esa puerta, no se trabajó en ella y se restaura el valor anterior.
+
+**Consecuencia de diseño que conviene tener presente:** «Fabricadas día» mide
+*cuándo la puerta llegó al 100% en la app*, no cuándo salió del taller. Si se
+cargan datos con retraso, el día de la carga se infla. Por eso cada tarjeta del
+Resumen es ahora **auditable**: se abre y muestra exactamente qué puertas cuenta,
+con enlace a la ficha para corregir la fecha.

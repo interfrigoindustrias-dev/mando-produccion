@@ -31,10 +31,49 @@ function contador(el, vistas, total, ids, qid){
   n.classList.toggle("on", act.length>0);
   n.title = act.length ? "Filtros activos: "+act.join(" · ") : "Sin filtros";
 }
+/* Puertas que hay detrás de cada tarjeta, para poder auditarlas de un clic. */
+const DETALLE_KPI = new Map();
+
+/** list: [etiqueta, valor, explicación, destacar, filas]
+ *  Si se pasan filas, la tarjeta se vuelve clicable y las muestra. */
 function kpiCards(el, list){
-  $(el).innerHTML = list.map(([s,v,t,hi])=>
-    `<div class="kpi ${hi?"hi":""}" title="${esc(t||"")}"><b>${v}</b><span>${esc(s)}</span></div>`).join("");
+  $(el).innerHTML = list.map(([s,v,t,hi,filas],i)=>{
+    const id = el.replace(/\W/g,"") + "_" + i;
+    if(filas) DETALLE_KPI.set(id, {titulo:s, explicacion:t||"", filas});
+    return `<div class="kpi ${hi?"hi":""} ${filas?"clic":""}" title="${esc(t||"")}"
+      ${filas?`data-kpi="${id}"`:""}><b>${v}</b><span>${esc(s)}</span>${
+      filas?'<i class="lupa">ver</i>':""}</div>`;
+  }).join("");
 }
+
+/** Abre el detalle de una tarjeta: qué puertas se están contando. */
+function verDetalleKpi(id){
+  const d = DETALLE_KPI.get(id); if(!d) return;
+  $("#k-titulo").textContent = d.titulo;
+  $("#k-expl").textContent = d.explicacion;
+  $("#k-cuenta").textContent = `${d.filas.length} puerta${d.filas.length===1?"":"s"}`;
+  if(!d.filas.length){
+    $("#k-tabla").innerHTML = `<tbody><tr><td class="mut" style="padding:18px">
+      Ninguna puerta cumple esta condición.</td></tr></tbody>`;
+  } else {
+    tablaMini("#k-tabla",
+      ["OP","Cliente","Tipo","Medidas","Puntos","Avance","F. creación","F. proceso","Despacho",""],
+      d.filas.map(({r,c})=>[
+        `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""), esc(c[C.TIPO]??""),
+        `${num(c[C.ANCHO])??"—"}×${num(c[C.ALTO])??"—"}`, num(c[C.PTS])??"—",
+        Math.round(progreso(c).pct*100)+"%",
+        esc(fmtDate(c[C.FECHA])), esc(fmtDate(c[C.FPROC])), tagDesp(c[C.DESP]),
+        `<button class="btn sm" data-ficha="${r}">Abrir</button>`]));
+  }
+  $("#ov-kpi").classList.remove("hide");
+}
+document.addEventListener("click", ev=>{
+  const k = ev.target.closest("[data-kpi]");
+  if(k){ verDetalleKpi(k.dataset.kpi); return; }
+  // Desde el detalle se puede abrir la ficha y corregir la fecha ahí mismo.
+  const f = ev.target.closest("[data-ficha]");
+  if(f){ $("#ov-kpi").classList.add("hide"); openDet(+f.dataset.ficha); }
+});
 function barras(el, filas, total, warn){
   const max = Math.max(1, ...filas.map(f=>f[1]));
   $(el).innerHTML = `<div class="brk">`+filas.map(([k,v])=>

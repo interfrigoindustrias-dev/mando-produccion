@@ -55,10 +55,12 @@ async function enterApp(){
     const nf = await ensureRows(MIN_FILAS, 0);
     if(nf) toast(`Hoja ampliada: ${nf} fila(s) añadida(s)`,"ok");
   }catch(e){ console.warn("filas:", e.message); }
+  await loadLog();                // el historial hace falta para poder reparar
+  const nr = await repairFechasFalsas();
+  if(nr) toast(`${nr} fecha(s) de proceso restaurada(s)`,"ok");
   const n = await autoFechas();   // programa las fechas de proceso según prioridad
   if(n) toast(`${n} fecha(s) de proceso programada(s)`,"ok");
   restartPoll();
-  loadLog();                  // historial en segundo plano; no bloquea la carga
   await loadModelos();        // catálogo de modelos de stock
   renderDashVisible();
 }

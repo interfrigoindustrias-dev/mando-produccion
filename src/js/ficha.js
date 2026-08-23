@@ -43,6 +43,7 @@ $("#d-procs").addEventListener("click", ev=>{
 });
 $("#d-save").onclick = async ()=>{
   const r=detRow, row=ROWS.find(x=>x.r===r); if(!row) return;
+  const estabaCompleta = completa(row.c);
   const ups=[], cambios=[], op=row.c[C.OP];
   const nom = v => v===true?"hecho" : v===false?"pendiente" : "no aplica";
   $$("#d-procs .pc").forEach(pc=>{
@@ -83,7 +84,7 @@ $("#d-save").onclick = async ()=>{
     logChanges("EDITA", op, r, cambios);
     // Si se tocó algún proceso, la fecha pasa a hoy; si no, se reprograma
     // por si cambió la prioridad.
-    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await tocarFechaProceso(r);
+    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await tocarFechaProceso(r, estabaCompleta);
     await autoFechas();
     toast("Cambios guardados","ok"); setSync("","Guardado");
   }catch(e){ toast(e.message,"err"); refresh(false); }
