@@ -93,6 +93,26 @@ function renderResumen(){
   }
   barras("#r-14d", ult14, ult14.reduce((s,x)=>s+x[1],0));
 
+  // Clientes cuyo pedido está completo en almacén: ninguna puerta suya sigue
+  // abierta, y al menos una está terminada esperando despacho.
+  const porCliente={};
+  A.forEach(c=>{
+    const k=String(c[C.CLI]??"").trim(); if(!k || anulada(c)) return;
+    const e=porCliente[k] || (porCliente[k]={listas:0, pendientes:0});
+    if(completa(c) && desp(c)==="En Almacén") e.listas++;
+    else if(!completa(c)) e.pendientes++;
+  });
+  const listos = Object.entries(porCliente)
+    .filter(([,e])=>e.listas>0 && e.pendientes===0)
+    .sort((a,b)=>b[1].listas-a[1].listas);
+  if(listos.length){
+    barras("#r-listos", listos.map(([k,e])=>[k, e.listas]),
+           listos.reduce((s,[,e])=>s+e.listas,0));
+  } else {
+    $("#r-listos").innerHTML = `<p class="mut">Ningún cliente tiene el pedido completo
+      en almacén ahora mismo.</p>`;
+  }
+
   // clientes con más puertas en producción
   const porCli={};
   prod.forEach(c=>{ const k=String(c[C.CLI]??"—").trim()||"—"; porCli[k]=(porCli[k]||0)+1; });
@@ -124,14 +144,13 @@ $("#r-hoy").onclick = ()=>{ $("#r-dia").value = iso(new Date()); renderResumen()
 /* ---------- En almacén (hoja EN ALMACÉN) ----------
    Base: terminadas y almacenadas, más las separadas. */
 const almacenBase = () => activas().filter(({c})=>
-  (completa(c) && desp(c)==="En Almacén") || desp(c)==="Separado" ||
-  (anulada(c) && $("#a-anu").value==="ver"));
+  (completa(c) && desp(c)==="En Almacén") || desp(c)==="Separado");
 function almacenList(){
   const q=$("#a-q").value.trim().toLowerCase(), g=id=>$("#"+id).value;
   const eq=(v,f)=>!f||String(v??"").trim()===f;
   return almacenBase().filter(({c})=>
     (!q || [c[C.OP],c[C.CLI],c[C.TIPO],c[C.MAT]].join(" ").toLowerCase().includes(q)) &&
-    eq(c[C.MAT],g("a-mat")) && eq(c[C.TIPO],g("a-tipo")) &&
+    eq(c[C.TIPO],g("a-tipo")) &&
     eq(c[C.ESP],g("a-esp")) && eq(c[C.AP],g("a-ap")) && eq(desp(c),g("a-est")));
 }
 /** Selector de estado de despacho editable en la tabla. */
@@ -157,13 +176,13 @@ function renderAlmacen(){
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
       esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP])]),
     L.map(({c})=> anulada(c) ? "anu" : desp(c)==="Separado" ? "sep" : ""));
-  contador("#a-cnt", L.length, B.length, ["a-mat","a-tipo","a-esp","a-ap","a-est","a-anu"], "a-q");
+  contador("#a-cnt", L.length, B.length, ["a-tipo","a-esp","a-ap","a-est"], "a-q");
 }
-["a-q","a-mat","a-tipo","a-esp","a-ap","a-est","a-anu"].forEach(id=>{
+["a-q","a-tipo","a-esp","a-ap","a-est"].forEach(id=>{
   $("#"+id).addEventListener("input", renderAlmacen);
   $("#"+id).addEventListener("change", renderAlmacen);
 });
-$("#a-clear").onclick = ()=>{ ["a-q","a-mat","a-tipo","a-esp","a-ap","a-est","a-anu"]
+$("#a-clear").onclick = ()=>{ ["a-q","a-tipo","a-esp","a-ap","a-est"]
   .forEach(id=>$("#"+id).value=""); renderAlmacen(); };
 /** Guarda el estado de despacho y aplica la regla 4 (fecha de despacho de hoy).
  *  Lo usan tanto Almacén como Planta. */
@@ -258,21 +277,25 @@ function renderModelos(){
     return {m, hay,
       alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
       sep:  hay.filter(c=>desp(c)==="Separado").length,
-      prod: hay.filter(c=>!completa(c)).length,
+      // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
+      prod: hay.filter(c=>!completa(c) && progreso(c).ok > 0).length,
+      proy: hay.filter(c=>!completa(c) && progreso(c).ok === 0).length,
       tot:  hay.length};
   });
-  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, sep:a.sep+f.sep, prod:a.prod+f.prod, tot:a.tot+f.tot}),
-                         {alm:0,sep:0,prod:0,tot:0});
+  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, sep:a.sep+f.sep, prod:a.prod+f.prod,
+                                  proy:a.proy+f.proy, tot:a.tot+f.tot}),
+                         {alm:0,sep:0,prod:0,proy:0,tot:0});
   const n = (v,cls) => `<td class="n ${v?(cls||""):"z"}">${v}</td>`;
   $("#m-tabla").innerHTML =
     `<thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
       <th title="Marcadas STOCK, terminadas y con estado En Almacén">En almacén</th>
       <th title="Marcadas STOCK en estado Separado">Separadas</th>
-      <th title="Marcadas STOCK con avance menor al 100%">En producción</th>
+      <th title="Empezadas: tienen al menos un proceso marcado">En producción</th>
+      <th title="Creadas pero sin empezar: ningún proceso marcado todavía">Proyectadas</th>
       <th title="Todas las marcadas STOCK sin despachar">Total</th>
       <th title="Avance promedio de las que están en producción">Avance</th>
       <th></th></tr></thead><tbody>`+
-    filas.map(({m,hay,alm,sep,prod,tot})=>{
+    filas.map(({m,hay,alm,sep,prod,proy,tot})=>{
       const abiertas = hay.filter(c=>!completa(c));
       const av = abiertas.length
         ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—";
@@ -280,7 +303,7 @@ function renderModelos(){
       <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
       <td class="num">${m.ancho??"—"}×${m.alto??"—"}</td><td class="num">${m.esp??"—"}</td>
       <td>${esc(m.ap||"—")}</td>
-      ${n(alm)}${n(sep)}${n(prod)}${n(tot)}
+      ${n(alm)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
       <td class="num">${av}</td>
       <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`;
     }).join("")+
@@ -291,20 +314,21 @@ function renderModelos(){
       if(!otras.length) return "";
       const oAlm = otras.filter(c=>completa(c) && desp(c)==="En Almacén").length;
       const oSep = otras.filter(c=>desp(c)==="Separado").length;
-      const oPro = otras.filter(c=>!completa(c)).length;
+      const oPro = otras.filter(c=>!completa(c) && progreso(c).ok > 0).length;
+      const oProy= otras.filter(c=>!completa(c) && progreso(c).ok === 0).length;
       const ab   = otras.filter(c=>!completa(c));
       const av   = ab.length ? Math.round(ab.reduce((a,c)=>a+progreso(c).pct,0)/ab.length*100)+"%" : "—";
       const det  = otras.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n");
-      T.alm+=oAlm; T.sep+=oSep; T.prod+=oPro; T.tot+=otras.length;
+      T.alm+=oAlm; T.sep+=oSep; T.prod+=oPro; T.proy+=oProy; T.tot+=otras.length;
       return `<tr class="otras" title="${esc(det)}">
         <td class="mod">Sin modelo definido</td>
         <td colspan="4" class="sub">${otras.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
-        ${n(oAlm)}${n(oSep)}${n(oPro)}${n(otras.length)}
+        ${n(oAlm)}${n(oSep)}${n(oPro)}${n(oProy)}${n(otras.length)}
         <td class="num">${av}</td><td></td></tr>`;
     })()+
     `<tr class="tot"><td>TOTAL</td><td colspan="4"></td>
       <td class="n">${T.alm}</td><td class="n">${T.sep}</td><td class="n">${T.prod}</td>
-      <td class="n">${T.tot}</td><td colspan="2"></td></tr></tbody>`;
+      <td class="n">${T.proy}</td><td class="n">${T.tot}</td><td colspan="2"></td></tr></tbody>`;
 }
 
 /** «+ Crear»: abre el alta con el modelo ya cargado. */

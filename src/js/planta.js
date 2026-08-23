@@ -32,6 +32,12 @@ function plantaList(){
     if(fp==="__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
     else if(fp && String(c[C.PRIO]??"").trim().toUpperCase()!==fp) return false;
     if(q && ![c[C.OP],c[C.CLI]].join(" ").toLowerCase().includes(q)) return false;
+    // Solo lo que ya toca: si la fecha de proceso es futura, la puerta todavía
+    // no entra a planta. Sin fecha se muestra, porque no hay nada que esperar.
+    if(fe==="open"){
+      const f = toDate(c[C.FPROC]);
+      if(f){ const h=new Date(); h.setHours(0,0,0,0); if(f > h) return false; }
+    }
     return true;
   });
   const ord=$("#p-ord").value;

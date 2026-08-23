@@ -45,3 +45,10 @@
 #a-tabla tr.anu td{opacity:.5;text-decoration:line-through}
 #m-tabla .mod{font-weight:700}
 
+
+/* Texto que explica qué significa cada bloque */
+.expl{font-size:12.5px;line-height:1.6;color:var(--tx2);margin:-4px 0 14px;
+  padding-left:11px;border-left:3px solid var(--line2)}
+.expl b{color:var(--tx);font-weight:650}
+.dash-h + .expl{margin-top:2px}
+.sec .expl{margin:0 0 12px}

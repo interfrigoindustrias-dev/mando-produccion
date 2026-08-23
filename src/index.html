@@ -154,14 +154,35 @@
     <h2 class="dash-h">Inventario</h2>
     <div class="kpis" id="r-inv"></div>
     <h2 class="dash-h">Ritmo y antigüedad</h2>
+    <p class="expl">A qué velocidad sale el trabajo y cuánto llevan esperando las puertas
+      abiertas. <b>Ritmo</b> mide producción real de los últimos 30 días;
+      <b>antigüedad</b> cuenta días desde que se creó la ficha, no desde que se empezó.
+      Sirven para responder dos preguntas: ¿cuándo termino lo que tengo?, y ¿qué se
+      está quedando atrás?</p>
     <div class="kpis" id="r-ritmo"></div>
     <div class="dash-2">
-      <div class="sec"><h2>Producción de los últimos 14 días</h2><div id="r-14d"></div></div>
+      <div class="sec"><h2>Producción de los últimos 14 días</h2>
+        <p class="expl">Puertas terminadas cada día. Sirve para ver si el ritmo cae
+          o si hay días muertos.</p>
+        <div id="r-14d"></div></div>
       <div class="sec"><h2>Clientes con más puertas en producción</h2><div id="r-clientes"></div></div>
+      <div class="sec"><h2>Pedidos listos en almacén
+        <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— clientes a los que ya se les puede despachar</span></h2>
+        <p class="expl">Clientes cuyas puertas están <b>todas terminadas y en almacén</b>,
+          sin ninguna pendiente. Son entregas que solo esperan que alguien las despache.</p>
+        <div id="r-listos"></div></div>
     </div>
     <div class="dash-2">
-      <div class="sec"><h2>Cantidad por tipo de puerta</h2><div id="r-tipos"></div></div>
-      <div class="sec"><h2>Carga por proceso <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— pendientes en puertas abiertas</span></h2><div id="r-carga"></div></div>
+      <div class="sec"><h2>Cantidad por tipo de puerta</h2>
+        <p class="expl">Reparto histórico de todas las puertas registradas, terminadas
+          o no. Muestra qué se fabrica de verdad.</p>
+        <div id="r-tipos"></div></div>
+      <div class="sec"><h2>Carga por proceso</h2>
+        <p class="expl">Cuántas puertas abiertas tienen <b>ese proceso todavía sin marcar</b>.
+          La barra más larga es el cuello de botella: el puesto con más trabajo acumulado
+          por delante. Una puerta cuenta en varios procesos a la vez, así que la suma es
+          mayor que el número de puertas.</p>
+        <div id="r-carga"></div></div>
     </div>
     <div class="sec"><h2>En producción <span class="mut" id="r-nprod" style="text-transform:none;letter-spacing:0;font-weight:400"></span></h2>
       <div class="tw" style="max-height:420px"><table id="r-tabla"></table></div></div>
@@ -171,14 +192,11 @@
     <div class="kpis" id="a-kpis"></div>
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="a-q" placeholder="OP, cliente…" autocomplete="off"></label>
-      <label class="f"><span>Material</span><select class="inp" id="a-mat"></select></label>
       <label class="f"><span>Tipo</span><select class="inp" id="a-tipo"></select></label>
       <label class="f"><span>Espesor</span><select class="inp" id="a-esp"></select></label>
       <label class="f"><span>Apertura</span><select class="inp" id="a-ap"></select></label>
       <label class="f"><span>Estado</span><select class="inp" id="a-est">
         <option value="">Todos</option><option>En Almacén</option><option>Separado</option></select></label>
-      <label class="f"><span>Anuladas</span><select class="inp" id="a-anu">
-        <option value="">Ocultar</option><option value="ver">Mostrar</option></select></label>
       <button class="btn sm" id="a-clear">Limpiar</button>
       <div class="grow"></div>
       <span class="cnt" id="a-cnt"></span>

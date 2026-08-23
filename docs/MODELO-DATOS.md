@@ -56,7 +56,8 @@ defecto:
 avance          = hechos / procesos que aplican
 completa        = avance >= 100 %
 anulada         = ESTADO DESPACHO = "Anulada"
-en producción   = no completa, no anulada, y no Despachado ni En Almacén
+en producción   = no completa, no anulada, ya empezada (algún proceso marcado)
+proyectada      = no completa y sin empezar (ningún proceso marcado)
 en almacén      = completa y ESTADO DESPACHO = "En Almacén"
 stock           = STOCK marcado, no despachada y no anulada
 ```

@@ -8,10 +8,13 @@ automático queda en `LOG APP` con acción `AUTO`, el valor anterior y el nuevo.
 
 ---
 
-## 1 · 2 · 3 — Fecha de proceso según prioridad
+## 1 · 2 · 3 — Fecha de proceso
 
-La fecha de proceso funciona como **fecha objetivo** mientras la puerta está
-abierta, y se convierte en **fecha de fabricación** cuando llega al 100 %.
+La fecha de proceso tiene **dos vidas**, y esa es la clave para entenderla.
+
+### Mientras la puerta no se ha tocado: es una fecha PROGRAMADA
+
+Dice **cuándo toca empezarla**. Se cuenta desde la fecha de creación:
 
 | Prioridad | Días desde la creación |
 |---|---|
@@ -19,28 +22,32 @@ abierta, y se convierte en **fecha de fabricación** cuando llega al 100 %.
 | MEDIA | +3 |
 | BAJA | +8 |
 
-```
-si la puerta está al 100 %  →  la fecha no se toca nunca más
-si no tiene prioridad       →  la fecha no se toca nunca
-en cualquier otro caso      →  fecha = máximo(creación + días, hoy)
-```
+Si ese día todavía no ha llegado, **no pasa nada**: la fecha se queda quieta en
+el futuro. Cuando llega, empieza a correrse al día actual.
 
-Es decir: la fecha se programa hacia adelante, y una vez llega ese día **se va
-corriendo al día actual** mientras la puerta siga sin terminar. Al completarse,
-se congela en el día en que llegó al 100 %.
+### En cuanto se marca el primer proceso: es la fecha de TRABAJO
 
-### Ejemplos
+Se pone en el día de hoy y se va corriendo cada día mientras la puerta siga
+abierta. Ya no importa la programación: la puerta está en el taller.
+
+Cualquier cambio de proceso —marcar o desmarcar— la vuelve a poner en hoy.
+
+### Al 100%: se congela
+
+Queda como la **fecha real de fabricación**. Nada la vuelve a tocar, salvo que
+alguien desmarque un proceso y la puerta vuelva a abrirse.
+
+### Ejemplos verificados
 
 | Situación | Resultado |
 |---|---|
-| ALTA, creada hoy | hoy |
-| ALTA, creada hace 10 días | hoy |
-| MEDIA, creada hoy | hoy + 3 |
-| MEDIA, creada hace 10 días | hoy |
-| BAJA, creada hoy | hoy + 8 |
-| BAJA, creada hace 3 días | hoy + 5 |
-| Cualquiera al 100 % | congelada |
-| MEDIA o BAJA sin fecha de creación | no se toca |
+| BAJA creada hoy, sin empezar | hoy + 8 días |
+| Se marca un proceso de esa misma puerta | pasa a hoy |
+| Pasa el recálculo diario | **no** la devuelve al futuro |
+| Pasa un día sin tocarla | avanza a hoy |
+| Llega al 100% | congelada, 0 escrituras |
+| Se desmarca un proceso | vuelve a hoy |
+| Sin prioridad y sin empezar | no se toca |
 | Anulada | no se toca |
 
 ## 4 — Fecha de despacho
@@ -64,9 +71,9 @@ que puede correr muchas veces sin efectos secundarios. Se invoca en seis momento
 5. Al marcar o desmarcar procesos
 6. Al crear fichas nuevas
 
-`congelarSiCompleta()` se llama justo después de guardar un cambio de procesos:
-si la puerta acaba de llegar al 100 %, escribe la fecha de hoy; si se reabrió,
-la reprograma.
+`tocarFechaProceso()` se llama justo después de guardar un cambio de procesos y
+pone la fecha en el día de hoy. Si con ese cambio la puerta llegó al 100 %, ésa
+es la fecha que queda congelada.
 
 > Una versión anterior tenía un candado en `localStorage` que la limitaba a una
 > ejecución diaria. Era la causa de que poner una prioridad no hiciera nada hasta

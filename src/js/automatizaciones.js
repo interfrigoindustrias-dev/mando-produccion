@@ -6,26 +6,40 @@
 "use strict";
 
 /* ============================== AUTOMATIZACIONES ==============================
-   1-3. La fecha de proceso se programa según la prioridad, contando desde la fecha
-        de creación: ALTA hoy mismo, MEDIA +3 días, BAJA +8 días. Cuando esa fecha
-        llega, se va corriendo al día actual mientras la puerta siga abierta.
-        Al llegar al 100% se congela: pasa a ser la fecha real de fabricación.
-   4.   Al marcar Despachado se rellena la fecha de despacho si está vacía.
-   Corren en el navegador, así que se disparan cuando alguien abre la app.        */
+   FECHA DE PROCESO — tiene dos vidas:
+
+   1. Mientras la puerta no se ha tocado (ningún proceso marcado), es una fecha
+      PROGRAMADA: cuándo toca empezarla. Se cuenta desde la fecha de creación
+      según la prioridad — ALTA hoy mismo, MEDIA +3 días, BAJA +8 días. Si ese
+      día aún no ha llegado, se respeta tal cual: no pasa nada hasta entonces.
+
+   2. En cuanto se marca el primer proceso pasa a ser fecha de TRABAJO: se pone
+      en el día actual y se va corriendo cada día mientras la puerta siga abierta.
+
+   Al llegar al 100% se congela: queda como la fecha real de fabricación.
+
+   Además, al marcar Despachado se rellena la fecha de despacho si está vacía.
+
+   Todo corre en el navegador: se dispara cuando alguien abre o usa la app.    */
 const OFFSET = {ALTA:0, MEDIA:3, BAJA:8};
 
-/** Fecha que DEBE tener FECHA PROCESO una puerta abierta, según su prioridad.
- *  null = la automatización no la toca (sin prioridad, o sin fecha de creación
- *  cuando la prioridad exige contar días desde ella). */
+const hoy0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+
+/** Fecha que DEBE tener FECHA PROCESO una puerta abierta.
+ *  null = la automatización no la toca. */
 function fechaProgramada(c){
+  // Ya empezada: la fecha sigue al trabajo, no al calendario.
+  if(progreso(c).ok > 0) return hoy0();
+
+  // Sin empezar: la programación depende de la prioridad.
   const prio = String(c[C.PRIO]??"").trim().toUpperCase();
   if(!(prio in OFFSET)) return null;
-  const hoy0 = new Date(); hoy0.setHours(0,0,0,0);
   const creada = toDate(c[C.FECHA]);
   if(!creada && OFFSET[prio] > 0) return null;   // sin fecha de creación no hay de dónde contar
-  const objetivo = creada ? new Date(creada) : new Date(hoy0);
+  const hoy = hoy0();
+  const objetivo = creada ? new Date(creada) : new Date(hoy);
   objetivo.setDate(objetivo.getDate() + OFFSET[prio]);
-  return objetivo > hoy0 ? objetivo : hoy0;      // el día programado, o hoy si ya pasó
+  return objetivo > hoy ? objetivo : hoy;        // el día programado, o hoy si ya pasó
 }
 
 /** Recalcula las fechas de proceso de todas las puertas abiertas.
@@ -54,24 +68,19 @@ async function autoFechas(){
   }catch(e){ console.warn("auto fechas:", e.message); return 0; }
 }
 
-/** Congela la fecha en el día en que la puerta llega al 100%.
- *  Se llama justo después de guardar un cambio de procesos. */
-async function congelarSiCompleta(r, estabaCompleta){
+/** Al tocar CUALQUIER proceso, la fecha de proceso pasa al día actual.
+ *  Se llama justo después de guardar un cambio de procesos. Si con ese cambio
+ *  la puerta llegó al 100%, ésta es la fecha que queda congelada. */
+async function tocarFechaProceso(r){
   if(CFG.auto===false) return;
-  const row = ROWS.find(x=>x.r===r); if(!row) return;
-  const ahoraCompleta = completa(row.c);
-  if(ahoraCompleta && !estabaCompleta){
-    const h = hoy(), antes = fmtDate(row.c[C.FPROC]);
-    if(antes !== h){
-      row.c[C.FPROC] = h;
-      try{
-        await writeCells([{a1:`X${r}`, v:[[h]]}]);
-        logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r, campo:"Fecha proceso",
-                  antes, despues:h}]);
-      }catch(e){ console.warn("congelar:", e.message); }
-    }
-  } else if(!ahoraCompleta && estabaCompleta){
-    await autoFechas();                          // volvió a abrirse: se reprograma
-  }
-}
+  const row = ROWS.find(x=>x.r===r);
+  if(!row || anulada(row.c)) return;
 
+  const h = hoy(), antes = fmtDate(row.c[C.FPROC]);
+  if(antes === h) return;
+  row.c[C.FPROC] = h;
+  try{
+    await writeCells([{a1:`X${r}`, v:[[h]]}]);
+    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r, campo:"Fecha proceso", antes, despues:h}]);
+  }catch(e){ row.c[C.FPROC] = antes; console.warn("fecha proceso:", e.message); }
+}
