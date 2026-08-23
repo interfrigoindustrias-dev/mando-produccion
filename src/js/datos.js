@@ -37,7 +37,10 @@ async function refresh(silent){
 }
 /** Repinta el dashboard que esté a la vista tras un refresco de datos. */
 function renderDashVisible(){
-  if(!$("#v-planta").classList.contains("hide")) renderPlanta();
+  if(!$("#v-planta").classList.contains("hide")){
+    if(typeof plantaEnUso === "function" && plantaEnUso()) return;
+    renderPlanta();
+  }
   else if(!$("#v-resumen").classList.contains("hide")) renderResumen();
   else if(!$("#v-almacen").classList.contains("hide")) renderAlmacen();
   else if(!$("#v-stock").classList.contains("hide")){ renderStock(); renderModelos(); }

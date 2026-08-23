@@ -55,12 +55,44 @@ function plantaList(){
   });
   return L;
 }
+/* Qué tarjetas hay dibujadas ahora mismo, en orden. Sirve para no reconstruir
+   la lista cuando el conjunto no ha cambiado: reconstruirla desecha los botones
+   que el operario tiene bajo el dedo y puede dejar otra puerta en esa posición. */
+let plantaDibujada = "";
+
+/** Repinta UNA tarjeta sin tocar el resto de la lista. */
+function pintarTarjeta(r){
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const card = document.querySelector(`.pcard[data-r="${r}"]`); if(!card) return;
+  const c = row.c;
+  PROCS.forEach(pr=>{
+    const b = card.querySelector(`.pb[data-i="${pr.i}"]`); if(!b) return;
+    const v = tri(c[pr.i]);
+    b.classList.toggle("on", v===true);
+    b.classList.toggle("off", v!==true);
+  });
+  const pc = Math.round(progreso(c).pct*100);
+  const av = card.querySelector(".av"); if(av) av.textContent = pc+"%";
+  card.classList.toggle("lista", pc>=100);
+  const sel = card.querySelector(".pdesp");
+  if(sel && sel.value !== desp(c)) sel.value = desp(c);
+}
+
 function renderPlanta(){
   const L=plantaList();
   const cnt=$("#p-cnt");
   cnt.innerHTML = `<b>${L.length}</b> de ${activas().length} OP`;
   cnt.classList.toggle("on", L.length!==activas().length);
   $("#p-empty").classList.toggle("hide", L.length>0);
+
+  // Mismo conjunto y mismo orden: basta con refrescar lo que haya cambiado.
+  const firma = L.map(x=>x.r).join(",");
+  if(firma === plantaDibujada && $("#p-lista").children.length === L.length){
+    L.forEach(({r})=>pintarTarjeta(r));
+    return;
+  }
+  plantaDibujada = firma;
+
   $("#p-lista").innerHTML = L.map(({r,c})=>{
     const pc=Math.round(progreso(c).pct*100);
     const prio=String(c[C.PRIO]??"").trim().toUpperCase();
@@ -90,26 +122,34 @@ function renderPlanta(){
     </div>`;
   }).join("");
 }
+/* Momento del último toque. Un refresco de fondo no debe rehacer la lista
+   justo cuando alguien está marcando: se espera a que pare. */
+let plantaOcupada = 0;
+const plantaEnUso = () => Date.now() - plantaOcupada < 1500;
+
 $("#p-lista").addEventListener("change", async ev=>{
   const el=ev.target.closest("[data-desp]"); if(!el) return;
   el.disabled=true;
   const ok=await guardarDespacho(+el.dataset.desp, el.value);
   el.disabled=false;
-  if(ok){ renderPlanta(); render(); }
+  if(ok){ plantaDibujada=""; renderPlanta(); render(); }
 });
 $("#p-lista").addEventListener("click", async ev=>{
   const b=ev.target.closest(".pb"); if(!b) return;
   const r=+b.dataset.r, i=+b.dataset.i;
   const cur=tri(ROWS.find(x=>x.r===r).c[i]); if(cur===null) return;
+
+  // Respuesta inmediata al dedo, antes de que viaje nada a la red.
+  b.classList.toggle("on", cur!==true);
+  b.classList.toggle("off", cur===true);
   b.disabled=true;
-  await setProc(r,i,!cur);
-  b.disabled=false;
-  const v=tri(ROWS.find(x=>x.r===r).c[i]);
-  b.classList.toggle("on", !!v); b.classList.toggle("off", !v);
-  const card=b.closest(".pcard"), c=ROWS.find(x=>x.r===r).c, pc=Math.round(progreso(c).pct*100);
-  $(".av",card).textContent = pc+"%";
-  card.classList.toggle("lista", pc>=100);
+  plantaOcupada = Date.now();
+  try{ await setProc(r,i,!cur); }
+  finally{ b.disabled=false; plantaOcupada = Date.now(); }
+  // El estado real manda sobre lo que se pintó de forma optimista.
+  pintarTarjeta(r);
 });
 ["#p-q","#p-prio","#p-est","#p-ord"].forEach(s=>{
-  $(s).addEventListener("input", renderPlanta); $(s).addEventListener("change", renderPlanta);
+  const rehacer = ()=>{ plantaDibujada=""; renderPlanta(); };
+  $(s).addEventListener("input", rehacer); $(s).addEventListener("change", rehacer);
 });

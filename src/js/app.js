@@ -78,6 +78,10 @@ $("#g-login").onclick = async ()=>{
 };
 
 (function boot(){
+  // Todo lo visible dice a qué producto pertenece: sin ambigüedad posible.
+  document.title = MOD.titulo + " | Interfrigo";
+  const h1 = document.querySelector("#gate h1");
+  if(h1) h1.textContent = MOD.titulo;
   aplicaTema(localStorage.getItem("puertas.tema") || "auto");
   loadCfg();
   $("#g-sheet").textContent = CFG.tab;

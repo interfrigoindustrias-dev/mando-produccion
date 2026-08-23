@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Control de Puertas | Interfrigo</title>
+<title>Control de Paneles | Interfrigo</title>
 <meta name="theme-color" content="#0A4283">
 <meta name="description" content="Control de producción y despacho de puertas industriales — Interfrigo">
 <link rel="manifest" href="manifest.webmanifest">
@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="img/icono-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Puertas">
+<meta name="apple-mobile-web-app-title" content="Paneles">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/componentes.css">
@@ -26,7 +26,7 @@
 <div id="gate">
   <div class="card">
     <div class="logo"></div>
-    <h1>Control de Puertas</h1>
+    <h1>Control de Paneles</h1>
     <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
 
     <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
@@ -51,7 +51,7 @@
   <div class="logo sm"></div>
   <div class="modsel">
     <button class="modbtn" id="btn-modulo" title="Cambiar de producto">
-      <span id="mod-nombre">Puertas</span><i>▾</i></button>
+      <span id="mod-nombre">Paneles</span><i>▾</i></button>
     <div class="modmenu hide" id="mod-menu"></div>
   </div>
   <div class="tabs" role="tablist">
@@ -405,6 +405,7 @@
 <div id="print"></div>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>window.MODULO = "paneles";</script>
 <script src="config-app.js" onerror="void 0"></script>
 <script src="js/modulo.js"></script>
 <script src="js/constantes.js"></script>

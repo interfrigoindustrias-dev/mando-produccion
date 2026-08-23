@@ -8,9 +8,8 @@
 /* ------------------------------ constantes ------------------------------ */
 // userinfo.email hace falta para registrar QUIÉN hace cada cambio en el historial.
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email";
-const LOG_TAB = "LOG APP";
+const LOG_TAB = "LOG APP";   // una por hoja: cada módulo tiene la suya
 const LOG_HEAD = ["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"];
-const CFG_KEY = "puertas.cfg.v1";
 const NCOL = 27;                       // A..AA
 const LAST_COL = "AA";
 

@@ -151,3 +151,19 @@ select.mini.ap.vacio{color:var(--tx3);font-weight:400}
 /* Aviso de sesión caducada en la barra superior */
 #reconectar{background:var(--warn);border-color:var(--warn);color:#fff;font-weight:700}
 #reconectar:hover{filter:brightness(1.08)}
+
+/* ---------- Conmutador de producto ---------- */
+.modsel{position:relative}
+.modbtn{display:inline-flex;align-items:center;gap:7px;background:var(--acc);color:#fff;
+  border:0;border-radius:10px;padding:7px 12px;font-weight:800;font-size:13px;
+  letter-spacing:.02em;cursor:pointer}
+.modbtn i{font-style:normal;font-size:10px;opacity:.8}
+.modbtn:hover{filter:brightness(1.1)}
+.modmenu{position:absolute;top:calc(100% + 6px);left:0;z-index:60;min-width:190px;
+  background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);
+  box-shadow:var(--sh);padding:5px;display:flex;flex-direction:column;gap:2px}
+.modmenu a{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;
+  text-decoration:none;color:var(--tx);font-weight:600;font-size:13px}
+.modmenu a:hover{background:var(--bg3)}
+.modmenu a.act{background:var(--soft);color:var(--acc);font-weight:800}
+.modmenu .punto{width:10px;height:10px;border-radius:999px;flex:none}

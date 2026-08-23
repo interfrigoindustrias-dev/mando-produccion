@@ -58,7 +58,7 @@ function cartaHTML(row){
   return `<div class="carta">
     <div class="c-h">
       <span class="c-logo"></span>
-      <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>Control de puertas</span></div>
+      <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>${esc(MOD.nombre)}</span></div>
       <div class="c-op"><b>${esc(c[C.OP]??"")}</b><span>${esc(fmtDate(c[C.FECHA]))}</span></div>
     </div>
     <div class="c-cli">${esc(c[C.CLI]??"")}${flags?`<span class="c-flags">${esc(flags)}</span>`:""}</div>

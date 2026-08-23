@@ -29,9 +29,10 @@ function loadCfg(){
   //    Antes era al revés, y un equipo con datos viejos seguía apuntando a la
   //    hoja anterior sin que nadie se diera cuenta. Solo cede si alguien pidió
   //    expresamente otra hoja desde ⚙ (queda marcado como manual).
-  if(window.CONFIG_SERVIDOR && !guardado.manual){
+  const empresa = configDelModulo();
+  if(empresa && !guardado.manual){
     CAMPOS_EMPRESA.forEach(k=>{
-      if(window.CONFIG_SERVIDOR[k] !== undefined) CFG[k] = window.CONFIG_SERVIDOR[k];
+      if(empresa[k] !== undefined) CFG[k] = empresa[k];
     });
   }
 
@@ -69,31 +70,31 @@ function openCfg(){
   $("#c-cid").value=CFG.clientId; $("#c-sid").value=CFG.sheetId; $("#c-tab").value=CFG.tab;
   $("#c-poll").value=String(CFG.poll); $("#c-df").value=CFG.dateFmt; $("#c-brand").value=CFG.brand||"";
   $("#c-auto").checked = CFG.auto!==false;
-  const emp = window.CONFIG_SERVIDOR;
+  const emp = configDelModulo();
   const av = $("#c-origen");
   if(av){
     if(emp && !CFG.manual){
       av.className = "aviso ok";
-      av.innerHTML = `Esta instalación viene <b>configurada de fábrica</b>: el Client ID y la
-        hoja los fija la empresa y se aplican en todos los equipos. No hace falta tocar nada.`;
+      av.innerHTML = `Módulo <b>${esc(MOD.nombre)}</b>, configurado <b>de fábrica</b>:
+        el Client ID y la hoja los fija la empresa y se aplican en todos los equipos.
+        No hace falta tocar nada.`;
     } else if(emp && CFG.manual){
       av.className = "aviso";
       av.innerHTML = `Este equipo apunta a una hoja <b>distinta de la de la empresa</b>.
         Pulsa «Usar la de la empresa» para volver a la configuración común.`;
     } else {
       av.className = "aviso";
-      av.innerHTML = `Esta instalación no trae configuración propia: hay que introducir
-        el Client ID y la hoja a mano, o abrir un enlace de configuración.`;
+      av.innerHTML = `El módulo <b>${esc(MOD.nombre)}</b> todavía no tiene hoja asignada.
+        Introduce el Client ID y el ID de su hoja aquí, o abre un enlace de configuración.`;
     }
   }
   $("#ov-cfg").classList.remove("hide");
 }
 $("#c-empresa").onclick = ()=>{
-  if(!window.CONFIG_SERVIDOR){ toast("Esta instalación no trae configuración propia","err"); return; }
+  const emp = configDelModulo();
+  if(!emp){ toast("Esta instalación no trae configuración para "+MOD.nombre,"err"); return; }
   delete CFG.manual;
-  CAMPOS_EMPRESA.forEach(k=>{
-    if(window.CONFIG_SERVIDOR[k]!==undefined) CFG[k]=window.CONFIG_SERVIDOR[k];
-  });
+  CAMPOS_EMPRESA.forEach(k=>{ if(emp[k]!==undefined) CFG[k]=emp[k]; });
   saveCfg();
   toast("Restaurada la configuración de la empresa","ok");
   location.reload();
@@ -127,7 +128,7 @@ $("#c-save").onclick = ()=>{
   CFG.auto=$("#c-auto").checked;
   // Cambiar la hoja o el Client ID a mano es una decisión explícita: queda
   // marcada para que la configuración de la empresa no la pise en cada carga.
-  const emp = window.CONFIG_SERVIDOR;
+  const emp = configDelModulo();
   CFG.manual = !!(emp && (CFG.clientId!==emp.clientId || CFG.sheetId!==emp.sheetId || CFG.tab!==emp.tab));
   saveCfg(); $("#ov-cfg").classList.add("hide");
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
