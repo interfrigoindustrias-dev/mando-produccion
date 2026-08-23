@@ -103,6 +103,21 @@ hoja, la recorta sola) → **Guardar**.
 En los tres casos, lo guardado en el navegador tiene prioridad sobre la
 configuración de la instalación, por si alguien necesita apuntar a otra hoja.
 
+### Sobre el inicio de sesión
+
+La configuración ya no se pide en ningún equipo, pero **Google sí exige que cada
+persona autorice el acceso una vez por dispositivo**. No se puede evitar: la app
+entra a la hoja con la cuenta de cada operario, y de ahí sale el historial de
+quién editó qué.
+
+A partir de la segunda visita entra sola: la app recuerda el correo usado y se lo
+pasa a Google como pista, así que ni siquiera aparece el selector de cuentas.
+
+Si algún día se quisiera suprimir el inicio de sesión haría falta un intermediario
+en el servidor con una cuenta de servicio. Se descartó a propósito: acabaría con
+la trazabilidad por persona y dejaría la producción accesible a cualquiera que
+tuviera la dirección.
+
 ---
 
 ## Problemas frecuentes
