@@ -107,5 +107,6 @@ Sube `src/` a `public_html/puertas/` por SSH. Ver
 | [DESPLIEGUE.md](docs/DESPLIEGUE.md) | Google Cloud, Hostinger y resolución de problemas |
 | [DECISIONES.md](docs/DECISIONES.md) | Trampas encontradas y por qué el código es así |
 | [PWA.md](docs/PWA.md) | Instalación como aplicación y actualizaciones |
+| [GRAFO.md](docs/GRAFO.md) | Grafo de conocimiento del código (graphify) |
 | [PRUEBAS.md](docs/PRUEBAS.md) | Comprobación de humo antes de publicar |
 | [CHANGELOG.md](CHANGELOG.md) | Historial de cambios |
