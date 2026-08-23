@@ -77,6 +77,25 @@ $("#g-login").onclick = async ()=>{
   catch(e){ $("#g-msg").textContent = e.message; }
 };
 
+/** Dice exactamente qué falta y de dónde debería venir, en vez de un aviso
+ *  genérico que obliga a adivinar. */
+function explicarQueFalta(){
+  const el = $("#g-falta"); if(!el) return;
+  const emp = configDelModulo();
+  const falta = [];
+  if(!CFG.clientId) falta.push("el <b>Client ID</b>");
+  if(!CFG.sheetId)  falta.push("el <b>ID de la hoja</b>");
+  const q = falta.join(" y ");
+  if(!emp){
+    el.innerHTML = `Falta ${q} para el módulo <b>${esc(MOD.nombre)}</b>, y esta instalación
+      no trae configuración propia. Pide el <b>enlace de configuración</b> a alguien que ya
+      la use (⚙ › Enlace para otros equipos) o introdúcelo a mano en ⚙.`;
+  } else {
+    el.innerHTML = `Falta ${q} para el módulo <b>${esc(MOD.nombre)}</b>. La instalación sí
+      trae configuración: pulsa <b>⚙ › Usar la de la empresa</b> para tomarla.`;
+  }
+}
+
 (function boot(){
   // Todo lo visible dice a qué producto pertenece: sin ambigüedad posible.
   document.title = MOD.titulo + " | Interfrigo";
@@ -86,6 +105,7 @@ $("#g-login").onclick = async ()=>{
   loadCfg();
   $("#g-sheet").textContent = CFG.tab;
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
+  if(!cfgOk()) explicarQueFalta();
   const wait = setInterval(()=>{
     if(window.google && google.accounts && google.accounts.oauth2){
       clearInterval(wait); gisReady=true; initTokenClient();

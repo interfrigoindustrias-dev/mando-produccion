@@ -203,3 +203,22 @@ Paneles usa `LOG PANELES` y `MODELOS PANELES`.
 
 **Regla para el futuro:** al añadir un producto, comprobar que ningún nombre de
 pestaña auxiliar se repita entre módulos que compartan documento.
+
+## 17. Una anulación manual incompleta bloquea el equipo para siempre
+
+Cuando el módulo Paneles todavía no tenía hoja asignada, su aviso pedía
+introducirla a mano. Quien abrió ⚙ y pulsó Guardar dejó su configuración marcada
+como `manual` —una decisión deliberada de apuntar a otro sitio— **con la hoja
+vacía**. A partir de ahí la app ignoraba la configuración de la empresa para
+siempre: seguía pidiendo datos aunque el servidor ya publicara la hoja correcta.
+
+**Solución:** una anulación solo se respeta si de verdad apunta a algún sitio
+(tiene Client ID y hoja). Si está incompleta se descarta, se limpia la marca y
+manda la configuración de la empresa.
+
+**Lección más general:** un ajuste que el usuario puede dejar a medias necesita
+saber distinguir «lo he cambiado a propósito» de «lo he dejado sin terminar». Si
+no, el estado intermedio se vuelve permanente y nadie sabe por qué.
+
+Además, el aviso ya no es genérico: dice qué falta exactamente y de dónde debería
+venir, con el botón concreto que lo resuelve.

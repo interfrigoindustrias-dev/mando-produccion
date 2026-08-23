@@ -30,10 +30,16 @@ function loadCfg(){
   //    hoja anterior sin que nadie se diera cuenta. Solo cede si alguien pidió
   //    expresamente otra hoja desde ⚙ (queda marcado como manual).
   const empresa = configDelModulo();
-  if(empresa && !guardado.manual){
+  // Una anulación manual solo vale si de verdad apunta a algún sitio. Si está
+  // incompleta —pasaba al guardar ⚙ en un módulo que aún no tenía hoja— se
+  // descarta: mejor la configuración de la empresa que quedarse bloqueado.
+  const anulacionUtil = guardado.manual && guardado.clientId && guardado.sheetId;
+  if(empresa && !anulacionUtil){
+    if(guardado.manual){ delete CFG.manual; }      // se limpia la marca inservible
     CAMPOS_EMPRESA.forEach(k=>{
-      if(empresa[k] !== undefined) CFG[k] = empresa[k];
+      if(empresa[k] !== undefined && empresa[k] !== "") CFG[k] = empresa[k];
     });
+    if(guardado.manual) saveCfg();
   }
 
   // 3) Un enlace con ?cfg=... configura el dispositivo de una vez.
