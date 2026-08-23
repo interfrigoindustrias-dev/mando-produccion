@@ -102,3 +102,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // sin él, en iPhone nadie descubriría cómo hacerlo.
   mostrarBoton(!yaInstalada());
 });
+
+/* ---------- rescate: descartar todo lo guardado y volver a descargar ----------
+   Si por lo que sea el equipo se queda con una versión antigua, esto la borra
+   sin tener que buscar opciones escondidas del navegador. */
+async function forzarActualizacion(){
+  try{
+    if("serviceWorker" in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.unregister()));
+    }
+    if(window.caches){
+      const ks = await caches.keys();
+      await Promise.all(ks.map(k=>caches.delete(k)));
+    }
+  }catch(e){ console.warn("actualizar:", e.message); }
+  // El parámetro obliga a saltarse cualquier copia intermedia.
+  location.replace(location.pathname + "?v=" + Date.now());
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+  const b = document.getElementById("c-actualizar");
+  if(b) b.onclick = forzarActualizacion;
+});

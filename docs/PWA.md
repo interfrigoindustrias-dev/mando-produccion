@@ -18,8 +18,12 @@ así que el botón abre un diálogo con los tres pasos ilustrados.
 
 ## Qué se cachea y qué no
 
-`sw.js` guarda **solo el armazón**: HTML, CSS, JS e iconos. Con eso la app abre
-al instante y sobrevive a un corte de red.
+`sw.js` guarda **solo el armazón**: HTML, CSS, JS e iconos, y lo sirve
+**primero desde la red**, usando la copia guardada únicamente si no hay conexión.
+Así la app sobrevive a un corte de red sin retrasar nunca una versión nueva.
+
+Si un equipo se queda con una versión antigua: **⚙ › Forzar actualización**.
+Borra el service worker y las cachés y vuelve a descargar todo.
 
 **Los datos nunca se cachean.** Todo lo que va a `sheets.googleapis.com` o
 `accounts.google.com` pasa directo a la red: el service worker ni lo toca. Si no

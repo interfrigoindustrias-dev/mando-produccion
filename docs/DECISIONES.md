@@ -139,3 +139,21 @@ esa puerta, no se trabajó en ella y se restaura el valor anterior.
 cargan datos con retraso, el día de la carga se infla. Por eso cada tarjeta del
 Resumen es ahora **auditable**: se abre y muestra exactamente qué puertas cuenta,
 con enlace a la ficha para corregir la fecha.
+
+## 14. Cachear el código «primero la caché» retrasa los arreglos
+
+El service worker servía el JavaScript desde su copia guardada y refrescaba por
+detrás. Consecuencia: tras publicar un arreglo, los equipos seguían ejecutando el
+código anterior. Un fallo ya corregido seguía dando la cara, y desde fuera parecía
+que la corrección no funcionaba.
+
+**Solución:** el armazón va **primero a la red**, con la caché solo como respaldo
+cuando no hay conexión. Además `.htaccess` marca js y css como
+`no-cache, must-revalidate`: son respuestas 304 vacías, casi gratis, y garantizan
+que lo publicado llegue de inmediato. Las imágenes sí se retienen un día.
+
+Y por si algo se atasca igualmente, **⚙ › Forzar actualización** borra el service
+worker y todas las cachés y vuelve a descargar la aplicación.
+
+**Lección:** en una herramienta de producción, ver el dato correcto pesa más que
+ahorrar milisegundos de carga.

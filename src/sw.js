@@ -82,19 +82,21 @@ self.addEventListener("fetch", ev => {
     return;
   }
 
-  // El resto del armazón: caché primero, y se refresca por detrás.
+  // El resto del armazón: RED PRIMERO, con la caché como respaldo.
+  //
+  // La estrategia contraria (caché primero) hacía que tras publicar una version
+  // nueva los equipos siguieran ejecutando el código viejo hasta la siguiente
+  // carga. En una aplicación de producción eso no es aceptable: un arreglo
+  // publicado tiene que llegar ya. Sin red, la caché responde igual que antes.
   ev.respondWith(
-    caches.match(req).then(hit => {
-      const red = fetch(req)
-        .then(res => {
-          if (res && res.status === 200) {
-            const copia = res.clone();
-            caches.open(CACHE).then(c => c.put(req, copia));
-          }
-          return res;
-        })
-        .catch(() => hit);
-      return hit || red;
-    })
+    fetch(req)
+      .then(res => {
+        if (res && res.status === 200) {
+          const copia = res.clone();
+          caches.open(CACHE).then(c => c.put(req, copia));
+        }
+        return res;
+      })
+      .catch(() => caches.match(req))
   );
 });
