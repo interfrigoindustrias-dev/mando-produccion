@@ -14,7 +14,7 @@ que es donde se va la mayor parte del contexto en una sesión con un asistente.
 
 ## Estado actual
 
-160 nodos y 214 aristas repartidos en 19 comunidades, extraídos por AST local.
+163 nodos y 216 aristas repartidos en 20 comunidades, extraídos por AST local.
 **Coste: 0 tokens** — no interviene ningún modelo de lenguaje.
 
 Las comunidades coinciden una a una con los módulos de `src/js/`, lo que
@@ -43,9 +43,16 @@ Node: autoFechas()
 ## Reconstruir tras cambios
 
 ```bash
-graphify .            # reconstrucción completa
-graphify . --update   # solo los archivos que cambiaron
+python tools/grafo.py
 ```
+
+Extrae por AST, agrupa y **etiqueta las comunidades automáticamente** a partir
+del archivo que aporta más nodos a cada grupo.
+
+Lo de etiquetar solo no es un capricho: los identificadores de comunidad
+**cambian en cada reconstrucción**. Con etiquetas fijas, al primer cambio de
+código una función aparecía bajo el grupo equivocado — pasó con
+`tocarFechaProceso()`, que salió clasificada en «Carga y refresco».
 
 ## Limitación actual
 

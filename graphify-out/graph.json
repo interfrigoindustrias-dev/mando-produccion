@@ -409,7 +409,7 @@
       "file_type": "code",
       "norm_label": "syncsel()",
       "source_file": "src/js/control.js",
-      "source_location": "L263"
+      "source_location": "L262"
     },
     {
       "id": "src_js_control_tagdesp",
@@ -436,47 +436,107 @@
       "source_location": "L88"
     },
     {
+      "id": "src_js_datos_refresh",
+      "label": "refresh()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "refresh()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_js_datos_renderdashvisible",
+      "label": "renderDashVisible()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "renderdashvisible()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_js_datos_restartpoll",
+      "label": "restartPoll()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "restartpoll()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L38"
+    },
+    {
+      "id": "src_js_datos_setsync",
+      "label": "setSync()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "setsync()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_js_datos_stoppoll",
+      "label": "stopPoll()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "stoppoll()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L42"
+    },
+    {
       "id": "src_js_ficha_hintop",
       "label": "hintOp()",
       "_callable": true,
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "hintop()",
       "source_file": "src/js/ficha.js",
-      "source_location": "L132"
+      "source_location": "L133"
     },
     {
       "id": "src_js_ficha_initform",
       "label": "initForm()",
       "_callable": true,
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "initform()",
       "source_file": "src/js/ficha.js",
-      "source_location": "L97"
+      "source_location": "L98"
     },
     {
       "id": "src_js_ficha_nextop",
       "label": "nextOp()",
       "_callable": true,
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "nextop()",
       "source_file": "src/js/ficha.js",
-      "source_location": "L120"
+      "source_location": "L121"
     },
     {
       "id": "src_js_ficha_opendet",
       "label": "openDet()",
       "_callable": true,
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "opendet()",
@@ -488,20 +548,20 @@
       "label": "targetRows()",
       "_callable": true,
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "targetrows()",
       "source_file": "src/js/ficha.js",
-      "source_location": "L125"
+      "source_location": "L126"
     },
     {
       "id": "src_js_impresion_cartahtml",
       "label": "cartaHTML()",
       "_callable": true,
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "cartahtml()",
       "source_file": "src/js/impresion.js",
@@ -512,8 +572,8 @@
       "label": "printFichas()",
       "_callable": true,
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "printfichas()",
       "source_file": "src/js/impresion.js",
@@ -524,48 +584,12 @@
       "label": "stickerHTML()",
       "_callable": true,
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "stickerhtml()",
       "source_file": "src/js/impresion.js",
       "source_location": "L12"
-    },
-    {
-      "id": "src_js_automatizaciones_autofechas",
-      "label": "autoFechas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "autofechas()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L35"
-    },
-    {
-      "id": "src_js_automatizaciones_congelarsicompleta",
-      "label": "congelarSiCompleta()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "congelarsicompleta()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L59"
-    },
-    {
-      "id": "src_js_automatizaciones_fechaprogramada",
-      "label": "fechaProgramada()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "fechaprogramada()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L20"
     },
     {
       "id": "src_js_planta_plantalist",
@@ -589,7 +613,7 @@
       "file_type": "code",
       "norm_label": "renderplanta()",
       "source_file": "src/js/planta.js",
-      "source_location": "L52"
+      "source_location": "L58"
     },
     {
       "id": "src_js_app_enterapp",
@@ -597,7 +621,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "Navegaci\u00f3n y arranque",
+      "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "enterapp()",
       "source_file": "src/js/app.js",
@@ -609,7 +633,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 14,
-      "community_name": "Navegaci\u00f3n y arranque",
+      "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "goto()",
       "source_file": "src/js/app.js",
@@ -621,7 +645,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "Instalaci\u00f3n como app",
+      "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "abririnstalar()",
       "source_file": "src/js/pwa.js",
@@ -633,7 +657,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "Instalaci\u00f3n como app",
+      "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "mostrarboton()",
       "source_file": "src/js/pwa.js",
@@ -645,11 +669,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "Instalaci\u00f3n como app",
+      "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "yainstalada()",
       "source_file": "src/js/pwa.js",
       "source_location": "L37"
+    },
+    {
+      "id": "tools_grafo_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "grafo.py",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "tools/grafo.py",
+      "source_location": "L54"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -657,11 +693,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "almacenbase()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L126"
+      "source_location": "L146"
     },
     {
       "id": "src_js_dashboards_almacenlist",
@@ -669,11 +705,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "almacenlist()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L129"
+      "source_location": "L148"
     },
     {
       "id": "src_js_dashboards_csvde",
@@ -681,11 +717,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "csvde()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L379"
+      "source_location": "L403"
     },
     {
       "id": "src_js_dashboards_esmodelo",
@@ -693,11 +729,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "esmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L243"
+      "source_location": "L262"
     },
     {
       "id": "src_js_dashboards_guardardespacho",
@@ -705,11 +741,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "guardardespacho()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L170"
+      "source_location": "L189"
     },
     {
       "id": "src_js_dashboards_loadmodelos",
@@ -717,11 +753,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "loadmodelos()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L223"
+      "source_location": "L242"
     },
     {
       "id": "src_js_dashboards_renderalmacen",
@@ -729,11 +765,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "renderalmacen()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L145"
+      "source_location": "L164"
     },
     {
       "id": "src_js_dashboards_rendermodelos",
@@ -741,11 +777,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "rendermodelos()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L252"
+      "source_location": "L271"
     },
     {
       "id": "src_js_dashboards_renderstock",
@@ -753,11 +789,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "renderstock()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L352"
+      "source_location": "L376"
     },
     {
       "id": "src_js_dashboards_seldesp",
@@ -765,11 +801,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "seldesp()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L138"
+      "source_location": "L157"
     },
     {
       "id": "src_js_dashboards_stockbase",
@@ -777,11 +813,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "stockbase()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L335"
+      "source_location": "L359"
     },
     {
       "id": "src_js_dashboards_stocklist",
@@ -789,11 +825,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "stocklist()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L337"
+      "source_location": "L361"
     },
     {
       "id": "src_js_constantes_anulada",
@@ -801,7 +837,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "anulada()",
       "source_file": "src/js/constantes.js",
@@ -1137,7 +1173,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "authfail()",
       "source_file": "src/js/auth.js",
@@ -1149,7 +1185,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "ensuretoken()",
       "source_file": "src/js/auth.js",
@@ -1161,7 +1197,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "inittokenclient()",
       "source_file": "src/js/auth.js",
@@ -1173,7 +1209,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "logout()",
       "source_file": "src/js/auth.js",
@@ -1185,7 +1221,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "requesttoken()",
       "source_file": "src/js/auth.js",
@@ -1197,7 +1233,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "settoken()",
       "source_file": "src/js/auth.js",
@@ -1209,7 +1245,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "cfgok()",
       "source_file": "src/js/config.js",
@@ -1221,7 +1257,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "loadcfg()",
       "source_file": "src/js/config.js",
@@ -1233,7 +1269,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "lookslikeid()",
       "source_file": "src/js/config.js",
@@ -1245,7 +1281,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "opencfg()",
       "source_file": "src/js/config.js",
@@ -1257,7 +1293,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "parsesheetid()",
       "source_file": "src/js/config.js",
@@ -1269,71 +1305,59 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "savecfg()",
       "source_file": "src/js/config.js",
       "source_location": "L24"
     },
     {
-      "id": "src_js_datos_refresh",
-      "label": "refresh()",
+      "id": "src_js_automatizaciones_autofechas",
+      "label": "autoFechas()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "Carga y refresco de datos",
+      "community_name": "Automatizaciones de fecha",
       "file_type": "code",
-      "norm_label": "refresh()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L12"
+      "norm_label": "autofechas()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L49"
     },
     {
-      "id": "src_js_datos_renderdashvisible",
-      "label": "renderDashVisible()",
+      "id": "src_js_automatizaciones_fechaprogramada",
+      "label": "fechaProgramada()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "Carga y refresco de datos",
+      "community_name": "Automatizaciones de fecha",
       "file_type": "code",
-      "norm_label": "renderdashvisible()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L32"
+      "norm_label": "fechaprogramada()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L30"
     },
     {
-      "id": "src_js_datos_restartpoll",
-      "label": "restartPoll()",
+      "id": "src_js_automatizaciones_hoy0",
+      "label": "hoy0()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "Carga y refresco de datos",
+      "community_name": "Automatizaciones de fecha",
       "file_type": "code",
-      "norm_label": "restartpoll()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L38"
+      "norm_label": "hoy0()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L26"
     },
     {
-      "id": "src_js_datos_setsync",
-      "label": "setSync()",
+      "id": "src_js_automatizaciones_tocarfechaproceso",
+      "label": "tocarFechaProceso()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "Carga y refresco de datos",
+      "community_name": "Automatizaciones de fecha",
       "file_type": "code",
-      "norm_label": "setsync()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_js_datos_stoppoll",
-      "label": "stopPoll()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "Carga y refresco de datos",
-      "file_type": "code",
-      "norm_label": "stoppoll()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L42"
+      "norm_label": "tocarfechaproceso()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L74"
     },
     {
       "id": "src_js_util",
@@ -1402,10 +1426,21 @@
       "source_location": "L100"
     },
     {
+      "id": "src_js_datos",
+      "label": "datos.js",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "datos.js",
+      "source_file": "src/js/datos.js",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_ficha",
       "label": "ficha.js",
       "_origin": "ast",
-      "community": 10,
+      "community": 11,
       "community_name": "Ficha de la puerta",
       "file_type": "code",
       "norm_label": "ficha.js",
@@ -1416,8 +1451,8 @@
       "id": "src_js_impresion",
       "label": "impresion.js",
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "impresion.js",
       "source_file": "src/js/impresion.js",
@@ -1427,8 +1462,8 @@
       "id": "src_js_impresion_campos_mano",
       "label": "CAMPOS_MANO",
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "campos_mano",
       "source_file": "src/js/impresion.js",
@@ -1438,34 +1473,12 @@
       "id": "src_js_impresion_qc",
       "label": "QC",
       "_origin": "ast",
-      "community": 11,
-      "community_name": "Impresi\u00f3n: etiqueta y carta",
+      "community": 12,
+      "community_name": "Impresion",
       "file_type": "code",
       "norm_label": "qc",
       "source_file": "src/js/impresion.js",
       "source_location": "L10"
-    },
-    {
-      "id": "src_js_automatizaciones",
-      "label": "automatizaciones.js",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "automatizaciones.js",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_js_automatizaciones_offset",
-      "label": "OFFSET",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "offset",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L15"
     },
     {
       "id": "src_js_planta",
@@ -1505,7 +1518,7 @@
       "label": "app.js",
       "_origin": "ast",
       "community": 14,
-      "community_name": "Navegaci\u00f3n y arranque",
+      "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "app.js",
       "source_file": "src/js/app.js",
@@ -1516,7 +1529,7 @@
       "label": "VIEWS",
       "_origin": "ast",
       "community": 14,
-      "community_name": "Navegaci\u00f3n y arranque",
+      "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "views",
       "source_file": "src/js/app.js",
@@ -1527,7 +1540,7 @@
       "label": "pwa.js",
       "_origin": "ast",
       "community": 15,
-      "community_name": "Instalaci\u00f3n como app",
+      "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "pwa.js",
       "source_file": "src/js/pwa.js",
@@ -1538,7 +1551,7 @@
       "label": "deploy.sh",
       "_origin": "ast",
       "community": 16,
-      "community_name": "Script de despliegue",
+      "community_name": "Despliegue",
       "file_type": "code",
       "metadata": {
         "language": "bash",
@@ -1553,7 +1566,7 @@
       "label": "deploy.sh script",
       "_origin": "ast",
       "community": 16,
-      "community_name": "Script de despliegue",
+      "community_name": "Despliegue",
       "file_type": "code",
       "metadata": {
         "language": "bash",
@@ -1568,7 +1581,7 @@
       "label": "deploy.config.example.sh",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Plantilla de configuraci\u00f3n",
+      "community_name": "deploy.config.example.sh",
       "file_type": "code",
       "metadata": {
         "language": "bash",
@@ -1583,7 +1596,7 @@
       "label": "deploy.config.example.sh script",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Plantilla de configuraci\u00f3n",
+      "community_name": "deploy.config.example.sh",
       "file_type": "code",
       "metadata": {
         "language": "bash",
@@ -1616,11 +1629,22 @@
       "source_location": "L10"
     },
     {
+      "id": "tools_grafo",
+      "label": "grafo.py",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "grafo.py",
+      "file_type": "code",
+      "norm_label": "grafo.py",
+      "source_file": "tools/grafo.py",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_dashboards",
       "label": "dashboards.js",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "dashboards.js",
       "source_file": "src/js/dashboards.js",
@@ -1631,40 +1655,40 @@
       "label": "MOD_HEAD",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "mod_head",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L202"
+      "source_location": "L221"
     },
     {
       "id": "src_js_dashboards_mod_seed",
       "label": "MOD_SEED",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "mod_seed",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L203"
+      "source_location": "L222"
     },
     {
       "id": "src_js_dashboards_modelos",
       "label": "MODELOS",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Tableros y cat\u00e1logo de modelos",
+      "community_name": "Tableros y catalogo",
       "file_type": "code",
       "norm_label": "modelos",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L221"
+      "source_location": "L240"
     },
     {
       "id": "src_js_constantes",
       "label": "constantes.js",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "constantes.js",
       "source_file": "src/js/constantes.js",
@@ -1675,7 +1699,7 @@
       "label": "APERTURAS",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "aperturas",
       "source_file": "src/js/constantes.js",
@@ -1686,7 +1710,7 @@
       "label": "C",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "c",
       "source_file": "src/js/constantes.js",
@@ -1697,7 +1721,7 @@
       "label": "CFG",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "cfg",
       "source_file": "src/js/constantes.js",
@@ -1708,7 +1732,7 @@
       "label": "CON_RIEL",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "con_riel",
       "source_file": "src/js/constantes.js",
@@ -1719,7 +1743,7 @@
       "label": "DESPACHOS",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "despachos",
       "source_file": "src/js/constantes.js",
@@ -1730,7 +1754,7 @@
       "label": "ESPESORES",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "espesores",
       "source_file": "src/js/constantes.js",
@@ -1741,7 +1765,7 @@
       "label": "LOG_HEAD",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "log_head",
       "source_file": "src/js/constantes.js",
@@ -1752,7 +1776,7 @@
       "label": "MATERIALES",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "materiales",
       "source_file": "src/js/constantes.js",
@@ -1763,7 +1787,7 @@
       "label": "PROCS",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "procs",
       "source_file": "src/js/constantes.js",
@@ -1774,7 +1798,7 @@
       "label": "ROWS",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "rows",
       "source_file": "src/js/constantes.js",
@@ -1785,7 +1809,7 @@
       "label": "SEL",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "sel",
       "source_file": "src/js/constantes.js",
@@ -1796,7 +1820,7 @@
       "label": "TIPOS",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Constantes del modelo de datos",
+      "community_name": "Constantes del modelo",
       "file_type": "code",
       "norm_label": "tipos",
       "source_file": "src/js/constantes.js",
@@ -1862,7 +1886,7 @@
       "label": "auth.js",
       "_origin": "ast",
       "community": 7,
-      "community_name": "Autenticaci\u00f3n con Google",
+      "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "auth.js",
       "source_file": "src/js/auth.js",
@@ -1873,22 +1897,33 @@
       "label": "config.js",
       "_origin": "ast",
       "community": 8,
-      "community_name": "Configuraci\u00f3n del usuario",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "config.js",
       "source_file": "src/js/config.js",
       "source_location": "L1"
     },
     {
-      "id": "src_js_datos",
-      "label": "datos.js",
+      "id": "src_js_automatizaciones",
+      "label": "automatizaciones.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "Carga y refresco de datos",
+      "community_name": "Automatizaciones de fecha",
       "file_type": "code",
-      "norm_label": "datos.js",
-      "source_file": "src/js/datos.js",
+      "norm_label": "automatizaciones.js",
+      "source_file": "src/js/automatizaciones.js",
       "source_location": "L1"
+    },
+    {
+      "id": "src_js_automatizaciones_offset",
+      "label": "OFFSET",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "offset",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L24"
     }
   ],
   "links": [
@@ -2141,19 +2176,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L40",
+      "source_location": "L54",
       "weight": 1.0
     },
     {
-      "source": "src_js_automatizaciones_congelarsicompleta",
-      "target": "src_js_automatizaciones_autofechas",
+      "source": "src_js_automatizaciones_fechaprogramada",
+      "target": "src_js_automatizaciones_hoy0",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L74",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -2381,7 +2416,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/control.js",
-      "source_location": "L236",
+      "source_location": "L235",
       "weight": 1.0
     },
     {
@@ -2393,7 +2428,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L132",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -2405,7 +2440,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L146",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -2417,7 +2452,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L146",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -2429,7 +2464,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L158",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -2441,7 +2476,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L255",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -2453,7 +2488,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L257",
+      "source_location": "L276",
       "weight": 1.0
     },
     {
@@ -2465,7 +2500,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L353",
+      "source_location": "L377",
       "weight": 1.0
     },
     {
@@ -2477,7 +2512,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L353",
+      "source_location": "L377",
       "weight": 1.0
     },
     {
@@ -2489,7 +2524,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L340",
+      "source_location": "L364",
       "weight": 1.0
     },
     {
@@ -2549,7 +2584,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/ficha.js",
-      "source_location": "L138",
+      "source_location": "L139",
       "weight": 1.0
     },
     {
@@ -2561,7 +2596,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/planta.js",
-      "source_location": "L53",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -3011,7 +3046,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L15",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_automatizaciones",
+      "target": "src_js_automatizaciones_hoy0",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -3022,7 +3068,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L20",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -3033,18 +3079,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L35",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
       "source": "src_js_automatizaciones",
-      "target": "src_js_automatizaciones_congelarsicompleta",
+      "target": "src_js_automatizaciones_tocarfechaproceso",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/automatizaciones.js",
-      "source_location": "L59",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -3495,7 +3541,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/control.js",
-      "source_location": "L263",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -3561,7 +3607,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L126",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
@@ -3572,7 +3618,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L129",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -3583,7 +3629,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L138",
+      "source_location": "L157",
       "weight": 1.0
     },
     {
@@ -3594,7 +3640,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L145",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -3605,7 +3651,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L170",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -3616,7 +3662,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L202",
+      "source_location": "L221",
       "weight": 1.0
     },
     {
@@ -3627,7 +3673,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L203",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -3638,7 +3684,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L221",
+      "source_location": "L240",
       "weight": 1.0
     },
     {
@@ -3649,7 +3695,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L223",
+      "source_location": "L242",
       "weight": 1.0
     },
     {
@@ -3660,7 +3706,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L243",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -3671,7 +3717,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L252",
+      "source_location": "L271",
       "weight": 1.0
     },
     {
@@ -3682,7 +3728,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L335",
+      "source_location": "L359",
       "weight": 1.0
     },
     {
@@ -3693,7 +3739,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L337",
+      "source_location": "L361",
       "weight": 1.0
     },
     {
@@ -3704,7 +3750,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L352",
+      "source_location": "L376",
       "weight": 1.0
     },
     {
@@ -3715,7 +3761,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L379",
+      "source_location": "L403",
       "weight": 1.0
     },
     {
@@ -3792,7 +3838,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/ficha.js",
-      "source_location": "L120",
+      "source_location": "L121",
       "weight": 1.0
     },
     {
@@ -3803,7 +3849,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/ficha.js",
-      "source_location": "L125",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -3814,7 +3860,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/ficha.js",
-      "source_location": "L132",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -3836,7 +3882,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/ficha.js",
-      "source_location": "L97",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -3924,7 +3970,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/planta.js",
-      "source_location": "L52",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -4236,6 +4282,17 @@
       "weight": 1.0
     },
     {
+      "source": "tools_grafo",
+      "target": "tools_grafo_main",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tools/grafo.py",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
       "source": "src_js_control_filllists",
       "target": "src_js_control_medidade",
       "relation": "indirect_call",
@@ -4256,7 +4313,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L151",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -4304,7 +4361,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L357",
+      "source_location": "L381",
       "weight": 1.0
     },
     {
@@ -4316,10 +4373,10 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/js/ficha.js",
-      "source_location": "L118",
+      "source_location": "L119",
       "weight": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b3880be78c40f9e6d8b811cd4d5c692f267d1bc7"
+  "built_at_commit": "af803d1afcde6b8b334d075b2e764628c88a078c"
 }
