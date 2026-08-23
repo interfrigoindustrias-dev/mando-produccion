@@ -721,7 +721,7 @@
       "file_type": "code",
       "norm_label": "configdelmodulo()",
       "source_file": "src/js/modulo.js",
-      "source_location": "L67"
+      "source_location": "L73"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -4328,7 +4328,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/modulo.js",
-      "source_location": "L67",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -4802,5 +4802,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "780d3ce3f6f0d3b51d30f95184476a5d90634812"
+  "built_at_commit": "68644f1d67e4efb4b451802534c2b78d9922d44e"
 }
