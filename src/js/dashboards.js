@@ -228,7 +228,7 @@ $("#a-tabla").addEventListener("change", async ev=>{
 /* ============================== MODELOS DE STOCK ==============================
    Catalogo editable en la pestana MODELOS de la misma hoja. Se crea y se siembra
    sola la primera vez. Para anadir un modelo basta con agregar una fila alli. */
-const MOD_TAB = "MODELOS";
+const MOD_TAB = MOD.modelosTab;   // propia de cada módulo, ver modulo.js
 const MOD_HEAD = ["NOMBRE","TIPO","ESPESOR","APERTURA","ANCHO VANO","ALTO VANO","PRIORIDAD","ACTIVO"];
 const MOD_SEED = [
   ["SE12 90x190 DX BAJA",      "SE12",     92,"DX", 90,190,"BAJA", true],

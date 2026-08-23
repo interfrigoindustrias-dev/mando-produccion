@@ -21,7 +21,11 @@ const MODULOS = {
     titulo: "Control de Puertas",
     pagina: "index.html",
     color: "#0A4283",          // azul de marca
-    colorOscuro: "#5c9ceb"
+    colorOscuro: "#5c9ceb",
+    // Pestañas auxiliares. Los módulos pueden compartir documento, así que
+    // cada uno necesita las suyas: si no, mezclarían historial y catálogo.
+    logTab: "LOG APP",         // ya existe con el historial de puertas
+    modelosTab: "MODELOS"
   },
   paneles: {
     id: "paneles",
@@ -29,7 +33,9 @@ const MODULOS = {
     titulo: "Control de Paneles",
     pagina: "paneles.html",
     color: "#0B6B4F",          // verde, para distinguirlo de un vistazo
-    colorOscuro: "#3fbe90"
+    colorOscuro: "#3fbe90",
+    logTab: "LOG PANELES",
+    modelosTab: "MODELOS PANELES"
   }
 };
 

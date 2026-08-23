@@ -177,3 +177,17 @@ de que ese equipo se ha desviado, con un botón para volver a lo común.
 
 El enlace lleva los datos en base64. No son secretos: sin la hoja compartida y
 sin el origen autorizado en Google, no dan acceso a nada.
+
+## 16. Módulos que comparten documento necesitan pestañas auxiliares propias
+
+Puertas y Paneles viven en el mismo archivo de Google, en pestañas distintas. La
+app crea dos pestañas de apoyo —historial y catálogo de modelos— y con nombres
+fijos **ambos módulos habrían escrito en las mismas**: el historial de paneles
+acabaría mezclado con el de puertas, y el catálogo de stock también.
+
+**Solución:** cada módulo declara las suyas en `modulo.js` (`logTab`,
+`modelosTab`). Puertas conserva `LOG APP` y `MODELOS`, que ya existían con datos;
+Paneles usa `LOG PANELES` y `MODELOS PANELES`.
+
+**Regla para el futuro:** al añadir un producto, comprobar que ningún nombre de
+pestaña auxiliar se repita entre módulos que compartan documento.

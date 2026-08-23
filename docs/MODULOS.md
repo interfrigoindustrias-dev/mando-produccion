@@ -8,8 +8,16 @@ filas, su propio historial y su propio catálogo.
 |---|---|---|
 | Página | `index.html` | `paneles.html` |
 | Color | azul `#0A4283` | verde `#0B6B4F` |
-| Hoja | la de puertas | la de paneles |
+| Pestaña de datos | `OP PUERTA` | `PANEL` |
+| Historial | `LOG APP` | `LOG PANELES` |
+| Catálogo | `MODELOS` | `MODELOS PANELES` |
 | Preferencias | `interfrigo.cfg.puertas` | `interfrigo.cfg.paneles` |
+
+Hoy **comparten documento de Google**: es el mismo archivo, distintas pestañas.
+Que compartan archivo no significa que compartan datos — cada módulo lee la suya
+y tiene historial y catálogo propios. Por eso las pestañas auxiliares llevan el
+nombre del módulo: si no, los dos escribirían en `LOG APP` y se mezclaría el
+historial de productos distintos.
 
 ## Cómo se sabe dónde estás
 
