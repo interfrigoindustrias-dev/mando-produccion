@@ -17,12 +17,40 @@ function parseSheetId(s){
 const looksLikeId = s => /^[a-zA-Z0-9-_]{20,}$/.test(s);
 
 function loadCfg(){
+  // 1) Lo que trae la instalación (config-app.js), si existe: así ningún equipo
+  //    ni celular tiene que configurar nada la primera vez.
+  if(window.CONFIG_SERVIDOR) Object.assign(CFG, window.CONFIG_SERVIDOR);
+  // 2) Lo guardado en este navegador manda sobre lo anterior.
   try{ Object.assign(CFG, JSON.parse(localStorage.getItem(CFG_KEY)||"{}")); }catch(e){}
+  // 3) Un enlace con ?cfg=... configura el dispositivo de una vez.
+  aplicarCfgDeEnlace();
   const clean = parseSheetId(CFG.sheetId);         // repara IDs guardados con /edit?gid=…
   if(clean !== CFG.sheetId){ CFG.sheetId = clean; saveCfg(); }
 }
 function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); }
 const cfgOk = () => !!(CFG.clientId && CFG.sheetId);
+
+/** Lee ?cfg=<base64> de la URL, lo aplica y limpia la dirección.
+ *  Sirve para configurar un celular sin teclear nada: se abre el enlace y ya. */
+function aplicarCfgDeEnlace(){
+  try{
+    const p = new URLSearchParams(location.search).get("cfg");
+    if(!p) return;
+    const d = JSON.parse(decodeURIComponent(escape(atob(p.replace(/-/g,"+").replace(/_/g,"/")))));
+    if(d.clientId) CFG.clientId = d.clientId;
+    if(d.sheetId)  CFG.sheetId  = parseSheetId(d.sheetId);
+    if(d.tab)      CFG.tab      = d.tab;
+    saveCfg();
+    history.replaceState(null,"",location.pathname);   // no dejar el dato en la barra
+  }catch(e){ console.warn("cfg del enlace:", e.message); }
+}
+
+/** Enlace que deja cualquier dispositivo configurado al abrirlo. */
+function enlaceDeConfiguracion(){
+  const d = JSON.stringify({clientId:CFG.clientId, sheetId:CFG.sheetId, tab:CFG.tab});
+  const b64 = btoa(unescape(encodeURIComponent(d))).replace(/\+/g,"-").replace(/\//g,"_");
+  return location.origin + location.pathname + "?cfg=" + b64;
+}
 
 function openCfg(){
   $("#c-cid").value=CFG.clientId; $("#c-sid").value=CFG.sheetId; $("#c-tab").value=CFG.tab;
@@ -30,6 +58,20 @@ function openCfg(){
   $("#c-auto").checked = CFG.auto!==false;
   $("#ov-cfg").classList.remove("hide");
 }
+$("#c-enlace").onclick = async ()=>{
+  if(!cfgOk()){ toast("Primero completa el Client ID y el ID de la hoja","err"); return; }
+  const url = enlaceDeConfiguracion();
+  try{
+    await navigator.clipboard.writeText(url);
+    toast("Enlace copiado. Ábrelo en el otro equipo y quedará configurado","ok");
+  }catch(e){
+    // Sin permiso de portapapeles: se muestra para copiarlo a mano.
+    $("#c-sid").value = url;
+    $("#c-sid").select();
+    toast("Copia el enlace que quedó en el campo de la hoja","err");
+  }
+};
+
 $("#c-save").onclick = ()=>{
   const sid = parseSheetId($("#c-sid").value);
   if(sid && !looksLikeId(sid)){

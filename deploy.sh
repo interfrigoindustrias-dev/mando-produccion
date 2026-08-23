@@ -30,6 +30,15 @@ echo "→ Subiendo a ${DESTINO}…"
 "${SCP[@]}" "$SRC/manifest.webmanifest" "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/.htaccess"            "${USUARIO}@${HOST}:${DESTINO}/"
 
+# Configuracion de la instalacion: fuera del repositorio, para que ningun
+# equipo ni celular tenga que introducirla a mano. Ver src/config-app.example.js
+if [[ -f "${AQUI}/app.config.js" ]]; then
+  "${SCP[@]}" "${AQUI}/app.config.js" "${USUARIO}@${HOST}:${DESTINO}/config-app.js"
+  echo "  · configuracion de instalacion publicada"
+else
+  echo "  · sin app.config.js: cada equipo se configurara a mano o por enlace"
+fi
+
 # El service worker lleva sellada la version, para que el cache de los equipos
 # ya instalados se renueve solo en cuanto se publica algo nuevo.
 SELLO="$(git -C "$AQUI" rev-parse --short HEAD 2>/dev/null || date +%Y%m%d%H%M)"

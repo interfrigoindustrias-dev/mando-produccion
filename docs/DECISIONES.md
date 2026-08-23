@@ -157,3 +157,18 @@ worker y todas las cachés y vuelve a descargar la aplicación.
 
 **Lección:** en una herramienta de producción, ver el dato correcto pesa más que
 ahorrar milisegundos de carga.
+
+## 15. La configuración no puede vivir solo en cada navegador
+
+El Client ID y el ID de la hoja se guardaban únicamente en `localStorage`, que es
+propio de cada dispositivo. Decisión razonable al principio —el mismo archivo
+servía en cualquier dominio sin editarlo— y molesta después: cada celular que
+entraba pedía configurarse.
+
+**Solución en dos capas:** `config-app.js` viaja con la instalación y sirve de
+valor por defecto para todos; y **⚙ › Enlace para otros equipos** genera un
+enlace que configura cualquier dispositivo con solo abrirlo. Lo guardado en el
+navegador sigue teniendo prioridad, por si hay que apuntar a otra hoja.
+
+El enlace lleva los datos en base64. No son secretos: sin la hoja compartida y
+sin el origen autorizado en Google, no dan acceso a nada.

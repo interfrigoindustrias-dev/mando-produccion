@@ -30,7 +30,10 @@
     <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
 
     <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
-      Falta configurar el <b>Client ID</b> y el <b>ID de la hoja</b>.
+      Este equipo todavía no está configurado. Tienes dos formas de hacerlo:
+      pedir a alguien que ya la use el <b>enlace de configuración</b>
+      (⚙ › Enlace para otros equipos) y abrirlo aquí, o introducir a mano el
+      <b>Client ID</b> y el <b>ID de la hoja</b> en ⚙.
     </div>
 
     <div style="display:flex;gap:8px;margin-top:20px">
@@ -358,6 +361,7 @@
     autorizado en el Client ID, y la hoja compartida con permiso de edición a cada usuario.
   </p>
   <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
+    <button class="btn" id="c-enlace" title="Copia un enlace que deja configurado cualquier celular o equipo con solo abrirlo">🔗 Enlace para otros equipos</button>
     <button class="btn" id="c-actualizar" title="Descarta la copia guardada y vuelve a descargar la aplicación">↻ Forzar actualización</button>
     <div class="grow"></div>
     <button class="btn" data-close>Cancelar</button><button class="btn pri" id="c-save">Guardar</button>
@@ -393,6 +397,7 @@
 <div id="print"></div>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="config-app.js" onerror="void 0"></script>
 <script src="js/constantes.js"></script>
 <script src="js/util.js"></script>
 <script src="js/config.js"></script>

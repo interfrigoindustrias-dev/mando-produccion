@@ -69,10 +69,39 @@ domains/interfrigo.com.co/public_html/
 
 ## 4. Configurar la app
 
-Abrir la URL → **⚙** → pegar **Client ID** e **ID de la hoja** (acepta la URL
-completa, la recorta sola) → **Guardar** → **Entrar con Google**.
+Hay tres formas, de menos a más trabajo:
 
-Se guarda en `localStorage`: hay que hacerlo una vez por navegador.
+### a) Configuración de la instalación (recomendada)
+
+Copiar `src/config-app.example.js` a **`app.config.js`** en la raíz del proyecto
+y rellenar los valores. `deploy.sh` lo publica junto a la aplicación, y a partir
+de ahí **ningún equipo ni celular tiene que configurar nada**: entra y usa.
+
+```js
+window.CONFIG_SERVIDOR = {
+  clientId: "....apps.googleusercontent.com",
+  sheetId:  "1AbC...",
+  tab:      "OP PUERTA"
+};
+```
+
+Ese archivo no se versiona. Ninguno de esos valores es una contraseña: el acceso
+lo controla Google según con quién esté compartida la hoja y qué origen tenga
+autorizado el cliente OAuth.
+
+### b) Enlace de configuración
+
+Desde un equipo ya configurado: **⚙ › 🔗 Enlace para otros equipos**. Copia un
+enlace que, al abrirlo en otro dispositivo, lo deja configurado y limpia la
+dirección. Útil para celulares y tablets, sin teclear nada.
+
+### c) A mano
+
+**⚙** → pegar **Client ID** e **ID de la hoja** (acepta la URL completa de la
+hoja, la recorta sola) → **Guardar**.
+
+En los tres casos, lo guardado en el navegador tiene prioridad sobre la
+configuración de la instalación, por si alguien necesita apuntar a otra hoja.
 
 ---
 
