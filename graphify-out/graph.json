@@ -436,167 +436,35 @@
       "source_location": "L89"
     },
     {
-      "id": "src_js_datos_refresh",
-      "label": "refresh()",
+      "id": "src_js_planta_pintartarjeta",
+      "label": "pintarTarjeta()",
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "Carga y refresco",
+      "community_name": "Vista de planta",
       "file_type": "code",
-      "norm_label": "refresh()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L12"
+      "norm_label": "pintartarjeta()",
+      "source_file": "src/js/planta.js",
+      "source_location": "L64"
     },
     {
-      "id": "src_js_datos_renderdashvisible",
-      "label": "renderDashVisible()",
+      "id": "src_js_planta_plantaenuso",
+      "label": "plantaEnUso()",
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "Carga y refresco",
+      "community_name": "Vista de planta",
       "file_type": "code",
-      "norm_label": "renderdashvisible()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L39"
-    },
-    {
-      "id": "src_js_datos_restartpoll",
-      "label": "restartPoll()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Carga y refresco",
-      "file_type": "code",
-      "norm_label": "restartpoll()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L45"
-    },
-    {
-      "id": "src_js_datos_setsync",
-      "label": "setSync()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Carga y refresco",
-      "file_type": "code",
-      "norm_label": "setsync()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_js_datos_stoppoll",
-      "label": "stopPoll()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Carga y refresco",
-      "file_type": "code",
-      "norm_label": "stoppoll()",
-      "source_file": "src/js/datos.js",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_js_ficha_hintop",
-      "label": "hintOp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "hintop()",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L134"
-    },
-    {
-      "id": "src_js_ficha_initform",
-      "label": "initForm()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "initform()",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L99"
-    },
-    {
-      "id": "src_js_ficha_nextop",
-      "label": "nextOp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "nextop()",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L122"
-    },
-    {
-      "id": "src_js_ficha_opendet",
-      "label": "openDet()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "opendet()",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_js_ficha_targetrows",
-      "label": "targetRows()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "targetrows()",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L127"
-    },
-    {
-      "id": "src_js_impresion_cartahtml",
-      "label": "cartaHTML()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "cartahtml()",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L52"
-    },
-    {
-      "id": "src_js_impresion_printfichas",
-      "label": "printFichas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "printfichas()",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L90"
-    },
-    {
-      "id": "src_js_impresion_stickerhtml",
-      "label": "stickerHTML()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "stickerhtml()",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L12"
+      "norm_label": "plantaenuso()",
+      "source_file": "src/js/planta.js",
+      "source_location": "L128"
     },
     {
       "id": "src_js_planta_plantalist",
       "label": "plantaList()",
       "_callable": true,
       "_origin": "ast",
-      "community": 13,
+      "community": 10,
       "community_name": "Vista de planta",
       "file_type": "code",
       "norm_label": "plantalist()",
@@ -608,12 +476,168 @@
       "label": "renderPlanta()",
       "_callable": true,
       "_origin": "ast",
-      "community": 13,
+      "community": 10,
       "community_name": "Vista de planta",
       "file_type": "code",
       "norm_label": "renderplanta()",
       "source_file": "src/js/planta.js",
-      "source_location": "L58"
+      "source_location": "L81"
+    },
+    {
+      "id": "src_js_datos_refresh",
+      "label": "refresh()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "refresh()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_js_datos_renderdashvisible",
+      "label": "renderDashVisible()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "renderdashvisible()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L39"
+    },
+    {
+      "id": "src_js_datos_restartpoll",
+      "label": "restartPoll()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "restartpoll()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L48"
+    },
+    {
+      "id": "src_js_datos_setsync",
+      "label": "setSync()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "setsync()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_js_datos_stoppoll",
+      "label": "stopPoll()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "stoppoll()",
+      "source_file": "src/js/datos.js",
+      "source_location": "L52"
+    },
+    {
+      "id": "src_js_ficha_hintop",
+      "label": "hintOp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "hintop()",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L134"
+    },
+    {
+      "id": "src_js_ficha_initform",
+      "label": "initForm()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "initform()",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L99"
+    },
+    {
+      "id": "src_js_ficha_nextop",
+      "label": "nextOp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "nextop()",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L122"
+    },
+    {
+      "id": "src_js_ficha_opendet",
+      "label": "openDet()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "opendet()",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_js_ficha_targetrows",
+      "label": "targetRows()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "targetrows()",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L127"
+    },
+    {
+      "id": "src_js_impresion_cartahtml",
+      "label": "cartaHTML()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "cartahtml()",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L52"
+    },
+    {
+      "id": "src_js_impresion_printfichas",
+      "label": "printFichas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "printfichas()",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L90"
+    },
+    {
+      "id": "src_js_impresion_stickerhtml",
+      "label": "stickerHTML()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "stickerhtml()",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L12"
     },
     {
       "id": "src_js_pwa_abririnstalar",
@@ -673,7 +697,7 @@
       "file_type": "code",
       "norm_label": "enterapp()",
       "source_file": "src/js/app.js",
-      "source_location": "L38"
+      "source_location": "L43"
     },
     {
       "id": "src_js_app_goto",
@@ -688,16 +712,16 @@
       "source_location": "L10"
     },
     {
-      "id": "tools_grafo_main",
-      "label": "main()",
+      "id": "src_js_modulo_configdelmodulo",
+      "label": "configDelModulo()",
       "_callable": true,
       "_origin": "ast",
-      "community": 19,
-      "community_name": "grafo.py",
+      "community": 16,
+      "community_name": "modulo.js",
       "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "tools/grafo.py",
-      "source_location": "L54"
+      "norm_label": "configdelmodulo()",
+      "source_file": "src/js/modulo.js",
+      "source_location": "L67"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -856,6 +880,18 @@
       "source_location": "L372"
     },
     {
+      "id": "tools_grafo_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "grafo.py",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "tools/grafo.py",
+      "source_location": "L54"
+    },
+    {
       "id": "src_js_constantes_anulada",
       "label": "anulada()",
       "_callable": true,
@@ -865,7 +901,7 @@
       "file_type": "code",
       "norm_label": "anulada()",
       "source_file": "src/js/constantes.js",
-      "source_location": "L23"
+      "source_location": "L22"
     },
     {
       "id": "src_js_comun_activas",
@@ -1117,7 +1153,7 @@
       "file_type": "code",
       "norm_label": "aplicarcfgdeenlace()",
       "source_file": "src/js/config.js",
-      "source_location": "L48"
+      "source_location": "L49"
     },
     {
       "id": "src_js_config_cfgok",
@@ -1129,7 +1165,7 @@
       "file_type": "code",
       "norm_label": "cfgok()",
       "source_file": "src/js/config.js",
-      "source_location": "L44"
+      "source_location": "L45"
     },
     {
       "id": "src_js_config_enlacedeconfiguracion",
@@ -1141,7 +1177,7 @@
       "file_type": "code",
       "norm_label": "enlacedeconfiguracion()",
       "source_file": "src/js/config.js",
-      "source_location": "L62"
+      "source_location": "L63"
     },
     {
       "id": "src_js_config_loadcfg",
@@ -1177,7 +1213,7 @@
       "file_type": "code",
       "norm_label": "opencfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L68"
+      "source_location": "L69"
     },
     {
       "id": "src_js_config_parsesheetid",
@@ -1201,7 +1237,7 @@
       "file_type": "code",
       "norm_label": "savecfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L43"
+      "source_location": "L44"
     },
     {
       "id": "src_js_auditoria_ensurelog",
@@ -1288,95 +1324,47 @@
       "source_location": "L73"
     },
     {
-      "id": "src_js_automatizaciones_autofechas",
-      "label": "autoFechas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "autofechas()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_js_automatizaciones_fechaprogramada",
-      "label": "fechaProgramada()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "fechaprogramada()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L30"
-    },
-    {
-      "id": "src_js_automatizaciones_hoy0",
-      "label": "hoy0()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "hoy0()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L26"
-    },
-    {
-      "id": "src_js_automatizaciones_repairfechasfalsas",
-      "label": "repairFechasFalsas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "repairfechasfalsas()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L106"
-    },
-    {
-      "id": "src_js_automatizaciones_tocarfechaproceso",
-      "label": "tocarFechaProceso()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "tocarfechaproceso()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L79"
-    },
-    {
       "id": "src_js_auth_authfail",
       "label": "authFail()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "authfail()",
       "source_file": "src/js/auth.js",
-      "source_location": "L33"
+      "source_location": "L35"
+    },
+    {
+      "id": "src_js_auth_avisarreconectar",
+      "label": "avisarReconectar()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "avisarreconectar()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L77"
     },
     {
       "id": "src_js_auth_ensuretoken",
       "label": "ensureToken()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "ensuretoken()",
       "source_file": "src/js/auth.js",
-      "source_location": "L49"
+      "source_location": "L51"
     },
     {
       "id": "src_js_auth_inittokenclient",
       "label": "initTokenClient()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "inittokenclient()",
@@ -1388,36 +1376,108 @@
       "label": "logout()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "logout()",
       "source_file": "src/js/auth.js",
-      "source_location": "L53"
+      "source_location": "L86"
+    },
+    {
+      "id": "src_js_auth_programarrenovacion",
+      "label": "programarRenovacion()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "programarrenovacion()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L63"
     },
     {
       "id": "src_js_auth_requesttoken",
       "label": "requestToken()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "requesttoken()",
       "source_file": "src/js/auth.js",
-      "source_location": "L39"
+      "source_location": "L41"
     },
     {
       "id": "src_js_auth_settoken",
       "label": "setToken()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "settoken()",
       "source_file": "src/js/auth.js",
       "source_location": "L28"
+    },
+    {
+      "id": "src_js_automatizaciones_autofechas",
+      "label": "autoFechas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "autofechas()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_js_automatizaciones_fechaprogramada",
+      "label": "fechaProgramada()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "fechaprogramada()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L30"
+    },
+    {
+      "id": "src_js_automatizaciones_hoy0",
+      "label": "hoy0()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "hoy0()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_js_automatizaciones_repairfechasfalsas",
+      "label": "repairFechasFalsas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "repairfechasfalsas()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L106"
+    },
+    {
+      "id": "src_js_automatizaciones_tocarfechaproceso",
+      "label": "tocarFechaProceso()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "tocarfechaproceso()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L79"
     },
     {
       "id": "src_js_util",
@@ -1486,65 +1546,10 @@
       "source_location": "L101"
     },
     {
-      "id": "src_js_datos",
-      "label": "datos.js",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Carga y refresco",
-      "file_type": "code",
-      "norm_label": "datos.js",
-      "source_file": "src/js/datos.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_js_ficha",
-      "label": "ficha.js",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "Ficha de la puerta",
-      "file_type": "code",
-      "norm_label": "ficha.js",
-      "source_file": "src/js/ficha.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_js_impresion",
-      "label": "impresion.js",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "impresion.js",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_js_impresion_campos_mano",
-      "label": "CAMPOS_MANO",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "campos_mano",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L46"
-    },
-    {
-      "id": "src_js_impresion_qc",
-      "label": "QC",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Impresion",
-      "file_type": "code",
-      "norm_label": "qc",
-      "source_file": "src/js/impresion.js",
-      "source_location": "L10"
-    },
-    {
       "id": "src_js_planta",
       "label": "planta.js",
       "_origin": "ast",
-      "community": 13,
+      "community": 10,
       "community_name": "Vista de planta",
       "file_type": "code",
       "norm_label": "planta.js",
@@ -1555,7 +1560,7 @@
       "id": "src_js_planta_color_proc",
       "label": "COLOR_PROC",
       "_origin": "ast",
-      "community": 13,
+      "community": 10,
       "community_name": "Vista de planta",
       "file_type": "code",
       "norm_label": "color_proc",
@@ -1566,12 +1571,67 @@
       "id": "src_js_planta_prio_ord",
       "label": "PRIO_ORD",
       "_origin": "ast",
-      "community": 13,
+      "community": 10,
       "community_name": "Vista de planta",
       "file_type": "code",
       "norm_label": "prio_ord",
       "source_file": "src/js/planta.js",
       "source_location": "L9"
+    },
+    {
+      "id": "src_js_datos",
+      "label": "datos.js",
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "Carga y refresco",
+      "file_type": "code",
+      "norm_label": "datos.js",
+      "source_file": "src/js/datos.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_js_ficha",
+      "label": "ficha.js",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Ficha de la puerta",
+      "file_type": "code",
+      "norm_label": "ficha.js",
+      "source_file": "src/js/ficha.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_js_impresion",
+      "label": "impresion.js",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "impresion.js",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_js_impresion_campos_mano",
+      "label": "CAMPOS_MANO",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "campos_mano",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L46"
+    },
+    {
+      "id": "src_js_impresion_qc",
+      "label": "QC",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "Impresion",
+      "file_type": "code",
+      "norm_label": "qc",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L10"
     },
     {
       "id": "src_js_pwa",
@@ -1607,10 +1667,32 @@
       "source_location": "L9"
     },
     {
+      "id": "src_js_modulo",
+      "label": "modulo.js",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "modulo.js",
+      "file_type": "code",
+      "norm_label": "modulo.js",
+      "source_file": "src/js/modulo.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_js_modulo_modulos",
+      "label": "MODULOS",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "modulo.js",
+      "file_type": "code",
+      "norm_label": "modulos",
+      "source_file": "src/js/modulo.js",
+      "source_location": "L17"
+    },
+    {
       "id": "deploy",
       "label": "deploy.sh",
       "_origin": "ast",
-      "community": 16,
+      "community": 17,
       "community_name": "Despliegue",
       "file_type": "code",
       "metadata": {
@@ -1625,7 +1707,7 @@
       "id": "deploy_sh__entry",
       "label": "deploy.sh script",
       "_origin": "ast",
-      "community": 16,
+      "community": 17,
       "community_name": "Despliegue",
       "file_type": "code",
       "metadata": {
@@ -1640,7 +1722,7 @@
       "id": "deploy_config_example",
       "label": "deploy.config.example.sh",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "community_name": "deploy.config.example.sh",
       "file_type": "code",
       "metadata": {
@@ -1655,7 +1737,7 @@
       "id": "deploy_config_example_sh__entry",
       "label": "deploy.config.example.sh script",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "community_name": "deploy.config.example.sh",
       "file_type": "code",
       "metadata": {
@@ -1670,7 +1752,7 @@
       "id": "src_sw",
       "label": "sw.js",
       "_origin": "ast",
-      "community": 18,
+      "community": 19,
       "community_name": "Service worker",
       "file_type": "code",
       "norm_label": "sw.js",
@@ -1681,23 +1763,12 @@
       "id": "src_sw_armazon",
       "label": "ARMAZON",
       "_origin": "ast",
-      "community": 18,
+      "community": 19,
       "community_name": "Service worker",
       "file_type": "code",
       "norm_label": "armazon",
       "source_file": "src/sw.js",
       "source_location": "L10"
-    },
-    {
-      "id": "tools_grafo",
-      "label": "grafo.py",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "grafo.py",
-      "file_type": "code",
-      "norm_label": "grafo.py",
-      "source_file": "tools/grafo.py",
-      "source_location": "L1"
     },
     {
       "id": "src_js_dashboards",
@@ -1744,10 +1815,21 @@
       "source_location": "L251"
     },
     {
+      "id": "tools_grafo",
+      "label": "grafo.py",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "grafo.py",
+      "file_type": "code",
+      "norm_label": "grafo.py",
+      "source_file": "tools/grafo.py",
+      "source_location": "L1"
+    },
+    {
       "id": "src_config_app_example",
       "label": "config-app.example.js",
       "_origin": "ast",
-      "community": 20,
+      "community": 21,
       "community_name": "config-app.example.js",
       "file_type": "code",
       "norm_label": "config-app.example.js",
@@ -1774,7 +1856,7 @@
       "file_type": "code",
       "norm_label": "aperturas",
       "source_file": "src/js/constantes.js",
-      "source_location": "L20"
+      "source_location": "L19"
     },
     {
       "id": "src_js_constantes_c",
@@ -1785,7 +1867,7 @@
       "file_type": "code",
       "norm_label": "c",
       "source_file": "src/js/constantes.js",
-      "source_location": "L28"
+      "source_location": "L27"
     },
     {
       "id": "src_js_constantes_cfg",
@@ -1796,7 +1878,7 @@
       "file_type": "code",
       "norm_label": "cfg",
       "source_file": "src/js/constantes.js",
-      "source_location": "L38"
+      "source_location": "L37"
     },
     {
       "id": "src_js_constantes_con_riel",
@@ -1807,7 +1889,7 @@
       "file_type": "code",
       "norm_label": "con_riel",
       "source_file": "src/js/constantes.js",
-      "source_location": "L25"
+      "source_location": "L24"
     },
     {
       "id": "src_js_constantes_despachos",
@@ -1818,7 +1900,7 @@
       "file_type": "code",
       "norm_label": "despachos",
       "source_file": "src/js/constantes.js",
-      "source_location": "L21"
+      "source_location": "L20"
     },
     {
       "id": "src_js_constantes_espesores",
@@ -1829,7 +1911,7 @@
       "file_type": "code",
       "norm_label": "espesores",
       "source_file": "src/js/constantes.js",
-      "source_location": "L19"
+      "source_location": "L18"
     },
     {
       "id": "src_js_constantes_log_head",
@@ -1851,7 +1933,7 @@
       "file_type": "code",
       "norm_label": "materiales",
       "source_file": "src/js/constantes.js",
-      "source_location": "L17"
+      "source_location": "L16"
     },
     {
       "id": "src_js_constantes_procs",
@@ -1862,7 +1944,7 @@
       "file_type": "code",
       "norm_label": "procs",
       "source_file": "src/js/constantes.js",
-      "source_location": "L30"
+      "source_location": "L29"
     },
     {
       "id": "src_js_constantes_rows",
@@ -1873,7 +1955,7 @@
       "file_type": "code",
       "norm_label": "rows",
       "source_file": "src/js/constantes.js",
-      "source_location": "L40"
+      "source_location": "L39"
     },
     {
       "id": "src_js_constantes_sel",
@@ -1884,7 +1966,7 @@
       "file_type": "code",
       "norm_label": "sel",
       "source_file": "src/js/constantes.js",
-      "source_location": "L41"
+      "source_location": "L40"
     },
     {
       "id": "src_js_constantes_tipos",
@@ -1895,7 +1977,7 @@
       "file_type": "code",
       "norm_label": "tipos",
       "source_file": "src/js/constantes.js",
-      "source_location": "L18"
+      "source_location": "L17"
     },
     {
       "id": "src_js_comun",
@@ -1986,10 +2068,21 @@
       "source_location": "L12"
     },
     {
+      "id": "src_js_auth",
+      "label": "auth.js",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "auth.js",
+      "source_file": "src/js/auth.js",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_automatizaciones",
       "label": "automatizaciones.js",
       "_origin": "ast",
-      "community": 8,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "automatizaciones.js",
@@ -2000,7 +2093,7 @@
       "id": "src_js_automatizaciones_campos_proceso",
       "label": "CAMPOS_PROCESO",
       "_origin": "ast",
-      "community": 8,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "campos_proceso",
@@ -2011,23 +2104,12 @@
       "id": "src_js_automatizaciones_offset",
       "label": "OFFSET",
       "_origin": "ast",
-      "community": 8,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "offset",
       "source_file": "src/js/automatizaciones.js",
       "source_location": "L24"
-    },
-    {
-      "id": "src_js_auth",
-      "label": "auth.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "auth.js",
-      "source_file": "src/js/auth.js",
-      "source_location": "L1"
     }
   ],
   "links": [
@@ -2232,7 +2314,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/auth.js",
-      "source_location": "L51",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
@@ -2260,6 +2342,30 @@
       "weight": 1.0
     },
     {
+      "source": "src_js_auth_programarrenovacion",
+      "target": "src_js_auth_requesttoken",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/auth.js",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_auth_programarrenovacion",
+      "target": "src_js_auth_avisarreconectar",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/auth.js",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
       "source": "src_js_auth_requesttoken",
       "target": "src_js_auth_inittokenclient",
       "relation": "calls",
@@ -2268,7 +2374,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/auth.js",
-      "source_location": "L40",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_auth_settoken",
+      "target": "src_js_auth_programarrenovacion",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/auth.js",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -2352,7 +2470,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L54",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -2364,7 +2482,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L56",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -2376,7 +2494,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L39",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -2388,7 +2506,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -2400,7 +2518,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L41",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -2700,7 +2818,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/datos.js",
-      "source_location": "L46",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -2712,7 +2830,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/datos.js",
-      "source_location": "L47",
+      "source_location": "L50",
       "weight": 1.0
     },
     {
@@ -2736,7 +2854,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/planta.js",
-      "source_location": "L59",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_planta_renderplanta",
+      "target": "src_js_planta_pintartarjeta",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/planta.js",
+      "source_location": "L91",
       "weight": 1.0
     },
     {
@@ -3010,7 +3140,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/app.js",
-      "source_location": "L38",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -3142,7 +3272,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/auth.js",
-      "source_location": "L33",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -3153,7 +3283,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/auth.js",
-      "source_location": "L39",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -3164,7 +3294,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/auth.js",
-      "source_location": "L49",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_auth",
+      "target": "src_js_auth_programarrenovacion",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/auth.js",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_auth",
+      "target": "src_js_auth_avisarreconectar",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/auth.js",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -3175,7 +3327,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/auth.js",
-      "source_location": "L53",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -3439,7 +3591,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L43",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -3450,7 +3602,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L44",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -3461,7 +3613,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L48",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -3472,7 +3624,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L62",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -3483,7 +3635,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L68",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -3505,7 +3657,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L17",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -3516,7 +3668,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -3527,7 +3679,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -3538,7 +3690,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L20",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -3549,7 +3701,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L21",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -3560,7 +3712,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L23",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -3571,7 +3723,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L25",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -3582,7 +3734,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L28",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -3593,7 +3745,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L30",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -3604,7 +3756,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -3615,7 +3767,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L40",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -3626,7 +3778,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/constantes.js",
-      "source_location": "L41",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -4022,7 +4174,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/datos.js",
-      "source_location": "L45",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -4033,7 +4185,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/datos.js",
-      "source_location": "L49",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -4158,6 +4310,39 @@
       "weight": 1.0
     },
     {
+      "source": "src_js_modulo",
+      "target": "src_js_modulo_modulos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/modulo.js",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_modulo",
+      "target": "src_js_modulo_configdelmodulo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/modulo.js",
+      "source_location": "L67",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_planta",
+      "target": "src_js_planta_plantaenuso",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/planta.js",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
       "source": "src_js_planta",
       "target": "src_js_planta_color_proc",
       "relation": "contains",
@@ -4181,13 +4366,24 @@
     },
     {
       "source": "src_js_planta",
+      "target": "src_js_planta_pintartarjeta",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/planta.js",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_planta",
       "target": "src_js_planta_renderplanta",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/planta.js",
-      "source_location": "L58",
+      "source_location": "L81",
       "weight": 1.0
     },
     {
@@ -4606,5 +4802,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bfe79af1eba10e758f1da8175bb0b2e399b5f6d3"
+  "built_at_commit": "780d3ce3f6f0d3b51d30f95184476a5d90634812"
 }
