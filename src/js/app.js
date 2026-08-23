@@ -31,6 +31,11 @@ $("#f-clear").onclick = ()=>{
   $("#f-q").value=""; FSEL.forEach(id=>$("#"+id).value="");
   SEL.clear(); render();
 };
+$("#reconectar").onclick = async ()=>{
+  // Nace de un clic, así que el navegador no bloquea la ventana de Google.
+  try{ await requestToken(false); refresh(false); }
+  catch(e){ try{ await requestToken(true); refresh(false); }catch(e2){ toast(e2.message,"err"); } }
+};
 $("#btn-reload").onclick = ()=>refresh(false);
 $("#btn-cfg").onclick = openCfg; $("#g-cfg").onclick = openCfg;
 $("#btn-out").onclick = logout;

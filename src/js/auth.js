@@ -27,6 +27,8 @@ function initTokenClient(){
 }
 function setToken(r){
   token = r.access_token; tokenExp = Date.now() + (parseInt(r.expires_in,10)||3600)*1000 - 60000;
+  const b = $("#reconectar"); if(b) b.classList.add("hide");
+  programarRenovacion();
   // se guarda el correo en cuanto se conoce, para la próxima visita
   if(pendingAuth){ pendingAuth.resolve(token); pendingAuth=null; }
 }
@@ -50,6 +52,37 @@ async function ensureToken(){
   if(token && Date.now() < tokenExp) return token;
   return requestToken(false);
 }
+
+/* ---------- renovación anticipada ----------
+   El permiso de Google dura una hora. Si se espera a que caduque, la renovación
+   cae justo cuando alguien está marcando un proceso, y como no viene de un clic
+   el navegador puede bloquear la ventana emergente. Se renueva antes, con la
+   pestaña en primer plano, cuando nadie está esperando nada. */
+let temporizadorRenovar = null;
+
+function programarRenovacion(){
+  clearTimeout(temporizadorRenovar);
+  if(!tokenExp) return;
+  // A cuatro quintas partes de la vida del permiso, y nunca antes de un minuto.
+  const falta = tokenExp - Date.now();
+  const cuando = Math.max(60000, falta - 10*60000);
+  temporizadorRenovar = setTimeout(async ()=>{
+    if(document.hidden){ programarRenovacion(); return; }   // se reintenta al volver
+    try{ await requestToken(false); }
+    catch(e){ avisarReconectar(); }
+  }, cuando);
+}
+
+/** Si la renovación silenciosa falla, se pide un clic en vez de perder el trabajo. */
+function avisarReconectar(){
+  const b = $("#reconectar");
+  if(b) b.classList.remove("hide");
+}
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && tokenExp && Date.now() > tokenExp - 60000){
+    requestToken(false).catch(avisarReconectar);
+  }
+});
 function logout(){
   if(token && window.google) try{ google.accounts.oauth2.revoke(token,()=>{}); }catch(e){}
   token=null; tokenExp=0; ROWS=[]; stopPoll();

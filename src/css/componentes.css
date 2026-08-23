@@ -147,3 +147,7 @@ select.mini.ap.vacio{color:var(--tx3);font-weight:400}
 .aviso b{color:var(--tx)}
 .aviso.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);
   border-color:color-mix(in srgb,var(--ok) 35%,transparent)}
+
+/* Aviso de sesión caducada en la barra superior */
+#reconectar{background:var(--warn);border-color:var(--warn);color:#fff;font-weight:700}
+#reconectar:hover{filter:brightness(1.08)}
