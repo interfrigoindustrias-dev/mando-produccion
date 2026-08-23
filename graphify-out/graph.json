@@ -616,35 +616,11 @@
       "source_location": "L58"
     },
     {
-      "id": "src_js_app_enterapp",
-      "label": "enterApp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "Navegacion y arranque",
-      "file_type": "code",
-      "norm_label": "enterapp()",
-      "source_file": "src/js/app.js",
-      "source_location": "L38"
-    },
-    {
-      "id": "src_js_app_goto",
-      "label": "goto()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "Navegacion y arranque",
-      "file_type": "code",
-      "norm_label": "goto()",
-      "source_file": "src/js/app.js",
-      "source_location": "L10"
-    },
-    {
       "id": "src_js_pwa_abririnstalar",
       "label": "abrirInstalar()",
       "_callable": true,
       "_origin": "ast",
-      "community": 15,
+      "community": 14,
       "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "abririnstalar()",
@@ -652,11 +628,23 @@
       "source_location": "L62"
     },
     {
+      "id": "src_js_pwa_forzaractualizacion",
+      "label": "forzarActualizacion()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "Instalacion como app",
+      "file_type": "code",
+      "norm_label": "forzaractualizacion()",
+      "source_file": "src/js/pwa.js",
+      "source_location": "L109"
+    },
+    {
       "id": "src_js_pwa_mostrarboton",
       "label": "mostrarBoton()",
       "_callable": true,
       "_origin": "ast",
-      "community": 15,
+      "community": 14,
       "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "mostrarboton()",
@@ -668,12 +656,36 @@
       "label": "yaInstalada()",
       "_callable": true,
       "_origin": "ast",
-      "community": 15,
+      "community": 14,
       "community_name": "Instalacion como app",
       "file_type": "code",
       "norm_label": "yainstalada()",
       "source_file": "src/js/pwa.js",
       "source_location": "L37"
+    },
+    {
+      "id": "src_js_app_enterapp",
+      "label": "enterApp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "Navegacion y arranque",
+      "file_type": "code",
+      "norm_label": "enterapp()",
+      "source_file": "src/js/app.js",
+      "source_location": "L38"
+    },
+    {
+      "id": "src_js_app_goto",
+      "label": "goto()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "Navegacion y arranque",
+      "file_type": "code",
+      "norm_label": "goto()",
+      "source_file": "src/js/app.js",
+      "source_location": "L10"
     },
     {
       "id": "tools_grafo_main",
@@ -1538,10 +1550,21 @@
       "source_location": "L9"
     },
     {
+      "id": "src_js_pwa",
+      "label": "pwa.js",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "Instalacion como app",
+      "file_type": "code",
+      "norm_label": "pwa.js",
+      "source_file": "src/js/pwa.js",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_app",
       "label": "app.js",
       "_origin": "ast",
-      "community": 14,
+      "community": 15,
       "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "app.js",
@@ -1552,23 +1575,12 @@
       "id": "src_js_app_views",
       "label": "VIEWS",
       "_origin": "ast",
-      "community": 14,
+      "community": 15,
       "community_name": "Navegacion y arranque",
       "file_type": "code",
       "norm_label": "views",
       "source_file": "src/js/app.js",
       "source_location": "L9"
-    },
-    {
-      "id": "src_js_pwa",
-      "label": "pwa.js",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "Instalacion como app",
-      "file_type": "code",
-      "norm_label": "pwa.js",
-      "source_file": "src/js/pwa.js",
-      "source_location": "L1"
     },
     {
       "id": "deploy",
@@ -4076,6 +4088,17 @@
     },
     {
       "source": "src_js_pwa",
+      "target": "src_js_pwa_forzaractualizacion",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/pwa.js",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_pwa",
       "target": "src_js_pwa_yainstalada",
       "relation": "contains",
       "_origin": "ast",
@@ -4468,5 +4491,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "265d8fdc5b19bd0faef2b0f98c9b7190f969c5c7"
+  "built_at_commit": "52fb9d0aa7798c3ec3259b85ade8f8f62be1a0e1"
 }

@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-23)
 
 ## Corpus Check
-- Corpus is ~20,036 words - fits in a single context window. You may not need a graph.
+- Corpus is ~20,371 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 167 nodes · 220 edges · 20 communities (14 shown, 6 thin omitted)
+- 168 nodes · 221 edges · 20 communities (14 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -23,8 +23,8 @@
 - Ficha de la puerta
 - Impresion
 - Vista de planta
-- Navegacion y arranque
 - Instalacion como app
+- Navegacion y arranque
 - Despliegue
 - deploy.config.example.sh
 - Service worker
