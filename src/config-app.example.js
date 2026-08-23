@@ -14,4 +14,8 @@ window.CONFIG_SERVIDOR = {
   clientId: "<id-de-cliente>.apps.googleusercontent.com",
   sheetId:  "<id-de-la-hoja>",
   tab:      "OP PUERTA"
+
+  // Opcional. Si TODOS entran con una cuenta del dominio, salta el selector
+  // de cuentas de Google. Quien use otra cuenta quedaria bloqueado.
+  // , dominio: "<dominio-de-la-empresa>"
 };

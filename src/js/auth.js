@@ -6,17 +6,28 @@
 "use strict";
 
 /* ------------------------------ autenticación ------------------------------ */
+/* El correo con el que se entró la última vez. Pasárselo a Google evita el
+   selector de cuentas en las visitas siguientes. */
+const HINT_KEY = "puertas.ultimo.correo";
+
 function initTokenClient(){
   if(!gisReady || !CFG.clientId) return;
   try{
-    tokenClient = google.accounts.oauth2.initTokenClient({
+    const opciones = {
       client_id: CFG.clientId, scope: SCOPE,
       callback: r => { if(r && r.access_token) setToken(r); else authFail(r); }
-    });
+    };
+    // Si la instalación declara un dominio, Google no ofrece cuentas ajenas.
+    if(CFG.dominio) opciones.hosted_domain = CFG.dominio;
+    // Y si ya se entró antes en este equipo, se va directo a esa cuenta.
+    const ultimo = localStorage.getItem(HINT_KEY);
+    if(ultimo) opciones.hint = ultimo;
+    tokenClient = google.accounts.oauth2.initTokenClient(opciones);
   }catch(e){ $("#g-msg").textContent = "Client ID inválido: "+e.message; }
 }
 function setToken(r){
   token = r.access_token; tokenExp = Date.now() + (parseInt(r.expires_in,10)||3600)*1000 - 60000;
+  // se guarda el correo en cuanto se conoce, para la próxima visita
   if(pendingAuth){ pendingAuth.resolve(token); pendingAuth=null; }
 }
 function authFail(r){

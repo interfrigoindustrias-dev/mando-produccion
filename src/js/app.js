@@ -39,7 +39,8 @@ async function enterApp(){
   // el correo sale del propio token: sirve para el mensaje de "comparte la hoja con…"
   try{
     const r = await fetch("https://www.googleapis.com/oauth2/v3/userinfo",{headers:{Authorization:"Bearer "+token}});
-    if(r.ok){ const j=await r.json(); userMail=j.email||""; }
+    if(r.ok){ const j=await r.json(); userMail=j.email||"";
+              if(userMail) localStorage.setItem(HINT_KEY, userMail); }
   }catch(e){}
   $("#u-mail").textContent = userMail || "conectado";
   $("#u-av").textContent = (userMail||"?")[0].toUpperCase();
@@ -79,8 +80,16 @@ $("#g-login").onclick = async ()=>{
   const wait = setInterval(()=>{
     if(window.google && google.accounts && google.accounts.oauth2){
       clearInterval(wait); gisReady=true; initTokenClient();
-      if(cfgOk()){ // intento silencioso: si ya autorizó antes, entra sin clics
-        requestToken(false).then(enterApp).catch(()=>{});
+      if(cfgOk()){
+        // Intento silencioso: si este equipo ya autorizó antes, entra sin un solo clic.
+        $("#g-msg").textContent = "Conectando…";
+        requestToken(false)
+          .then(enterApp)
+          .catch(()=>{
+            // Primera vez en este dispositivo: Google exige el consentimiento.
+            $("#g-msg").textContent = "";
+            $("#g-login").focus();
+          });
       }
     }
   },150);
