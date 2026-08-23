@@ -28,6 +28,7 @@ echo "→ Subiendo a ${DESTINO}…"
 "${SSH[@]}" "mkdir -p ~/${DESTINO}/css ~/${DESTINO}/js ~/${DESTINO}/img"
 "${SCP[@]}" "$SRC/index.html"           "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/manifest.webmanifest" "${USUARIO}@${HOST}:${DESTINO}/"
+"${SCP[@]}" "$SRC/.htaccess"            "${USUARIO}@${HOST}:${DESTINO}/"
 
 # El service worker lleva sellada la version, para que el cache de los equipos
 # ya instalados se renueve solo en cuanto se publica algo nuevo.

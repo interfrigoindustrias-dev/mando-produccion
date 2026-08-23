@@ -1,0 +1,51 @@
+# Control de Puertas — configuración de Apache (Hostinger)
+
+# --- Tipos MIME correctos -------------------------------------------------
+# Sin esto el manifiesto se sirve como text/plain y algunos navegadores lo
+# rechazan, dejando la aplicación como no instalable.
+AddType application/manifest+json .webmanifest
+AddType text/javascript           .js
+AddType image/png                 .png
+AddType image/x-icon              .ico
+
+# --- Caché ----------------------------------------------------------------
+<IfModule mod_headers.c>
+  # El service worker NUNCA se cachea: si el servidor lo retiene, los equipos
+  # ya instalados no verían las versiones nuevas.
+  <FilesMatch "sw\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # El HTML se revalida siempre; el service worker se encarga de servirlo
+  # rápido desde su propia caché.
+  <FilesMatch "\.(html|webmanifest)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # El resto del armazón puede cachearse un rato: cuando cambia, cambia el
+  # sello de versión del service worker y se vuelve a pedir.
+  <FilesMatch "\.(css|js|png|ico)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+  <FilesMatch "sw\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# --- Compresión -----------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript \
+                                application/javascript application/manifest+json \
+                                image/svg+xml
+</IfModule>
+
+# --- Seguridad ------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Sin listados de directorio
+Options -Indexes

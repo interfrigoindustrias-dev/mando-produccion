@@ -21,6 +21,8 @@ Corre íntegramente en el navegador y usa una hoja de Google Sheets como base de
 Además: alta de fichas, historial de cambios por puerta, impresión de etiqueta
 100×100 mm y de hoja carta para planta.
 
+**Se instala como aplicación** en escritorio, tablet y móvil — ver [docs/PWA.md](docs/PWA.md).
+
 ---
 
 ## Estructura del proyecto
@@ -104,5 +106,6 @@ Sube `src/` a `public_html/puertas/` por SSH. Ver
 | [AUTOMATIZACIONES.md](docs/AUTOMATIZACIONES.md) | Reglas de fechas y disparadores |
 | [DESPLIEGUE.md](docs/DESPLIEGUE.md) | Google Cloud, Hostinger y resolución de problemas |
 | [DECISIONES.md](docs/DECISIONES.md) | Trampas encontradas y por qué el código es así |
+| [PWA.md](docs/PWA.md) | Instalación como aplicación y actualizaciones |
 | [PRUEBAS.md](docs/PRUEBAS.md) | Comprobación de humo antes de publicar |
 | [CHANGELOG.md](CHANGELOG.md) | Historial de cambios |

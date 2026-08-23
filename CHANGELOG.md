@@ -2,6 +2,20 @@
 
 Formato: cada versión agrupa lo entregado y lo corregido.
 
+## [2.1.0] — 2026-08-23
+
+### Añadido
+- **Aplicación instalable (PWA)**: manifiesto, iconos normales y maskable,
+  service worker que cachea el armazón, y botón de instalación con instrucciones
+  para iPhone y iPad.
+- Atajos del icono a Planta y a Nueva ficha.
+- `.htaccess` con tipos MIME, caché y compresión.
+
+### Cambiado
+- El repositorio sale de Google Drive: su sistema de archivos bloqueaba carpetas
+  y llegó a impedir operaciones de git.
+- Los datos del servidor salen del código versionado a `deploy.config.sh`.
+
 ## [2.0.0] — 2026-08-23
 
 ### Estructura
