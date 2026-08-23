@@ -1,0 +1,104 @@
+/* Etiqueta 100x100 mm y hoja carta
+   Proyecto: Control de Puertas - Interfrigo
+   Parte de una aplicacion sin dependencias externas; los archivos se cargan
+   en el orden declarado en index.html y comparten el ambito global. */
+
+/* ============================== IMPRESIÓN ============================== */
+#print{display:none}
+/* La caja de las casillas manuales, compartida por etiqueta y hoja carta */
+.box{width:4.5mm;height:4.5mm;border:.4mm solid #000;display:inline-block;flex:none;
+  text-align:center;font-size:9pt;line-height:4.2mm;font-weight:900}
+
+/* ---------- STICKER 100 x 100 mm ---------- */
+.stk{
+  width:100mm;height:100mm;padding:4mm;background:#fff;color:#000;box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;display:flex;flex-direction:column;
+  border:.8mm solid #000;page-break-after:always;overflow:hidden;
+}
+.stk:last-child{page-break-after:auto}
+.stk-h{display:flex;justify-content:space-between;align-items:center;gap:2mm;
+  border-bottom:.7mm solid #000;padding-bottom:1.1mm;flex:none}
+.stk-logo{width:28mm;height:7mm;flex:none;background:#000;
+  -webkit-mask:var(--logo-img) no-repeat left center/contain;mask:var(--logo-img) no-repeat left center/contain}
+.stk-hr{font-size:7pt;font-weight:800;letter-spacing:.04em;flex:1;text-align:right}
+.stk-prio{display:none}
+.stk-top{display:flex;align-items:center;justify-content:space-between;gap:2mm;flex:none;padding:1.1mm 0}
+.stk-op{font-size:31pt;font-weight:900;line-height:1;letter-spacing:-.03em}
+.stk-med{font-size:17pt;font-weight:900;line-height:1;text-align:right}
+.stk-med em{display:block;font-size:6.5pt;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;font-style:normal;margin-top:.6mm}
+.stk-cli{font-size:12pt;font-weight:800;text-transform:uppercase;line-height:1.12;flex:none;
+  border-top:.5mm solid #000;border-bottom:.5mm solid #000;padding:1.2mm 0;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.stk-g{display:grid;grid-template-columns:1fr 1fr;flex:none;padding:1mm 0;gap:.6mm 3mm}
+.stk-g div{font-size:6.5pt;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.15}
+.stk-g b{display:block;font-size:11.5pt;font-weight:900;letter-spacing:-.01em;margin-top:.3mm}
+.stk-qc{border-top:.5mm solid #000;padding-top:1.6mm;display:flex;flex-direction:column;flex:1 0 auto}
+.stk-qc p{font-size:6.5pt;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin:0 0 1.5mm}
+.stk-qcg{display:grid;grid-template-columns:1fr 1fr;gap:0 3mm;align-content:space-between;flex:1}
+.stk-qcg div{font-size:7.5pt;font-weight:700;display:flex;align-items:center;gap:1.6mm;text-transform:uppercase}
+.stk-qcg .llv{grid-column:1/-1;border-top:.35mm solid #000;padding-top:1.5mm;margin-top:.5mm}
+.stk-qcg .llv em{font-style:normal;margin-left:auto;display:flex;align-items:center;gap:1.4mm;font-weight:800}
+.stk-qcg .bx{width:4mm;height:4mm;border:.45mm solid #000;flex:none;display:inline-block}
+.stk-obs{border-top:.5mm solid #000;padding-top:1mm;margin-top:1mm;flex:none;
+  display:flex;align-items:baseline;gap:2mm;min-height:6mm}
+.stk-obs em{font-style:normal;font-size:6.5pt;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;flex:none}
+.stk-obs span{font-size:8pt;font-weight:600;flex:1;border-bottom:.3mm dotted #555;align-self:stretch;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.stk-f{display:flex;justify-content:space-between;gap:2mm;padding-top:1mm;margin-top:.9mm;flex:none;
+  border-top:.5mm solid #000;font-size:6.8pt;font-weight:800;text-transform:uppercase}
+
+/* ---------- HOJA CARTA con campos para diligenciar ---------- */
+.carta{
+  width:203mm;min-height:0;padding:7mm;background:#fff;color:#000;box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;page-break-after:always;display:flex;flex-direction:column;
+}
+.carta:last-child{page-break-after:auto}
+.c-h{display:flex;align-items:flex-start;gap:5mm;border-bottom:.8mm solid #000;padding-bottom:2.5mm;margin-bottom:3mm}
+.c-logo{width:44mm;height:12mm;background:#000;-webkit-mask:var(--logo-img) no-repeat left center/contain;mask:var(--logo-img) no-repeat left center/contain;flex:none}
+.c-t{flex:1;text-align:center}
+.c-t b{font-size:13pt;letter-spacing:.12em;display:block}
+.c-t span{font-size:8pt;letter-spacing:.06em}
+.c-op{text-align:right;flex:none}
+.c-op b{font-size:30pt;font-weight:900;line-height:1;display:block}
+.c-op span{font-size:8pt;font-weight:700}
+.c-cli{font-size:15pt;font-weight:800;text-transform:uppercase;border-bottom:.5mm solid #000;
+  padding-bottom:1.5mm;margin-bottom:3mm;display:flex;align-items:baseline;gap:4mm}
+.c-flags{font-size:8pt;font-weight:900;letter-spacing:.08em;border:.4mm solid #000;padding:.6mm 2mm}
+.c-sec{font-size:7.5pt;font-weight:900;letter-spacing:.1em;text-transform:uppercase;background:#000;color:#fff;
+  padding:1mm 2.5mm;margin:0 0 2mm}
+.c-grid{display:grid;grid-template-columns:repeat(4,1fr);border:.4mm solid #000;margin-bottom:3mm}
+.c-grid>div{border-right:.4mm solid #000;border-bottom:.4mm solid #000;padding:1.5mm 2.5mm;font-size:6.5pt;
+  font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.c-grid>div:nth-child(4n){border-right:0}
+.c-grid b{display:block;font-size:10.5pt;font-weight:800;letter-spacing:0;text-transform:none;margin-top:.4mm}
+.c-fill{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:.4mm solid #000;margin-bottom:3mm}
+.c-fill>div{border-right:.4mm solid #000;border-bottom:.4mm solid #000;padding:2.2mm 2.5mm;display:flex;align-items:baseline;gap:2mm}
+.c-fill>div:nth-child(2n){border-right:0}
+.c-fill label{font-size:7.2pt;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.c-fill i{flex:1;border-bottom:.35mm dotted #333;min-height:8mm;display:block}
+.c-proc{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5mm;margin-bottom:3mm}
+.c-proc div{border:.4mm solid #000;padding:2.6mm 2mm;font-size:7.2pt;font-weight:800;text-transform:uppercase;
+  display:flex;align-items:center;gap:2mm}
+.c-proc div.na{display:none}
+.c-obs{border:.4mm solid #000;padding:2.5mm;min-height:17mm;font-size:9pt;margin-bottom:auto}
+.c-obs em{font-size:7pt;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-style:normal;display:block;margin-bottom:1.5mm}
+.c-firmas{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;margin-top:5mm}
+.c-firmas div{border-top:.4mm solid #000;padding-top:1.5mm;text-align:center;font-size:7.2pt;font-weight:800;text-transform:uppercase}
+
+@media print{
+  /* Sin esto Chrome omite los fondos: el logo y las franjas negras no se imprimen */
+  *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
+  html,body{background:#fff !important}
+  body>*{display:none !important}
+  #print{display:block !important}
+  .stk{border:0;margin:0}          /* el borde lo da el troquel del sticker */
+}
+/* El tamaño de página lo fija #page-rule, que se inyecta al imprimir. */
+@media (max-width:760px){
+  main{padding:10px}
+  .tw{max-height:none}
+  header{padding:8px 10px;gap:8px}
+  .bar .f{min-width:calc(50% - 4px)}
+}

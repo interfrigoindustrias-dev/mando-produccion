@@ -1,0 +1,47 @@
+/* Tarjetas de indicadores, barras comparativas e historial
+   Proyecto: Control de Puertas - Interfrigo
+   Parte de una aplicacion sin dependencias externas; los archivos se cargan
+   en el orden declarado en index.html y comparten el ambito global. */
+
+/* ============================== DASHBOARDS ============================== */
+.dash-h{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx2);margin:18px 0 8px;font-weight:700}
+.dash-h:first-child{margin-top:0}
+.dash-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.kpi.hi b{color:var(--acc)}
+.brk{display:flex;flex-direction:column;gap:7px}
+.brk-r{display:grid;grid-template-columns:130px 1fr 52px;gap:10px;align-items:center;font-size:12.5px}
+.brk-r b{text-align:right;font-family:var(--mono);font-weight:700}
+.brk-b{height:9px;border-radius:999px;background:var(--bg3);overflow:hidden}
+.brk-b i{display:block;height:100%;border-radius:999px;background:var(--acc)}
+.brk-r.w .brk-b i{background:var(--warn)}
+.hist{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto;font-size:12.5px}
+.hist-r{display:grid;grid-template-columns:112px 1fr;gap:10px;padding:7px 9px;background:var(--bg);border:1px solid var(--line);border-radius:9px}
+.hist-r time{color:var(--tx3);font-family:var(--mono);font-size:11px;line-height:1.5}
+.hist-r .who{font-weight:700}
+.hist-r .what{color:var(--tx2)}
+.hist-r .what b{color:var(--tx);font-weight:600}
+.hist-r.crea{border-left:3px solid var(--ok)}
+.hist .mut{padding:10px 2px}
+.swi{display:inline-flex;align-items:center;gap:7px;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:600;font-size:12px;color:var(--tx2)}
+.swi input{accent-color:var(--acc);width:15px;height:15px;cursor:pointer}
+.warn{background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);
+  border-radius:var(--r);padding:10px 12px;font-size:12.5px;margin-bottom:12px;line-height:1.5}
+.warn b{color:var(--warn)}
+#m-tabla td{padding:5px 8px}
+#m-tabla .n{text-align:right;font-family:var(--mono);font-weight:700;font-size:14px}
+#m-tabla .n.z{color:var(--tx3);font-weight:400}
+#m-tabla tr.tot td{border-top:2px solid var(--line2);font-weight:800;background:var(--bg3)}
+/* Fila de puertas sin modelo en el catálogo */
+#m-tabla tr.otras td{background:color-mix(in srgb,var(--info) 14%,var(--bg2));
+  border-top:2px solid color-mix(in srgb,var(--info) 45%,transparent);
+  border-bottom:2px solid color-mix(in srgb,var(--info) 45%,transparent)}
+#m-tabla tr.otras .mod{color:var(--info);font-weight:800}
+#m-tabla tr.otras:hover td{background:color-mix(in srgb,var(--info) 22%,var(--bg2))}
+/* Almacén: las separadas resaltan en rojo */
+#a-tabla tr.sep td{background:color-mix(in srgb,var(--bad) 13%,var(--bg2));
+  color:color-mix(in srgb,var(--bad) 55%,var(--tx))}
+#a-tabla tr.sep:hover td{background:color-mix(in srgb,var(--bad) 20%,var(--bg2))}
+#a-tabla tr.sep td:first-child{box-shadow:inset 4px 0 0 var(--bad)}
+#a-tabla tr.anu td{opacity:.5;text-decoration:line-through}
+#m-tabla .mod{font-weight:700}
+

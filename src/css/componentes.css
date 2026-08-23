@@ -1,0 +1,142 @@
+/* Piezas reutilizables: filtros, tablas, formularios, modales
+   Proyecto: Control de Puertas - Interfrigo
+   Parte de una aplicacion sin dependencias externas; los archivos se cargan
+   en el orden declarado en index.html y comparten el ambito global. */
+
+/* ============================== FILTROS / KPIs ============================== */
+/* Barra de filtros: discreta, compacta, sin robar protagonismo a los datos */
+.bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;
+  background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:9px 11px}
+.bar .f{min-width:0;width:132px}
+.bar .f.wide{width:210px}
+.bar .f>span{font-size:9.5px;letter-spacing:.05em;margin-bottom:3px;color:var(--tx3);font-weight:700}
+.bar .inp{padding:5px 8px;font-size:12.5px;border-radius:8px;background:var(--bg);height:29px}
+.bar select.inp{background-position:calc(100% - 13px) 53%,calc(100% - 9px) 53%;padding-right:24px}
+.bar .btn{height:29px;padding:0 11px;font-size:12px}
+.bar .cnt{padding:4px 10px;font-size:11.5px}
+@media (max-width:900px){ .bar .f{width:calc(50% - 3px)} .bar .f.wide{width:100%} }
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px}
+.kpi b{display:block;font-size:21px;font-weight:750;letter-spacing:-.02em;line-height:1.25}
+.kpi span{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2);font-weight:600}
+
+/* ============================== TABLA ============================== */
+.tw{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);overflow:auto;max-height:calc(100dvh - 250px)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{
+  position:sticky;top:0;z-index:20;background:var(--bg3);text-align:left;
+  font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2);
+  padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:700;
+}
+td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+tbody tr:hover td{background:color-mix(in srgb,var(--acc) 6%,transparent)}
+tr.done td{opacity:.62}
+.stick{position:sticky;left:0;z-index:10;background:var(--bg2)}
+th.stick{z-index:30;background:var(--bg3)}
+tbody tr:hover .stick{background:color-mix(in srgb,var(--acc) 6%,var(--bg2))}
+.op{font-family:var(--mono);font-weight:700;font-size:13px}
+.sub{color:var(--tx3);font-size:11px}
+.num{text-align:right;font-family:var(--mono)}
+.cli{max-width:190px;overflow:hidden;text-overflow:ellipsis;display:block}
+
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid transparent;line-height:1.6}
+.t-alta{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.t-media{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+.t-baja{background:var(--bg3);color:var(--tx2);border-color:var(--line)}
+.t-alm{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+.t-des{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.t-sep{background:color-mix(in srgb,var(--info) 16%,transparent);color:var(--info)}
+.t-non{background:var(--bg3);color:var(--tx3)}
+.t-anu{background:var(--bg3);color:var(--tx3);text-decoration:line-through;border-color:var(--line2)}
+
+/* pill tri-estado */
+.p{width:26px;height:24px;border-radius:7px;border:1px solid var(--line);background:var(--bg3);color:var(--tx3);font-size:11px;font-weight:800;display:grid;place-items:center;padding:0}
+.p.on{background:color-mix(in srgb,var(--ok) 22%,transparent);border-color:color-mix(in srgb,var(--ok) 55%,transparent);color:var(--ok)}
+.p.off{background:transparent;border-style:dashed;color:var(--tx3)}
+.p.na{opacity:.32;background:repeating-linear-gradient(45deg,var(--bg3),var(--bg3) 3px,transparent 3px,transparent 6px)}
+.p:hover{border-color:var(--acc)}
+td.na-cell{background:repeating-linear-gradient(45deg,transparent,transparent 4px,var(--bg3) 4px,var(--bg3) 8px);opacity:.5}
+.kpi .fdesc{display:block;font-size:10px;color:var(--tx3);font-style:normal;margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.pbar{width:70px;height:6px;border-radius:999px;background:var(--bg3);overflow:hidden;display:inline-block;vertical-align:middle}
+.pbar i{display:block;height:100%;background:var(--acc);border-radius:999px;transition:.25s width}
+.pbar i.full{background:var(--ok)}
+.pct{font-family:var(--mono);font-size:11px;color:var(--tx2);margin-left:6px}
+
+.empty{padding:48px 16px;text-align:center;color:var(--tx2)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--tx2);margin-top:10px;align-items:center}
+.legend b{color:var(--tx)}
+
+/* ============================== FORM ALTA ============================== */
+.form{max-width:1080px;margin:0 auto}
+.sec{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;margin-bottom:14px}
+.sec>h2{display:flex;align-items:center;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.procs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.proc{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;cursor:pointer;user-select:none}
+.proc input{accent-color:var(--acc);width:16px;height:16px;cursor:pointer}
+.proc span{font-size:12.5px;font-weight:600}
+.sticky-actions{position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 60%,transparent);padding:12px 0;display:flex;gap:10px;justify-content:flex-end;align-items:center}
+
+/* ============================== MODAL ============================== */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:100;display:grid;place-items:center;padding:16px;overflow:auto}
+.mod{width:100%;max-width:760px;max-height:92dvh;overflow:auto;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--sh)}
+.mod header{position:static;background:none;border:0;padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.x{background:none;border:0;font-size:22px;line-height:1;color:var(--tx2);padding:2px 8px}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{flex:1;background:var(--bg);border:0;padding:7px 4px;font-size:11.5px;font-weight:700;color:var(--tx2);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button.a{background:var(--acc);color:#fff}
+.seg button.a.ko{background:var(--bg3);color:var(--tx2)}
+.seg button.a.na{background:var(--line2);color:var(--tx)}
+.rowproc{display:grid;grid-template-columns:1fr 190px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.rowproc:last-child{border:0}
+.rowproc>label{font-weight:600;font-size:13px}
+
+
+/* ============================== CAMPOS Y CONTADORES ============================== */
+.gid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.inp.ro{background:var(--bg3);color:var(--tx2);cursor:default;font-family:var(--mono);font-weight:700}
+.inp.ro:focus{border-color:var(--line);box-shadow:none}
+.f.auto>span::after{content:" · automático";color:var(--tx3);font-weight:600;letter-spacing:0;text-transform:none}
+.inp.big{font-size:17px;padding:12px 14px;font-weight:600}
+.cnt{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2);background:var(--bg3);
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:600;white-space:nowrap}
+.cnt b{color:var(--tx);font-family:var(--mono)}
+.cnt.on{border-color:var(--acc);color:var(--acc);background:var(--soft)}
+
+/* edición en línea dentro de la tabla */
+.mini{background:transparent;border:1px solid transparent;border-radius:7px;padding:3px 6px;font-size:12px;
+  width:100%;min-width:74px;color:inherit;font-family:inherit}
+.mini:hover{border-color:var(--line2);background:var(--bg)}
+.mini:focus{border-color:var(--acc);background:var(--bg2);outline:none}
+select.mini{appearance:none;font-weight:700}
+select.mini.ap{font-family:var(--mono);font-size:12px;letter-spacing:.02em;min-width:64px}
+select.mini.ap.vacio{color:var(--tx3);font-weight:400}
+.mini.gu{opacity:.55}
+
+/* procesos compactos en la ficha de edición */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:7px}
+.pc{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;
+  background:var(--bg);cursor:pointer;user-select:none;transition:.12s}
+.pc:hover{border-color:var(--line2)}
+.pc .bx{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line2);flex:none;display:grid;
+  place-items:center;font-size:12px;font-weight:900;color:transparent}
+.pc .nm{font-size:11.5px;font-weight:700;letter-spacing:.02em;flex:1}
+.pc .st{font-size:10px;color:var(--tx3);font-weight:600}
+.pc.on{background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.pc.on .bx{background:var(--ok);border-color:var(--ok);color:#fff}
+.pc.on .st{color:var(--ok)}
+.pc.na{opacity:.4;cursor:not-allowed;background:repeating-linear-gradient(45deg,var(--bg3),var(--bg3) 4px,transparent 4px,transparent 8px)}
+.pc.na .bx{border-style:dashed}
+
+
+/* ---------- Diálogo de instalación ---------- */
+.pasos{margin:14px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:11px;font-size:13.5px;line-height:1.55}
+.pasos li{padding-left:4px}
+.pasos b{font-weight:700}
+.tecla{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;
+  background:var(--bg3);border:1px solid var(--line2);border-radius:6px;
+  font-family:var(--mono);font-size:12px;vertical-align:-4px;margin:0 2px}

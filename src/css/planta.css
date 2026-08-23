@@ -1,0 +1,68 @@
+/* Vista de planta: tarjetas tactiles y botones por proceso
+   Proyecto: Control de Puertas - Interfrigo
+   Parte de una aplicacion sin dependencias externas; los archivos se cargan
+   en el orden declarado en index.html y comparten el ambito global. */
+
+/* ============================== PLANTA (táctil) ============================== */
+.planta{display:flex;flex-direction:column;gap:12px}
+/* Semáforo de prioridad: ALTA roja, MEDIA ámbar, BAJA verde, sin prioridad neutra */
+.pcard{--tone:#7c8aa0;
+  background:color-mix(in srgb,var(--tone) 10%,var(--bg2));
+  border:1px solid color-mix(in srgb,var(--tone) 26%,var(--line));
+  border-left:10px solid var(--tone);
+  border-radius:var(--r2);padding:14px 16px;box-shadow:var(--sh)}
+.pcard .op{color:color-mix(in srgb,var(--tone) 80%,var(--tx))}
+.pcard.prio-ALTA {--tone:#e0392c;border-left-width:16px;
+  background:color-mix(in srgb,#e0392c 15%,var(--bg2))}
+.pcard.prio-MEDIA{--tone:#e0980f}
+.pcard.prio-BAJA {--tone:#17a05e}
+.pcard.lista{opacity:.55}
+/* Puntaje destacado */
+.pts{display:inline-flex;align-items:baseline;gap:4px;background:var(--tone);color:#fff;
+  border-radius:9px;padding:5px 11px;font-weight:900;font-size:18px;line-height:1;flex:none}
+.pts em{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  opacity:.9;font-style:normal}
+.plisto{font-size:10px;font-weight:900;letter-spacing:.1em;color:var(--ok);
+  border:1.5px solid var(--ok);border-radius:6px;padding:2px 7px}
+/* Selector de estado de despacho en la tarjeta, tamaño cómodo para tablet */
+.pdesp{appearance:none;min-height:36px;padding:0 30px 0 13px;border-radius:10px;
+  border:2px solid color-mix(in srgb,var(--tone) 40%,var(--line));
+  background:var(--bg2);color:var(--tx);font-size:12.5px;font-weight:700;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--tx2) 50%),
+                   linear-gradient(135deg,var(--tx2) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 52%,calc(100% - 11px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.pdesp:focus{outline:none;border-color:var(--acc)}
+.pdesp:disabled{opacity:.5}
+.pcard.lista .pdesp{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--bg2))}
+.ph{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.ph .op{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.ph .cli{font-size:17px;font-weight:700;flex:1;min-width:150px}
+.ph .met{font-size:12.5px;color:var(--tx2);font-weight:600}
+.ph .av{font-size:19px;font-weight:800;font-family:var(--mono)}
+.pbtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:9px}
+/* Cada proceso con su color, dentro de la gama de la marca */
+.pb{--pc:var(--acc);
+  min-height:62px;border-radius:12px;border:2px solid color-mix(in srgb,var(--pc) 40%,transparent);
+  background:color-mix(in srgb,var(--pc) 9%,var(--bg2));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-size:11.5px;font-weight:800;letter-spacing:.03em;color:color-mix(in srgb,var(--pc) 62%,var(--tx));
+  padding:6px 4px;transition:.1s;-webkit-tap-highlight-color:transparent}
+.pb .ic{font-size:19px;line-height:1}
+.pb:active{transform:scale(.96)}
+.pb.on{background:var(--pc);border-color:var(--pc);color:#fff;
+  box-shadow:inset 0 0 0 2px color-mix(in srgb,#fff 28%,transparent)}
+.pb.on .ic::after{content:"✓"}
+.pb.off .ic::after{content:"○"}
+.pb.na{display:none}
+.pb:disabled{opacity:.5;pointer-events:none}
+@media (max-width:700px){
+  .pb{min-height:66px}
+  .ph .op{font-size:23px}
+}
+
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.tst{background:var(--bg3);border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:var(--r);padding:10px 16px;box-shadow:var(--sh);font-size:13px;animation:up .2s}
+.tst.ok{border-left-color:var(--ok)} .tst.err{border-left-color:var(--bad)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+
