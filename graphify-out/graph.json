@@ -1192,155 +1192,47 @@
       "source_location": "L73"
     },
     {
-      "id": "src_js_automatizaciones_autofechas",
-      "label": "autoFechas()",
+      "id": "src_js_config_aplicarcfgdeenlace",
+      "label": "aplicarCfgDeEnlace()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "Automatizaciones de fecha",
+      "community_name": "Configuracion del usuario",
       "file_type": "code",
-      "norm_label": "autofechas()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_js_automatizaciones_fechaprogramada",
-      "label": "fechaProgramada()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "fechaprogramada()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L30"
-    },
-    {
-      "id": "src_js_automatizaciones_hoy0",
-      "label": "hoy0()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "hoy0()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L26"
-    },
-    {
-      "id": "src_js_automatizaciones_repairfechasfalsas",
-      "label": "repairFechasFalsas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "repairfechasfalsas()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L106"
-    },
-    {
-      "id": "src_js_automatizaciones_tocarfechaproceso",
-      "label": "tocarFechaProceso()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "Automatizaciones de fecha",
-      "file_type": "code",
-      "norm_label": "tocarfechaproceso()",
-      "source_file": "src/js/automatizaciones.js",
-      "source_location": "L79"
-    },
-    {
-      "id": "src_js_auth_authfail",
-      "label": "authFail()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "authfail()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_js_auth_ensuretoken",
-      "label": "ensureToken()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "ensuretoken()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L38"
-    },
-    {
-      "id": "src_js_auth_inittokenclient",
-      "label": "initTokenClient()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "inittokenclient()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_js_auth_logout",
-      "label": "logout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "logout()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L42"
-    },
-    {
-      "id": "src_js_auth_requesttoken",
-      "label": "requestToken()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "requesttoken()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L28"
-    },
-    {
-      "id": "src_js_auth_settoken",
-      "label": "setToken()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "Autenticacion con Google",
-      "file_type": "code",
-      "norm_label": "settoken()",
-      "source_file": "src/js/auth.js",
-      "source_location": "L18"
+      "norm_label": "aplicarcfgdeenlace()",
+      "source_file": "src/js/config.js",
+      "source_location": "L35"
     },
     {
       "id": "src_js_config_cfgok",
       "label": "cfgOk()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "cfgok()",
       "source_file": "src/js/config.js",
-      "source_location": "L25"
+      "source_location": "L31"
+    },
+    {
+      "id": "src_js_config_enlacedeconfiguracion",
+      "label": "enlaceDeConfiguracion()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Configuracion del usuario",
+      "file_type": "code",
+      "norm_label": "enlacedeconfiguracion()",
+      "source_file": "src/js/config.js",
+      "source_location": "L49"
     },
     {
       "id": "src_js_config_loadcfg",
       "label": "loadCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "loadcfg()",
@@ -1352,7 +1244,7 @@
       "label": "looksLikeId()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "lookslikeid()",
@@ -1364,19 +1256,19 @@
       "label": "openCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "opencfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L27"
+      "source_location": "L55"
     },
     {
       "id": "src_js_config_parsesheetid",
       "label": "parseSheetId()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "parsesheetid()",
@@ -1388,12 +1280,144 @@
       "label": "saveCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 9,
+      "community": 7,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "savecfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L24"
+      "source_location": "L30"
+    },
+    {
+      "id": "src_js_automatizaciones_autofechas",
+      "label": "autoFechas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "autofechas()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_js_automatizaciones_fechaprogramada",
+      "label": "fechaProgramada()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "fechaprogramada()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L30"
+    },
+    {
+      "id": "src_js_automatizaciones_hoy0",
+      "label": "hoy0()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "hoy0()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_js_automatizaciones_repairfechasfalsas",
+      "label": "repairFechasFalsas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "repairfechasfalsas()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L106"
+    },
+    {
+      "id": "src_js_automatizaciones_tocarfechaproceso",
+      "label": "tocarFechaProceso()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "Automatizaciones de fecha",
+      "file_type": "code",
+      "norm_label": "tocarfechaproceso()",
+      "source_file": "src/js/automatizaciones.js",
+      "source_location": "L79"
+    },
+    {
+      "id": "src_js_auth_authfail",
+      "label": "authFail()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "authfail()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_js_auth_ensuretoken",
+      "label": "ensureToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "ensuretoken()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L38"
+    },
+    {
+      "id": "src_js_auth_inittokenclient",
+      "label": "initTokenClient()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "inittokenclient()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_js_auth_logout",
+      "label": "logout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "logout()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L42"
+    },
+    {
+      "id": "src_js_auth_requesttoken",
+      "label": "requestToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "requesttoken()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L28"
+    },
+    {
+      "id": "src_js_auth_settoken",
+      "label": "setToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "Autenticacion con Google",
+      "file_type": "code",
+      "norm_label": "settoken()",
+      "source_file": "src/js/auth.js",
+      "source_location": "L18"
     },
     {
       "id": "src_js_util",
@@ -1720,6 +1744,17 @@
       "source_location": "L251"
     },
     {
+      "id": "src_config_app_example",
+      "label": "config-app.example.js",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "config-app.example.js",
+      "file_type": "code",
+      "norm_label": "config-app.example.js",
+      "source_file": "src/config-app.example.js",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_constantes",
       "label": "constantes.js",
       "_origin": "ast",
@@ -1929,10 +1964,21 @@
       "source_location": "L12"
     },
     {
+      "id": "src_js_config",
+      "label": "config.js",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Configuracion del usuario",
+      "file_type": "code",
+      "norm_label": "config.js",
+      "source_file": "src/js/config.js",
+      "source_location": "L1"
+    },
+    {
       "id": "src_js_automatizaciones",
       "label": "automatizaciones.js",
       "_origin": "ast",
-      "community": 7,
+      "community": 8,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "automatizaciones.js",
@@ -1943,7 +1989,7 @@
       "id": "src_js_automatizaciones_campos_proceso",
       "label": "CAMPOS_PROCESO",
       "_origin": "ast",
-      "community": 7,
+      "community": 8,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "campos_proceso",
@@ -1954,7 +2000,7 @@
       "id": "src_js_automatizaciones_offset",
       "label": "OFFSET",
       "_origin": "ast",
-      "community": 7,
+      "community": 8,
       "community_name": "Automatizaciones de fecha",
       "file_type": "code",
       "norm_label": "offset",
@@ -1965,22 +2011,11 @@
       "id": "src_js_auth",
       "label": "auth.js",
       "_origin": "ast",
-      "community": 8,
+      "community": 9,
       "community_name": "Autenticacion con Google",
       "file_type": "code",
       "norm_label": "auth.js",
       "source_file": "src/js/auth.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_js_config",
-      "label": "config.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "Configuracion del usuario",
-      "file_type": "code",
-      "norm_label": "config.js",
-      "source_file": "src/js/config.js",
       "source_location": "L1"
     }
   ],
@@ -2298,6 +2333,42 @@
       "weight": 1.0
     },
     {
+      "source": "src_js_config_aplicarcfgdeenlace",
+      "target": "src_js_config_parsesheetid",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/config.js",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_config_aplicarcfgdeenlace",
+      "target": "src_js_config_savecfg",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/config.js",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_config_loadcfg",
+      "target": "src_js_config_aplicarcfgdeenlace",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/config.js",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
       "source": "src_js_config_loadcfg",
       "target": "src_js_config_parsesheetid",
       "relation": "calls",
@@ -2306,7 +2377,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L21",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -2318,7 +2389,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L22",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -3346,7 +3417,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L24",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -3357,7 +3428,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L25",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_config",
+      "target": "src_js_config_aplicarcfgdeenlace",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/config.js",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_config",
+      "target": "src_js_config_enlacedeconfiguracion",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/config.js",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -3368,7 +3461,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L27",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -4491,5 +4584,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "52fb9d0aa7798c3ec3259b85ade8f8f62be1a0e1"
+  "built_at_commit": "9d202c9a315692eb0c71d09adb62d5abc8c3420a"
 }

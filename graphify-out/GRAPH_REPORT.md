@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-23)
 
 ## Corpus Check
-- Corpus is ~20,371 words - fits in a single context window. You may not need a graph.
+- Corpus is ~21,090 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 168 nodes · 221 edges · 20 communities (14 shown, 6 thin omitted)
+- 171 nodes · 226 edges · 21 communities (15 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -16,9 +16,9 @@
 - Ayudantes de tableros
 - Cliente de Google Sheets
 - Historial de cambios
+- Configuracion del usuario
 - Automatizaciones de fecha
 - Autenticacion con Google
-- Configuracion del usuario
 - Carga y refresco
 - Ficha de la puerta
 - Impresion
@@ -54,7 +54,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (20 total, 6 thin omitted)
+## Communities (21 total, 6 thin omitted)
 
 ### Community 0 - "Utilidades y fechas"
 Cohesion: 0.12
@@ -84,17 +84,17 @@ Nodes (10): api(), ensureGid(), ensureRows(), fetchRows(), NUMERICOS, repairNume
 Cohesion: 0.36
 Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), renderHist(), shortUser()
 
-### Community 7 - "Automatizaciones de fecha"
+### Community 7 - "Configuracion del usuario"
+Cohesion: 0.36
+Nodes (4): aplicarCfgDeEnlace(), loadCfg(), parseSheetId(), saveCfg()
+
+### Community 8 - "Automatizaciones de fecha"
 Cohesion: 0.32
 Nodes (5): autoFechas(), CAMPOS_PROCESO, fechaProgramada(), hoy0(), OFFSET
 
-### Community 8 - "Autenticacion con Google"
+### Community 9 - "Autenticacion con Google"
 Cohesion: 0.48
 Nodes (5): authFail(), ensureToken(), initTokenClient(), requestToken(), setToken()
-
-### Community 9 - "Configuracion del usuario"
-Cohesion: 0.38
-Nodes (3): loadCfg(), parseSheetId(), saveCfg()
 
 ### Community 10 - "Carga y refresco"
 Cohesion: 0.60
@@ -121,7 +121,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `enProduccion()` connect `Ayudantes de tableros` to `Tableros y catalogo`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `refresh()` connect `Carga y refresco` to `Control de OPs`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `refresh()` (e.g. with `fillLists()` and `render()`) actually correct?**
   _`refresh()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
