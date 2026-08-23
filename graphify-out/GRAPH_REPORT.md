@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-23)
 
 ## Corpus Check
-- Corpus is ~21,359 words - fits in a single context window. You may not need a graph.
+- Corpus is ~21,684 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 171 nodes · 226 edges · 21 communities (15 shown, 6 thin omitted)
+- 172 nodes · 227 edges · 21 communities (15 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -15,8 +15,8 @@
 - Constantes del modelo
 - Ayudantes de tableros
 - Cliente de Google Sheets
-- Historial de cambios
 - Configuracion del usuario
+- Historial de cambios
 - Automatizaciones de fecha
 - Autenticacion con Google
 - Carga y refresco
@@ -80,13 +80,13 @@ Nodes (7): completa(), desp(), DETALLE_KPI, enProduccion(), enStock(), tablaMini
 Cohesion: 0.38
 Nodes (10): api(), ensureGid(), ensureRows(), fetchRows(), NUMERICOS, repairNumeros(), repairStatus(), rng() (+2 more)
 
-### Community 6 - "Historial de cambios"
+### Community 6 - "Configuracion del usuario"
+Cohesion: 0.31
+Nodes (5): aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), parseSheetId(), saveCfg()
+
+### Community 7 - "Historial de cambios"
 Cohesion: 0.36
 Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), renderHist(), shortUser()
-
-### Community 7 - "Configuracion del usuario"
-Cohesion: 0.36
-Nodes (4): aplicarCfgDeEnlace(), loadCfg(), parseSheetId(), saveCfg()
 
 ### Community 8 - "Automatizaciones de fecha"
 Cohesion: 0.32
@@ -109,7 +109,7 @@ Cohesion: 0.50
 Nodes (4): COLOR_PROC, plantaList(), PRIO_ORD, renderPlanta()
 
 ## Knowledge Gaps
-- **32 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+27 more)
+- **33 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+28 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -119,13 +119,13 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `renderAlmacen()` connect `Tableros y catalogo` to `Ayudantes de tableros`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `enProduccion()` connect `Ayudantes de tableros` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `refresh()` connect `Carga y refresco` to `Control de OPs`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `refresh()` (e.g. with `fillLists()` and `render()`) actually correct?**
   _`refresh()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
-  _32 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _33 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
   _Cohesion score 0.11594202898550725 - nodes in this community are weakly interconnected._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**

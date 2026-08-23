@@ -1108,143 +1108,59 @@
       "source_location": "L118"
     },
     {
-      "id": "src_js_auditoria_ensurelog",
-      "label": "ensureLog()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "ensurelog()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_js_auditoria_histof",
-      "label": "histOf()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "histof()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L75"
-    },
-    {
-      "id": "src_js_auditoria_loadlog",
-      "label": "loadLog()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "loadlog()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L63"
-    },
-    {
-      "id": "src_js_auditoria_logbulk",
-      "label": "logBulk()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "logbulk()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L48"
-    },
-    {
-      "id": "src_js_auditoria_logchanges",
-      "label": "logChanges()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "logchanges()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L32"
-    },
-    {
-      "id": "src_js_auditoria_renderhist",
-      "label": "renderHist()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "renderhist()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L79"
-    },
-    {
-      "id": "src_js_auditoria_shortuser",
-      "label": "shortUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Historial de cambios",
-      "file_type": "code",
-      "norm_label": "shortuser()",
-      "source_file": "src/js/auditoria.js",
-      "source_location": "L73"
-    },
-    {
       "id": "src_js_config_aplicarcfgdeenlace",
       "label": "aplicarCfgDeEnlace()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "aplicarcfgdeenlace()",
       "source_file": "src/js/config.js",
-      "source_location": "L35"
+      "source_location": "L48"
     },
     {
       "id": "src_js_config_cfgok",
       "label": "cfgOk()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "cfgok()",
       "source_file": "src/js/config.js",
-      "source_location": "L31"
+      "source_location": "L44"
     },
     {
       "id": "src_js_config_enlacedeconfiguracion",
       "label": "enlaceDeConfiguracion()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "enlacedeconfiguracion()",
       "source_file": "src/js/config.js",
-      "source_location": "L49"
+      "source_location": "L62"
     },
     {
       "id": "src_js_config_loadcfg",
       "label": "loadCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "loadcfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L19"
+      "source_location": "L22"
     },
     {
       "id": "src_js_config_lookslikeid",
       "label": "looksLikeId()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "lookslikeid()",
@@ -1256,19 +1172,19 @@
       "label": "openCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "opencfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L55"
+      "source_location": "L68"
     },
     {
       "id": "src_js_config_parsesheetid",
       "label": "parseSheetId()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "parsesheetid()",
@@ -1280,12 +1196,96 @@
       "label": "saveCfg()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "community_name": "Configuracion del usuario",
       "file_type": "code",
       "norm_label": "savecfg()",
       "source_file": "src/js/config.js",
-      "source_location": "L30"
+      "source_location": "L43"
+    },
+    {
+      "id": "src_js_auditoria_ensurelog",
+      "label": "ensureLog()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "ensurelog()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_js_auditoria_histof",
+      "label": "histOf()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "histof()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L75"
+    },
+    {
+      "id": "src_js_auditoria_loadlog",
+      "label": "loadLog()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "loadlog()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L63"
+    },
+    {
+      "id": "src_js_auditoria_logbulk",
+      "label": "logBulk()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "logbulk()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L48"
+    },
+    {
+      "id": "src_js_auditoria_logchanges",
+      "label": "logChanges()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "logchanges()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_js_auditoria_renderhist",
+      "label": "renderHist()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "renderhist()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L79"
+    },
+    {
+      "id": "src_js_auditoria_shortuser",
+      "label": "shortUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "Historial de cambios",
+      "file_type": "code",
+      "norm_label": "shortuser()",
+      "source_file": "src/js/auditoria.js",
+      "source_location": "L73"
     },
     {
       "id": "src_js_automatizaciones_autofechas",
@@ -1942,10 +1942,32 @@
       "source_location": "L95"
     },
     {
+      "id": "src_js_config",
+      "label": "config.js",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Configuracion del usuario",
+      "file_type": "code",
+      "norm_label": "config.js",
+      "source_file": "src/js/config.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_js_config_campos_empresa",
+      "label": "CAMPOS_EMPRESA",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "Configuracion del usuario",
+      "file_type": "code",
+      "norm_label": "campos_empresa",
+      "source_file": "src/js/config.js",
+      "source_location": "L20"
+    },
+    {
       "id": "src_js_auditoria",
       "label": "auditoria.js",
       "_origin": "ast",
-      "community": 6,
+      "community": 7,
       "community_name": "Historial de cambios",
       "file_type": "code",
       "norm_label": "auditoria.js",
@@ -1956,23 +1978,12 @@
       "id": "src_js_auditoria_log",
       "label": "LOG",
       "_origin": "ast",
-      "community": 6,
+      "community": 7,
       "community_name": "Historial de cambios",
       "file_type": "code",
       "norm_label": "log",
       "source_file": "src/js/auditoria.js",
       "source_location": "L12"
-    },
-    {
-      "id": "src_js_config",
-      "label": "config.js",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "Configuracion del usuario",
-      "file_type": "code",
-      "norm_label": "config.js",
-      "source_file": "src/js/config.js",
-      "source_location": "L1"
     },
     {
       "id": "src_js_automatizaciones",
@@ -2341,7 +2352,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L41",
+      "source_location": "L54",
       "weight": 1.0
     },
     {
@@ -2353,7 +2364,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L43",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -2365,7 +2376,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L26",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -2377,7 +2388,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L27",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -2389,7 +2400,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/config.js",
-      "source_location": "L28",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -3400,13 +3411,24 @@
     },
     {
       "source": "src_js_config",
+      "target": "src_js_config_campos_empresa",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/config.js",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_config",
       "target": "src_js_config_loadcfg",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L19",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -3417,7 +3439,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L30",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -3428,7 +3450,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L31",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -3439,7 +3461,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L35",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -3450,7 +3472,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L49",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -3461,7 +3483,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/config.js",
-      "source_location": "L55",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -4584,5 +4606,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "54ae6b851f3732edbc4a35a898a474a3ec51b736"
+  "built_at_commit": "bfe79af1eba10e758f1da8175bb0b2e399b5f6d3"
 }
