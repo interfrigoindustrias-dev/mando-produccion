@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-23)
 
 ## Corpus Check
-- Corpus is ~24,987 words - fits in a single context window. You may not need a graph.
+- Corpus is ~25,366 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 179 nodes · 237 edges · 22 communities (15 shown, 7 thin omitted)
+- 180 nodes · 239 edges · 22 communities (16 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -55,7 +55,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (22 total, 7 thin omitted)
+## Communities (22 total, 6 thin omitted)
 
 ### Community 0 - "Utilidades y fechas"
 Cohesion: 0.12
@@ -109,10 +109,14 @@ Nodes (5): refresh(), renderDashVisible(), restartPoll(), setSync(), stopPoll()
 Cohesion: 0.47
 Nodes (3): hintOp(), initForm(), targetRows()
 
+### Community 14 - "Instalacion como app"
+Cohesion: 0.47
+Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
+
 ## Knowledge Gaps
 - **34 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+29 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

@@ -652,6 +652,18 @@
       "source_location": "L62"
     },
     {
+      "id": "src_js_pwa_comprobarversion",
+      "label": "comprobarVersion()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "Instalacion como app",
+      "file_type": "code",
+      "norm_label": "comprobarversion()",
+      "source_file": "src/js/pwa.js",
+      "source_location": "L132"
+    },
+    {
       "id": "src_js_pwa_forzaractualizacion",
       "label": "forzarActualizacion()",
       "_callable": true,
@@ -721,7 +733,7 @@
       "file_type": "code",
       "norm_label": "configdelmodulo()",
       "source_file": "src/js/modulo.js",
-      "source_location": "L73"
+      "source_location": "L79"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -1686,7 +1698,7 @@
       "file_type": "code",
       "norm_label": "modulos",
       "source_file": "src/js/modulo.js",
-      "source_location": "L17"
+      "source_location": "L23"
     },
     {
       "id": "deploy",
@@ -2879,6 +2891,18 @@
       "context": "call",
       "source_file": "src/js/pwa.js",
       "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_pwa_comprobarversion",
+      "target": "src_js_pwa_forzaractualizacion",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/pwa.js",
+      "source_location": "L148",
       "weight": 1.0
     },
     {
@@ -4317,7 +4341,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/modulo.js",
-      "source_location": "L17",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -4328,7 +4352,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/modulo.js",
-      "source_location": "L73",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -4406,6 +4430,17 @@
       "confidence_score": 1.0,
       "source_file": "src/js/pwa.js",
       "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_pwa",
+      "target": "src_js_pwa_comprobarversion",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/pwa.js",
+      "source_location": "L132",
       "weight": 1.0
     },
     {
@@ -4802,5 +4837,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "68644f1d67e4efb4b451802534c2b78d9922d44e"
+  "built_at_commit": "3378ed60d45e5710bc106f5f0b37e0c1715781bb"
 }
