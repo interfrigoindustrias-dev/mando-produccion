@@ -4,7 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Control de Puertas | Interfrigo</title>
-<link rel="icon" href="img/logo.png">
+<meta name="theme-color" content="#0A4283">
+<meta name="description" content="Control de producción y despacho de puertas industriales — Interfrigo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="img/icono-192.png">
+<link rel="apple-touch-icon" href="img/icono-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Puertas">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/componentes.css">
 <link rel="stylesheet" href="css/dashboards.css">
@@ -28,6 +37,7 @@
       <button class="btn pri grow" id="g-login">Entrar con Google</button>
       <button class="btn" id="g-cfg" title="Configuración">⚙</button>
     </div>
+    <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
     <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
   </div>
 </div>
@@ -47,6 +57,7 @@
   <div class="grow"></div>
   <span id="sync"><i class="dot"></i><span id="sync-t">—</span></span>
   <button class="btn sm" id="btn-reload" title="Refrescar ahora">⟳</button>
+  <button class="btn sm hide" id="btn-instalar" title="Instalar como aplicación">⤓ Instalar</button>
   <button class="btn sm" id="btn-tema" title="Tema claro / oscuro">◐</button>
   <span class="chip"><span id="u-mail">—</span><span class="avatar" id="u-av">?</span></span>
   <button class="btn sm" id="btn-cfg" title="Configuración">⚙</button>
@@ -333,6 +344,18 @@
   </div>
 </div></div>
 
+<!-- ============================== INSTALAR ============================== -->
+<div class="ov hide" id="ov-instalar"><div class="mod" style="max-width:520px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Instalar la aplicación</h1>
+    <button class="x" data-close>×</button>
+  </header>
+  <div id="i-pasos"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:18px">
+    <button class="btn pri" data-close>Entendido</button>
+  </div>
+</div></div>
+
 <div id="toast"></div>
 <div id="print"></div>
 
@@ -352,5 +375,6 @@
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
 <script src="js/app.js"></script>
+<script src="js/pwa.js"></script>
 </body>
 </html>
