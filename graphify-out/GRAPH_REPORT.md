@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-24)
 
 ## Corpus Check
-- Corpus is ~26,623 words - fits in a single context window. You may not need a graph.
+- Corpus is ~27,974 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 185 nodes · 249 edges · 22 communities (16 shown, 6 thin omitted)
+- 196 nodes · 265 edges · 24 communities (18 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -14,6 +14,7 @@
 - Tableros y catalogo
 - Constantes del modelo
 - Ayudantes de tableros
+- auth.php
 - Cliente de Google Sheets
 - Vista de planta
 - Configuracion del usuario
@@ -39,8 +40,8 @@
 6. `filtered()` - 5 edges
 7. `kpis()` - 5 edges
 8. `renderAlmacen()` - 5 edges
-9. `ensureGid()` - 4 edges
-10. `ensureLog()` - 4 edges
+9. `callback()` - 4 edges
+10. `token()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `renderStock()` --indirect_call--> `completa()`  [INFERRED]
@@ -55,7 +56,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (22 total, 6 thin omitted)
+## Communities (24 total, 6 thin omitted)
 
 ### Community 0 - "Utilidades y fechas"
 Cohesion: 0.12
@@ -77,39 +78,43 @@ Nodes (12): APERTURAS, C, CFG, CON_RIEL, DESPACHOS, ESPESORES, LOG_HEAD, MATERIA
 Cohesion: 0.21
 Nodes (7): completa(), desp(), DETALLE_KPI, enProduccion(), enStock(), tablaMini(), verDetalleKpi()
 
-### Community 5 - "Cliente de Google Sheets"
+### Community 5 - "auth.php"
+Cohesion: 0.35
+Nodes (10): base64url(), callback(), guardar(), login(), logout(), paginaDestino(), pedirAGoogle(), responder() (+2 more)
+
+### Community 6 - "Cliente de Google Sheets"
 Cohesion: 0.38
 Nodes (10): api(), ensureGid(), ensureRows(), fetchRows(), NUMERICOS, repairNumeros(), repairStatus(), rng() (+2 more)
 
-### Community 6 - "Vista de planta"
+### Community 7 - "Vista de planta"
 Cohesion: 0.31
 Nodes (9): avisarProgramadas(), COLOR_PROC, etiquetaPrio(), metaTarjeta(), pintarTarjeta(), plantaList(), plantaProgramadas, PRIO_ORD (+1 more)
 
-### Community 7 - "Configuracion del usuario"
+### Community 8 - "Configuracion del usuario"
 Cohesion: 0.31
 Nodes (5): aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), parseSheetId(), saveCfg()
 
-### Community 8 - "Historial de cambios"
+### Community 9 - "Historial de cambios"
 Cohesion: 0.36
 Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), renderHist(), shortUser()
 
-### Community 9 - "Autenticacion con Google"
-Cohesion: 0.42
-Nodes (7): authFail(), avisarReconectar(), ensureToken(), initTokenClient(), programarRenovacion(), requestToken(), setToken()
+### Community 10 - "Autenticacion con Google"
+Cohesion: 0.43
+Nodes (6): avisarReconectar(), ensureToken(), entrarConGoogle(), paginaActual(), pedirToken(), programarRenovacion()
 
-### Community 10 - "Automatizaciones de fecha"
+### Community 11 - "Automatizaciones de fecha"
 Cohesion: 0.32
 Nodes (5): autoFechas(), CAMPOS_PROCESO, fechaProgramada(), hoy0(), OFFSET
 
-### Community 11 - "Carga y refresco"
+### Community 12 - "Carga y refresco"
 Cohesion: 0.60
 Nodes (5): refresh(), renderDashVisible(), restartPoll(), setSync(), stopPoll()
 
-### Community 12 - "Ficha de la puerta"
+### Community 13 - "Ficha de la puerta"
 Cohesion: 0.47
 Nodes (3): hintOp(), initForm(), targetRows()
 
-### Community 14 - "Instalacion como app"
+### Community 15 - "Instalacion como app"
 Cohesion: 0.47
 Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
 
@@ -122,7 +127,7 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `renderAlmacen()` connect `Tableros y catalogo` to `Ayudantes de tableros`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Why does `enProduccion()` connect `Ayudantes de tableros` to `Tableros y catalogo`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Why does `refresh()` connect `Carga y refresco` to `Control de OPs`?**
