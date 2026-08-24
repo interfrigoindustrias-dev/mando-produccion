@@ -21,8 +21,15 @@ const COLOR_PROC = {
   19:"#5A4EA0",  // RIEL
   20:"#7A4B8C"   // EMBOCINAR
 };
+/* Puertas que cumplen todo menos la fecha: su dia todavia no ha llegado.
+   Se guardan aparte para poder anunciarlas; esconderlas sin decir nada hacia
+   pensar que faltaban puertas. */
+let plantaProgramadas = [];
+
 function plantaList(){
   const q=$("#p-q").value.trim().toLowerCase(), fp=$("#p-prio").value, fe=$("#p-est").value;
+  const verProgramadas = $("#p-prog") && $("#p-prog").checked;
+  plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
     // «Pendientes»: solo las que no tienen estado de despacho. En cuanto se les
@@ -34,9 +41,12 @@ function plantaList(){
     if(q && ![c[C.OP],c[C.CLI]].join(" ").toLowerCase().includes(q)) return false;
     // Solo lo que ya toca: si la fecha de proceso es futura, la puerta todavía
     // no entra a planta. Sin fecha se muestra, porque no hay nada que esperar.
-    if(fe==="open"){
+    if(fe==="open" && !verProgramadas){
       const f = toDate(c[C.FPROC]);
-      if(f){ const h=new Date(); h.setHours(0,0,0,0); if(f > h) return false; }
+      if(f){
+        const h=new Date(); h.setHours(0,0,0,0);
+        if(f > h){ plantaProgramadas.push({c, f}); return false; }
+      }
     }
     return true;
   });
@@ -124,8 +134,35 @@ function pintarTarjeta(r){
   if(cambioLaFila) plantaDibujada = "";
 }
 
+/** Aviso de las puertas cuyo día todavía no ha llegado. */
+function avisarProgramadas(){
+  const box = $("#p-prog-aviso");
+  if(!box) return;
+  const n = plantaProgramadas.length;
+  if(!n){ box.classList.add("hide"); return; }
+
+  // Reparto por prioridad y la fecha más próxima, para que se entienda por qué.
+  const porPrio = {};
+  plantaProgramadas.forEach(({c})=>{
+    const p = String(c[C.PRIO]??"").trim().toUpperCase() || "SIN PRIORIDAD";
+    porPrio[p] = (porPrio[p]||0)+1;
+  });
+  const proxima = plantaProgramadas.reduce((a,b)=> b.f < a.f ? b : a).f;
+  const detalle = Object.entries(porPrio).map(([p,k])=>`${k} ${p}`).join(" · ");
+
+  box.classList.remove("hide");
+  box.innerHTML = `<b>${n} puerta${n===1?"":"s"} programada${n===1?"":"s"} para más adelante</b>
+    — ${esc(detalle)}. La más próxima entra el <b>${esc(fmt(proxima))}</b>.
+    <label class="swi" style="margin-left:auto">
+      <input type="checkbox" id="p-prog" ${$("#p-prog")&&$("#p-prog").checked?"checked":""}>
+      <span>Mostrarlas</span></label>`;
+  const ck = $("#p-prog");
+  if(ck) ck.onchange = ()=>{ plantaDibujada=""; renderPlanta(); };
+}
+
 function renderPlanta(){
   const L=plantaList();
+  avisarProgramadas();
   const cnt=$("#p-cnt");
   cnt.innerHTML = `<b>${L.length}</b> de ${activas().length} OP`;
   cnt.classList.toggle("on", L.length!==activas().length);

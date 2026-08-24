@@ -66,3 +66,9 @@
 .tst.ok{border-left-color:var(--ok)} .tst.err{border-left-color:var(--bad)}
 @keyframes up{from{opacity:0;transform:translateY(10px)}}
 
+
+/* Aviso de puertas cuyo día todavía no ha llegado */
+.aviso.prog{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--warn) 12%,transparent);
+  border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.aviso.prog b{color:var(--tx)}
