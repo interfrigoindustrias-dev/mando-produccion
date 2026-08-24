@@ -1,10 +1,10 @@
-# Graph Report - mando-produccion  (2026-08-23)
+# Graph Report - mando-produccion  (2026-08-24)
 
 ## Corpus Check
-- Corpus is ~25,637 words - fits in a single context window. You may not need a graph.
+- Corpus is ~26,089 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 181 nodes · 240 edges · 22 communities (16 shown, 6 thin omitted)
+- 183 nodes · 246 edges · 22 communities (16 shown, 6 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -18,8 +18,8 @@
 - Configuracion del usuario
 - Historial de cambios
 - Autenticacion con Google
-- Automatizaciones de fecha
 - Vista de planta
+- Automatizaciones de fecha
 - Carga y refresco
 - Ficha de la puerta
 - Impresion
@@ -38,9 +38,9 @@
 5. `filtered()` - 5 edges
 6. `kpis()` - 5 edges
 7. `renderAlmacen()` - 5 edges
-8. `ensureGid()` - 4 edges
-9. `ensureLog()` - 4 edges
-10. `initTokenClient()` - 4 edges
+8. `renderPlanta()` - 5 edges
+9. `ensureGid()` - 4 edges
+10. `ensureLog()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `renderStock()` --indirect_call--> `completa()`  [INFERRED]
@@ -93,13 +93,13 @@ Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), rende
 Cohesion: 0.42
 Nodes (7): authFail(), avisarReconectar(), ensureToken(), initTokenClient(), programarRenovacion(), requestToken(), setToken()
 
-### Community 9 - "Automatizaciones de fecha"
+### Community 9 - "Vista de planta"
+Cohesion: 0.39
+Nodes (7): COLOR_PROC, etiquetaPrio(), metaTarjeta(), pintarTarjeta(), plantaList(), PRIO_ORD, renderPlanta()
+
+### Community 10 - "Automatizaciones de fecha"
 Cohesion: 0.32
 Nodes (5): autoFechas(), CAMPOS_PROCESO, fechaProgramada(), hoy0(), OFFSET
-
-### Community 10 - "Vista de planta"
-Cohesion: 0.38
-Nodes (5): COLOR_PROC, pintarTarjeta(), plantaList(), PRIO_ORD, renderPlanta()
 
 ### Community 11 - "Carga y refresco"
 Cohesion: 0.60
