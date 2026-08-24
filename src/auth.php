@@ -64,7 +64,7 @@ function login(array $CFG): void
     $_SESSION['estado']  = base64url(random_bytes(16));
     $_SESSION['destino'] = paginaDestino($CFG);
 
-    $url = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+    $p = [
         'client_id'     => $CFG['client_id'],
         'redirect_uri'  => $CFG['redirect_uri'],
         'response_type' => 'code',
@@ -76,10 +76,13 @@ function login(array $CFG): void
         // Necesarios para obtener el permiso de renovación la primera vez.
         'access_type' => 'offline',
         'prompt'      => empty($_SESSION['refresh_token']) ? 'consent' : 'none',
-        // Si la instalación fija un dominio, Google no ofrece cuentas ajenas.
-        'hd'          => $CFG['dominio'] ?? '',
-        'login_hint'  => $_SESSION['email'] ?? '',
-    ]);
+    ];
+    // Solo se envían si tienen valor: un parámetro vacío puede hacer que
+    // Google rechace la petición.
+    if (!empty($CFG['dominio']))    { $p['hd'] = $CFG['dominio']; }
+    if (!empty($_SESSION['email'])) { $p['login_hint'] = $_SESSION['email']; }
+
+    $url = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($p);
     header('Location: ' . $url, true, 302);
     exit;
 }

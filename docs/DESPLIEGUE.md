@@ -107,15 +107,29 @@ hoja, la recorta sola) → **Guardar**.
 En los tres casos, lo guardado en el navegador tiene prioridad sobre la
 configuración de la instalación, por si alguien necesita apuntar a otra hoja.
 
+### Credenciales del inicio de sesión
+
+Copiar `src/auth.config.example.php` a **`auth.config.php`** en la raíz del
+proyecto con el Client ID y el **secreto del cliente**. `deploy.sh` lo publica
+con permisos 600. No se versiona.
+
+En Google Cloud Console, además del origen de JavaScript, hay que registrar el
+**URI de redirección**:
+
+```
+https://interfrigo.com.co/produccion/auth.php?a=callback
+```
+
+Es un campo distinto del de orígenes, y debe coincidir exactamente.
+
 ### Sobre el inicio de sesión
 
-La configuración ya no se pide en ningún equipo, pero **Google sí exige que cada
-persona autorice el acceso una vez por dispositivo**. No se puede evitar: la app
-entra a la hoja con la cuenta de cada operario, y de ahí sale el historial de
-quién editó qué.
+La configuración ya no se pide en ningún equipo. Google sí exige que cada
+persona autorice el acceso **una vez**, y ocurre **en la misma ventana**: la app
+envía a Google y Google devuelve a la app. No hay ventanas emergentes.
 
-A partir de la segunda visita entra sola: la app recuerda el correo usado y se lo
-pasa a Google como pista, así que ni siquiera aparece el selector de cuentas.
+A partir de ahí el servidor guarda un permiso de renovación y las siguientes
+visitas entran solas, sin pedir nada ni mostrar el selector de cuentas.
 
 Si algún día se quisiera suprimir el inicio de sesión haría falta un intermediario
 en el servidor con una cuenta de servicio. Se descartó a propósito: acabaría con

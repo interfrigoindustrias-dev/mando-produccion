@@ -247,3 +247,33 @@ inicial como el refresco, para que no puedan desincronizarse. Los botones y el
 selector de estado nunca se sustituyen; el selector tampoco se pisa si el
 operario lo tiene abierto. Y si cambia **qué** procesos aplican, la fila de
 botones sí se reconstruye, porque ya no representa a esa puerta.
+
+## 17. Sin ventanas emergentes hace falta un archivo en el servidor
+
+La biblioteca de Google (Identity Services) abre una ventana emergente porque es
+lo único posible sin servidor. El flujo que permitía volver en la misma ventana
+desde el navegador —`response_type=token`— **está retirado**: el permiso viajaba
+a la vista en la URL, y OAuth 2.1 lo elimina.
+
+El flujo que lo reemplaza, código de autorización con PKCE, exige un
+**secreto de cliente** cuando el cliente es de tipo *Aplicación web*. Un secreto
+no puede estar en el navegador.
+
+**Solución:** `auth.php` hace el canje en el servidor. El usuario va a Google y
+vuelve en la misma ventana; el secreto no sale de ahí. Y como se pide acceso
+*offline*, el servidor guarda un permiso de renovación en la sesión: a partir de
+entonces las renovaciones son **invisibles**, sin emergentes ni redirecciones.
+
+Cada persona sigue entrando con su propia cuenta, así que el historial de quién
+editó cada ficha **se conserva**. Esto no es la cuenta de servicio que se
+descartó en su momento: allí sí se perdía la trazabilidad.
+
+Requisitos que es fácil pasar por alto:
+
+- El URI de redirección debe estar en **URIs de redirección autorizados**, un
+  campo distinto de «Orígenes autorizados de JavaScript», y coincidir carácter
+  por carácter — incluido el `?a=callback`.
+- Los parámetros vacíos (`hd=`, `login_hint=`) pueden hacer que Google rechace
+  la petición: solo se envían cuando tienen valor.
+- `auth.config.php` va con permisos 600, bloqueado en `.htaccess` y fuera del
+  repositorio, que es público.
