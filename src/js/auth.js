@@ -1,91 +1,103 @@
-/* Autenticacion con Google Identity Services
-   Proyecto: Control de Puertas - Interfrigo
+/* Autenticacion con Google, sin ventanas emergentes
+   Proyecto: Control de Produccion - Interfrigo
    Parte de una aplicacion sin dependencias externas; los archivos se cargan
-   en el orden declarado en index.html y comparten el ambito global. */
+   en el orden declarado en la pagina y comparten el ambito global. */
 
 "use strict";
 
-/* ------------------------------ autenticación ------------------------------ */
-/* El correo con el que se entró la última vez. Pasárselo a Google evita el
-   selector de cuentas en las visitas siguientes. */
-const HINT_KEY = "puertas.ultimo.correo";
+/* ============================== AUTENTICACIÓN ==============================
+   Todo ocurre en la misma ventana. La página pide un permiso a auth.php; si no
+   hay sesión, envía al usuario a Google y Google lo devuelve a la aplicación.
 
-function initTokenClient(){
-  if(!gisReady || !CFG.clientId) return;
-  try{
-    const opciones = {
-      client_id: CFG.clientId, scope: SCOPE,
-      callback: r => { if(r && r.access_token) setToken(r); else authFail(r); }
-    };
-    // Si la instalación declara un dominio, Google no ofrece cuentas ajenas.
-    if(CFG.dominio) opciones.hosted_domain = CFG.dominio;
-    // Y si ya se entró antes en este equipo, se va directo a esa cuenta.
-    const ultimo = localStorage.getItem(HINT_KEY);
-    if(ultimo) opciones.hint = ultimo;
-    tokenClient = google.accounts.oauth2.initTokenClient(opciones);
-  }catch(e){ $("#g-msg").textContent = "Client ID inválido: "+e.message; }
+   El canje del código lo hace el servidor, porque exige un secreto de cliente
+   que no puede estar en el navegador. A cambio, el servidor guarda un permiso
+   de renovación: a partir de ahí las renovaciones son invisibles, sin ventanas
+   emergentes ni redirecciones.
+
+   Cada persona entra con SU cuenta, así que el historial sigue diciendo quién
+   hizo cada cambio.                                                          */
+
+const HINT_KEY = "puertas.ultimo.correo";
+const AUTH = "auth.php";
+
+let pidiendoToken = null;
+const paginaActual = () => location.pathname.split("/").pop() || MOD.pagina;
+
+/** Pide un permiso vigente al servidor. Devuelve null si hace falta entrar. */
+async function pedirToken(){
+  if(pidiendoToken) return pidiendoToken;
+  pidiendoToken = (async ()=>{
+    try{
+      const r = await fetch(`${AUTH}?a=token`, {credentials:"same-origin", cache:"no-store"});
+      if(r.status === 401) return null;                 // sin sesión
+      if(!r.ok) throw new Error("auth " + r.status);
+      const d = await r.json();
+      if(!d.access_token) return null;
+      token    = d.access_token;
+      tokenExp = Date.now() + (parseInt(d.expires_in,10)||3600)*1000 - 60000;
+      if(d.email){
+        userMail = d.email;
+        localStorage.setItem(HINT_KEY, d.email);
+      }
+      const b = $("#reconectar"); if(b) b.classList.add("hide");
+      programarRenovacion();
+      return token;
+    } finally { pidiendoToken = null; }
+  })();
+  return pidiendoToken;
 }
-function setToken(r){
-  token = r.access_token; tokenExp = Date.now() + (parseInt(r.expires_in,10)||3600)*1000 - 60000;
-  const b = $("#reconectar"); if(b) b.classList.add("hide");
-  programarRenovacion();
-  // se guarda el correo en cuanto se conoce, para la próxima visita
-  if(pendingAuth){ pendingAuth.resolve(token); pendingAuth=null; }
+
+/** Envía a Google en la MISMA ventana. Al volver, la sesión ya está lista. */
+function entrarConGoogle(){
+  location.href = `${AUTH}?a=login&next=${encodeURIComponent(paginaActual())}`;
 }
-function authFail(r){
-  const msg = (r && (r.error_description||r.error)) || "No se pudo autenticar";
-  if(pendingAuth){ pendingAuth.reject(new Error(msg)); pendingAuth=null; }
-  $("#g-msg").textContent = msg;
-}
-let pendingAuth=null;
-function requestToken(interactive){
-  if(!tokenClient) initTokenClient();
-  if(!tokenClient) return Promise.reject(new Error("Configura primero el Client ID"));
-  if(pendingAuth) return pendingAuth.p;
-  let resolve,reject; const p=new Promise((a,b)=>{resolve=a;reject=b;});
-  pendingAuth={p,resolve,reject};
-  tokenClient.requestAccessToken({prompt: interactive ? "consent" : ""});
-  setTimeout(()=>{ if(pendingAuth){ pendingAuth.reject(new Error("Tiempo de espera agotado")); pendingAuth=null; } }, 120000);
-  return p;
-}
+
 async function ensureToken(){
   if(token && Date.now() < tokenExp) return token;
-  return requestToken(false);
+  const t = await pedirToken();
+  if(t) return t;
+  avisarReconectar();
+  throw new Error("La sesión de Google caducó. Pulsa Reconectar.");
 }
 
 /* ---------- renovación anticipada ----------
-   El permiso de Google dura una hora. Si se espera a que caduque, la renovación
-   cae justo cuando alguien está marcando un proceso, y como no viene de un clic
-   el navegador puede bloquear la ventana emergente. Se renueva antes, con la
-   pestaña en primer plano, cuando nadie está esperando nada. */
+   El permiso dura una hora. Renovarlo al caducar lo dejaba caer justo cuando
+   alguien estaba marcando un proceso. Se renueva antes, contra el servidor,
+   sin que el usuario note nada. */
 let temporizadorRenovar = null;
 
 function programarRenovacion(){
   clearTimeout(temporizadorRenovar);
   if(!tokenExp) return;
-  // A cuatro quintas partes de la vida del permiso, y nunca antes de un minuto.
   const falta = tokenExp - Date.now();
   const cuando = Math.max(60000, falta - 10*60000);
   temporizadorRenovar = setTimeout(async ()=>{
     if(document.hidden){ programarRenovacion(); return; }   // se reintenta al volver
-    try{ await requestToken(false); }
-    catch(e){ avisarReconectar(); }
+    token = null;
+    if(!await pedirToken()) avisarReconectar();
   }, cuando);
 }
 
-/** Si la renovación silenciosa falla, se pide un clic en vez de perder el trabajo. */
+/** Si la renovación falla, se pide un clic en vez de perder el trabajo. */
 function avisarReconectar(){
   const b = $("#reconectar");
   if(b) b.classList.remove("hide");
 }
-document.addEventListener("visibilitychange", ()=>{
-  if(!document.hidden && tokenExp && Date.now() > tokenExp - 60000){
-    requestToken(false).catch(avisarReconectar);
+
+document.addEventListener("visibilitychange", async ()=>{
+  if(document.hidden || !tokenExp) return;
+  if(Date.now() > tokenExp - 60000){
+    token = null;
+    if(!await pedirToken()) avisarReconectar();
   }
 });
-function logout(){
-  if(token && window.google) try{ google.accounts.oauth2.revoke(token,()=>{}); }catch(e){}
-  token=null; tokenExp=0; ROWS=[]; stopPoll();
-  $("#app").classList.add("hide"); $("#gate").classList.remove("hide"); $("#g-msg").textContent="";
-}
 
+async function logout(){
+  try{ await fetch(`${AUTH}?a=logout`, {credentials:"same-origin"}); }catch(e){}
+  token = null; tokenExp = 0; userMail = "";
+  ROWS = []; stopPoll();
+  clearTimeout(temporizadorRenovar);
+  $("#app").classList.add("hide");
+  $("#gate").classList.remove("hide");
+  $("#g-msg").textContent = "";
+}

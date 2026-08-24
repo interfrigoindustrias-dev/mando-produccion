@@ -60,3 +60,21 @@ AddType image/x-icon              .ico
 
 # Sin listados de directorio
 Options -Indexes
+
+# --- Proteccion de credenciales y sesiones ---------------------------------
+# auth.config.php solo devuelve un array, asi que nunca imprime nada aunque se
+# pida por HTTP. Aun asi se bloquea: defensa en profundidad.
+<Files "auth.config.php">
+  Require all denied
+</Files>
+
+# El directorio de sesiones guarda los permisos de renovacion de cada usuario.
+<FilesMatch "^sess_">
+  Require all denied
+</FilesMatch>
+RedirectMatch 404 /\.sesiones(/.*)?$
+
+# Las respuestas de auth.php no se guardan jamas.
+<Files "auth.php">
+  Header set Cache-Control "no-store, no-cache, must-revalidate"
+</Files>

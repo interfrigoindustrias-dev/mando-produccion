@@ -31,6 +31,16 @@ echo "→ Subiendo a ${DESTINO}…"
 "${SCP[@]}" "$SRC/paneles.html"         "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/manifest.webmanifest" "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/.htaccess"            "${USUARIO}@${HOST}:${DESTINO}/"
+"${SCP[@]}" "$SRC/auth.php"             "${USUARIO}@${HOST}:${DESTINO}/"
+
+# Credenciales del cliente OAuth: fuera del repositorio (ver auth.config.example.php)
+if [[ -f "${AQUI}/auth.config.php" ]]; then
+  "${SCP[@]}" "${AQUI}/auth.config.php" "${USUARIO}@${HOST}:${DESTINO}/"
+  "${SSH[@]}" "chmod 600 ~/${DESTINO}/auth.config.php"
+  echo "  · credenciales del cliente publicadas"
+else
+  echo "  · FALTA auth.config.php: el inicio de sesion no funcionara"
+fi
 
 # Configuracion de la instalacion: fuera del repositorio, para que ningun
 # equipo ni celular tenga que introducirla a mano. Ver src/config-app.example.js

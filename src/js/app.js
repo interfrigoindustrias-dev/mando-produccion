@@ -33,20 +33,19 @@ $("#f-clear").onclick = ()=>{
 };
 $("#reconectar").onclick = async ()=>{
   // Nace de un clic, así que el navegador no bloquea la ventana de Google.
-  try{ await requestToken(false); refresh(false); }
-  catch(e){ try{ await requestToken(true); refresh(false); }catch(e2){ toast(e2.message,"err"); } }
+  const b=$("#reconectar"); b.disabled=true;
+  try{
+    token=null;
+    if(await pedirToken()){ b.classList.add("hide"); refresh(false); }
+    else entrarConGoogle();          // la sesión del servidor caducó
+  }catch(e){ toast(e.message,"err"); }
+  finally{ b.disabled=false; }
 };
 $("#btn-reload").onclick = ()=>refresh(false);
 $("#btn-cfg").onclick = openCfg; $("#g-cfg").onclick = openCfg;
 $("#btn-out").onclick = logout;
 
 async function enterApp(){
-  // el correo sale del propio token: sirve para el mensaje de "comparte la hoja con…"
-  try{
-    const r = await fetch("https://www.googleapis.com/oauth2/v3/userinfo",{headers:{Authorization:"Bearer "+token}});
-    if(r.ok){ const j=await r.json(); userMail=j.email||"";
-              if(userMail) localStorage.setItem(HINT_KEY, userMail); }
-  }catch(e){}
   $("#u-mail").textContent = userMail || "conectado";
   $("#u-av").textContent = (userMail||"?")[0].toUpperCase();
   $("#gate").classList.add("hide"); $("#app").classList.remove("hide");
@@ -70,11 +69,10 @@ async function enterApp(){
   await loadModelos();        // catálogo de modelos de stock
   renderDashVisible();
 }
-$("#g-login").onclick = async ()=>{
+$("#g-login").onclick = ()=>{
   if(!cfgOk()){ openCfg(); return; }
-  $("#g-msg").textContent="Abriendo Google…";
-  try{ await requestToken(true); $("#g-msg").textContent=""; await enterApp(); }
-  catch(e){ $("#g-msg").textContent = e.message; }
+  $("#g-msg").textContent = "Abriendo Google…";
+  entrarConGoogle();
 };
 
 /** Dice exactamente qué falta y de dónde debería venir, en vez de un aviso
@@ -101,26 +99,27 @@ function explicarQueFalta(){
   document.title = MOD.titulo + " | Interfrigo";
   const h1 = document.querySelector("#gate h1");
   if(h1) h1.textContent = MOD.titulo;
+
   aplicaTema(localStorage.getItem("puertas.tema") || "auto");
   loadCfg();
   $("#g-sheet").textContent = CFG.tab;
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
-  if(!cfgOk()) explicarQueFalta();
-  const wait = setInterval(()=>{
-    if(window.google && google.accounts && google.accounts.oauth2){
-      clearInterval(wait); gisReady=true; initTokenClient();
-      if(cfgOk()){
-        // Intento silencioso: si este equipo ya autorizó antes, entra sin un solo clic.
-        $("#g-msg").textContent = "Conectando…";
-        requestToken(false)
-          .then(enterApp)
-          .catch(()=>{
-            // Primera vez en este dispositivo: Google exige el consentimiento.
-            $("#g-msg").textContent = "";
-            $("#g-login").focus();
-          });
-      }
-    }
-  },150);
-  setTimeout(()=>clearInterval(wait), 15000);
+
+  // Si Google devolvió un problema, se dice en vez de dejar la pantalla muda.
+  const err = new URLSearchParams(location.search).get("auth_error");
+  if(err){
+    $("#g-msg").textContent = err === "access_denied"
+      ? "Se canceló el acceso. Vuelve a intentarlo."
+      : "No se pudo entrar (" + err + ").";
+    history.replaceState(null, "", location.pathname);
+  }
+
+  if(!cfgOk()) return;
+
+  // ¿Ya hay sesión en el servidor? Entonces se entra sin un solo clic.
+  $("#g-msg").textContent = "Conectando…";
+  pedirToken().then(t=>{
+    if(t){ enterApp(); }
+    else { $("#g-msg").textContent = ""; $("#g-login").focus(); }
+  }).catch(e=>{ $("#g-msg").textContent = e.message; });
 })();

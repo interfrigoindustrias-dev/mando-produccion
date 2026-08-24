@@ -139,7 +139,7 @@ $("#c-save").onclick = ()=>{
   saveCfg(); $("#ov-cfg").classList.add("hide");
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
   $("#g-sheet").textContent = CFG.tab;
-  initTokenClient(); restartPoll();
+  restartPoll();
   if(CFG.auto && ROWS.length) autoFechas();
   toast("Configuración guardada","ok");
 };

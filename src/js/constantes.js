@@ -35,8 +35,8 @@ const PROCS = [
 
 /* ------------------------------ estado ------------------------------ */
 let CFG = {clientId:"", sheetId:"", tab:"OP PUERTA", poll:20, dateFmt:"DMY", brand:""};
-let tokenClient=null, token=null, tokenExp=0, userMail="";
+let token=null, tokenExp=0, userMail="";
 let ROWS = [];              // {r:<fila 1-based>, c:[27 valores]}
 let SEL = new Set();        // filas seleccionadas (nº de fila de la hoja)
-let pollTimer=null, lastHash="", busyWrites=0, detRow=null, gisReady=false, writeSeq=0;
+let pollTimer=null, lastHash="", busyWrites=0, detRow=null,  writeSeq=0;
 

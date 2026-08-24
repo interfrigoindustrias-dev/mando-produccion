@@ -23,3 +23,6 @@ graphify-out/.graphify_*
 
 # Configuracion de la instalacion
 app.config.js
+
+# Credenciales del cliente OAuth
+auth.config.php
