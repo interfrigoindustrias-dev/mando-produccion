@@ -40,7 +40,7 @@ Los cambios de origen tardan entre 5 y 10 minutos en propagarse.
 ./deploy.sh
 ```
 
-Sube `src/` a `public_html/puertas/` en Hostinger por SSH y verifica el resultado.
+Sube `src/` a `public_html/produccion/` en Hostinger por SSH y verifica el resultado.
 
 ### Acceso SSH
 
@@ -61,10 +61,14 @@ y pegar el contenido de `.pub` en hPanel → **Avanzado › Acceso SSH › Llave
 
 ```
 domains/interfrigo.com.co/public_html/
-├── puertas/            ← la aplicación
-│   ├── index.html
+├── produccion/         ← la aplicación
+│   ├── puertas.html    Módulo Puertas
+│   ├── paneles.html    Módulo Paneles
+│   ├── index.html      redirige a puertas.html
 │   ├── css/  js/  img/
-└── puertas.html        ← redirección a /puertas/ (enlaces antiguos)
+│   └── config-app.js   configuración de la instalación (no versionada)
+├── puertas/            ← ruta anterior, solo redirecciones
+└── puertas.html        ← enlace más antiguo, redirección
 ```
 
 ## 4. Configurar la app

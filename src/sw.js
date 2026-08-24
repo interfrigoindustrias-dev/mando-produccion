@@ -10,7 +10,7 @@ const CACHE = "puertas-" + VERSION;
 const ARMAZON = [
   "./",
   "index.html",
-  "produccion.html",
+  "puertas.html",
   "paneles.html",
   "manifest.webmanifest",
   "css/base.css",
@@ -82,7 +82,7 @@ self.addEventListener("fetch", ev => {
           caches.open(CACHE).then(c => c.put(req, copia));
           return res;
         })
-        .catch(() => caches.match(req).then(r => r || caches.match("produccion.html")))
+        .catch(() => caches.match(req).then(r => r || caches.match("puertas.html")))
     );
     return;
   }

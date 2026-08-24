@@ -2,8 +2,8 @@
   "name": "Control de Puertas — Interfrigo",
   "short_name": "Puertas",
   "description": "Producción y despacho de puertas industriales: control de OPs, planta, almacén y stock.",
-  "id": "/puertas/",
-  "start_url": "produccion.html",
+  "id": "/produccion/",
+  "start_url": "puertas.html",
   "scope": "./",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
@@ -24,14 +24,14 @@
       "name": "Planta",
       "short_name": "Planta",
       "description": "Marcar procesos desde la tablet",
-      "url": "produccion.html?vista=planta",
+      "url": "puertas.html?vista=planta",
       "icons": [{ "src": "img/icono-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Nueva ficha",
       "short_name": "Nueva",
       "description": "Crear una puerta",
-      "url": "produccion.html?nueva=1",
+      "url": "puertas.html?nueva=1",
       "icons": [{ "src": "img/icono-192.png", "sizes": "192x192" }]
     }
   ]

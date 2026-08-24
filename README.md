@@ -4,7 +4,7 @@ Aplicación web para gestionar la producción y el despacho de puertas industria
 Corre íntegramente en el navegador y usa una hoja de Google Sheets como base de datos:
 **no hay servidor propio, ni backend, ni base de datos que mantener**.
 
-🔗 **Producción:** https://interfrigo.com.co/puertas/produccion.html
+🔗 **Producción:** https://interfrigo.com.co/produccion/puertas.html
 
 ---
 
@@ -92,7 +92,7 @@ que las cinco vistas pinten contenido y que las impresiones quepan en su hoja.
 ./deploy.sh
 ```
 
-Sube `src/` a `public_html/puertas/` por SSH. Ver
+Sube `src/` a `public_html/produccion/` por SSH. Ver
 **[docs/DESPLIEGUE.md](docs/DESPLIEGUE.md)**.
 
 ---

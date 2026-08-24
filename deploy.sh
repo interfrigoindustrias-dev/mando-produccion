@@ -27,7 +27,7 @@ fi
 echo "→ Subiendo a ${DESTINO}…"
 "${SSH[@]}" "mkdir -p ~/${DESTINO}/css ~/${DESTINO}/js ~/${DESTINO}/img"
 "${SCP[@]}" "$SRC/index.html"           "${USUARIO}@${HOST}:${DESTINO}/"
-"${SCP[@]}" "$SRC/produccion.html"      "${USUARIO}@${HOST}:${DESTINO}/"
+"${SCP[@]}" "$SRC/puertas.html"         "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/paneles.html"         "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/manifest.webmanifest" "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/.htaccess"            "${USUARIO}@${HOST}:${DESTINO}/"
@@ -68,8 +68,16 @@ printf '{"build":"%s"}
 "${SCP[@]}" "$TMP_VER" "${USUARIO}@${HOST}:${DESTINO}/version.json"
 rm -f "$TMP_VER"
 
-# Redirección desde la ruta antigua, para los enlaces ya repartidos
+# Rutas antiguas: se dejan redirecciones para no romper enlaces ya repartidos
+# ni marcadores del equipo.
 "${SCP[@]}" "$AQUI/redirect.html" "${USUARIO}@${HOST}:${REDIR}"
+if [[ -n "${VIEJO:-}" ]]; then
+  "${SSH[@]}" "mkdir -p ~/${VIEJO}"
+  "${SCP[@]}" "$AQUI/redirect.html"         "${USUARIO}@${HOST}:${VIEJO}/index.html"
+  "${SCP[@]}" "$AQUI/redirect.html"         "${USUARIO}@${HOST}:${VIEJO}/produccion.html"
+  "${SCP[@]}" "$AQUI/redirect-paneles.html" "${USUARIO}@${HOST}:${VIEJO}/paneles.html"
+  echo "  · rutas antiguas redirigidas"
+fi
 
 echo "→ Verificando…"
 "${SSH[@]}" "cd ~/${DESTINO} && echo '  archivos:' \$(find . -type f | wc -l) && ls -l --time-style='+%H:%M' index.html"
