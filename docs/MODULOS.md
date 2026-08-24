@@ -6,7 +6,7 @@ filas, su propio historial y su propio catálogo.
 
 | | Puertas | Paneles |
 |---|---|---|
-| Página | `index.html` | `paneles.html` |
+| Página | `produccion.html` | `paneles.html` |
 | Color | azul `#0A4283` | verde `#0B6B4F` |
 | Pestaña de datos | `OP PUERTA` | `PANEL` |
 | Historial | `LOG APP` | `LOG PANELES` |
@@ -18,6 +18,9 @@ Que compartan archivo no significa que compartan datos — cada módulo lee la s
 y tiene historial y catálogo propios. Por eso las pestañas auxiliares llevan el
 nombre del módulo: si no, los dos escribirían en `LOG APP` y se mezclaría el
 historial de productos distintos.
+
+> `index.html` redirige a `produccion.html`, para que los enlaces ya repartidos
+> y las apps instaladas antes del cambio sigan funcionando.
 
 ## Cómo se sabe dónde estás
 
@@ -64,7 +67,7 @@ la hoja.
 
 1. Añadir su entrada a `MODULOS` en `src/js/modulo.js` (id, nombre, título,
    página, colores).
-2. Duplicar `index.html` con el `window.MODULO` correspondiente.
+2. Duplicar `produccion.html` con el `window.MODULO` correspondiente.
 3. Añadir su hoja a `app.config.js`.
 4. Sumar la página a `ARMAZON` en `sw.js` y a `deploy.sh`.
 

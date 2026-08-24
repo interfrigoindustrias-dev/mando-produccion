@@ -25,7 +25,7 @@ const MODULOS = {
     id: "puertas",
     nombre: "Puertas",
     titulo: "Control de Puertas",
-    pagina: "index.html",
+    pagina: "produccion.html",
     color: "#0A4283",          // azul de marca
     colorOscuro: "#5c9ceb",
     // Pestañas auxiliares. Los módulos pueden compartir documento, así que

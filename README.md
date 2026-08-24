@@ -4,7 +4,7 @@ Aplicación web para gestionar la producción y el despacho de puertas industria
 Corre íntegramente en el navegador y usa una hoja de Google Sheets como base de datos:
 **no hay servidor propio, ni backend, ni base de datos que mantener**.
 
-🔗 **Producción:** https://interfrigo.com.co/puertas/
+🔗 **Producción:** https://interfrigo.com.co/puertas/produccion.html
 
 ---
 

@@ -10,6 +10,7 @@ const CACHE = "puertas-" + VERSION;
 const ARMAZON = [
   "./",
   "index.html",
+  "produccion.html",
   "paneles.html",
   "manifest.webmanifest",
   "css/base.css",
@@ -75,11 +76,13 @@ self.addEventListener("fetch", ev => {
     ev.respondWith(
       fetch(req)
         .then(res => {
+          // Se guarda la página realmente pedida: hay varias, y devolver
+          // siempre index.html dejaba a Paneles sin respaldo sin conexión.
           const copia = res.clone();
-          caches.open(CACHE).then(c => c.put("index.html", copia));
+          caches.open(CACHE).then(c => c.put(req, copia));
           return res;
         })
-        .catch(() => caches.match("index.html"))
+        .catch(() => caches.match(req).then(r => r || caches.match("produccion.html")))
     );
     return;
   }

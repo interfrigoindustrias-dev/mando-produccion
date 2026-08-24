@@ -27,6 +27,7 @@ fi
 echo "→ Subiendo a ${DESTINO}…"
 "${SSH[@]}" "mkdir -p ~/${DESTINO}/css ~/${DESTINO}/js ~/${DESTINO}/img"
 "${SCP[@]}" "$SRC/index.html"           "${USUARIO}@${HOST}:${DESTINO}/"
+"${SCP[@]}" "$SRC/produccion.html"      "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/paneles.html"         "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/manifest.webmanifest" "${USUARIO}@${HOST}:${DESTINO}/"
 "${SCP[@]}" "$SRC/.htaccess"            "${USUARIO}@${HOST}:${DESTINO}/"
