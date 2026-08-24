@@ -1,7 +1,7 @@
 # Graph Report - mando-produccion  (2026-08-24)
 
 ## Corpus Check
-- Corpus is ~26,481 words - fits in a single context window. You may not need a graph.
+- Corpus is ~26,623 words - fits in a single context window. You may not need a graph.
 
 ## Summary
 - 185 nodes · 249 edges · 22 communities (16 shown, 6 thin omitted)
