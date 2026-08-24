@@ -222,3 +222,28 @@ no, el estado intermedio se vuelve permanente y nadie sabe por qué.
 
 Además, el aviso ya no es genérico: dice qué falta exactamente y de dónde debería
 venir, con el botón concreto que lo resuelve.
+
+## 16. Repintar en sitio: o se refresca todo, o no se refresca nada
+
+En Planta hubo dos fallos encadenados, y el segundo lo introduje al arreglar el primero.
+
+**Primero:** la lista se reconstruía entera después de cada marca, disparada por
+el recálculo de fechas y por el refresco de fondo. El botón que el operario tenía
+bajo el dedo quedaba desechado, y en esa posición podía acabar otra puerta con
+otros procesos marcados. Parecía que «se activaban todos y se desactivaba el
+elegido».
+
+**Después:** al pasar a repintado quirúrgico solo actualicé los procesos y el
+avance. Prioridad, fecha, puntaje, cliente y medidas se quedaban congelados
+aunque cambiaran en la hoja, y la vista parecía no actualizarse nunca.
+
+**Regla:** cuando se repinta en sitio en vez de reconstruir, hay que cubrir
+**todos** los campos visibles. Es fácil arreglar el síntoma que se está mirando y
+dejar el resto muerto.
+
+Cómo quedó: cada dato de la tarjeta tiene un hueco marcado con `data-f`, y las
+piezas compartidas (`metaTarjeta`, `etiquetaPrio`) las usan tanto el pintado
+inicial como el refresco, para que no puedan desincronizarse. Los botones y el
+selector de estado nunca se sustituyen; el selector tampoco se pisa si el
+operario lo tiene abierto. Y si cambia **qué** procesos aplican, la fila de
+botones sí se reconstruye, porque ya no representa a esa puerta.

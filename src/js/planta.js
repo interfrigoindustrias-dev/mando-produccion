@@ -60,22 +60,68 @@ function plantaList(){
    que el operario tiene bajo el dedo y puede dejar otra puerta en esa posición. */
 let plantaDibujada = "";
 
-/** Repinta UNA tarjeta sin tocar el resto de la lista. */
+/* Piezas de la tarjeta, en un solo sitio: las usa tanto el pintado inicial
+   como el refresco, de modo que no puedan quedar desincronizadas. */
+const metaTarjeta = c => [
+  esc(c[C.TIPO]??""),
+  `${num(c[C.ANCHO])??"—"}×${num(c[C.ALTO])??"—"}`,
+  esc(c[C.AP]??""),
+  num(c[C.ESP])!==null ? num(c[C.ESP])+" mm" : ""
+].filter(Boolean).join(" · ");
+
+const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDAD</span>';
+
+/** Refresca UNA tarjeta entera sin reconstruirla.
+ *
+ *  Se actualiza el contenido de cada hueco, nunca la tarjeta completa: rehacerla
+ *  desecharia los botones que el operario tiene bajo el dedo, que fue el fallo
+ *  que hacia saltar las marcas de proceso.
+ *
+ *  Y se refresca TODO. La primera version solo tocaba los procesos, asi que
+ *  prioridad, fecha, puntaje y medidas se quedaban congelados aunque cambiaran
+ *  en la hoja: la vista parecia no actualizarse. */
 function pintarTarjeta(r){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
   const card = document.querySelector(`.pcard[data-r="${r}"]`); if(!card) return;
   const c = row.c;
+  const set = (campo, html)=>{
+    const el = card.querySelector(`[data-f="${campo}"]`);
+    if(el && el.innerHTML !== html) el.innerHTML = html;
+  };
+
+  const prio = String(c[C.PRIO]??"").trim().toUpperCase();
+  set("op",  esc(c[C.OP]??""));
+  set("cli", esc(c[C.CLI]??""));
+  set("met", metaTarjeta(c));
+  set("prio", etiquetaPrio(prio));
+  set("fecha", esc(fmtDate(c[C.FPROC]))||"sin fecha");
+  set("pts", `${num(c[C.PTS])??"—"}<em>pts</em>`);
+
+  // Color de la tarjeta segun la prioridad
+  ["ALTA","MEDIA","BAJA"].forEach(p=>card.classList.toggle("prio-"+p, prio===p));
+
+  // Procesos. Que un proceso pase a aplicar (o deje de hacerlo) cambia la fila
+  // de botones entera: eso si obliga a reconstruir.
+  let cambioLaFila = false;
   PROCS.forEach(pr=>{
-    const b = card.querySelector(`.pb[data-i="${pr.i}"]`); if(!b) return;
+    const b = card.querySelector(`.pb[data-i="${pr.i}"]`);
     const v = tri(c[pr.i]);
+    if(v===null){ if(b) cambioLaFila = true; return; }
+    if(!b){ cambioLaFila = true; return; }
     b.classList.toggle("on", v===true);
     b.classList.toggle("off", v!==true);
   });
+
   const pc = Math.round(progreso(c).pct*100);
-  const av = card.querySelector(".av"); if(av) av.textContent = pc+"%";
+  set("av", pc+"%");
+  set("listo", pc>=100 ? '<span class="plisto">COMPLETA</span>' : "");
   card.classList.toggle("lista", pc>=100);
+
+  // No se pisa el selector si el operario lo tiene abierto.
   const sel = card.querySelector(".pdesp");
-  if(sel && sel.value !== desp(c)) sel.value = desp(c);
+  if(sel && sel.value !== desp(c) && document.activeElement !== sel) sel.value = desp(c);
+
+  if(cambioLaFila) plantaDibujada = "";
 }
 
 function renderPlanta(){
@@ -104,19 +150,18 @@ function renderPlanta(){
     }).join("");
     return `<div class="pcard${prio?" prio-"+prio:""}${pc>=100?" lista":""}" data-r="${r}">
       <div class="ph">
-        <span class="op">${esc(c[C.OP]??"")}</span>
-        <span class="cli">${esc(c[C.CLI]??"")}</span>
-        <span class="met">${[esc(c[C.TIPO]??""), `${num(c[C.ANCHO])??"—"}×${num(c[C.ALTO])??"—"}`,
-          esc(c[C.AP]??""), num(c[C.ESP])!==null?num(c[C.ESP])+" mm":""].filter(Boolean).join(" · ")}</span>
-        ${prio?tagPrio(prio):'<span class="tag t-non">SIN PRIORIDAD</span>'}
-        <span class="met">${esc(fmtDate(c[C.FPROC]))||"sin fecha"}</span>
-        <span class="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
-        <span class="av">${pc}%</span>
+        <span class="op"  data-f="op">${esc(c[C.OP]??"")}</span>
+        <span class="cli" data-f="cli">${esc(c[C.CLI]??"")}</span>
+        <span class="met" data-f="met">${metaTarjeta(c)}</span>
+        <span data-f="prio">${etiquetaPrio(prio)}</span>
+        <span class="met" data-f="fecha">${esc(fmtDate(c[C.FPROC]))||"sin fecha"}</span>
+        <span class="pts" data-f="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
+        <span class="av"  data-f="av">${pc}%</span>
         <select class="pdesp" data-desp="${r}" title="Estado de despacho">
           <option value=""${desp(c)?"":" selected"}>Sin estado</option>
           ${DESPACHOS.map(d=>`<option${d===desp(c)?" selected":""}>${d}</option>`).join("")}
         </select>
-        ${pc>=100?'<span class="plisto">COMPLETA</span>':""}
+        <span data-f="listo">${pc>=100?'<span class="plisto">COMPLETA</span>':""}</span>
       </div>
       <div class="pbtns">${btns}</div>
     </div>`;
