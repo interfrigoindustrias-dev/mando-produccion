@@ -277,3 +277,22 @@ Requisitos que es fácil pasar por alto:
   la petición: solo se envían cuando tienen valor.
 - `auth.config.php` va con permisos 600, bloqueado en `.htaccess` y fuera del
   repositorio, que es público.
+
+## 18. `writeCells` escribe SIEMPRE en la pestaña del módulo
+
+`writeCells` compone el rango con `rng()`, que antepone `'OP PUERTA'!` (o la
+pestaña del módulo activo). Al construir la gestión de usuarios se usó para
+guardar una celda de la lista: habría escrito el rol de alguien encima de una
+celda de producción, silenciosamente y con datos reales.
+
+**Regla:** para cualquier pestaña que no sea la del módulo —`USUARIOS`, `LOG`,
+`MODELOS`— se llama a `api()` con el rango completo y entrecomillado. `writeCells`
+es exclusivamente para las filas de fichas.
+
+## 19. `let` en el ámbito global no es `window.algo`
+
+`let LOG = []` crea una ligadura léxica global que **no** aparece como propiedad
+de `window`. Una prueba que hacía `window.LOG = [...]` para simular historial no
+tocaba el array real y daba «0 avisos»: un falso aprobado, que es peor que un
+fallo. En las pruebas hay que asignar la variable a secas (`LOG.length = 0;
+LOG.push(...)`), no a través de `window`.
