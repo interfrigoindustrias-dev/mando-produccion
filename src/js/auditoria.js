@@ -68,6 +68,7 @@ async function loadLog(force){
     LOG = (j.values||[]).map(r=>({fecha:r[0]||"", usuario:r[1]||"", accion:r[2]||"", op:r[3]||"",
                                   fila:r[4]||"", campo:r[5]||"", antes:r[6]||"", despues:r[7]||""})).reverse();
     logAt = Date.now();
+    if(typeof pintarTimbre === "function") pintarTimbre();
   }catch(e){ console.warn("LOG:", e.message); }
 }
 const shortUser = m => String(m||"").split("@")[0];

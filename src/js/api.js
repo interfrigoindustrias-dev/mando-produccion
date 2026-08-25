@@ -117,6 +117,12 @@ async function repairNumeros(){
 /** escribe celdas sueltas: [{a1:"N5", v:[[valor]]}] */
 async function writeCells(list){
   if(!list.length) return;
+  // Un solo punto de paso para todas las escrituras: si el rol no puede
+  // modificar, se corta aquí en vez de confiar en que la interfaz lo impida.
+  if(typeof puede === "function" && !puede("marcar") && !puede("editar") && !puede("*")){
+    toast("Tu acceso es de solo lectura","err");
+    throw new Error("solo lectura");
+  }
   writeSeq++;                               // invalida cualquier lectura en vuelo
   busyWrites++; setSync("busy","Guardando…");
   try{

@@ -62,10 +62,13 @@
   <div class="grow"></div>
   <span id="sync"><i class="dot"></i><span id="sync-t">—</span></span>
   <button class="btn sm hide" id="reconectar" title="La sesión de Google caducó">⚡ Reconectar</button>
+  <button class="btn sm campana" id="btn-avisos" title="Novedades">
+    🔔<span class="badge hide" id="avisos-n">0</span></button>
   <button class="btn sm" id="btn-reload" title="Refrescar ahora">⟳</button>
   <button class="btn sm hide" id="btn-instalar" title="Instalar como aplicación">⤓ Instalar</button>
   <button class="btn sm" id="btn-tema" title="Tema claro / oscuro">◐</button>
-  <span class="chip"><span id="u-mail">—</span><span class="avatar" id="u-av">?</span></span>
+  <span class="chip"><span class="rolchip" id="u-rol"></span><span id="u-mail">—</span><span class="avatar" id="u-av">?</span></span>
+  <button class="btn sm hide" id="btn-usuarios" title="Gestionar usuarios">👥</button>
   <button class="btn sm" id="btn-cfg" title="Configuración">⚙</button>
   <button class="btn sm" id="btn-out" title="Salir">⏻</button>
 </header>
@@ -399,6 +402,49 @@
   </div>
 </div></div>
 
+<!-- ============================== AVISOS ============================== -->
+<div class="ov hide" id="ov-avisos"><div class="mod" style="max-width:640px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Novedades</h1>
+    <button class="x" id="av-cerrar">×</button>
+  </header>
+  <p class="mut" style="margin:0 0 12px">Cambios de otras personas desde tu última
+    visita. No se listan los tuyos ni los automáticos del sistema.</p>
+  <div id="av-lista" class="av-lista"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:16px">
+    <button class="btn pri" id="av-cerrar2">Entendido</button>
+  </div>
+</div></div>
+
+<!-- ============================== USUARIOS ============================== -->
+<div class="ov hide" id="ov-usuarios"><div class="mod" style="max-width:840px">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px">Usuarios y permisos</h1>
+      <p class="mut" style="margin:4px 0 0">Quién puede entrar y qué puede hacer.</p>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="aviso" id="us-limite"></div>
+
+  <div class="tw" style="max-height:44vh"><table id="us-tabla"></table></div>
+
+  <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);margin:18px 0 10px">
+    Añadir a alguien</h2>
+  <div class="bar" style="margin:0">
+    <label class="f wide"><span>Correo de Google</span>
+      <input class="inp" id="us-correo" type="email" placeholder="nombre@interfrigo.com.co"></label>
+    <label class="f"><span>Nombre</span><input class="inp" id="us-nombre" placeholder="Opcional"></label>
+    <label class="f"><span>Rol</span><select class="inp" id="us-rol"></select></label>
+    <button class="btn pri" id="us-add">Añadir</button>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+    <button class="btn" data-close>Cerrar</button>
+  </div>
+</div></div>
+
 <div id="toast"></div>
 <div id="print"></div>
 
@@ -418,6 +464,8 @@
 <script src="js/planta.js"></script>
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
+<script src="js/usuarios.js"></script>
+<script src="js/avisos.js"></script>
 <script src="js/app.js"></script>
 <script src="js/pwa.js"></script>
 </body>

@@ -46,6 +46,10 @@ $("#btn-cfg").onclick = openCfg; $("#g-cfg").onclick = openCfg;
 $("#btn-out").onclick = logout;
 
 async function enterApp(){
+  // Antes de mostrar nada: ¿esta persona tiene acceso, y con qué rol?
+  const permiso = await loadUsuarios();
+  if(!permiso.acceso){ sinAcceso(permiso.motivo); return; }
+
   $("#u-mail").textContent = userMail || "conectado";
   $("#u-av").textContent = (userMail||"?")[0].toUpperCase();
   $("#gate").classList.add("hide"); $("#app").classList.remove("hide");
@@ -67,6 +71,8 @@ async function enterApp(){
   if(n) toast(`${n} fecha(s) de proceso programada(s)`,"ok");
   restartPoll();
   await loadModelos();        // catálogo de modelos de stock
+  aplicarRol();               // la interfaz se ajusta a lo que esta persona puede hacer
+  pintarTimbre();
   renderDashVisible();
 }
 $("#g-login").onclick = ()=>{

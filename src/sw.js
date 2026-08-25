@@ -33,6 +33,8 @@ const ARMAZON = [
   "js/planta.js",
   "js/dashboards.js",
   "js/impresion.js",
+  "js/usuarios.js",
+  "js/avisos.js",
   "js/app.js",
   "js/pwa.js",
   "img/logo.png",
