@@ -32,16 +32,23 @@ function plantaList(){
   plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
-    // «Pendientes»: solo las que no tienen estado de despacho. En cuanto se les
-    // asigna uno (En Almacén, Despachado o Separado) salen de la vista de planta.
-    if(fe==="open" && desp(c)) return false;
+    // Una puerta terminada ya salió de planta: la revisa calidad. Se va de esta
+    // vista pase lo que pase con el filtro, igual que las despachadas.
+    const e = desp(c);
+    if(e==="Terminado" || e==="En Almacén" || e==="Despachado") return false;
+
+    // «Por fabricar» es lo que planta necesita ver: todo lo que no llega al 100%,
+    // tenga o no estado. Antes se exigía además no tener estado, y eso escondía
+    // puertas a medio hacer que ya estaban separadas para un cliente.
+    if(fe==="pend" && p>=1) return false;
+    if(fe==="open" && (e || p>=1)) return false;
     if(fe==="wip"  && !(p>0 && p<1)) return false;
     if(fp==="__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
     else if(fp && String(c[C.PRIO]??"").trim().toUpperCase()!==fp) return false;
     if(q && ![c[C.OP],c[C.CLI]].join(" ").toLowerCase().includes(q)) return false;
     // Solo lo que ya toca: si la fecha de proceso es futura, la puerta todavía
     // no entra a planta. Sin fecha se muestra, porque no hay nada que esperar.
-    if(fe==="open" && !verProgramadas){
+    if((fe==="pend" || fe==="open") && !verProgramadas){
       const f = toDate(c[C.FPROC]);
       if(f){
         const h=new Date(); h.setHours(0,0,0,0);
@@ -81,6 +88,13 @@ const metaTarjeta = c => [
 
 const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDAD</span>';
 
+/* Observaciones: lo que hay que saber ANTES de tocar la puerta («GOLPEADA»,
+   «lleva visor de 30x60»…). Si no hay nada, el hueco no ocupa sitio. */
+const notaTarjeta = c => {
+  const t = String(c[C.OBS]??"").trim();
+  return t ? `<div class="pobs" data-f="obs" title="Observaciones">${esc(t)}</div>` : "";
+};
+
 /** Refresca UNA tarjeta entera sin reconstruirla.
  *
  *  Se actualiza el contenido de cada hueco, nunca la tarjeta completa: rehacerla
@@ -106,6 +120,13 @@ function pintarTarjeta(r){
   set("prio", etiquetaPrio(prio));
   set("fecha", esc(fmtDate(c[C.FPROC]))||"sin fecha");
   set("pts", `${num(c[C.PTS])??"—"}<em>pts</em>`);
+
+  // Las observaciones aparecen y desaparecen: si cambia que haya o no, la
+  // tarjeta cambia de forma y hay que rehacerla.
+  const obsAhora = notaTarjeta(c);
+  const obsEl = card.querySelector('[data-f="obs"]');
+  if(!!obsAhora !== !!obsEl) plantaDibujada = "";
+  else if(obsEl) set("obs", esc(String(c[C.OBS]??"").trim()));
 
   // Color de la tarjeta segun la prioridad
   ["ALTA","MEDIA","BAJA"].forEach(p=>card.classList.toggle("prio-"+p, prio===p));
@@ -200,6 +221,7 @@ function renderPlanta(){
         </select>
         <span data-f="listo">${pc>=100?'<span class="plisto">COMPLETA</span>':""}</span>
       </div>
+      ${notaTarjeta(c)}
       <div class="pbtns">${btns}</div>
     </div>`;
   }).join("");

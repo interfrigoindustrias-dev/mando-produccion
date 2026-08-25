@@ -6,11 +6,18 @@
 "use strict";
 
 /* ------------------------------ navegación / arranque ------------------------------ */
-const VIEWS = ["control","planta","resumen","almacen","stock"];
+/* Solo las vistas que EXISTEN en esta pagina. Puertas y paneles comparten este
+   archivo pero no tienen los mismos tableros: dar por hecho que estan todas
+   reventaba la navegacion entera en la pagina que no los tuviera. */
+const VIEWS = ["control","planta","calidad","resumen","almacen","stock"]
+  .filter(v => document.getElementById("v-"+v));
+
 function goto(v){
+  if(!VIEWS.includes(v)) return;
   $$(".tab").forEach(x=>x.setAttribute("aria-selected", String(x.dataset.view===v)));
   VIEWS.forEach(x=>$("#v-"+x).classList.toggle("hide", x!==v));
   if(v==="planta")  renderPlanta();
+  if(v==="calidad") renderCalidad();
   if(v==="resumen") renderResumen();
   if(v==="almacen") renderAlmacen();
   if(v==="stock"){ renderStock(); renderModelos(); }
@@ -67,6 +74,10 @@ async function enterApp(){
   await loadLog();                // el historial hace falta para poder reparar
   const nr = await repairFechasFalsas();
   if(nr) toast(`${nr} fecha(s) de proceso restaurada(s)`,"ok");
+  // El escalado va ANTES: subir una puerta a ALTA cambia su fecha programada,
+  // y si se hiciera después quedaría con la fecha de la prioridad vieja.
+  const np = await autoPrioridades();
+  if(np) toast(`${np} puerta(s) subieron a prioridad ALTA por antigüedad`,"ok");
   const n = await autoFechas();   // programa las fechas de proceso según prioridad
   if(n) toast(`${n} fecha(s) de proceso programada(s)`,"ok");
   restartPoll();

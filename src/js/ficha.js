@@ -11,8 +11,16 @@ function openDet(r){
   detRow=r; const c=row.c;
   $("#d-op").textContent = "OP "+(c[C.OP]??"");
   $("#d-cli").textContent = [c[C.CLI], fmtDate(c[C.FECHA])].filter(Boolean).join(" · ");
+  const si = v => tri(v)===true ? "Sí" : "No";
   const spec=[["Material",c[C.MAT]],["Tipo",c[C.TIPO]],["Espesor",c[C.ESP]],["Apertura",c[C.AP]],
-              ["Puntos",c[C.PTS]],["Complemento",tri(c[C.COMP])?"Sí":"No"],["Stock",tri(c[C.STOCK])?"Sí":"No"]];
+              ["Puntos",c[C.PTS]],["Complemento",si(c[C.COMP])],["Stock",si(c[C.STOCK])],
+              // Especificacion nueva de la hoja (AC..AJ)
+              ["Marco",c[C.MARCO]],["Visor",c[C.VISOR]],["Empaque visor",c[C.EMPV]],
+              ["Bumper",c[C.BUMP]],
+              // El tamaño solo se enseña si lleva bumper: si no, confunde.
+              ...(llevaBumper(c[C.BUMP]) ? [["Tamaño bumper",c[C.TBUMP]]] : []),
+              ["Alfajor frontal",si(c[C.ALFF])],["Alfajor posterior",si(c[C.ALFP])],
+              ["Inicio producción",fmtDate(c[C.FINI])]];
   $("#d-spec").innerHTML = spec.map(([k,v])=>
     `<div class="kpi"><b style="font-size:15px">${esc(v??"—")||"—"}</b><span>${k}</span></div>`).join("");
   $("#d-ancho").value = num(c[C.ANCHO]) ?? "";
@@ -26,7 +34,14 @@ function openDet(r){
     return `<button type="button" class="pc ${cls}" data-i="${p.i}" ${v===null?"disabled":""}>
       <span class="bx">✓</span><span class="nm">${p.k}<span class="st"> · ${st}</span></span></button>`;
   }).join("")+`</div>`;
+  // Las listas se pintan aqui y no en el HTML: asi salen siempre de las
+  // constantes, que son copia de la validacion de la hoja.
+  const op1=(v,sel)=>`<option${String(sel)===v?" selected":""}>${esc(v)}</option>`;
+  $("#d-desp").innerHTML = `<option value="">—</option>`+DESPACHOS.map(v=>op1(v,c[C.DESP])).join("");
+  $("#d-ap").innerHTML   = `<option value="">—</option>`+APERTURAS.map(v=>op1(v,c[C.AP])).join("");
+  $("#d-pts").value = num(c[C.PTS]) ?? "";
   $("#d-desp").value = DESPACHOS.includes(String(c[C.DESP])) ? String(c[C.DESP]) : "";
+  $("#d-ap").value   = APERTURAS.includes(String(c[C.AP])) ? String(c[C.AP]) : "";
   $("#d-fdesp").value = fmtDate(c[C.FDESP]); $("#d-fproc").value = fmtDate(c[C.FPROC]);
   $("#d-prio").value = ["ALTA","MEDIA","BAJA"].includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
   $("#d-ens").value = c[C.ENS]??""; $("#d-obs").value = c[C.OBS]??"";
@@ -66,6 +81,8 @@ $("#d-save").onclick = async ()=>{
                [C.FPROC,"X","Fecha proceso",$("#d-fproc").value.trim(),true],
                [C.PRIO,"M","Prioridad",$("#d-prio").value,false],
                [C.ENS,"AA","N° ensamble",$("#d-ens").value.trim(),false],
+               [C.PTS,"J","Puntos",numCell($("#d-pts").value),false],
+               [C.AP,"L","Apertura",$("#d-ap").value,false],
                [C.ANCHO,"H","Ancho vano",numCell($("#d-ancho").value),false],
                [C.ALTO,"I","Alto vano",numCell($("#d-alto").value),false],
                [C.OBS,"V","Observaciones",$("#d-obs").value.trim(),false]];
@@ -90,7 +107,7 @@ $("#d-save").onclick = async ()=>{
   }catch(e){ toast(e.message,"err"); refresh(false); }
 };
 $("#d-print").onclick     = ()=> printFichas([detRow], "carta");
-$("#d-print-stk").onclick = ()=> printFichas([detRow], "sticker");
+$("#d-print-stk").onclick = ()=> pedirSticker([detRow]);
 $$("[data-close]").forEach(b=>b.onclick=()=>b.closest(".ov").classList.add("hide"));
 $$(".ov").forEach(o=>o.addEventListener("mousedown", e=>{ if(e.target===o) o.classList.add("hide"); }));
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $$(".ov").forEach(o=>o.classList.add("hide")); });
@@ -102,13 +119,31 @@ function initForm(){
   $("#n-tipo").innerHTML = `<option value="">—</option>`+TIPOS.map(v=>opt(v)).join("");
   $("#n-esp").innerHTML  = `<option value="">—</option>`+ESPESORES.map(v=>opt(v,"70")).join("");
   $("#n-ap").innerHTML   = `<option value="">—</option>`+APERTURAS.map(v=>opt(v)).join("");
+  $("#n-marco").innerHTML = TIPOS_MARCO.map(v=>opt(v,"ALUMINIO 2X1")).join("");
+  $("#n-visor").innerHTML = VISORES.map(v=>opt(v,"SIN VISOR")).join("");
+  $("#n-bump").innerHTML  = BUMPERS.map(v=>opt(v,"SIN BUMPER")).join("");
+  $("#n-tbump").innerHTML = `<option value="">—</option>`+TAM_BUMPER.map(v=>opt(v)).join("");
+
+  // El empaque del visor no se teclea: sale de la tabla Datos Calculo de la hoja.
+  const verEmpaque = ()=>{ $("#n-empv").value = EMPAQUE_VISOR[$("#n-visor").value] ?? ""; };
+  $("#n-visor").onchange = verEmpaque; verEmpaque();
+
+  // El tamaño solo tiene sentido si de verdad lleva bumper; si no, se apaga y
+  // se vacia, para que no se cuele un tamaño de un bumper que no existe.
+  const verBumper = ()=>{
+    const hay = llevaBumper($("#n-bump").value);
+    $("#n-tbump").disabled = !hay;
+    if(!hay) $("#n-tbump").value = "";
+    else if(!$("#n-tbump").value) $("#n-tbump").value = "40";
+  };
+  $("#n-bump").onchange = verBumper; verBumper();
   $("#n-procs").innerHTML = PROCS.map(p=>
     `<label class="proc"><input type="checkbox" data-i="${p.i}" checked><span>${p.k}</span></label>`).join("");
   $("#n-fecha").value = hoy();
   // Riel solo en corredizas (SE12, SM20, 480); marco según el selector con/sin marco.
   const aplicaProcs = ()=>{
     const riel = CON_RIEL.has($("#n-tipo").value);
-    const marco = $("#n-marco").value === "con";
+    const marco = $("#n-marco").value !== "SIN MARCO";
     $$('#n-procs input').forEach(ck=>{
       const i=+ck.dataset.i;
       if(i===18||i===19) ck.checked = riel;       // CORTE RIEL, RIEL
@@ -161,6 +196,14 @@ $("#form-new").addEventListener("submit", async ev=>{
       c[C.PTS]=numCell($("#n-pts").value); c[C.ESP]=numCell($("#n-esp").value);
       c[C.AP]=$("#n-ap").value;
       c[C.PRIO]=$("#n-prio").value; c[C.OBS]=$("#n-obs").value.trim();
+      // Especificacion (AC..AJ). Las casillas van como booleanos de verdad,
+      // no como texto: si no, la hoja no las dibuja como casillas.
+      c[C.ALFF]=$("#n-alff").checked; c[C.ALFP]=$("#n-alfp").checked;
+      c[C.MARCO]=$("#n-marco").value; c[C.VISOR]=$("#n-visor").value;
+      c[C.EMPV]=EMPAQUE_VISOR[$("#n-visor").value] ?? "";
+      c[C.EMPVREF]=$("#n-empvref").value.trim();
+      c[C.BUMP]=$("#n-bump").value;
+      c[C.TBUMP]= llevaBumper($("#n-bump").value) ? numCell($("#n-tbump").value) : "";
       PROCS.forEach(p=>{ c[p.i] = aplica.get(p.i) ? false : ""; });
       c[C.STATUS] = statusValue(r, c);
       data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});

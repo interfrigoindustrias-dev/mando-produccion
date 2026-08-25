@@ -55,6 +55,7 @@
     <button class="tab" role="tab" data-view="control" aria-selected="true">Control de OPs</button>
     <button class="tab" role="tab" data-view="planta" aria-selected="false">Planta</button>
     <button class="tab" role="tab" data-view="resumen" aria-selected="false">Resumen</button>
+    <button class="tab" role="tab" data-view="calidad" aria-selected="false">Calidad</button>
     <button class="tab" role="tab" data-view="almacen" aria-selected="false">Almacén</button>
     <button class="tab" role="tab" data-view="stock" aria-selected="false">Stock</button>
   </div>
@@ -81,13 +82,17 @@
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="f-q" placeholder="OP, cliente, ensamble, obs…" autocomplete="off"></label>
       <label class="f"><span>Progreso</span><select class="inp" id="f-prog">
-        <option value="">Todos</option><option value="pend">Sin iniciar (0%)</option>
+        <option value="" selected>Todas</option><option value="pend">Sin iniciar (0%)</option>
         <option value="wip">En proceso</option><option value="done">Completa (100%)</option>
-        <option value="open" selected>Abiertas (&lt;100%)</option></select></label>
+        <option value="open">Abiertas (&lt;100%)</option></select></label>
       <label class="f"><span>Despacho</span><select class="inp" id="f-desp">
-        <option value="">Todos</option><option>En Almacén</option><option>Despachado</option>
-        <option>Separado</option><option>Anulada</option>
+        <option value="">Todos</option><option>Terminado</option><option>En Almacén</option>
+        <option>Despachado</option><option>Separado</option><option>Anulada</option>
         <option value="__none">Sin estado</option></select></label>
+      <label class="f"><span>Ensamble</span><select class="inp" id="f-ens">
+        <option value="">Todas</option>
+        <option value="si">Con ensamble</option>
+        <option value="no">Sin ensamble</option></select></label>
       <label class="f"><span>Prioridad</span><select class="inp" id="f-prio">
         <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
       <label class="f"><span>Material</span><select class="inp" id="f-mat"></select></label>
@@ -126,6 +131,27 @@
     </div>
   </section>
 
+  <!-- ---------- CALIDAD (revision antes de almacen) ---------- -->
+  <section id="v-calidad" class="hide">
+    <div class="kpis" id="q-kpis"></div>
+    <div class="aviso">
+      Una puerta al 100% todavía no está en almacén: está lista para que la revisen.
+      Aprueba la que esté bien, o márcala <b>no apta</b> y anota qué le pasa —
+      la nota se guarda en la columna <b>NOTAS DE CALIDAD</b> de la hoja.
+    </div>
+    <div class="bar">
+      <label class="f wide"><span>Buscar</span><input class="inp" id="q-q" placeholder="OP, cliente, tipo, nota…" autocomplete="off"></label>
+      <label class="f"><span>Mostrar</span><select class="inp" id="q-est">
+        <option value="">Todas</option>
+        <option value="mal">Solo no aptas</option>
+        <option value="ok">Solo por revisar</option></select></label>
+      <div class="grow"></div>
+      <span class="cnt" id="q-cnt"></span>
+    </div>
+    <div id="q-lista" class="qlista"></div>
+    <p class="mut hide" id="q-empty" style="padding:26px 2px">Nada pendiente de revisar. </p>
+  </section>
+
   <!-- ---------- PLANTA (tablet del jefe de planta) ---------- -->
   <section id="v-planta" class="hide">
     <div class="bar">
@@ -134,7 +160,8 @@
         <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option>
         <option value="__none">Sin prioridad</option></select></label>
       <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
-        <option value="open" selected>Pendientes (sin estado)</option>
+        <option value="pend" selected>Por fabricar (menos del 100%)</option>
+        <option value="open">Sin estado asignado</option>
         <option value="">Todas</option>
         <option value="wip">Iniciadas sin terminar</option></select></label>
       <label class="f"><span>Ordenar</span><select class="inp" id="p-ord">
@@ -225,7 +252,6 @@
     <div class="kpis" id="s-kpis"></div>
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="s-q" placeholder="OP, tipo, medidas…" autocomplete="off"></label>
-      <label class="f"><span>Material</span><select class="inp" id="s-mat"></select></label>
       <label class="f"><span>Tipo</span><select class="inp" id="s-tipo"></select></label>
       <label class="f"><span>Espesor</span><select class="inp" id="s-esp"></select></label>
       <label class="f"><span>Apertura</span><select class="inp" id="s-ap"></select></label>
@@ -239,6 +265,7 @@
       <span class="cnt" id="s-cnt"></span>
       <button class="btn sm" id="s-csv">⇩ CSV</button>
     </div>
+    <div class="aviso hide" id="s-modelo"></div>
     <div class="tw"><table id="s-tabla"></table></div>
   </section>
 </main>
@@ -281,9 +308,23 @@
           <label class="f"><span>Puntos</span><input class="inp" id="n-pts" type="number" step="any" value="1"></label>
           <label class="f"><span>Espesor mm</span><select class="inp" id="n-esp"></select></label>
           <label class="f"><span>Apertura</span><select class="inp" id="n-ap"></select></label>
-          <label class="f"><span>Marco</span><select class="inp" id="n-marco">
-            <option value="con" selected>Con marco</option><option value="sin">Sin marco</option></select></label>
+          <label class="f"><span>Tipo de marco</span><select class="inp" id="n-marco"></select></label>
         </div>
+
+        <div class="grid" style="margin-top:12px">
+          <label class="f"><span>Visor</span><select class="inp" id="n-visor"></select></label>
+          <label class="f"><span>Empaque visor</span>
+            <input class="inp" id="n-empv" readonly title="Se calcula solo a partir del visor"></label>
+          <label class="f"><span>Referencia empaque</span><input class="inp" id="n-empvref"></label>
+          <label class="f"><span>Bumper</span><select class="inp" id="n-bump"></select></label>
+          <label class="f"><span>Tamaño bumper</span><select class="inp" id="n-tbump" disabled></select></label>
+        </div>
+
+        <div class="bar" style="margin:12px 0 0;gap:18px">
+          <label class="proc"><input type="checkbox" id="n-alff"><span>Alfajor frontal</span></label>
+          <label class="proc"><input type="checkbox" id="n-alfp"><span>Alfajor posterior</span></label>
+        </div>
+
         <label class="f" style="margin-top:12px"><span>Observaciones</span><textarea class="inp" id="n-obs" rows="2"></textarea></label>
       </div>
 
@@ -318,8 +359,9 @@
   <div class="grid g2" style="margin-top:16px">
     <label class="f"><span>Ancho vano (cm)</span><input class="inp" id="d-ancho" type="number" step="any" inputmode="decimal"></label>
     <label class="f"><span>Alto vano (cm)</span><input class="inp" id="d-alto" type="number" step="any" inputmode="decimal"></label>
-    <label class="f"><span>Estado despacho</span><select class="inp" id="d-desp">
-      <option value="">—</option><option>En Almacén</option><option>Despachado</option><option>Separado</option></select></label>
+    <label class="f"><span>Puntos</span><input class="inp" id="d-pts" type="number" step="any" inputmode="decimal"></label>
+    <label class="f"><span>Apertura</span><select class="inp" id="d-ap"></select></label>
+    <label class="f"><span>Estado despacho</span><select class="inp" id="d-desp"></select></label>
     <label class="f"><span>Fecha despacho</span><input class="inp" id="d-fdesp" placeholder="dd/mm/aaaa"></label>
     <label class="f"><span>Fecha proceso</span><input class="inp" id="d-fproc" placeholder="dd/mm/aaaa"></label>
     <label class="f"><span>Prioridad</span><select class="inp" id="d-prio">
@@ -402,6 +444,19 @@
   </div>
 </div></div>
 
+<!-- ============================== IMPRIMIR: LOGO ============================== -->
+<div class="ov hide" id="ov-logo"><div class="mod" style="max-width:440px">
+  <header><h1 style="margin:0;font-size:17px">Imprimir etiqueta</h1></header>
+  <p class="mut" style="margin:6px 0 18px">
+    <b><span id="pl-n">0</span></b> etiqueta(s) de 100 × 150 mm.
+    Sobre etiqueta blanca conviene el logo; sobre etiqueta ya preimpresa, no.</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end">
+    <button class="btn" data-close>Cancelar</button>
+    <button class="btn" id="pl-sin">Sin logo</button>
+    <button class="btn pri" id="pl-con">Con logo</button>
+  </div>
+</div></div>
+
 <!-- ============================== AVISOS ============================== -->
 <div class="ov hide" id="ov-avisos"><div class="mod" style="max-width:640px">
   <header style="display:flex;align-items:center;gap:12px">
@@ -464,6 +519,7 @@
 <script src="js/planta.js"></script>
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
+<script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>
 <script src="js/app.js"></script>

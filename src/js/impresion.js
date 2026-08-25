@@ -5,35 +5,59 @@
 
 "use strict";
 
-/* ---------- Sticker 100 x 100 mm ---------- */
-/* Checklist de calidad de la etiqueta. Se verifica a mano al terminar la puerta. */
-const QC = ["Dimensiones","Marco","Hoja / hojas","Empaque","Herrajes","Limpieza",
-            "Alineación / cierre","Revisión final"];
+/* ---------- Sticker 100 x 150 mm ---------- */
+/* Lo que el operario verifica a mano antes de dar la puerta por buena.
+   El orden es el del recorrido fisico: primero se mide, luego se mira la hoja,
+   despues se prueba el movimiento y al final se revisa el acabado. */
+const QC = ["Dimensiones","Hojas libre de golpes","Apertura de la puerta","Herrajes",
+            "Alineación y cierre","Estado del marco","Estado de empaques","Limpieza"];
+
+/* El logo se puede quitar: sobre etiqueta preimpresa estorba, y ademas la
+   tinta negra de un bloque grande arruga el adhesivo. */
+let stickerConLogo = true;
+
+/** El numero de OP siempre se lee con su prefijo: «OP 315-2», nunca «315-2». */
+const rotuloOP = c => "OP " + String(c[C.OP] ?? "").trim();
+
 function stickerHTML(row){
   const c=row.c;
-  const prio=String(c[C.PRIO]??"").trim().toUpperCase();
   const med=[num(c[C.ANCHO]),num(c[C.ALTO])].every(x=>x!==null)?`${num(c[C.ANCHO])}×${num(c[C.ALTO])}`:"—";
   const flags=[tri(c[C.COMP])?"COMPL":"", tri(c[C.STOCK])?"STOCK":""].filter(Boolean).join(" ");
   const cel=(k,v)=>`<div>${k}<b>${esc(v??"")||"—"}</b></div>`;
   const obs = String(c[C.OBS]??"").trim();
-  return `<div class="stk">
+
+  // Extras: solo se imprimen si la puerta los lleva. Una etiqueta con
+  // «SIN VISOR / SIN BUMPER» gasta sitio en decir que no hay nada.
+  const extras = [
+    String(c[C.VISOR]??"").trim() && String(c[C.VISOR]).toUpperCase()!=="SIN VISOR"
+      ? ["Visor", c[C.VISOR]] : null,
+    llevaBumper(c[C.BUMP])
+      ? ["Bumper", `${c[C.BUMP]}${String(c[C.TBUMP]??"").trim()?" · "+num(c[C.TBUMP]):""}`] : null,
+    tri(c[C.ALFF])===true || tri(c[C.ALFP])===true
+      ? ["Alfajor", [tri(c[C.ALFF])===true?"frontal":"", tri(c[C.ALFP])===true?"posterior":""]
+          .filter(Boolean).join(" + ")] : null
+  ].filter(Boolean);
+
+  return `<div class="stk${stickerConLogo?"":" nologo"}">
     <div class="stk-h">
-      <span class="stk-logo"></span>
+      ${stickerConLogo?'<span class="stk-logo"></span>':'<span class="stk-marca">INTERFRIGO</span>'}
       <span class="stk-hr">${esc(fmtDate(c[C.FECHA]))}${flags?" · "+esc(flags):""}</span>
     </div>
     <div class="stk-top">
-      <div class="stk-op">${esc(c[C.OP]??"")}</div>
+      <div class="stk-op">${esc(rotuloOP(c))}</div>
       <div class="stk-med">${med}<em>cm · vano</em></div>
     </div>
     <div class="stk-cli">${esc(c[C.CLI]??"")}</div>
     <div class="stk-g">
       ${cel("Tipo",c[C.TIPO])}${cel("Material",c[C.MAT])}
       ${cel("Apertura",c[C.AP])}${cel("Espesor mm",c[C.ESP])}
+      ${cel("Marco",c[C.MARCO])}${cel("Puntos",num(c[C.PTS]))}
+      ${extras.map(([k,v])=>cel(k,v)).join("")}
     </div>
     <div class="stk-qc">
       <p>Control de calidad</p>
       <div class="stk-qcg">${QC.map(q=>`<div><span class="bx"></span>${esc(q)}</div>`).join("")}
-        <div class="llv"><span class="bx"></span>¿Lleva llaves?
+        <div class="llv">¿Lleva llaves?
           <em>Sí <span class="bx"></span> &nbsp; No <span class="bx"></span></em></div>
       </div>
     </div>
@@ -86,19 +110,37 @@ function cartaHTML(row){
   </div>`;
 }
 
-/** modo: "sticker" | "carta" */
-function printFichas(rowNums, modo){
+/** modo: "sticker" | "carta"
+ *  logo: solo para sticker. Si no se dice nada, se respeta la ultima eleccion. */
+function printFichas(rowNums, modo, logo){
+  if(logo !== undefined) stickerConLogo = !!logo;
   const rows = rowNums.map(n=>ROWS.find(x=>x.r===n)).filter(Boolean);
   if(!rows.length){ toast("Nada que imprimir","err"); return; }
   const stk = modo==="sticker";
   document.body.classList.add(stk?"p-stk":"p-carta");
   let rule = $("#page-rule");
   if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
-  rule.textContent = stk ? "@page{size:100mm 100mm;margin:0}" : "@page{size:letter portrait;margin:0}";
+  rule.textContent = stk ? "@page{size:100mm 150mm;margin:0}" : "@page{size:letter portrait;margin:0}";
   $("#print").innerHTML = rows.map(stk?stickerHTML:cartaHTML).join("");
   setTimeout(()=>window.print(), 80);
 }
-$("#btn-print-stk").onclick   = ()=> printFichas([...SEL], "sticker");
+/* Preguntar con logo o sin logo, en vez de fijarlo: en etiqueta blanca el logo
+   ayuda a identificar la puerta; sobre etiqueta preimpresa sobra. */
+function pedirSticker(filas){
+  if(!filas.length){ toast("Nada que imprimir","err"); return; }
+  $("#pl-n").textContent = filas.length;
+  $("#ov-logo").dataset.filas = filas.join(",");
+  $("#ov-logo").classList.remove("hide");
+}
+$("#pl-con").onclick = ()=>{
+  const f=$("#ov-logo").dataset.filas.split(",").map(Number);
+  $("#ov-logo").classList.add("hide"); printFichas(f,"sticker",true);
+};
+$("#pl-sin").onclick = ()=>{
+  const f=$("#ov-logo").dataset.filas.split(",").map(Number);
+  $("#ov-logo").classList.add("hide"); printFichas(f,"sticker",false);
+};
+$("#btn-print-stk").onclick   = ()=> pedirSticker([...SEL]);
 $("#btn-print-carta").onclick = ()=> printFichas([...SEL], "carta");
 window.addEventListener("afterprint", ()=>{
   $("#print").innerHTML="";

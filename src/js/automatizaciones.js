@@ -23,6 +23,68 @@
    Todo corre en el navegador: se dispara cuando alguien abre o usa la app.    */
 const OFFSET = {ALTA:0, MEDIA:3, BAJA:8};
 
+/* ESCALADO DE PRIORIDAD — nada se queda atrás para siempre.
+   Una puerta espera su turno para entrar a planta y, pasado un margen, sube a
+   ALTA sola. Contado desde la fecha de creación:
+
+     ALTA   entra hoy mismo.
+     MEDIA  entra a los 3 días; aguanta 2 más como MEDIA; al 5.º día pasa a ALTA.
+     BAJA   entra a los 8 días; aguanta 5 más como BAJA; al 13.º día pasa a ALTA.
+
+   El cambio se escribe en la columna M y queda en el historial como AUTO, para
+   que se vea que lo hizo el sistema y no una persona. */
+const ESCALA = {MEDIA: 3 + 2, BAJA: 8 + 5};
+
+/** Fecha de inicio de producción: la columna AB de la hoja.
+ *  Se escribe UNA sola vez, cuando se marca el primer proceso. Si se
+ *  reescribiera en cada marca dejaría de significar «cuándo empezó». */
+async function marcarInicioProduccion(r){
+  if(CFG.auto===false) return;
+  const row = ROWS.find(x=>x.r===r);
+  if(!row || anulada(row.c)) return;
+  if(String(row.c[C.FINI]??"").trim()) return;      // ya tiene fecha: no se toca
+  if(progreso(row.c).ok <= 0) return;               // aún no hay ningún proceso hecho
+
+  const h = hoy();
+  row.c[C.FINI] = h;
+  try{
+    await writeCells([{a1:`AB${r}`, v:[[h]]}]);
+    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r,
+              campo:"Inicio de producción", antes:"", despues:h}]);
+  }catch(e){ row.c[C.FINI]=""; console.warn("inicio produccion:", e.message); }
+}
+
+/** Sube a ALTA lo que ya agotó su margen de espera.
+ *  Idempotente: solo escribe lo que de verdad cambia. */
+async function autoPrioridades(){
+  if(CFG.auto===false || busyWrites>0) return 0;
+  const hoyMs = hoy0().getTime();
+  const ups=[], logs=[];
+  for(const {r,c} of ROWS){
+    if(!rowActive(c) || completa(c) || anulada(c)) continue;
+    const prio = String(c[C.PRIO]??"").trim().toUpperCase();
+    if(!(prio in ESCALA)) continue;                 // ALTA o sin prioridad: nada que hacer
+    const creada = toDate(c[C.FECHA]);
+    if(!creada) continue;                           // sin fecha no hay desde dónde contar
+    const limite = new Date(creada);
+    limite.setDate(limite.getDate() + ESCALA[prio]);
+    if(limite.getTime() > hoyMs) continue;          // todavía está en plazo
+
+    ups.push({a1:`M${r}`, v:[["ALTA"]]});
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Prioridad",
+               antes:prio, despues:"ALTA"});
+    c[C.PRIO] = "ALTA";
+  }
+  if(!ups.length) return 0;
+  try{
+    await writeCells(ups);
+    logBulk(logs);
+    render(); renderDashVisible();
+    if(typeof renderPlanta === "function"){ plantaDibujada=""; renderPlanta(); }
+    return ups.length;
+  }catch(e){ console.warn("auto prioridades:", e.message); return 0; }
+}
+
 const hoy0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
 
 /** Fecha que DEBE tener FECHA PROCESO una puerta abierta.

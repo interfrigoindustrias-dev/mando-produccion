@@ -60,3 +60,28 @@
 .kpi .lupa{position:absolute;top:8px;right:10px;font-size:9.5px;font-style:normal;
   font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);opacity:0;transition:.12s}
 .kpi.clic:hover .lupa{opacity:1;color:var(--acc)}
+
+/* Inventario por modelo: la fila es pulsable y filtra el listado de abajo. */
+#m-tabla tbody tr{cursor:pointer}
+#m-tabla tbody tr.tot,#m-tabla tbody tr.otras{cursor:default}
+#m-tabla tbody tr.sel{background:color-mix(in srgb,var(--br) 16%,transparent)}
+#m-tabla tbody tr.sel .mod{font-weight:800}
+#s-modelo{display:flex;align-items:center;gap:8px}
+#s-modelo .x{margin-left:auto}
+
+/* ---------- Tablero de calidad ---------- */
+.qlista{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.qcard{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;background:var(--bg2)}
+/* Las rechazadas se ven de lejos: son las que hay que atacar primero. */
+.qcard.mal{border-color:#D64545;box-shadow:inset 4px 0 0 #D64545}
+.qh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.qh .op{font-weight:800;font-size:16px;letter-spacing:-.01em}
+.qh .cli{font-weight:600}
+.qh .met{color:var(--tx2);font-size:12.5px}
+.qh .btn{margin-left:auto}
+.tag.t-mal{background:#D64545;color:#fff}
+.tag.t-esp{background:color-mix(in srgb,var(--br) 18%,transparent);color:var(--br)}
+.qnota{display:block}
+.qnota span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--tx2);margin-bottom:5px}
+.qacc{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:11px}

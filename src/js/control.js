@@ -7,7 +7,7 @@
 
 /* ------------------------------ filtros ------------------------------ */
 /* Un filtro por cada columna visible salvo los procesos. */
-const FSEL = ["f-prog","f-desp","f-prio","f-mat","f-tipo","f-esp","f-ap","f-med"];
+const FSEL = ["f-prog","f-desp","f-prio","f-ens","f-mat","f-tipo","f-esp","f-ap","f-med"];
 const medidaDe = c => (num(c[C.ANCHO])!==null && num(c[C.ALTO])!==null)
   ? `${num(c[C.ANCHO])}×${num(c[C.ALTO])}` : "";
 function filtered(){
@@ -27,6 +27,14 @@ function filtered(){
     const fdesp=g("f-desp");
     if(fdesp==="__none"){ if(String(c[C.DESP]||"").trim()!=="") return false; }
     else if(fdesp && String(c[C.DESP])!==fdesp) return false;
+    // Con o sin numero de ensamble: sirve para cazar las que se quedaron sin
+    // asignar, que es justo lo que se pierde de vista.
+    const fens=g("f-ens");
+    if(fens){
+      const tiene = String(c[C.ENS]??"").trim() !== "";
+      if(fens==="si" && !tiene) return false;
+      if(fens==="no" &&  tiene) return false;
+    }
     const fprog=g("f-prog");
     if(fprog){
       const p=progreso(c).pct;
@@ -247,6 +255,7 @@ async function setProc(r, i, next){
     logChanges("EDITA", row.c[C.OP], r, [{campo:PROCS.find(p=>p.i===i).k,
       antes:nom(tri(prev)), despues:nom(next)}]);
     await tocarFechaProceso(r, estabaCompleta);  // fecha de hoy, salvo si ya estaba terminada
+    await marcarInicioProduccion(r);             // AB: se sella la primera vez y ya no cambia
   }catch(e){ row.c[i]=prev; paintRow(r); toast(e.message,"err"); }
 }
 $("#tb").addEventListener("click", ev=>{

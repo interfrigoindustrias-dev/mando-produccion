@@ -23,7 +23,7 @@ const USU_HEAD = ["CORREO", "NOMBRE", "ROL", "ACTIVO", "NOTAS"];
 /* Qué puede hacer cada rol. La primera columna es la más permisiva. */
 const ROLES = {
   admin:   {nombre:"Administrador", puede:["*"]},
-  oficina: {nombre:"Oficina",       puede:["ver","marcar","despachar","crear","editar"]},
+  oficina: {nombre:"Oficina",       puede:["ver","marcar","despachar","crear","editar","calidad"]},
   planta:  {nombre:"Planta",        puede:["ver.planta","marcar","despachar"]},
   lectura: {nombre:"Solo lectura",  puede:["ver"]}
 };

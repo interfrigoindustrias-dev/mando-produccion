@@ -342,8 +342,44 @@ function renderModelos(){
       <td class="n">${T.proy}</td><td class="n">${T.tot}</td><td colspan="2"></td></tr></tbody>`;
 }
 
+/* Modelo elegido en el inventario de arriba. Al pulsar una fila, el listado de
+   abajo se queda solo con esas puertas: se ve QUE puertas hay detras del numero,
+   que es la pregunta que sigue siempre a mirar el inventario. */
+let stockModelo = "";
+
+function pintarChipModelo(){
+  const box = $("#s-modelo");
+  if(!box) return;
+  box.classList.toggle("hide", !stockModelo);
+  if(stockModelo) box.innerHTML =
+    `Mostrando solo <b>${esc(stockModelo)}</b> <button class="x" id="s-modelo-x" title="Quitar">×</button>`;
+}
+$("#s-modelo").addEventListener("click", ev=>{
+  if(!ev.target.closest("#s-modelo-x")) return;
+  stockModelo=""; renderStock();
+});
+/** Marca visualmente la fila elegida del inventario. */
+function marcarFilaModelo(){
+  $$("#m-tabla tbody tr").forEach(tr=>{
+    const nom = tr.querySelector(".mod");
+    tr.classList.toggle("sel", !!stockModelo && nom && nom.textContent === stockModelo);
+  });
+}
+
 /** «+ Crear»: abre el alta con el modelo ya cargado. */
 $("#m-tabla").addEventListener("click", ev=>{
+  // Un clic en la fila (no en «+ Crear») selecciona ese modelo abajo.
+  if(!ev.target.closest("[data-mod]")){
+    const tr = ev.target.closest("tbody tr");
+    const nom = tr && tr.querySelector(".mod");
+    if(!nom || tr.classList.contains("tot")) return;
+    const modelo = nom.textContent.trim();
+    if(!MODELOS.some(m=>m.nombre===modelo)) return;    // «Sin modelo definido»
+    stockModelo = (stockModelo===modelo) ? "" : modelo;  // volver a pulsar lo quita
+    renderStock(); marcarFilaModelo();
+    $("#s-tabla").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
   const b = ev.target.closest("[data-mod]"); if(!b) return;
   const m = MODELOS.find(x=>x.nombre===b.dataset.mod); if(!m) return;
   $("#n-op").value = String(nextOp());
@@ -374,7 +410,12 @@ function stockList(){
   const eq=(v,f)=>!f||String(v??"").trim()===f;
   return stockBase().filter(({c})=>{
     if(q && ![c[C.OP],c[C.TIPO],c[C.MAT],num(c[C.ANCHO]),num(c[C.ALTO])].join(" ").toLowerCase().includes(q)) return false;
-    if(!eq(c[C.MAT],g("s-mat")) || !eq(c[C.TIPO],g("s-tipo"))) return false;
+    if(!eq(c[C.TIPO],g("s-tipo"))) return false;
+    // Filtro por modelo: se activa al pulsar una fila del inventario de arriba.
+    if(stockModelo){
+      const m = MODELOS.find(x=>x.nombre===stockModelo);
+      if(m && !esModelo(c,m,false)) return false;
+    }
     if(!eq(c[C.ESP],g("s-esp")) || !eq(c[C.AP],g("s-ap"))) return false;
     const fe=g("s-est");
     if(fe==="__none"){ if(desp(c)!=="") return false; } else if(!eq(desp(c),fe)) return false;
@@ -402,13 +443,14 @@ function renderStock(){
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
         tagDesp(c[C.DESP])];
     }));
-  contador("#s-cnt", L.length, B.length, ["s-mat","s-tipo","s-esp","s-ap","s-est","s-av"], "s-q");
+  contador("#s-cnt", L.length, B.length, ["s-tipo","s-esp","s-ap","s-est","s-av"], "s-q");
+  pintarChipModelo();
 }
-["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"].forEach(id=>{
+["s-q","s-tipo","s-esp","s-ap","s-est","s-av"].forEach(id=>{
   $("#"+id).addEventListener("input", renderStock);
   $("#"+id).addEventListener("change", renderStock);
 });
-$("#s-clear").onclick = ()=>{ ["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"]
+$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-tipo","s-esp","s-ap","s-est","s-av"]
   .forEach(id=>$("#"+id).value=""); renderStock(); };
 
 function csvDe(nombre, cols, filas){

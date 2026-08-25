@@ -72,3 +72,13 @@
   background:color-mix(in srgb,var(--warn) 12%,transparent);
   border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
 .aviso.prog b{color:var(--tx)}
+
+/* Observaciones de la puerta. Van dentro de la tarjeta, antes de los botones:
+   es lo que hay que leer ANTES de empezar a marcar procesos. */
+.pobs{
+  margin:8px 0 0; padding:8px 11px; border-radius:9px;
+  background:var(--av-bg, rgba(255,176,32,.12));
+  border-left:4px solid #E8A317;
+  font-size:13px; line-height:1.35; color:var(--tx);
+  overflow-wrap:anywhere;
+}

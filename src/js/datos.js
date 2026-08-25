@@ -29,7 +29,7 @@ async function refresh(silent){
         catch(e){ console.error("render/"+nombre, e); toast("Fallo al pintar "+nombre+": "+e.message,"err"); }
       }
     }
-    autoFechas();                                // reprograma si cambió el día o la prioridad
+    autoPrioridades().then(autoFechas);          // escala por antigüedad y reprograma fechas
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){
     setSync("err", "Error"); if(!silent) toast(e.message,"err"); console.error(e);
@@ -41,6 +41,7 @@ function renderDashVisible(){
     if(typeof plantaEnUso === "function" && plantaEnUso()) return;
     renderPlanta();
   }
+  else if($("#v-calidad") && !$("#v-calidad").classList.contains("hide")) renderCalidad();
   else if(!$("#v-resumen").classList.contains("hide")) renderResumen();
   else if(!$("#v-almacen").classList.contains("hide")) renderAlmacen();
   else if(!$("#v-stock").classList.contains("hide")){ renderStock(); renderModelos(); }
