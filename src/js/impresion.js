@@ -12,8 +12,9 @@
 const QC = ["Dimensiones","Hojas libre de golpes","Apertura de la puerta","Herrajes",
             "Alineación y cierre","Estado del marco","Estado de empaques","Limpieza"];
 
-/* El logo se puede quitar: sobre etiqueta preimpresa estorba, y ademas la
-   tinta negra de un bloque grande arruga el adhesivo. */
+/* «Sin logo» significa SIN MARCA: ni el logotipo ni el nombre escrito. Sobre
+   etiqueta ya preimpresa cualquier rastro de la marca sobra o se solapa con lo
+   que la etiqueta trae de fabrica. */
 let stickerConLogo = true;
 
 /** El numero de OP siempre se lee con su prefijo: «OP 315-2», nunca «315-2». */
@@ -40,7 +41,7 @@ function stickerHTML(row){
 
   return `<div class="stk${stickerConLogo?"":" nologo"}">
     <div class="stk-h">
-      ${stickerConLogo?'<span class="stk-logo"></span>':'<span class="stk-marca">INTERFRIGO</span>'}
+      ${stickerConLogo ? '<span class="stk-logo"></span>' : ""}
       <span class="stk-hr">${esc(fmtDate(c[C.FECHA]))}${flags?" · "+esc(flags):""}</span>
     </div>
     <div class="stk-top">
@@ -140,7 +141,10 @@ $("#pl-sin").onclick = ()=>{
   const f=$("#ov-logo").dataset.filas.split(",").map(Number);
   $("#ov-logo").classList.add("hide"); printFichas(f,"sticker",false);
 };
-$("#btn-print-stk").onclick   = ()=> pedirSticker([...SEL]);
+/* En puertas la etiqueta solo se imprime desde Calidad, asi que aqui ese boton
+   ya no existe; paneles si lo conserva. Se comprueba antes de engancharlo. */
+const stkBtn = $("#btn-print-stk");
+if(stkBtn) stkBtn.onclick = ()=> pedirSticker([...SEL]);
 $("#btn-print-carta").onclick = ()=> printFichas([...SEL], "carta");
 window.addEventListener("afterprint", ()=>{
   $("#print").innerHTML="";

@@ -107,7 +107,9 @@ $("#d-save").onclick = async ()=>{
   }catch(e){ toast(e.message,"err"); refresh(false); }
 };
 $("#d-print").onclick     = ()=> printFichas([detRow], "carta");
-$("#d-print-stk").onclick = ()=> pedirSticker([detRow]);
+// La etiqueta se imprime desde Calidad; en paneles el boton sigue existiendo.
+const dStk = $("#d-print-stk");
+if(dStk) dStk.onclick = ()=> pedirSticker([detRow]);
 $$("[data-close]").forEach(b=>b.onclick=()=>b.closest(".ov").classList.add("hide"));
 $$(".ov").forEach(o=>o.addEventListener("mousedown", e=>{ if(e.target===o) o.classList.add("hide"); }));
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") $$(".ov").forEach(o=>o.classList.add("hide")); });

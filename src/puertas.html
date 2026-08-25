@@ -102,8 +102,7 @@
       <label class="f"><span>Medidas</span><select class="inp" id="f-med"></select></label>
       <button class="btn sm" id="f-clear">Limpiar</button>
       <div class="grow"></div>
-      <button class="btn sm" id="btn-print-stk" disabled>🏷 Sticker (<span id="nsel">0</span>)</button>
-      <button class="btn sm" id="btn-print-carta" disabled>🖨 Hoja carta</button>
+      <button class="btn sm" id="btn-print-carta" disabled>🖨 Hoja carta (<span id="nsel">0</span>)</button>
       <button class="btn sm" id="btn-csv">⇩ CSV</button>
     </div>
 
@@ -146,6 +145,8 @@
         <option value="mal">Solo no aptas</option>
         <option value="ok">Solo por revisar</option></select></label>
       <div class="grow"></div>
+      <button class="btn sm" id="q-todas">Seleccionar todas</button>
+      <button class="btn sm" id="q-print" disabled>🏷 Etiquetas (<span id="q-nsel">0</span>)</button>
       <span class="cnt" id="q-cnt"></span>
     </div>
     <div id="q-lista" class="qlista"></div>
@@ -350,7 +351,6 @@
       <div class="op" style="font-size:24px" id="d-op"></div>
       <div class="mut" id="d-cli"></div>
     </div>
-    <button class="btn sm" id="d-print-stk">🏷 Sticker</button>
     <button class="btn sm" id="d-print">🖨 Carta</button>
     <button class="x" data-close>×</button>
   </header>

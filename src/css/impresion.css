@@ -106,10 +106,11 @@
   .bar .f{min-width:calc(50% - 4px)}
 }
 
-/* Etiqueta sin logo: en su lugar va el nombre compuesto en texto, que imprime
-   limpio en cualquier impresora termica y no arruga el adhesivo. */
+/* Etiqueta sin logo: no queda NADA de la marca, ni logotipo ni nombre escrito.
+   La cabecera se reduce a la fecha, alineada a la izquierda para que no quede
+   un hueco raro donde estaba el logo. */
 .stk.nologo .stk-h{padding-bottom:1.4mm}
-.stk-marca{font-size:11pt;font-weight:900;letter-spacing:.16em;flex:none}
+.stk.nologo .stk-hr{text-align:left}
 
 /* La linea de llaves cierra el bloque de calidad, separada del resto. */
 .stk-qcg .llv{border-top:.4mm solid #000;padding-top:1.3mm;margin-top:1mm;

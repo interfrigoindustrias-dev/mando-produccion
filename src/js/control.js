@@ -272,7 +272,8 @@ $("#tb").addEventListener("click", ev=>{
 });
 function syncSel(){
   $("#nsel").textContent = SEL.size;
-  $("#btn-print-stk").disabled = SEL.size===0;
+  const bs = $("#btn-print-stk");
+  if(bs) bs.disabled = SEL.size===0;
   $("#btn-print-carta").disabled = SEL.size===0;
 }
 $("#ck-all").onchange = ev=>{

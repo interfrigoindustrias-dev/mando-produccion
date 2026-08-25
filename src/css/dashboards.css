@@ -85,3 +85,10 @@
 .qnota span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
   color:var(--tx2);margin-bottom:5px}
 .qacc{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:11px}
+
+/* Selección para imprimir etiquetas. */
+.qsel{display:flex;align-items:center;flex:none;cursor:pointer}
+.qsel input{width:18px;height:18px;accent-color:var(--acc);cursor:pointer}
+.qcard.sel{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 5%,var(--bg2))}
+/* Una rechazada seleccionada sigue leyéndose como rechazada: el borde rojo manda. */
+.qcard.sel.mal{border-color:#D64545}

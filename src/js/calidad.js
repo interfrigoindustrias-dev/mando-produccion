@@ -31,6 +31,11 @@ const esNoApta = c => String(c[C.CAL] ?? "").trim().toUpperCase().startsWith(NO_
 /** La nota sin el prefijo: lo que la persona escribio de verdad. */
 const notaLimpia = c => String(c[C.CAL] ?? "").replace(/^\s*NO APTA\s*[:·-]?\s*/i, "").trim();
 
+/* Puertas marcadas para imprimir etiqueta. Se guarda aparte del HTML porque la
+   lista se repinta cada vez que se guarda una nota: si la seleccion viviera solo
+   en las casillas, se perderia a media tanda. */
+const SEL_CAL = new Set();
+
 /** Puertas que le competen a calidad ahora mismo. */
 function calidadBase(){
   return ROWS.filter(({c})=>{
@@ -81,6 +86,8 @@ function renderCalidad(){
     const bloqueo = mal ? " disabled" : "";
     return `<div class="qcard${mal ? " mal" : ""}" data-r="${r}">
       <div class="qh">
+        <label class="qsel" title="Marcar para imprimir su etiqueta">
+          <input type="checkbox" data-sel="${r}"${SEL_CAL.has(r) ? " checked" : ""}></label>
         <span class="op">OP ${esc(c[C.OP] ?? "")}</span>
         <span class="cli">${esc(c[C.CLI] ?? "")}</span>
         <span class="met">${esc(c[C.TIPO] ?? "")} · ${num(c[C.ANCHO]) ?? "—"}×${num(c[C.ALTO]) ?? "—"} · ${esc(c[C.AP] ?? "")}</span>
@@ -101,6 +108,22 @@ function renderCalidad(){
     </div>`;
   }).join("");
   $("#q-empty").classList.toggle("hide", L.length > 0);
+
+  // Si una puerta sale de la lista (se aprobo, se filtro), deja de estar
+  // seleccionada: imprimir la etiqueta de algo que ya no se ve confunde.
+  const visibles = new Set(L.map(x=>x.r));
+  [...SEL_CAL].forEach(r=>{ if(!visibles.has(r)) SEL_CAL.delete(r); });
+  pintarSelCalidad();
+}
+
+/** Refresca el contador y el botón de etiquetas. */
+function pintarSelCalidad(){
+  const n = SEL_CAL.size;
+  const c = $("#q-nsel"); if(c) c.textContent = n;
+  const b = $("#q-print"); if(b) b.disabled = n === 0;
+  const t = $("#q-todas");
+  if(t) t.textContent = n && n === document.querySelectorAll("[data-sel]").length
+    ? "Quitar selección" : "Seleccionar todas";
 }
 
 /** Guarda la nota de calidad (AK) y, si procede, el estado de despacho (Y). */
@@ -177,6 +200,34 @@ $("#q-lista").addEventListener("change", ev=>{
   const tag = card.querySelector(".tag");
   tag.className = "tag " + (k.checked ? "t-mal" : "t-esp");
   tag.textContent = k.checked ? "NO APTA" : "POR REVISAR";
+});
+
+/* Selección para imprimir. La casilla no toca la hoja: solo elige qué se
+   imprime, asi que no pasa por guardarCalidad. */
+$("#q-lista").addEventListener("change", ev=>{
+  const k = ev.target.closest("[data-sel]"); if(!k) return;
+  const r = +k.dataset.sel;
+  k.checked ? SEL_CAL.add(r) : SEL_CAL.delete(r);
+  k.closest(".qcard").classList.toggle("sel", k.checked);
+  pintarSelCalidad();
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const t = $("#q-todas");
+  if(t) t.onclick = ()=>{
+    const cajas = [...document.querySelectorAll("[data-sel]")];
+    const marcar = SEL_CAL.size !== cajas.length;      // si ya estaban todas, se quitan
+    SEL_CAL.clear();
+    cajas.forEach(k=>{
+      k.checked = marcar;
+      k.closest(".qcard").classList.toggle("sel", marcar);
+      if(marcar) SEL_CAL.add(+k.dataset.sel);
+    });
+    pintarSelCalidad();
+  };
+
+  const p = $("#q-print");
+  if(p) p.onclick = ()=> pedirSticker([...SEL_CAL]);
 });
 
 ["#q-q","#q-est"].forEach(s=>{
