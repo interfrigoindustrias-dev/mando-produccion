@@ -1,10 +1,10 @@
 # Graph Report - .  (2026-08-25)
 
 ## Corpus Check
-- Corpus is ~37,351 words - fits in a single context window. You may not need a graph.
+- Corpus is ~38,656 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 280 nodes · 420 edges · 27 communities (23 shown, 4 thin omitted)
+- 291 nodes · 435 edges · 28 communities (24 shown, 4 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
@@ -28,6 +28,7 @@
 - Autenticacion con Google
 - avisos.js
 - meta.js
+- comprobar_ids.py
 - Instalacion como app
 - modulo.js
 - Despliegue
@@ -55,29 +56,29 @@
   src/js/dashboards.js → src/js/comun.js
 - `printFichas()` --references--> `ROWS`  [EXTRACTED]
   src/js/impresion.js → src/js/constantes.js
-- `marcarInicioProduccion()` --references--> `ROWS`  [EXTRACTED]
-  src/js/automatizaciones.js → src/js/constantes.js
+- `render()` --references--> `SEL`  [EXTRACTED]
+  src/js/control.js → src/js/constantes.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (27 total, 4 thin omitted)
+## Communities (28 total, 4 thin omitted)
 
 ### Community 0 - "Constantes del modelo"
 Cohesion: 0.09
-Nodes (20): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPESORES (+12 more)
+Nodes (21): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPESORES (+13 more)
 
 ### Community 1 - "Control de OPs"
 Cohesion: 0.15
-Nodes (21): PROCS, SEL, editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis() (+13 more)
+Nodes (21): PROCS, editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis(), medidaDe() (+13 more)
 
 ### Community 2 - "Utilidades y fechas"
 Cohesion: 0.11
 Nodes (15): renderResumen(), fmt(), fmtDate(), hoy(), iso(), num(), numCell(), p2() (+7 more)
 
 ### Community 3 - "Tableros y catalogo"
-Cohesion: 0.19
-Nodes (15): almacenBase(), almacenList(), esModelo(), MOD_HEAD, MOD_SEED, MODELOS, pintarChipModelo(), pintarSelAlmacen() (+7 more)
+Cohesion: 0.15
+Nodes (18): almacenBase(), almacenList(), bCarta, bStk, bTodas, chipMod, esModelo(), MOD_HEAD (+10 more)
 
 ### Community 4 - "usuarios.js"
 Cohesion: 0.18
@@ -139,12 +140,16 @@ Nodes (6): abrirAvisos(), avisosNuevos(), cerrarAvisos(), marcarVisto(), pintarT
 Cohesion: 0.29
 Nodes (3): META, META_DEF, META_HEAD
 
-### Community 19 - "Instalacion como app"
+### Community 19 - "comprobar_ids.py"
+Cohesion: 0.52
+Nodes (6): ids_de(), leer(), main(), protegido_en_linea(), El propio renglon comprueba antes de usar., scripts_de()
+
+### Community 20 - "Instalacion como app"
 Cohesion: 0.47
 Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
 
 ## Knowledge Gaps
-- **43 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `OFFSET`, `ESCALA` (+38 more)
+- **47 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `OFFSET`, `ESCALA` (+42 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -152,16 +157,16 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ROWS` connect `Automatizaciones de fecha` to `Constantes del modelo`, `Control de OPs`, `Vista de planta`, `Impresion`?**
-  _High betweenness centrality (0.185) - this node is a cross-community bridge._
+  _High betweenness centrality (0.178) - this node is a cross-community bridge._
 - **Why does `guardarDespacho()` connect `Automatizaciones de fecha` to `Tableros y catalogo`?**
   _High betweenness centrality (0.111) - this node is a cross-community bridge._
 - **Why does `renderResumen()` connect `Utilidades y fechas` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.079) - this node is a cross-community bridge._
+  _High betweenness centrality (0.076) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `refresh()` (e.g. with `autoFechas()` and `fillLists()`) actually correct?**
   _`refresh()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
-  _43 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _47 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
-  _Cohesion score 0.08923076923076922 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08547008547008547 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
   _Cohesion score 0.11 - nodes in this community are weakly interconnected._
