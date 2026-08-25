@@ -171,6 +171,7 @@
         <option value="pts">Más puntos primero</option>
         <option value="avance">Menos avance primero</option></select></label>
       <div class="grow"></div>
+      <button class="btn sm" id="btn-crono" title="Repartir lo pendiente en días">🗓 Cronograma</button>
       <span class="cnt" id="p-cnt"></span>
     </div>
     <div id="p-prog-aviso" class="aviso prog hide"></div>
@@ -444,6 +445,30 @@
   </div>
 </div></div>
 
+<!-- ============================== CRONOGRAMA ============================== -->
+<div class="ov hide" id="ov-crono"><div class="mod mod-ancho">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px">Cronograma de planta</h1>
+      <p class="mut" style="margin:4px 0 0">Reparto del trabajo pendiente, agrupado por
+        cliente y tipo para no cambiar de montaje a media jornada.</p>
+    </div>
+    <label class="f" style="flex:none"><span>Días hábiles</span>
+      <input class="inp" id="cr-dias" type="number" min="1" max="60" value="15" style="width:88px"></label>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="crkpis" id="cr-kpis"></div>
+  <div class="aviso" id="cr-veredicto"></div>
+
+  <div class="tw" style="max-height:56vh"><table id="cr-tabla" class="crtabla"></table></div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+    <button class="btn" id="cr-print">Imprimir</button>
+    <button class="btn pri" data-close>Cerrar</button>
+  </div>
+</div></div>
+
 <!-- ============================== IMPRIMIR: LOGO ============================== -->
 <div class="ov hide" id="ov-logo"><div class="mod" style="max-width:440px">
   <header><h1 style="margin:0;font-size:17px">Imprimir etiqueta</h1></header>
@@ -519,6 +544,7 @@
 <script src="js/planta.js"></script>
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
+<script src="js/cronograma.js"></script>
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>
