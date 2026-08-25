@@ -23,6 +23,24 @@ function goto(v){
   if(v==="stock"){ renderStock(); renderModelos(); }
 }
 $$(".tab").forEach(t=>t.onclick=()=>goto(t.dataset.view));
+
+/** Quién soy, en la barra de arriba.
+ *
+ *  Se enseña el NOMBRE de la lista de usuarios, no el correo: en una pantalla
+ *  compartida «Diego» se reconoce de un vistazo y «contacto@interfrigo.com.co»
+ *  no dice quién está usando la aplicación. El correo sigue visible al pasar
+ *  el ratón, que es cuando de verdad hace falta.
+ *
+ *  Si esa persona no tiene nombre puesto, se cae al correo: es preferible un
+ *  correo a un hueco vacío. */
+function pintarQuienSoy(){
+  const nombre = (typeof MI_NOMBRE === "string" && MI_NOMBRE.trim()) ? MI_NOMBRE.trim() : "";
+  const visible = nombre || userMail || "conectado";
+  const el = $("#u-mail");
+  el.textContent = visible;
+  el.title = nombre ? `${nombre} · ${userMail}` : (userMail || "");
+  $("#u-av").textContent = visible[0].toUpperCase();
+}
 $("#btn-nueva").onclick = ()=>{
   $("#n-op").value = String(nextOp());        // siempre la siguiente disponible
   $("#n-fecha").value = hoy();                // fecha de creación: hoy
@@ -57,8 +75,7 @@ async function enterApp(){
   const permiso = await loadUsuarios();
   if(!permiso.acceso){ sinAcceso(permiso.motivo); return; }
 
-  $("#u-mail").textContent = userMail || "conectado";
-  $("#u-av").textContent = (userMail||"?")[0].toUpperCase();
+  pintarQuienSoy();
   $("#gate").classList.add("hide"); $("#app").classList.remove("hide");
   initForm();
   $("#r-dia").value = iso(new Date());
@@ -84,6 +101,7 @@ async function enterApp(){
   await loadModelos();        // catálogo de modelos de stock
   // La meta solo existe en puertas: paneles no tiene cronograma.
   if(typeof loadMeta === "function") await loadMeta();
+  if(typeof loadInformes === "function") await loadInformes();
   aplicarRol();               // la interfaz se ajusta a lo que esta persona puede hacer
   pintarTimbre();
   renderDashVisible();

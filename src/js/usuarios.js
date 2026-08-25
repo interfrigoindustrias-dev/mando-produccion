@@ -94,6 +94,7 @@ function aplicarRol(){
   const ocultar = (sel, cond) => $$(sel).forEach(e => e.classList.toggle("hide", !cond));
   ocultar("#btn-nueva",       puede("crear"));
   ocultar("#btn-usuarios",    puede("usuarios") || puede("*"));
+  ocultar("#btn-informes",    puede("crear"));
   ocultar("#btn-print-stk",   puede("ver"));
   ocultar("#btn-print-carta", puede("ver"));
   ocultar("#q-print",         puede("ver"));
@@ -173,11 +174,17 @@ async function guardarUsuario(i, campo, valor){
       {method:"PUT", body: JSON.stringify({values:[[valor]]})});
     logChanges("EDITA", u.correo, i+2, [{campo:"Usuario · "+campo, antes:String(antes), despues:String(valor)}]);
     setSync("","Guardado");
-    // Si me cambio el rol a mí mismo, la interfaz debe reflejarlo ya.
-    if(u.correo === String(userMail).toLowerCase() && campo === "rol"){
-      MI_ROL = ROLES[valor] ? valor : "lectura";
-      aplicarRol();
-      toast("Tu propio rol cambió a "+(ROLES[MI_ROL]||{}).nombre,"ok");
+    // Si me cambio algo a mí mismo, la barra de arriba debe reflejarlo ya.
+    if(u.correo === String(userMail).toLowerCase()){
+      if(campo === "rol"){
+        MI_ROL = ROLES[valor] ? valor : "lectura";
+        aplicarRol();
+        toast("Tu propio rol cambió a "+(ROLES[MI_ROL]||{}).nombre,"ok");
+      }
+      if(campo === "nombre"){
+        MI_NOMBRE = String(valor||"").trim();
+        if(typeof pintarQuienSoy === "function") pintarQuienSoy();
+      }
     }
   }catch(e){ u[campo] = antes; pintarUsuarios(); toast(e.message,"err"); }
 }

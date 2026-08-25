@@ -69,6 +69,7 @@
   <button class="btn sm hide" id="btn-instalar" title="Instalar como aplicación">⤓ Instalar</button>
   <button class="btn sm" id="btn-tema" title="Tema claro / oscuro">◐</button>
   <span class="chip"><span class="rolchip" id="u-rol"></span><span id="u-mail">—</span><span class="avatar" id="u-av">?</span></span>
+  <button class="btn sm hide" id="btn-informes" title="Informes programados">📊</button>
   <button class="btn sm hide" id="btn-usuarios" title="Gestionar usuarios">👥</button>
   <button class="btn sm" id="btn-cfg" title="Configuración">⚙</button>
   <button class="btn sm" id="btn-out" title="Salir">⏻</button>
@@ -445,6 +446,31 @@
   </div>
 </div></div>
 
+<!-- ============================== INFORMES ============================== -->
+<div class="ov hide" id="ov-informes"><div class="mod mod-ancho">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px">Informes programados</h1>
+      <p class="mut" style="margin:4px 0 0">Qué se manda, a quién y cada cuánto.
+        Los envía Google desde la propia hoja, sin que nadie tenga que abrir la aplicación.</p>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="aviso" id="inf-estado">
+    Para que salgan solos hay que instalar el script una vez en la hoja
+    (<b>Extensiones → Apps Script</b>). Mientras tanto, puedes descargar
+    cualquier informe aquí mismo con <b>Ver CSV</b>.
+  </div>
+
+  <div id="inf-lista"></div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+    <button class="btn" id="inf-add">+ Añadir informe</button>
+    <button class="btn pri" data-close>Cerrar</button>
+  </div>
+</div></div>
+
 <!-- ============================== CRONOGRAMA ============================== -->
 <div class="ov hide" id="ov-crono"><div class="mod mod-ancho">
   <header style="display:flex;align-items:flex-start;gap:12px">
@@ -555,6 +581,7 @@
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
 <script src="js/meta.js"></script>
+<script src="js/informes.js"></script>
 <script src="js/cronograma.js"></script>
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
