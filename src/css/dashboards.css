@@ -92,3 +92,10 @@
 .qcard.sel{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 5%,var(--bg2))}
 /* Una rechazada seleccionada sigue leyéndose como rechazada: el borde rojo manda. */
 .qcard.sel.mal{border-color:#D64545}
+
+/* Selección para imprimir desde Almacén. */
+#a-tabla .almck{width:17px;height:17px;accent-color:var(--acc);cursor:pointer}
+#a-tabla tbody tr.sel{background:color-mix(in srgb,var(--acc) 9%,transparent)}
+#a-tabla tbody tr.sel .op{font-weight:800}
+/* La primera columna es solo la casilla: que no se coma ancho de la tabla. */
+#a-tabla th:first-child,#a-tabla td:first-child{width:34px;text-align:center;padding-left:8px;padding-right:4px}

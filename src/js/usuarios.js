@@ -99,6 +99,9 @@ function aplicarRol(){
   ocultar("#btn-print-carta", puede("ver"));
   ocultar("#q-print",         puede("ver"));
   ocultar("#q-todas",         puede("ver"));
+  ocultar("#a-print-carta",   puede("ver"));
+  ocultar("#a-print-stk",     puede("ver"));
+  ocultar("#a-todas",         puede("ver"));
 
   // Distintivo del rol junto al correo, para que nadie dude de con qué permisos entró.
   const chip = $("#u-rol");

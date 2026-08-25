@@ -81,7 +81,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_auth",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "auth.php"
     },
@@ -92,7 +92,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_auth_login",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "login()"
     },
@@ -103,7 +103,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "src_auth_callback",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "callback()"
     },
@@ -114,7 +114,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_auth_token",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "token()"
     },
@@ -125,7 +125,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "src_auth_logout",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "logout()"
     },
@@ -136,7 +136,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_auth_guardar",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "guardar()"
     },
@@ -147,7 +147,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "src_auth_pediragoogle",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "pediragoogle()"
     },
@@ -158,7 +158,7 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "src_auth_paginadestino",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "paginadestino()"
     },
@@ -169,7 +169,7 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "src_auth_volver",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "volver()"
     },
@@ -180,7 +180,7 @@
       "source_location": "L215",
       "_origin": "ast",
       "id": "src_auth_responder",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "responder()"
     },
@@ -191,7 +191,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_auth_base64url",
-      "community": 9,
+      "community": 10,
       "community_name": "auth.php",
       "norm_label": "base64url()"
     },
@@ -213,7 +213,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_api",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api.js"
     },
@@ -224,7 +224,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_api_api",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api()"
     },
@@ -235,7 +235,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_api_rng",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "rng()"
     },
@@ -246,7 +246,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_api_fetchrows",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "fetchrows()"
     },
@@ -257,7 +257,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_api_ensuregid",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensuregid()"
     },
@@ -268,7 +268,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_api_ensurerows",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensurerows()"
     },
@@ -279,7 +279,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_api_setcheckboxui",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "setcheckboxui()"
     },
@@ -290,7 +290,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_api_repairstatus",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairstatus()"
     },
@@ -301,7 +301,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_api_numericos",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "numericos"
     },
@@ -312,7 +312,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_api_repairnumeros",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairnumeros()"
     },
@@ -323,7 +323,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_js_api_writecells",
-      "community": 10,
+      "community": 11,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "writecells()"
     },
@@ -334,7 +334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_app",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "app.js"
     },
@@ -345,7 +345,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_app_views",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "views"
     },
@@ -356,18 +356,29 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_app_goto",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "goto()"
+    },
+    {
+      "label": "pintarQuienSoy()",
+      "file_type": "code",
+      "source_file": "src/js/app.js",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "src_js_app_pintarquiensoy",
+      "community": 3,
+      "community_name": "usuarios.js",
+      "norm_label": "pintarquiensoy()"
     },
     {
       "label": "enterApp()",
       "file_type": "code",
       "source_file": "src/js/app.js",
-      "source_location": "L55",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "src_js_app_enterapp",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "enterapp()"
     },
@@ -375,10 +386,10 @@
       "label": "explicarQueFalta()",
       "file_type": "code",
       "source_file": "src/js/app.js",
-      "source_location": "L99",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "src_js_app_explicarquefalta",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "explicarquefalta()"
     },
@@ -389,7 +400,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auditoria",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "auditoria.js"
     },
@@ -400,7 +411,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_auditoria_log",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "log"
     },
@@ -411,7 +422,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_auditoria_ensurelog",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "ensurelog()"
     },
@@ -422,7 +433,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_auditoria_logchanges",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "logchanges()"
     },
@@ -433,7 +444,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_auditoria_logbulk",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "logbulk()"
     },
@@ -444,7 +455,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_js_auditoria_loadlog",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "loadlog()"
     },
@@ -455,7 +466,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "src_js_auditoria_shortuser",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "shortuser()"
     },
@@ -466,7 +477,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_js_auditoria_histof",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "histof()"
     },
@@ -477,7 +488,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_js_auditoria_renderhist",
-      "community": 13,
+      "community": 14,
       "community_name": "Historial de cambios",
       "norm_label": "renderhist()"
     },
@@ -488,7 +499,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auth",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "auth.js"
     },
@@ -499,7 +510,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_auth_paginaactual",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "paginaactual()"
     },
@@ -510,7 +521,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_auth_pedirtoken",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "pedirtoken()"
     },
@@ -521,7 +532,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_auth_entrarcongoogle",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "entrarcongoogle()"
     },
@@ -532,7 +543,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_auth_ensuretoken",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "ensuretoken()"
     },
@@ -543,7 +554,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_auth_programarrenovacion",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "programarrenovacion()"
     },
@@ -554,7 +565,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_auth_avisarreconectar",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "avisarreconectar()"
     },
@@ -565,7 +576,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_auth_logout",
-      "community": 15,
+      "community": 16,
       "community_name": "Autenticacion con Google",
       "norm_label": "logout()"
     },
@@ -576,7 +587,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_automatizaciones",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "automatizaciones.js"
     },
@@ -587,7 +598,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_automatizaciones_offset",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "offset"
     },
@@ -598,7 +609,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_automatizaciones_escala",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "escala"
     },
@@ -609,7 +620,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_js_automatizaciones_marcarinicioproduccion",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "marcarinicioproduccion()"
     },
@@ -620,7 +631,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autoprioridades",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autoprioridades()"
     },
@@ -631,7 +642,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_js_automatizaciones_hoy0",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "hoy0()"
     },
@@ -642,7 +653,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_automatizaciones_fechaprogramada",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "fechaprogramada()"
     },
@@ -653,7 +664,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autofechas",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autofechas()"
     },
@@ -664,7 +675,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "src_js_automatizaciones_tocarfechaproceso",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "tocarfechaproceso()"
     },
@@ -675,7 +686,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_js_automatizaciones_campos_proceso",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "campos_proceso"
     },
@@ -686,7 +697,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairfechasfalsas",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairfechasfalsas()"
     },
@@ -697,7 +708,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_avisos",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "avisos.js"
     },
@@ -708,7 +719,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_avisos_ultimovisto",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "ultimovisto()"
     },
@@ -719,7 +730,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_avisos_marcarvisto",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "marcarvisto()"
     },
@@ -730,7 +741,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_avisos_avisosnuevos",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "avisosnuevos()"
     },
@@ -741,7 +752,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_avisos_pintartimbre",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "pintartimbre()"
     },
@@ -752,7 +763,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_avisos_abriravisos",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "abriravisos()"
     },
@@ -763,7 +774,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_avisos_cerraravisos",
-      "community": 16,
+      "community": 17,
       "community_name": "avisos.js",
       "norm_label": "cerraravisos()"
     },
@@ -774,7 +785,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_calidad",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "calidad.js"
     },
@@ -785,7 +796,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_calidad_esnoapta",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "esnoapta()"
     },
@@ -796,7 +807,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_calidad_notalimpia",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "notalimpia()"
     },
@@ -807,7 +818,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_calidad_sel_cal",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "sel_cal"
     },
@@ -818,7 +829,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_calidad_calidadbase",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "calidadbase()"
     },
@@ -829,7 +840,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_js_calidad_calidadlist",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "calidadlist()"
     },
@@ -840,7 +851,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_js_calidad_rendercalidad",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "rendercalidad()"
     },
@@ -851,7 +862,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "src_js_calidad_pintarselcalidad",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "pintarselcalidad()"
     },
@@ -862,7 +873,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_js_calidad_guardarcalidad",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "guardarcalidad()"
     },
@@ -873,7 +884,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_calidad_notade",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "notade()"
     },
@@ -884,7 +895,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "src_js_calidad_malde",
-      "community": 11,
+      "community": 12,
       "community_name": "calidad.js",
       "norm_label": "malde()"
     },
@@ -895,7 +906,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_comun",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "comun.js"
     },
@@ -906,7 +917,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_comun_activas",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "activas()"
     },
@@ -917,7 +928,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_comun_completa",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "completa()"
     },
@@ -928,7 +939,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_comun_desp",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "desp()"
     },
@@ -939,7 +950,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_comun_puntos",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "puntos()"
     },
@@ -950,7 +961,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_comun_enproduccion",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enproduccion()"
     },
@@ -961,7 +972,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_comun_enstock",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enstock()"
     },
@@ -972,7 +983,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_comun_contador",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "contador()"
     },
@@ -983,7 +994,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_comun_detalle_kpi",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "detalle_kpi"
     },
@@ -994,7 +1005,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_comun_kpicards",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "kpicards()"
     },
@@ -1005,7 +1016,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_comun_verdetallekpi",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "verdetallekpi()"
     },
@@ -1016,7 +1027,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_comun_barras",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "barras()"
     },
@@ -1027,7 +1038,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_comun_tablamini",
-      "community": 6,
+      "community": 7,
       "community_name": "Ayudantes de tableros",
       "norm_label": "tablamini()"
     },
@@ -1038,7 +1049,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_config",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "config.js"
     },
@@ -1049,7 +1060,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_config_parsesheetid",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "parsesheetid()"
     },
@@ -1060,7 +1071,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_config_lookslikeid",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "lookslikeid()"
     },
@@ -1071,7 +1082,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_config_campos_empresa",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "campos_empresa"
     },
@@ -1082,7 +1093,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_config_loadcfg",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "loadcfg()"
     },
@@ -1093,7 +1104,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_config_savecfg",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "savecfg()"
     },
@@ -1104,7 +1115,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_config_cfgok",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "cfgok()"
     },
@@ -1115,7 +1126,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_config_aplicarcfgdeenlace",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "aplicarcfgdeenlace()"
     },
@@ -1126,7 +1137,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_config_enlacedeconfiguracion",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "enlacedeconfiguracion()"
     },
@@ -1137,7 +1148,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_js_config_opencfg",
-      "community": 12,
+      "community": 13,
       "community_name": "Configuracion del usuario",
       "norm_label": "opencfg()"
     },
@@ -1214,8 +1225,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_constantes_despachos",
-      "community": 3,
-      "community_name": "Tableros y catalogo",
+      "community": 0,
+      "community_name": "Constantes del modelo",
       "norm_label": "despachos"
     },
     {
@@ -1335,7 +1346,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_js_constantes_procs",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "procs"
     },
@@ -1357,7 +1368,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_constantes_rows",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "rows"
     },
@@ -1368,7 +1379,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_constantes_sel",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "sel"
     },
@@ -1379,7 +1390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_control",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "control.js"
     },
@@ -1390,7 +1401,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_js_control_fsel",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "fsel"
     },
@@ -1401,7 +1412,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_control_medidade",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "medidade()"
     },
@@ -1412,7 +1423,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_js_control_filtered",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "filtered()"
     },
@@ -1423,7 +1434,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_control_filtrosactivos",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "filtrosactivos()"
     },
@@ -1434,7 +1445,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_control_numord",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "numord()"
     },
@@ -1445,7 +1456,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_control_filllists",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "filllists()"
     },
@@ -1456,7 +1467,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_control_tagprio",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "tagprio()"
     },
@@ -1467,7 +1478,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_control_tagdesp",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "tagdesp()"
     },
@@ -1478,7 +1489,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_js_control_prios",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "prios"
     },
@@ -1500,7 +1511,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "src_js_control_selprio",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "selprio()"
     },
@@ -1511,7 +1522,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_control_editcampo",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "editcampo()"
     },
@@ -1522,7 +1533,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_js_control_render",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "render()"
     },
@@ -1533,7 +1544,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "src_js_control_kpis",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "kpis()"
     },
@@ -1544,7 +1555,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "src_js_control_paintrow",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "paintrow()"
     },
@@ -1555,7 +1566,7 @@
       "source_location": "L239",
       "_origin": "ast",
       "id": "src_js_control_setproc",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "setproc()"
     },
@@ -1566,7 +1577,7 @@
       "source_location": "L273",
       "_origin": "ast",
       "id": "src_js_control_syncsel",
-      "community": 2,
+      "community": 1,
       "community_name": "Control de OPs",
       "norm_label": "syncsel()"
     },
@@ -1577,7 +1588,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_cronograma",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "cronograma.js"
     },
@@ -1588,7 +1599,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_cronograma_diashabiles",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "diashabiles()"
     },
@@ -1599,7 +1610,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_cronograma_pendientecronograma",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "pendientecronograma()"
     },
@@ -1610,7 +1621,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_cronograma_entradaenplanta",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "entradaenplanta()"
     },
@@ -1621,7 +1632,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_cronograma_rank_prio",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "rank_prio"
     },
@@ -1632,7 +1643,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_cronograma_calcularcronograma",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "calcularcronograma()"
     },
@@ -1643,7 +1654,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_js_cronograma_dia_sem",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "dia_sem"
     },
@@ -1654,7 +1665,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_cronograma_mes_cor",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "mes_cor"
     },
@@ -1665,7 +1676,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_js_cronograma_fechacorta",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "fechacorta()"
     },
@@ -1676,7 +1687,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_cronograma_rendercronograma",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "rendercronograma()"
     },
@@ -1687,7 +1698,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_js_cronograma_ritmoreal",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "ritmoreal()"
     },
@@ -1698,7 +1709,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_cronograma_redondo",
-      "community": 7,
+      "community": 8,
       "community_name": "cronograma.js",
       "norm_label": "redondo()"
     },
@@ -1709,7 +1720,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_dashboards",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "dashboards.js"
     },
@@ -1720,7 +1731,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_dashboards_renderresumen",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "renderresumen()"
     },
@@ -1731,7 +1742,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_js_dashboards_almacenbase",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "almacenbase()"
     },
@@ -1742,7 +1753,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_js_dashboards_almacenlist",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "almacenlist()"
     },
@@ -1753,8 +1764,8 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_dashboards_seldesp",
-      "community": 3,
-      "community_name": "Tableros y catalogo",
+      "community": 0,
+      "community_name": "Constantes del modelo",
       "norm_label": "seldesp()"
     },
     {
@@ -1764,7 +1775,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "src_js_dashboards_renderalmacen",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "renderalmacen()"
     },
@@ -1775,7 +1786,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "src_js_dashboards_guardardespacho",
-      "community": 5,
+      "community": 6,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "guardardespacho()"
     },
@@ -1786,7 +1797,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "src_js_dashboards_mod_head",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "mod_head"
     },
@@ -1797,7 +1808,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "src_js_dashboards_mod_seed",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "mod_seed"
     },
@@ -1808,7 +1819,7 @@
       "source_location": "L251",
       "_origin": "ast",
       "id": "src_js_dashboards_modelos",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "modelos"
     },
@@ -1819,7 +1830,7 @@
       "source_location": "L253",
       "_origin": "ast",
       "id": "src_js_dashboards_loadmodelos",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "loadmodelos()"
     },
@@ -1830,7 +1841,7 @@
       "source_location": "L273",
       "_origin": "ast",
       "id": "src_js_dashboards_esmodelo",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "esmodelo()"
     },
@@ -1841,7 +1852,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "src_js_dashboards_rendermodelos",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "rendermodelos()"
     },
@@ -1852,7 +1863,7 @@
       "source_location": "L350",
       "_origin": "ast",
       "id": "src_js_dashboards_pintarchipmodelo",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "pintarchipmodelo()"
     },
@@ -1863,7 +1874,7 @@
       "source_location": "L362",
       "_origin": "ast",
       "id": "src_js_dashboards_marcarfilamodelo",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "marcarfilamodelo()"
     },
@@ -1874,7 +1885,7 @@
       "source_location": "L406",
       "_origin": "ast",
       "id": "src_js_dashboards_stockbase",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "stockbase()"
     },
@@ -1885,7 +1896,7 @@
       "source_location": "L408",
       "_origin": "ast",
       "id": "src_js_dashboards_stocklist",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "stocklist()"
     },
@@ -1896,7 +1907,7 @@
       "source_location": "L428",
       "_origin": "ast",
       "id": "src_js_dashboards_renderstock",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "renderstock()"
     },
@@ -1907,7 +1918,7 @@
       "source_location": "L456",
       "_origin": "ast",
       "id": "src_js_dashboards_csvde",
-      "community": 3,
+      "community": 4,
       "community_name": "Tableros y catalogo",
       "norm_label": "csvde()"
     },
@@ -1918,8 +1929,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_datos",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "datos.js"
     },
     {
@@ -1929,8 +1940,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_datos_setsync",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "setsync()"
     },
     {
@@ -1940,8 +1951,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_datos_refresh",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "refresh()"
     },
     {
@@ -1951,8 +1962,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_datos_renderdashvisible",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "renderdashvisible()"
     },
     {
@@ -1962,8 +1973,8 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_datos_restartpoll",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "restartpoll()"
     },
     {
@@ -1973,8 +1984,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_js_datos_stoppoll",
-      "community": 18,
-      "community_name": "Carga y refresco",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "stoppoll()"
     },
     {
@@ -2061,7 +2072,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_impresion",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "impresion.js"
     },
@@ -2072,7 +2083,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_impresion_qc",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "qc"
     },
@@ -2083,7 +2094,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_impresion_rotuloop",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "rotuloop()"
     },
@@ -2094,7 +2105,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_impresion_stickerhtml",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "stickerhtml()"
     },
@@ -2105,7 +2116,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_js_impresion_campos_mano",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "campos_mano"
     },
@@ -2116,7 +2127,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_impresion_cartahtml",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "cartahtml()"
     },
@@ -2127,7 +2138,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "src_js_impresion_printfichas",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "printfichas()"
     },
@@ -2138,7 +2149,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_js_impresion_pedirsticker",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "pedirsticker()"
     },
@@ -2149,9 +2160,174 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "src_js_impresion_stkbtn",
-      "community": 14,
+      "community": 15,
       "community_name": "Impresion",
       "norm_label": "stkbtn"
+    },
+    {
+      "label": "informes.js",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_js_informes",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "informes.js"
+    },
+    {
+      "label": "INF_HEAD",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "src_js_informes_inf_head",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "inf_head"
+    },
+    {
+      "label": "TIPOS_INFORME",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "src_js_informes_tipos_informe",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "tipos_informe"
+    },
+    {
+      "label": "FRECUENCIAS",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "src_js_informes_frecuencias",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "frecuencias"
+    },
+    {
+      "label": "DIAS_SEMANA",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "src_js_informes_dias_semana",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "dias_semana"
+    },
+    {
+      "label": "enRango()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "src_js_informes_enrango",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "enrango()"
+    },
+    {
+      "label": "periodoDe()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "src_js_informes_periodode",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "periodode()"
+    },
+    {
+      "label": "INFORMES",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L111",
+      "_origin": "ast",
+      "id": "src_js_informes_informes",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "informes"
+    },
+    {
+      "label": "loadInformes()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "src_js_informes_loadinformes",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "loadinformes()"
+    },
+    {
+      "label": "csvInforme()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "src_js_informes_csvinforme",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "csvinforme()"
+    },
+    {
+      "label": "descargarInforme()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L159",
+      "_origin": "ast",
+      "id": "src_js_informes_descargarinforme",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "descargarinforme()"
+    },
+    {
+      "label": "abrirInformes()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "src_js_informes_abririnformes",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "abririnformes()"
+    },
+    {
+      "label": "cuandoSale()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L178",
+      "_origin": "ast",
+      "id": "src_js_informes_cuandosale",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "cuandosale()"
+    },
+    {
+      "label": "pintarInformes()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L185",
+      "_origin": "ast",
+      "id": "src_js_informes_pintarinformes",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "pintarinformes()"
+    },
+    {
+      "label": "guardarInforme()",
+      "file_type": "code",
+      "source_file": "src/js/informes.js",
+      "source_location": "L226",
+      "_origin": "ast",
+      "id": "src_js_informes_guardarinforme",
+      "community": 5,
+      "community_name": "informes.js",
+      "norm_label": "guardarinforme()"
     },
     {
       "label": "meta.js",
@@ -2160,7 +2336,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_meta",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "meta.js"
     },
@@ -2171,7 +2347,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_meta_meta_head",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "meta_head"
     },
@@ -2182,7 +2358,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_meta_meta_def",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "meta_def"
     },
@@ -2193,7 +2369,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_meta_meta",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "meta"
     },
@@ -2204,7 +2380,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_meta_puntosdia",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "puntosdia()"
     },
@@ -2215,7 +2391,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_meta_loadmeta",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "loadmeta()"
     },
@@ -2226,7 +2402,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_meta_guardarmeta",
-      "community": 17,
+      "community": 18,
       "community_name": "meta.js",
       "norm_label": "guardarmeta()"
     },
@@ -2270,7 +2446,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_planta",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "planta.js"
     },
@@ -2281,7 +2457,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_planta_prio_ord",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "prio_ord"
     },
@@ -2292,7 +2468,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_planta_color_proc",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "color_proc"
     },
@@ -2303,7 +2479,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_planta_plantaprogramadas",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "plantaprogramadas"
     },
@@ -2314,7 +2490,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_planta_plantalist",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "plantalist()"
     },
@@ -2325,7 +2501,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_planta_metatarjeta",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "metatarjeta()"
     },
@@ -2336,7 +2512,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaprio",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaprio()"
     },
@@ -2347,7 +2523,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_js_planta_notatarjeta",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "notatarjeta()"
     },
@@ -2358,7 +2534,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_js_planta_pintartarjeta",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "pintartarjeta()"
     },
@@ -2369,7 +2545,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_js_planta_avisarprogramadas",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "avisarprogramadas()"
     },
@@ -2380,7 +2556,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "src_js_planta_renderplanta",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "renderplanta()"
     },
@@ -2391,7 +2567,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "src_js_planta_plantaenuso",
-      "community": 8,
+      "community": 9,
       "community_name": "Vista de planta",
       "norm_label": "plantaenuso()"
     },
@@ -2468,7 +2644,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_usuarios",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "usuarios.js"
     },
@@ -2479,7 +2655,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_usuarios_usu_head",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "usu_head"
     },
@@ -2490,7 +2666,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_usuarios_roles",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "roles"
     },
@@ -2501,7 +2677,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_usuarios_usuarios",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "usuarios"
     },
@@ -2512,7 +2688,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_usuarios_puede",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "puede()"
     },
@@ -2523,7 +2699,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_js_usuarios_vistaspermitidas",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "vistaspermitidas()"
     },
@@ -2534,7 +2710,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_usuarios_loadusuarios",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "loadusuarios()"
     },
@@ -2545,7 +2721,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_js_usuarios_aplicarrol",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "aplicarrol()"
     },
@@ -2553,10 +2729,10 @@
       "label": "sinAcceso()",
       "file_type": "code",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L112",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "src_js_usuarios_sinacceso",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "sinacceso()"
     },
@@ -2564,10 +2740,10 @@
       "label": "abrirUsuarios()",
       "file_type": "code",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L129",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "src_js_usuarios_abrirusuarios",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "abrirusuarios()"
     },
@@ -2575,10 +2751,10 @@
       "label": "pintarUsuarios()",
       "file_type": "code",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L144",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "src_js_usuarios_pintarusuarios",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "pintarusuarios()"
     },
@@ -2586,10 +2762,10 @@
       "label": "guardarUsuario()",
       "file_type": "code",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L162",
+      "source_location": "L163",
       "_origin": "ast",
       "id": "src_js_usuarios_guardarusuario",
-      "community": 4,
+      "community": 3,
       "community_name": "usuarios.js",
       "norm_label": "guardarusuario()"
     },
@@ -2600,7 +2776,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_util",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "util.js"
     },
@@ -2611,7 +2787,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_util_esc",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "esc()"
     },
@@ -2622,7 +2798,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_util_a1",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "a1()"
     },
@@ -2633,7 +2809,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_util_toast",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "toast()"
     },
@@ -2644,7 +2820,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_util_tri",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "tri()"
     },
@@ -2655,7 +2831,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_util_progreso",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "progreso()"
     },
@@ -2666,7 +2842,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_util_detectsep",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "detectsep()"
     },
@@ -2677,7 +2853,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_js_util_statusvalue",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "statusvalue()"
     },
@@ -2688,7 +2864,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_util_rowactive",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "rowactive()"
     },
@@ -2699,7 +2875,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_js_util_num",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "num()"
     },
@@ -2710,7 +2886,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_js_util_numcell",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "numcell()"
     },
@@ -2721,7 +2897,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "src_js_util_p2",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "p2()"
     },
@@ -2732,7 +2908,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_js_util_fmt",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "fmt()"
     },
@@ -2743,7 +2919,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_js_util_hoy",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "hoy()"
     },
@@ -2754,7 +2930,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_util_sheet_epoch",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "sheet_epoch"
     },
@@ -2765,7 +2941,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "src_js_util_serialtodate",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "serialtodate()"
     },
@@ -2776,7 +2952,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_util_todate",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "todate()"
     },
@@ -2787,7 +2963,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "src_js_util_fmtdate",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "fmtdate()"
     },
@@ -2798,7 +2974,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_js_util_sameday",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "sameday()"
     },
@@ -2809,7 +2985,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_util_iso",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "iso()"
     },
@@ -2820,7 +2996,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_util_lunes",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "lunes()"
     },
@@ -2831,7 +3007,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_util_opbase",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "opbase()"
     },
@@ -2842,7 +3018,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "src_js_util_temas",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "temas"
     },
@@ -2853,7 +3029,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_js_util_aplicatema",
-      "community": 1,
+      "community": 2,
       "community_name": "Utilidades y fechas",
       "norm_label": "aplicatema()"
     },
@@ -3389,7 +3565,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/app.js",
-      "source_location": "L55",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_app",
@@ -3400,7 +3576,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/app.js",
-      "source_location": "L99",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_app",
@@ -3416,6 +3592,17 @@
       "_origin": "ast",
       "source": "src_js_app",
       "target": "src_js_app_goto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/app.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_app",
+      "target": "src_js_app_pintarquiensoy",
       "confidence_score": 1.0
     },
     {
@@ -3452,6 +3639,18 @@
       "_origin": "ast",
       "source": "src_js_usuarios_aplicarrol",
       "target": "src_js_app_views"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/app.js",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_app_enterapp",
+      "target": "src_js_app_pintarquiensoy",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6405,6 +6604,232 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_abririnformes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_csvinforme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_cuandosale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_descargarinforme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_dias_semana",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_enrango",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_frecuencias",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_guardarinforme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_inf_head",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_informes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_loadinformes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_periodode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_pintarinformes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes",
+      "target": "src_js_informes_tipos_informe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_csvinforme",
+      "target": "src_js_informes_periodode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_descargarinforme",
+      "target": "src_js_informes_csvinforme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_pintarinformes",
+      "target": "src_js_informes_csvinforme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L173",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_abririnformes",
+      "target": "src_js_informes_pintarinformes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_pintarinformes",
+      "target": "src_js_informes_cuandosale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/informes.js",
+      "source_location": "L239",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_informes_guardarinforme",
+      "target": "src_js_informes_pintarinformes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/js/meta.js",
       "source_location": "L68",
       "weight": 1.0,
@@ -6802,7 +7227,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L129",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios",
@@ -6824,7 +7249,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L162",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios",
@@ -6846,7 +7271,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L144",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios",
@@ -6879,7 +7304,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L112",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios",
@@ -6936,7 +7361,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L130",
+      "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios_abrirusuarios",
@@ -6984,7 +7409,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L179",
+      "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios_guardarusuario",
@@ -6996,7 +7421,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L140",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios_abrirusuarios",
@@ -7008,7 +7433,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/usuarios.js",
-      "source_location": "L182",
+      "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_usuarios_guardarusuario",
@@ -7400,5 +7825,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "31217ef84feda4d5f5326e59e73737e196ef6aeb"
+  "built_at_commit": "3dcff0bf75e1b5de397a263ddba77f1d26ba6add"
 }

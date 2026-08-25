@@ -172,6 +172,22 @@ function selDesp(r, v){
     <option value=""${cur?"":" selected"}>—</option>`+
     DESPACHOS.map(d=>`<option${d===cur?" selected":""}>${d}</option>`).join("")+`</select>`;
 }
+/* Puertas marcadas en Almacén para imprimir. Igual que en Calidad, vive fuera
+   del HTML: la tabla se repinta al cambiar un estado o un filtro, y si la
+   selección viviera en las casillas se perdería a media tanda. */
+const SEL_ALM = new Set();
+
+/** Refresca contador y botones de impresión de Almacén. */
+function pintarSelAlmacen(){
+  const n = SEL_ALM.size;
+  const c = $("#a-nsel"); if(c) c.textContent = n;
+  const bc = $("#a-print-carta"); if(bc) bc.disabled = n === 0;
+  const bs = $("#a-print-stk");   if(bs) bs.disabled = n === 0;
+  const t = $("#a-todas");
+  if(t) t.textContent = n && n === document.querySelectorAll("[data-alm]").length
+    ? "Quitar selección" : "Seleccionar todas";
+}
+
 function renderAlmacen(){
   const L=almacenList(), B=almacenBase().map(x=>x.c), A=activas().map(x=>x.c);
   kpiCards("#a-kpis",[
@@ -181,13 +197,27 @@ function renderAlmacen(){
     ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
-  tablaMini("#a-tabla", ["OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado"],
+  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado"],
     L.map(({r,c})=>[
+      `<input type="checkbox" class="almck" data-alm="${r}"${SEL_ALM.has(r)?" checked":""}
+         title="Marcar para imprimir">`,
       `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
       esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP])]),
-    L.map(({c})=> anulada(c) ? "anu" : desp(c)==="Separado" ? "sep" : ""));
+    // La marca de selección viaja con la clase de la fila: al repintar la tabla
+    // (cambiar un estado, tocar un filtro) la casilla se restauraba marcada pero
+    // la fila perdía el resaltado, y quedaban diciendo cosas distintas.
+    L.map(({r,c})=> [
+      anulada(c) ? "anu" : desp(c)==="Separado" ? "sep" : "",
+      SEL_ALM.has(r) ? "sel" : ""
+    ].filter(Boolean).join(" ")));
   contador("#a-cnt", L.length, B.length, ["a-tipo","a-esp","a-ap","a-est"], "a-q");
+
+  // Lo que sale del listado deja de estar marcado: no tiene sentido imprimir
+  // la ficha de algo que ya no se está viendo.
+  const visibles = new Set(L.map(x=>x.r));
+  [...SEL_ALM].forEach(r=>{ if(!visibles.has(r)) SEL_ALM.delete(r); });
+  pintarSelAlmacen();
 }
 ["a-q","a-tipo","a-esp","a-ap","a-est"].forEach(id=>{
   $("#"+id).addEventListener("input", renderAlmacen);
@@ -195,6 +225,24 @@ function renderAlmacen(){
 });
 $("#a-clear").onclick = ()=>{ ["a-q","a-tipo","a-esp","a-ap","a-est"]
   .forEach(id=>$("#"+id).value=""); renderAlmacen(); };
+
+/* Desde Almacén se imprimen las dos cosas: la ficha para acompañar la puerta y
+   la etiqueta para pegarla. Es el punto donde la puerta se prepara para salir,
+   y obligar a volver a Calidad para reimprimir una etiqueta perdida seria
+   trabajo de mas. */
+$("#a-todas").onclick = ()=>{
+  const cajas = [...document.querySelectorAll("[data-alm]")];
+  const marcar = SEL_ALM.size !== cajas.length;
+  SEL_ALM.clear();
+  cajas.forEach(k=>{
+    k.checked = marcar;
+    k.closest("tr").classList.toggle("sel", marcar);
+    if(marcar) SEL_ALM.add(+k.dataset.alm);
+  });
+  pintarSelAlmacen();
+};
+$("#a-print-carta").onclick = ()=> printFichas([...SEL_ALM], "carta");
+$("#a-print-stk").onclick   = ()=> pedirSticker([...SEL_ALM]);
 /** Guarda el estado de despacho y aplica la regla 4 (fecha de despacho de hoy).
  *  Lo usan tanto Almacén como Planta. */
 async function guardarDespacho(r, val){
@@ -217,6 +265,15 @@ async function guardarDespacho(r, val){
   }catch(e){ row.c[C.DESP]=antes; toast(e.message,"err"); return false; }
 }
 $("#a-tabla").addEventListener("change", async ev=>{
+  // Selección para imprimir. No toca la hoja: solo elige qué se imprime.
+  const ck = ev.target.closest("[data-alm]");
+  if(ck){
+    const r = +ck.dataset.alm;
+    ck.checked ? SEL_ALM.add(r) : SEL_ALM.delete(r);
+    ck.closest("tr").classList.toggle("sel", ck.checked);
+    pintarSelAlmacen();
+    return;
+  }
   const el=ev.target.closest("[data-edit-desp]"); if(!el) return;
   const val=el.value;
   const k = val==="Despachado"?"t-des" : val==="Separado"?"t-sep" : val==="Anulada"?"t-anu" : val?"t-alm":"t-non";
