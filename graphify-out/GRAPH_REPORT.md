@@ -1,10 +1,10 @@
 # Graph Report - .  (2026-08-25)
 
 ## Corpus Check
-- Corpus is ~37,016 words - fits in a single context window. You may not need a graph.
+- Corpus is ~37,351 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 278 nodes · 416 edges · 27 communities (23 shown, 4 thin omitted)
+- 280 nodes · 420 edges · 27 communities (23 shown, 4 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
@@ -12,8 +12,8 @@
 - Constantes del modelo
 - Control de OPs
 - Utilidades y fechas
-- usuarios.js
 - Tableros y catalogo
+- usuarios.js
 - informes.js
 - Automatizaciones de fecha
 - Ayudantes de tableros
@@ -38,13 +38,13 @@
 1. `ROWS` - 12 edges
 2. `render()` - 10 edges
 3. `renderCalidad()` - 7 edges
-4. `refresh()` - 7 edges
-5. `pintarTarjeta()` - 7 edges
-6. `renderPlanta()` - 7 edges
-7. `api()` - 6 edges
-8. `paintRow()` - 6 edges
-9. `writeCells()` - 5 edges
-10. `calidadList()` - 5 edges
+4. `renderAlmacen()` - 7 edges
+5. `refresh()` - 7 edges
+6. `pintarTarjeta()` - 7 edges
+7. `renderPlanta()` - 7 edges
+8. `api()` - 6 edges
+9. `paintRow()` - 6 edges
+10. `writeCells()` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `refresh()` --indirect_call--> `autoFechas()`  [INFERRED]
@@ -65,7 +65,7 @@
 
 ### Community 0 - "Constantes del modelo"
 Cohesion: 0.09
-Nodes (21): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPESORES (+13 more)
+Nodes (20): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPESORES (+12 more)
 
 ### Community 1 - "Control de OPs"
 Cohesion: 0.15
@@ -75,13 +75,13 @@ Nodes (21): PROCS, SEL, editCampo(), fillLists(), filtered(), filtrosActivos(), 
 Cohesion: 0.11
 Nodes (15): renderResumen(), fmt(), fmtDate(), hoy(), iso(), num(), numCell(), p2() (+7 more)
 
-### Community 3 - "usuarios.js"
+### Community 3 - "Tableros y catalogo"
+Cohesion: 0.19
+Nodes (15): almacenBase(), almacenList(), esModelo(), MOD_HEAD, MOD_SEED, MODELOS, pintarChipModelo(), pintarSelAlmacen() (+7 more)
+
+### Community 4 - "usuarios.js"
 Cohesion: 0.18
 Nodes (14): enterApp(), goto(), pintarQuienSoy(), VIEWS, abrirUsuarios(), aplicarRol(), guardarUsuario(), loadUsuarios() (+6 more)
-
-### Community 4 - "Tableros y catalogo"
-Cohesion: 0.23
-Nodes (12): almacenBase(), almacenList(), esModelo(), MOD_HEAD, MOD_SEED, MODELOS, pintarChipModelo(), renderAlmacen() (+4 more)
 
 ### Community 5 - "informes.js"
 Cohesion: 0.19
@@ -152,9 +152,9 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ROWS` connect `Automatizaciones de fecha` to `Constantes del modelo`, `Control de OPs`, `Vista de planta`, `Impresion`?**
-  _High betweenness centrality (0.183) - this node is a cross-community bridge._
+  _High betweenness centrality (0.185) - this node is a cross-community bridge._
 - **Why does `guardarDespacho()` connect `Automatizaciones de fecha` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.109) - this node is a cross-community bridge._
+  _High betweenness centrality (0.111) - this node is a cross-community bridge._
 - **Why does `renderResumen()` connect `Utilidades y fechas` to `Tableros y catalogo`?**
   _High betweenness centrality (0.079) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `refresh()` (e.g. with `autoFechas()` and `fillLists()`) actually correct?**
@@ -162,6 +162,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
   _43 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
-  _Cohesion score 0.08547008547008547 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08923076923076922 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
   _Cohesion score 0.11 - nodes in this community are weakly interconnected._

@@ -11,7 +11,10 @@ const FSEL = ["f-prog","f-desp","f-prio","f-ens","f-mat","f-tipo","f-esp","f-ap"
 const medidaDe = c => (num(c[C.ANCHO])!==null && num(c[C.ALTO])!==null)
   ? `${num(c[C.ANCHO])}×${num(c[C.ALTO])}` : "";
 function filtered(){
-  const g = id => $("#"+id).value;
+  // Un filtro que no existe en esta pagina no filtra. El de ensamble solo esta
+  // en puertas, y darlo por hecho hacia que render() reventara entero en paneles
+  // — la tabla se quedaba en blanco sin decir por que.
+  const g = id => { const e = $("#"+id); return e ? e.value : ""; };
   const q = $("#f-q").value.trim().toLowerCase();
   const eq = (v,f) => !f || String(v??"").trim()===f;
   return ROWS.filter(({c})=>{
@@ -52,12 +55,13 @@ function filtered(){
 }
 /** Describe los filtros activos, para la tarjeta «Filtradas». */
 function filtrosActivos(){
-  const et={"f-prog":"progreso","f-desp":"despacho","f-prio":"prioridad",
+  const et={"f-prog":"progreso","f-desp":"despacho","f-prio":"prioridad","f-ens":"ensamble",
     "f-mat":"material","f-tipo":"tipo","f-esp":"espesor","f-ap":"apertura","f-med":"medidas"};
   const out=[];
   if($("#f-q").value.trim()) out.push(`«${$("#f-q").value.trim()}»`);
   for(const id of FSEL){
-    const el=$("#"+id); if(!el.value) continue;
+    // El filtro puede no existir en esta pagina: paneles no tiene el de ensamble.
+    const el=$("#"+id); if(!el || !el.value) continue;
     const txt=el.options[el.selectedIndex].text;
     out.push(`${et[id]}: ${txt}`);
   }

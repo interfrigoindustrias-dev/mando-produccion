@@ -38,10 +38,13 @@ function openDet(r){
   // constantes, que son copia de la validacion de la hoja.
   const op1=(v,sel)=>`<option${String(sel)===v?" selected":""}>${esc(v)}</option>`;
   $("#d-desp").innerHTML = `<option value="">—</option>`+DESPACHOS.map(v=>op1(v,c[C.DESP])).join("");
-  $("#d-ap").innerHTML   = `<option value="">—</option>`+APERTURAS.map(v=>op1(v,c[C.AP])).join("");
-  $("#d-pts").value = num(c[C.PTS]) ?? "";
   $("#d-desp").value = DESPACHOS.includes(String(c[C.DESP])) ? String(c[C.DESP]) : "";
-  $("#d-ap").value   = APERTURAS.includes(String(c[C.AP])) ? String(c[C.AP]) : "";
+  // Puntos y apertura editables: solo en la ficha de puertas.
+  if($("#d-ap")){
+    $("#d-ap").innerHTML = `<option value="">—</option>`+APERTURAS.map(v=>op1(v,c[C.AP])).join("");
+    $("#d-ap").value = APERTURAS.includes(String(c[C.AP])) ? String(c[C.AP]) : "";
+    $("#d-pts").value = num(c[C.PTS]) ?? "";
+  }
   $("#d-fdesp").value = fmtDate(c[C.FDESP]); $("#d-fproc").value = fmtDate(c[C.FPROC]);
   $("#d-prio").value = ["ALTA","MEDIA","BAJA"].includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
   $("#d-ens").value = c[C.ENS]??""; $("#d-obs").value = c[C.OBS]??"";
@@ -81,8 +84,9 @@ $("#d-save").onclick = async ()=>{
                [C.FPROC,"X","Fecha proceso",$("#d-fproc").value.trim(),true],
                [C.PRIO,"M","Prioridad",$("#d-prio").value,false],
                [C.ENS,"AA","N° ensamble",$("#d-ens").value.trim(),false],
-               [C.PTS,"J","Puntos",numCell($("#d-pts").value),false],
-               [C.AP,"L","Apertura",$("#d-ap").value,false],
+               ...($("#d-ap") ? [
+                 [C.PTS,"J","Puntos",numCell($("#d-pts").value),false],
+                 [C.AP,"L","Apertura",$("#d-ap").value,false]] : []),
                [C.ANCHO,"H","Ancho vano",numCell($("#d-ancho").value),false],
                [C.ALTO,"I","Alto vano",numCell($("#d-alto").value),false],
                [C.OBS,"V","Observaciones",$("#d-obs").value.trim(),false]];
@@ -121,24 +125,29 @@ function initForm(){
   $("#n-tipo").innerHTML = `<option value="">—</option>`+TIPOS.map(v=>opt(v)).join("");
   $("#n-esp").innerHTML  = `<option value="">—</option>`+ESPESORES.map(v=>opt(v,"70")).join("");
   $("#n-ap").innerHTML   = `<option value="">—</option>`+APERTURAS.map(v=>opt(v)).join("");
-  $("#n-marco").innerHTML = TIPOS_MARCO.map(v=>opt(v,"ALUMINIO 2X1")).join("");
-  $("#n-visor").innerHTML = VISORES.map(v=>opt(v,"SIN VISOR")).join("");
-  $("#n-bump").innerHTML  = BUMPERS.map(v=>opt(v,"SIN BUMPER")).join("");
-  $("#n-tbump").innerHTML = `<option value="">—</option>`+TAM_BUMPER.map(v=>opt(v)).join("");
+  /* La especificacion ampliada (marco, visor, bumper, alfajores) es de puertas.
+     Este archivo lo comparten las dos paginas: darla por hecha reventaba
+     initForm en paneles y con ello el arranque entero. */
+  if($("#n-visor")){
+    $("#n-marco").innerHTML = TIPOS_MARCO.map(v=>opt(v,"ALUMINIO 2X1")).join("");
+    $("#n-visor").innerHTML = VISORES.map(v=>opt(v,"SIN VISOR")).join("");
+    $("#n-bump").innerHTML  = BUMPERS.map(v=>opt(v,"SIN BUMPER")).join("");
+    $("#n-tbump").innerHTML = `<option value="">—</option>`+TAM_BUMPER.map(v=>opt(v)).join("");
 
-  // El empaque del visor no se teclea: sale de la tabla Datos Calculo de la hoja.
-  const verEmpaque = ()=>{ $("#n-empv").value = EMPAQUE_VISOR[$("#n-visor").value] ?? ""; };
-  $("#n-visor").onchange = verEmpaque; verEmpaque();
+    // El empaque del visor no se teclea: sale de la tabla Datos Calculo de la hoja.
+    const verEmpaque = ()=>{ $("#n-empv").value = EMPAQUE_VISOR[$("#n-visor").value] ?? ""; };
+    $("#n-visor").onchange = verEmpaque; verEmpaque();
 
-  // El tamaño solo tiene sentido si de verdad lleva bumper; si no, se apaga y
-  // se vacia, para que no se cuele un tamaño de un bumper que no existe.
-  const verBumper = ()=>{
-    const hay = llevaBumper($("#n-bump").value);
-    $("#n-tbump").disabled = !hay;
-    if(!hay) $("#n-tbump").value = "";
-    else if(!$("#n-tbump").value) $("#n-tbump").value = "40";
-  };
-  $("#n-bump").onchange = verBumper; verBumper();
+    // El tamaño solo tiene sentido si de verdad lleva bumper; si no, se apaga y
+    // se vacia, para que no se cuele un tamaño de un bumper que no existe.
+    const verBumper = ()=>{
+      const hay = llevaBumper($("#n-bump").value);
+      $("#n-tbump").disabled = !hay;
+      if(!hay) $("#n-tbump").value = "";
+      else if(!$("#n-tbump").value) $("#n-tbump").value = "40";
+    };
+    $("#n-bump").onchange = verBumper; verBumper();
+  }
   $("#n-procs").innerHTML = PROCS.map(p=>
     `<label class="proc"><input type="checkbox" data-i="${p.i}" checked><span>${p.k}</span></label>`).join("");
   $("#n-fecha").value = hoy();
@@ -198,14 +207,16 @@ $("#form-new").addEventListener("submit", async ev=>{
       c[C.PTS]=numCell($("#n-pts").value); c[C.ESP]=numCell($("#n-esp").value);
       c[C.AP]=$("#n-ap").value;
       c[C.PRIO]=$("#n-prio").value; c[C.OBS]=$("#n-obs").value.trim();
-      // Especificacion (AC..AJ). Las casillas van como booleanos de verdad,
-      // no como texto: si no, la hoja no las dibuja como casillas.
-      c[C.ALFF]=$("#n-alff").checked; c[C.ALFP]=$("#n-alfp").checked;
-      c[C.MARCO]=$("#n-marco").value; c[C.VISOR]=$("#n-visor").value;
-      c[C.EMPV]=EMPAQUE_VISOR[$("#n-visor").value] ?? "";
-      c[C.EMPVREF]=$("#n-empvref").value.trim();
-      c[C.BUMP]=$("#n-bump").value;
-      c[C.TBUMP]= llevaBumper($("#n-bump").value) ? numCell($("#n-tbump").value) : "";
+      // Especificacion (AC..AJ), solo en puertas. Las casillas van como
+      // booleanos de verdad, no como texto: si no, la hoja no las dibuja.
+      if($("#n-visor")){
+        c[C.ALFF]=$("#n-alff").checked; c[C.ALFP]=$("#n-alfp").checked;
+        c[C.MARCO]=$("#n-marco").value; c[C.VISOR]=$("#n-visor").value;
+        c[C.EMPV]=EMPAQUE_VISOR[$("#n-visor").value] ?? "";
+        c[C.EMPVREF]=$("#n-empvref").value.trim();
+        c[C.BUMP]=$("#n-bump").value;
+        c[C.TBUMP]= llevaBumper($("#n-bump").value) ? numCell($("#n-tbump").value) : "";
+      }
       PROCS.forEach(p=>{ c[p.i] = aplica.get(p.i) ? false : ""; });
       c[C.STATUS] = statusValue(r, c);
       data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});

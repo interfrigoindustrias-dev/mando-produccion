@@ -296,3 +296,37 @@ de `window`. Una prueba que hacía `window.LOG = [...]` para simular historial n
 tocaba el array real y daba «0 avisos»: un falso aprobado, que es peor que un
 fallo. En las pruebas hay que asignar la variable a secas (`LOG.length = 0;
 LOG.push(...)`), no a través de `window`.
+
+## 20. El JS compartido no puede dar por hecho el HTML de una sola página
+
+`puertas.html` y `paneles.html` cargan casi los mismos archivos JS, pero no
+tienen los mismos controles. Un `$("#f-ens").addEventListener(...)` sobre algo
+que solo existe en puertas lanza un `TypeError` que **corta la carga del archivo
+entero** y deja sin enganchar todo lo que viene después.
+
+Lo peor es que el síntoma no se parece a la causa: la tabla de paneles aparecía
+vacía, los filtros no respondían y la ficha no abría — nada apuntaba a un botón
+de puertas. Ocurrió cinco veces seguidas (filtro de ensamble, chip de modelo,
+botones de impresión de almacén, campos de visor y bumper, y `filtrosActivos`).
+
+**Regla:** en cualquier archivo que carguen las dos páginas, todo acceso al DOM
+se comprueba antes:
+
+```js
+const e = $("#id"); if(e) e.onclick = ...     // o  if($("#id")){ ... }
+```
+
+Y un filtro que no existe **no filtra**, en vez de reventar:
+
+```js
+const g = id => { const e = $("#"+id); return e ? e.value : ""; };
+```
+
+`tools/comprobar_ids.py` lo verifica y `deploy.sh` lo ejecuta antes de publicar:
+si encuentra un acceso sin proteger, el despliegue se detiene.
+
+## 21. Las fechas del historial no siempre son texto
+
+`repairFechasFalsas` hacía `e.fecha.slice(...)`. Si la celda de `LOG` contiene
+una fecha de verdad, llega como objeto y `.slice` no existe: el arranque
+reventaba. Ahora la fecha se fuerza a texto al leer el historial.

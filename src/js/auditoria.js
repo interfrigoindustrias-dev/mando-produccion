@@ -65,7 +65,10 @@ async function loadLog(force){
   try{
     if(!(await ensureLog())) return;
     const j = await api(`/values/${encodeURIComponent(`'${LOG_TAB}'!A2:H`)}`);
-    LOG = (j.values||[]).map(r=>({fecha:r[0]||"", usuario:r[1]||"", accion:r[2]||"", op:r[3]||"",
+    // La fecha se fuerza a texto: si la celda del historial es una fecha de
+    // verdad (o un numero de serie), llega como objeto y cualquier operacion de
+    // texto sobre ella revienta la reparacion de fechas al arrancar.
+    LOG = (j.values||[]).map(r=>({fecha:String(r[0]??""), usuario:r[1]||"", accion:r[2]||"", op:r[3]||"",
                                   fila:r[4]||"", campo:r[5]||"", antes:r[6]||"", despues:r[7]||""})).reverse();
     logAt = Date.now();
     if(typeof pintarTimbre === "function") pintarTimbre();

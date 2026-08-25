@@ -220,17 +220,22 @@ function renderAlmacen(){
   pintarSelAlmacen();
 }
 ["a-q","a-tipo","a-esp","a-ap","a-est"].forEach(id=>{
-  $("#"+id).addEventListener("input", renderAlmacen);
-  $("#"+id).addEventListener("change", renderAlmacen);
+  const e=$("#"+id); if(!e) return;
+  e.addEventListener("input", renderAlmacen);
+  e.addEventListener("change", renderAlmacen);
 });
 $("#a-clear").onclick = ()=>{ ["a-q","a-tipo","a-esp","a-ap","a-est"]
-  .forEach(id=>$("#"+id).value=""); renderAlmacen(); };
+  .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; }); renderAlmacen(); };
 
 /* Desde Almacén se imprimen las dos cosas: la ficha para acompañar la puerta y
    la etiqueta para pegarla. Es el punto donde la puerta se prepara para salir,
    y obligar a volver a Calidad para reimprimir una etiqueta perdida seria
    trabajo de mas. */
-$("#a-todas").onclick = ()=>{
+/* Estos tres botones solo existen en puertas. Este archivo lo comparten las dos
+   paginas, y engancharlos a ciegas reventaba la carga de paneles justo aqui,
+   dejando sin enganchar todo lo que viene despues. */
+const bTodas = $("#a-todas");
+if(bTodas) bTodas.onclick = ()=>{
   const cajas = [...document.querySelectorAll("[data-alm]")];
   const marcar = SEL_ALM.size !== cajas.length;
   SEL_ALM.clear();
@@ -241,8 +246,10 @@ $("#a-todas").onclick = ()=>{
   });
   pintarSelAlmacen();
 };
-$("#a-print-carta").onclick = ()=> printFichas([...SEL_ALM], "carta");
-$("#a-print-stk").onclick   = ()=> pedirSticker([...SEL_ALM]);
+const bCarta = $("#a-print-carta");
+if(bCarta) bCarta.onclick = ()=> printFichas([...SEL_ALM], "carta");
+const bStk = $("#a-print-stk");
+if(bStk) bStk.onclick = ()=> pedirSticker([...SEL_ALM]);
 /** Guarda el estado de despacho y aplica la regla 4 (fecha de despacho de hoy).
  *  Lo usan tanto Almacén como Planta. */
 async function guardarDespacho(r, val){
@@ -411,7 +418,11 @@ function pintarChipModelo(){
   if(stockModelo) box.innerHTML =
     `Mostrando solo <b>${esc(stockModelo)}</b> <button class="x" id="s-modelo-x" title="Quitar">×</button>`;
 }
-$("#s-modelo").addEventListener("click", ev=>{
+/* El chip del modelo solo existe en puertas: paneles no tiene inventario por
+   modelo. Sin esta comprobacion, dashboards.js reventaba aqui al cargar paneles
+   y dejaba sin enganchar todo lo de mas abajo. */
+const chipMod = $("#s-modelo");
+if(chipMod) chipMod.addEventListener("click", ev=>{
   if(!ev.target.closest("#s-modelo-x")) return;
   stockModelo=""; renderStock();
 });
@@ -463,10 +474,15 @@ $("#m-tabla").addEventListener("click", ev=>{
 const stockBase = () => activas().filter(({c})=>
   tri(c[C.STOCK])===true && desp(c)!=="Despachado" && !anulada(c));
 function stockList(){
-  const q=$("#s-q").value.trim().toLowerCase(), g=id=>$("#"+id).value;
+  const q=$("#s-q").value.trim().toLowerCase();
+  // Un filtro que no existe en esta pagina simplemente no filtra. Puertas y
+  // paneles no tienen los mismos: el de material se quito de puertas y sigue
+  // en paneles, y darlo por hecho dejaba muerto el filtro de la otra pagina.
+  const g=id=>{ const e=$("#"+id); return e ? e.value : ""; };
   const eq=(v,f)=>!f||String(v??"").trim()===f;
   return stockBase().filter(({c})=>{
     if(q && ![c[C.OP],c[C.TIPO],c[C.MAT],num(c[C.ANCHO]),num(c[C.ALTO])].join(" ").toLowerCase().includes(q)) return false;
+    if(!eq(c[C.MAT],g("s-mat"))) return false;
     if(!eq(c[C.TIPO],g("s-tipo"))) return false;
     // Filtro por modelo: se activa al pulsar una fila del inventario de arriba.
     if(stockModelo){
@@ -500,15 +516,16 @@ function renderStock(){
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
         tagDesp(c[C.DESP])];
     }));
-  contador("#s-cnt", L.length, B.length, ["s-tipo","s-esp","s-ap","s-est","s-av"], "s-q");
+  contador("#s-cnt", L.length, B.length, ["s-mat","s-tipo","s-esp","s-ap","s-est","s-av"], "s-q");
   pintarChipModelo();
 }
-["s-q","s-tipo","s-esp","s-ap","s-est","s-av"].forEach(id=>{
-  $("#"+id).addEventListener("input", renderStock);
-  $("#"+id).addEventListener("change", renderStock);
+["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"].forEach(id=>{
+  const e=$("#"+id); if(!e) return;
+  e.addEventListener("input", renderStock);
+  e.addEventListener("change", renderStock);
 });
-$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-tipo","s-esp","s-ap","s-est","s-av"]
-  .forEach(id=>$("#"+id).value=""); renderStock(); };
+$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"]
+  .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; }); renderStock(); };
 
 function csvDe(nombre, cols, filas){
   const q=v=>`"${String(v??"").replace(/<[^>]*>/g,"").replace(/"/g,'""')}"`;

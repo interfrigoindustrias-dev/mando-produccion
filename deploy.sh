@@ -24,6 +24,17 @@ else
   echo "  · node no disponible, se omite"
 fi
 
+# La sintaxis correcta no basta: un $("#id") sobre algo que solo existe en una
+# de las dos paginas revienta la carga del archivo entero en la otra.
+echo "→ Comprobando elementos compartidos entre puertas y paneles…"
+if command -v python >/dev/null 2>&1; then
+  python tools/comprobar_ids.py || { echo "  ✗ corrige lo anterior antes de publicar"; exit 1; }
+elif command -v python3 >/dev/null 2>&1; then
+  python3 tools/comprobar_ids.py || { echo "  ✗ corrige lo anterior antes de publicar"; exit 1; }
+else
+  echo "  · python no disponible, se omite"
+fi
+
 echo "→ Subiendo a ${DESTINO}…"
 "${SSH[@]}" "mkdir -p ~/${DESTINO}/css ~/${DESTINO}/js ~/${DESTINO}/img"
 "${SCP[@]}" "$SRC/index.html"           "${USUARIO}@${HOST}:${DESTINO}/"

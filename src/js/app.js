@@ -48,12 +48,17 @@ $("#btn-nueva").onclick = ()=>{
   $("#ov-nueva").classList.remove("hide");
   setTimeout(()=>$("#n-cli").focus(), 60);
 };
+/* Puertas y paneles no tienen los mismos filtros — el de ensamble, por ejemplo,
+   solo existe en puertas. Se recorre lo que de verdad hay en la pagina: dar por
+   hecho que estan todos rompia la carga aqui y dejaba sin enganchar el resto. */
 ["f-q", ...FSEL].forEach(id=>{
-  $("#"+id).addEventListener("input", render);
-  $("#"+id).addEventListener("change", render);
+  const e = $("#"+id); if(!e) return;
+  e.addEventListener("input", render);
+  e.addEventListener("change", render);
 });
 $("#f-clear").onclick = ()=>{
-  $("#f-q").value=""; FSEL.forEach(id=>$("#"+id).value="");
+  $("#f-q").value="";
+  FSEL.forEach(id=>{ const e = $("#"+id); if(e) e.value=""; });
   SEL.clear(); render();
 };
 $("#reconectar").onclick = async ()=>{
