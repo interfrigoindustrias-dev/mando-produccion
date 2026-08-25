@@ -82,6 +82,8 @@ async function enterApp(){
   if(n) toast(`${n} fecha(s) de proceso programada(s)`,"ok");
   restartPoll();
   await loadModelos();        // catálogo de modelos de stock
+  // La meta solo existe en puertas: paneles no tiene cronograma.
+  if(typeof loadMeta === "function") await loadMeta();
   aplicarRol();               // la interfaz se ajusta a lo que esta persona puede hacer
   pintarTimbre();
   renderDashVisible();

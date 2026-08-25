@@ -453,10 +453,20 @@
       <p class="mut" style="margin:4px 0 0">Reparto del trabajo pendiente, agrupado por
         cliente y tipo para no cambiar de montaje a media jornada.</p>
     </div>
-    <label class="f" style="flex:none"><span>Días hábiles</span>
-      <input class="inp" id="cr-dias" type="number" min="1" max="60" value="15" style="width:88px"></label>
     <button class="x" data-close>×</button>
   </header>
+
+  <!-- La meta manda sobre el reparto. Vive en la pestaña META de la hoja, así que
+       quien la cambie la cambia para todos. -->
+  <div class="crmeta">
+    <span class="crml">Quiero</span>
+    <input class="inp" id="cr-meta-pts" type="number" min="1" step="any" style="width:92px">
+    <span class="crml">puntos en</span>
+    <input class="inp" id="cr-meta-dias" type="number" min="1" max="90" step="1" style="width:78px">
+    <span class="crml">días hábiles</span>
+    <button class="btn pri sm hide" id="cr-guardar">Guardar meta</button>
+    <span class="mut crmn">Se guarda en la pestaña <b>META</b> de la hoja</span>
+  </div>
 
   <div class="crkpis" id="cr-kpis"></div>
   <div class="aviso" id="cr-veredicto"></div>
@@ -544,6 +554,7 @@
 <script src="js/planta.js"></script>
 <script src="js/dashboards.js"></script>
 <script src="js/impresion.js"></script>
+<script src="js/meta.js"></script>
 <script src="js/cronograma.js"></script>
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>

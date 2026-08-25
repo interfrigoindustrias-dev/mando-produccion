@@ -6,14 +6,20 @@
 "use strict";
 
 /* ============================== CRONOGRAMA ==============================
-   Responde a «¿que hago cada dia para vaciar lo que hay?».
+   Responde a «¿que hago cada dia para cumplir la meta?».
 
-   No inventa capacidad: reparte el trabajo pendiente entre los dias habiles
-   que se pidan, y el cupo diario sale de dividir los puntos entre esos dias.
-   Asi se ve de entrada si el plazo es realista comparandolo con el ritmo que
-   la planta lleva de verdad.
+   El cupo diario NO sale de dividir lo pendiente entre los dias: sale de la
+   META que se fija en la hoja (pestaña META, ver meta.js). Esa es la
+   diferencia entre planificar y limitarse a repartir lo que hay — si el cupo
+   saliera del pendiente, un mes flojo bajaria el objetivo solo, que es
+   justo lo contrario de lo que sirve.
 
-   Tres criterios, en este orden:
+   Por eso el plan cubre SIEMPRE el plazo completo, aunque el trabajo cargado
+   no llegue: los dias que quedan cortos se marcan con los puntos que faltan
+   por cargar. Ese hueco es informacion — dice cuanto trabajo hay que meter
+   para no tener la planta parada.
+
+   Tres criterios de orden:
 
    1. Lo empezado se termina. Una puerta a medias ocupa sitio y estorba.
    2. Manda la prioridad, y nada entra antes de su dia: una MEDIA no aparece
@@ -25,7 +31,7 @@
    Se recalcula cada vez que se abre, con lo que haya en la hoja en ese momento. */
 
 /* Cuanto se tolera pasarse del cupo antes de mandar la puerta al dia siguiente.
-   Sin holgura, una puerta de 1.5 puntos no entraria nunca en un cupo de 3.57 ya
+   Sin holgura, una puerta de 6 puntos no entraria nunca en un cupo de 7,2 ya
    medio ocupado, y el plan se estiraria sin motivo. */
 const HOLGURA_CUPO = 0.75;
 
@@ -71,12 +77,12 @@ function entradaEnPlanta(c){
 
 const RANK_PRIO = {ALTA:0, MEDIA:1, SIN:2, BAJA:3};
 
-/** Reparte el pendiente entre n dias habiles. */
-function calcularCronograma(n){
+/** Reparte el pendiente en el plazo de la meta, al ritmo de la meta. */
+function calcularCronograma(){
   const pend = pendienteCronograma();
-  const dias = diasHabiles(n);
+  const dias = diasHabiles(META.dias);
+  const cupo = puntosDia();                      // ritmo objetivo, no derivado
   const totalPts = pend.reduce((a,x)=>a+x.pts, 0);
-  const cupo = dias.length ? totalPts / dias.length : 0;
 
   pend.sort((a,b)=>
     (a.empezada === b.empezada ? 0 : a.empezada ? -1 : 1) ||
@@ -98,13 +104,20 @@ function calcularCronograma(n){
       d.items.push(x); d.pts += x.pts; cola.splice(i, 1);
     }
   }
-  // Lo que no cupo va al dia menos cargado que ya lo admita, para no dejarlo fuera.
+  // Lo que no cupo en ningun dia: o su fecha de entrada cae fuera del plazo, o
+  // el trabajo excede la capacidad de la meta. Se coloca en el dia mas flojo
+  // que lo admita, y se cuenta aparte para poder avisarlo.
+  const sobra = cola.length;
   for(const x of cola){
     const posibles = plan.filter(d => x.entra <= d.fecha);
     const d = (posibles.length ? posibles : plan).reduce((a,b)=> b.pts < a.pts ? b : a);
     d.items.push(x); d.pts += x.pts;
   }
-  return {plan, totalPts, cupo, total:pend.length, sinHueco:cola.length};
+
+  // Capacidad que da la meta, frente a lo que hay cargado de verdad.
+  const capacidad = cupo * plan.length;
+  return {plan, cupo, capacidad, totalPts, total:pend.length,
+          sobra, hueco: Math.max(0, capacidad - totalPts)};
 }
 
 /* ---------- pintado ---------- */
@@ -114,38 +127,44 @@ const MES_COR = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","no
 const fechaCorta = f => `${DIA_SEM[f.getDay()]} ${f.getDate()} ${MES_COR[f.getMonth()]}`;
 
 function renderCronograma(){
-  const n = Math.max(1, Math.min(60, parseInt($("#cr-dias").value, 10) || 15));
-  const {plan, totalPts, cupo, total} = calcularCronograma(n);
+  const {plan, cupo, capacidad, totalPts, total, hueco} = calcularCronograma();
+  const ritmo = ritmoReal();          // lo que la planta viene haciendo de verdad
 
-  // Ritmo real de la planta, para poder juzgar si el plazo es realista.
-  const ritmo = ritmoReal();
+  $("#cr-meta-pts").value  = META.puntos;
+  $("#cr-meta-dias").value = META.dias;
 
   $("#cr-kpis").innerHTML = [
+    [redondo(cupo) + "<small>/día</small>", "Meta · puntos"],
+    [ritmo === null ? "—" : redondo(ritmo) + "<small>/día</small>", "Ritmo real · puntos"],
+    [redondo(totalPts), "Puntos cargados"],
     [total, "Puertas pendientes"],
-    [redondo(totalPts), "Puntos de trabajo"],
-    [redondo(cupo) + "<small>/día</small>", "Ritmo necesario · puntos"],
-    [ritmo === null ? "—" : redondo(ritmo) + "<small>/día</small>", "Ritmo real · puntos"]
+    [redondo(hueco), hueco > 0 ? "Puntos por cargar" : "Sin hueco"]
   ].map(([v,k]) => `<div class="crk"><b>${v}</b><span>${k}</span></div>`).join("");
 
-  // Un veredicto claro vale mas que cuatro numeros sueltos.
+  // Dos preguntas distintas, y las dos importan:
+  //   ¿da la planta para este ritmo?   ¿hay trabajo cargado para llenarlo?
   const av = $("#cr-veredicto");
-  if(ritmo === null || !total){
-    av.className = "aviso";
-    av.textContent = total
-      ? "Todavía no hay historial suficiente para comparar el plan con el ritmo real."
-      : "No hay nada pendiente: no hay cronograma que hacer.";
+  const partes = [];
+  if(ritmo === null){
+    partes.push("Todavía no hay historial suficiente para saber si la planta da este ritmo.");
   } else if(cupo <= ritmo){
-    av.className = "aviso ok";
-    av.innerHTML = `Cabe. Hacen falta <b>${redondo(cupo)}</b> puntos al día y la planta
-      viene haciendo <b>${redondo(ritmo)}</b>. Sin horas extra, mientras no entre
-      trabajo nuevo de prioridad alta.`;
+    partes.push(`La planta da para <b>${redondo(cupo)}</b> puntos al día: viene haciendo
+      <b>${redondo(ritmo)}</b>.`);
   } else {
-    const faltan = Math.ceil(totalPts / ritmo);
-    av.className = "aviso prog";
-    av.innerHTML = `No cabe en ${n} días. Harían falta <b>${redondo(cupo)}</b> puntos al día
-      y la planta viene haciendo <b>${redondo(ritmo)}</b>. A ese ritmo son
-      <b>${faltan}</b> días hábiles, o hay que subir la capacidad.`;
+    partes.push(`<b>Ojo con el ritmo.</b> La meta pide <b>${redondo(cupo)}</b> puntos al día
+      y la planta viene haciendo <b>${redondo(ritmo)}</b>. Hace falta más capacidad,
+      o bajar la meta.`);
   }
+  if(hueco > 0){
+    partes.push(`Faltan <b>${redondo(hueco)}</b> puntos por cargar para llenar los
+      ${META.dias} días: hay <b>${redondo(totalPts)}</b> de los <b>${redondo(capacidad)}</b>
+      que cabrían. Los días marcados en azul están a medias.`);
+  } else if(totalPts > capacidad){
+    partes.push(`Hay <b>${redondo(totalPts - capacidad)}</b> puntos de más para este plazo:
+      el trabajo cargado no cabe en ${META.dias} días a este ritmo.`);
+  }
+  av.className = "aviso" + (ritmo !== null && cupo > ritmo ? " prog" : (hueco > 0 ? "" : " ok"));
+  av.innerHTML = partes.join(" ");
 
   let acum = 0;
   $("#cr-tabla").innerHTML =
@@ -153,9 +172,13 @@ function renderCronograma(){
       <th>Lotes de trabajo</th><th class="n">Acum.</th></tr></thead><tbody>` +
     plan.map((d, i) => {
       acum += d.items.length;
+      // El dia sigue existiendo aunque no haya trabajo: el plazo se programa
+      // entero. Lo que falta se dice en puntos, que es lo accionable.
       if(!d.items.length) return `<tr class="libre">
         <td class="crd"><b>${i+1}</b><span>${fechaCorta(d.fecha)}</span></td>
-        <td colspan="3" class="crv">Sin carga — margen para retrasos, retrabajos o lo que entre</td>
+        <td class="n crn">0</td>
+        <td class="n crp">0<span class="crbar"><i style="width:0"></i></span></td>
+        <td class="crv">Día sin trabajo cargado — caben <b>${redondo(cupo)}</b> puntos</td>
         <td class="n">${acum}</td></tr>`;
 
       // Se juntan las puertas del mismo cliente y tipo: es un solo montaje.
@@ -172,12 +195,19 @@ function renderCronograma(){
         <span class="crc">${esc(l.cli)}</span>
         <span class="cro">OP ${esc(l.ops.join(", "))}</span></div>`).join("");
 
-      const pc = cupo ? Math.min(100, Math.round(d.pts / (cupo + HOLGURA_CUPO) * 100)) : 0;
-      return `<tr>
+      // La barra se mide contra la meta, no contra el dia mas cargado: asi se
+      // ve de un vistazo que jornadas quedan por debajo del objetivo.
+      const pc = cupo ? Math.min(100, Math.round(d.pts / cupo * 100)) : 0;
+      const falta = cupo - d.pts;
+      const corto = falta > 0.4;                 // por debajo de la meta
+      return `<tr${corto ? ' class="corto"' : ""}>
         <td class="crd"><b>${i+1}</b><span>${fechaCorta(d.fecha)}</span></td>
         <td class="n crn">${d.items.length}</td>
-        <td class="n crp">${redondo(d.pts)}<span class="crbar"><i style="width:${pc}%"></i></span></td>
-        <td class="crlotes">${lotes}</td>
+        <td class="n crp">${redondo(d.pts)}<span class="crde">/${redondo(cupo)}</span>
+          <span class="crbar"><i style="width:${pc}%"></i></span></td>
+        <td class="crlotes">${lotes}${corto
+          ? `<div class="crfalta">Faltan <b>${redondo(falta)}</b> puntos para la meta del día</div>`
+          : ""}</td>
         <td class="n">${acum}</td></tr>`;
     }).join("") + `</tbody>`;
 }
@@ -209,9 +239,42 @@ const redondo = v => (Math.round(v * 10) / 10).toLocaleString("es-CO");
 /* ---------- interacción ---------- */
 document.addEventListener("DOMContentLoaded", ()=>{
   const b = $("#btn-crono");
-  if(b) b.onclick = ()=>{ renderCronograma(); $("#ov-crono").classList.remove("hide"); };
-  const d = $("#cr-dias");
-  if(d){ d.addEventListener("input", renderCronograma); d.addEventListener("change", renderCronograma); }
+  if(b) b.onclick = async ()=>{
+    // Se relee la meta al abrir: puede haberla cambiado alguien en la hoja.
+    await loadMeta();
+    renderCronograma();
+    $("#ov-crono").classList.remove("hide");
+  };
+
+  // Escribir en los campos solo simula: hasta que no se guarda, la hoja no
+  // cambia. Asi se puede tantear un plazo sin pisarle la meta a nadie.
+  const previsualizar = ()=>{
+    const p = Number($("#cr-meta-pts").value), d = Math.round(Number($("#cr-meta-dias").value));
+    if(!(p > 0) || !(d > 0)) return;
+    const antes = META;
+    META = {puntos:p, dias:d};
+    renderCronograma();
+    META = antes;
+    $("#cr-meta-pts").value = p; $("#cr-meta-dias").value = d;   // renderCronograma los repone
+    $("#cr-guardar").classList.toggle("hide", p === antes.puntos && d === antes.dias);
+  };
+  ["#cr-meta-pts","#cr-meta-dias"].forEach(sel=>{
+    const e = $(sel); if(!e) return;
+    e.addEventListener("input", previsualizar);
+  });
+
+  const g = $("#cr-guardar");
+  if(g) g.onclick = async ()=>{
+    g.disabled = true;
+    const ok = await guardarMeta($("#cr-meta-pts").value, $("#cr-meta-dias").value);
+    g.disabled = false;
+    if(ok){
+      g.classList.add("hide");
+      renderCronograma();
+      toast(`Meta guardada: ${redondo(puntosDia())} puntos al día`, "ok");
+    }
+  };
+
   const p = $("#cr-print");
   if(p) p.onclick = ()=> window.print();
 });
