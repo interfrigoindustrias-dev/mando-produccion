@@ -67,47 +67,85 @@ function stickerHTML(row){
   </div>`;
 }
 
-/* ---------- Hoja carta: OP completa + campos para diligenciar a mano ---------- */
-const CAMPOS_MANO = [
-  "Dimensiones hoja","Dimensiones marco","Tipo de bisagra","Cantidad de bisagras",
-  "Tipo de empaque","Tornillos","Cerradura / manija","Burlete",
-  "Lámina / acabado","Color","Herrajes adicionales","Operario",
-  "Fecha inicio","Fecha fin"
-];
-function cartaHTML(row){
-  const c=row.c, pc=Math.round(progreso(c).pct*100);
-  const cel=(k,v)=>`<div>${k}<b>${esc(v??"")||"—"}</b></div>`;
-  const med=[num(c[C.ANCHO]),num(c[C.ALTO])].every(x=>x!==null)?`${num(c[C.ANCHO])} × ${num(c[C.ALTO])}`:"—";
-  const prio=String(c[C.PRIO]??"").trim().toUpperCase();
-  const flags=[tri(c[C.COMP])?"COMPLEMENTO":"", tri(c[C.STOCK])?"STOCK":""].filter(Boolean).join(" · ");
-  return `<div class="carta">
+/* ---------- Hoja carta: una sola pagina por puerta ---------- */
+
+/* Cabina de la hoja: lo que identifica la puerta. Es igual en los cuatro
+   formatos porque la pregunta «¿de que puerta hablamos?» no cambia. */
+function cabeceraCarta(c){
+  const cel = (k, v, ancho) =>
+    `<div${ancho ? ` style="grid-column:span ${ancho}"` : ""}>${k}<b>${esc(v ?? "") || "—"}</b></div>`;
+  const si = v => tri(v) === true ? "SÍ" : "No";
+  const med = [num(c[C.ANCHO]), num(c[C.ALTO])].every(x => x !== null)
+    ? `${num(c[C.ANCHO])} × ${num(c[C.ALTO])}` : "—";
+  const alfajor = [tri(c[C.ALFF]) === true ? "frontal" : "",
+                   tri(c[C.ALFP]) === true ? "posterior" : ""].filter(Boolean).join(" + ") || "No";
+  const bumper = llevaBumper(c[C.BUMP])
+    ? `${c[C.BUMP]}${String(c[C.TBUMP] ?? "").trim() ? " · " + num(c[C.TBUMP]) : ""}`
+    : (c[C.BUMP] || "—");
+
+  return `
     <div class="c-h">
       <span class="c-logo"></span>
       <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>${esc(MOD.nombre)}</span></div>
-      <div class="c-op"><b>${esc(c[C.OP]??"")}</b><span>${esc(fmtDate(c[C.FECHA]))}</span></div>
+      <div class="c-op"><b>OP ${esc(c[C.OP] ?? "")}</b><span>${esc(fmtDate(c[C.FECHA]))}</span></div>
     </div>
-    <div class="c-cli">${esc(c[C.CLI]??"")}${flags?`<span class="c-flags">${esc(flags)}</span>`:""}</div>
-
-    <p class="c-sec">Especificación registrada</p>
+    <div class="c-cli">${esc(c[C.CLI] ?? "")}${
+      tri(c[C.COMP]) === true ? '<span class="c-flags">COMPLEMENTO</span>' : ""}${
+      tri(c[C.STOCK]) === true ? '<span class="c-flags">STOCK</span>' : ""}</div>
     <div class="c-grid">
-      ${cel("Material",c[C.MAT])}${cel("Tipo",c[C.TIPO])}${cel("Apertura",c[C.AP])}${cel("Espesor mm",c[C.ESP])}
-      ${cel("Ancho vano",num(c[C.ANCHO]))}${cel("Alto vano",num(c[C.ALTO]))}${cel("Vano (A × H)",med)}${cel("Prioridad",prio)}
-      ${cel("F. proceso",fmtDate(c[C.FPROC]))}${cel("Avance",pc+"%")}${cel("Estado despacho",c[C.DESP])}${cel("F. despacho",fmtDate(c[C.FDESP]))}
+      ${cel("Material", c[C.MAT])}${cel("Tipo", c[C.TIPO])}
+      ${cel("Vano A × H", med)}${cel("Espesor mm", num(c[C.ESP]))}
+      ${cel("Apertura", c[C.AP])}${cel("Puntos", num(c[C.PTS]))}
+      ${cel("Tipo de marco", c[C.MARCO], 2)}${cel("Visor", c[C.VISOR])}
+      ${cel("Bumper", bumper)}${cel("Alfajor", alfajor)}
     </div>
+    <div class="c-obs"><em>Observaciones</em><span>${esc(c[C.OBS] ?? "")}</span></div>`;
+}
 
-    <p class="c-sec">Para diligenciar en planta</p>
-    <div class="c-fill">
-      ${CAMPOS_MANO.map(k=>`<div><label>${esc(k)}</label><i></i></div>`).join("")}
+/** Una pieza: casilla para marcar, o casilla y raya para anotar cantidad. */
+function piezaCarta(it, modoBloque){
+  const modo = it.modo || modoBloque;
+  // La referencia va separada del nombre con un punto: en papel, pegada al
+  // texto se lee como parte del nombre de la pieza.
+  const ref = it.r ? `<i>· ${esc(it.r)}</i>` : "";
+  return `<div class="c-it"><span class="bx"></span><span class="nm">${esc(it.n)}${ref}</span>${
+    modo === "cant" ? '<span class="qt"></span>' : ""}</div>`;
+}
+
+/** Lista de materiales del formato que le toque a esta puerta. */
+function materialesCarta(c){
+  const n = formatoDe(c);
+  const F = FORMATOS[n];
+
+  if(!F || F.pendiente || !F.bloques.length){
+    // Sin lista definida todavia: se imprime igual, con espacio pautado para
+    // escribir a mano. Una hoja util a medias sirve; ninguna hoja, no.
+    return `<p class="c-sec">Materiales — ${F ? esc(F.nombre) : "formato sin definir"}</p>
+      <div class="c-libre">${Array.from({length: 26}, ()=>"<i></i>").join("")}</div>`;
+  }
+
+  return `<p class="c-sec">Materiales · formato ${n} — ${esc(F.nombre)}
+      <em>Marcar lo usado; donde diga cantidad, anotarla</em></p>
+    <div class="c-mat">${F.bloques.map(b => `
+      <div class="c-blq">
+        <h4>${esc(b.t)}<em>${b.modo === "cant" ? "cantidad" : b.modo === "mixto" ? "marcar / cant." : "marcar"}</em></h4>
+        ${b.items.map(it => piezaCarta(it, b.modo)).join("")}
+      </div>`).join("")}</div>`;
+}
+
+function cartaHTML(row){
+  const c = row.c;
+  // Con muchas piezas la hoja se aprieta un punto mas para no pasar de pagina.
+  const n = formatoDe(c);
+  const denso = piezasDe(n) > 70 ? " denso" : "";
+  return `<div class="carta${denso}">
+    ${cabeceraCarta(c)}
+    ${materialesCarta(c)}
+    <div class="c-pie">
+      <div class="c-proc">${PROCS.map(pr =>
+        tri(c[pr.i]) === null ? "" : `<span><span class="box"></span>${pr.k}</span>`).join("")}</div>
+      <div class="c-firmas"><div>Producción</div><div>Calidad</div><div>Despacho</div></div>
     </div>
-
-    <p class="c-sec">Procesos — marcar a mano</p>
-    <div class="c-proc">${PROCS.map(pr=>{
-      if(tri(c[pr.i])===null) return `<div class="na"></div>`;   // no aplica: no se imprime
-      return `<div><span class="box"></span>${pr.k}</div>`;
-    }).join("")}</div>
-
-    <div class="c-obs"><em>Observaciones</em>${esc(c[C.OBS]??"")}</div>
-    <div class="c-firmas"><div>Producción</div><div>Control de calidad</div><div>Despacho</div></div>
   </div>`;
 }
 
