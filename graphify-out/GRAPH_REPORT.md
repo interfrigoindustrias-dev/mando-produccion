@@ -1,21 +1,21 @@
 # Graph Report - .  (2026-08-26)
 
 ## Corpus Check
-- Corpus is ~39,925 words - fits in a single context window. You may not need a graph.
+- Corpus is ~41,388 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 300 nodes · 450 edges · 28 communities (24 shown, 4 thin omitted)
+- 309 nodes · 466 edges · 28 communities (24 shown, 4 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
+- Tableros y catalogo
 - Constantes del modelo
 - Control de OPs
 - Utilidades y fechas
-- Tableros y catalogo
 - usuarios.js
-- Impresion
 - informes.js
+- Impresion
 - Automatizaciones de fecha
 - Ayudantes de tableros
 - Configuracion del usuario
@@ -36,10 +36,10 @@
 - Service worker
 
 ## God Nodes (most connected - your core abstractions)
-1. `ROWS` - 12 edges
+1. `ROWS` - 14 edges
 2. `render()` - 10 edges
-3. `renderCalidad()` - 7 edges
-4. `renderAlmacen()` - 7 edges
+3. `renderAlmacen()` - 8 edges
+4. `renderCalidad()` - 7 edges
 5. `refresh()` - 7 edges
 6. `pintarTarjeta()` - 7 edges
 7. `renderPlanta()` - 7 edges
@@ -50,12 +50,12 @@
 ## Surprising Connections (you probably didn't know these)
 - `refresh()` --indirect_call--> `autoFechas()`  [INFERRED]
   src/js/datos.js → src/js/automatizaciones.js
+- `guardarCalidad()` --references--> `ROWS`  [EXTRACTED]
+  src/js/calidad.js → src/js/constantes.js
 - `renderStock()` --indirect_call--> `completa()`  [INFERRED]
   src/js/dashboards.js → src/js/comun.js
 - `renderAlmacen()` --indirect_call--> `enProduccion()`  [INFERRED]
   src/js/dashboards.js → src/js/comun.js
-- `printFichas()` --references--> `ROWS`  [EXTRACTED]
-  src/js/impresion.js → src/js/constantes.js
 - `kpis()` --indirect_call--> `s()`  [INFERRED]
   src/js/control.js → src/js/formatos.js
 
@@ -64,33 +64,33 @@
 
 ## Communities (28 total, 4 thin omitted)
 
-### Community 0 - "Constantes del modelo"
-Cohesion: 0.09
-Nodes (21): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPESORES (+13 more)
+### Community 0 - "Tableros y catalogo"
+Cohesion: 0.12
+Nodes (24): DESPACHOS, almacenBase(), almacenList(), bCarta, bStk, bTodas, chipMod, esModelo() (+16 more)
 
-### Community 1 - "Control de OPs"
+### Community 1 - "Constantes del modelo"
+Cohesion: 0.08
+Nodes (19): APERTURAS, BUMPERS, C, CFG, CON_RIEL, EMPAQUE_VISOR, ESPESORES, LOG_HEAD (+11 more)
+
+### Community 2 - "Control de OPs"
 Cohesion: 0.15
 Nodes (21): PROCS, SEL, editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis() (+13 more)
 
-### Community 2 - "Utilidades y fechas"
+### Community 3 - "Utilidades y fechas"
 Cohesion: 0.11
 Nodes (15): renderResumen(), fmt(), fmtDate(), hoy(), iso(), num(), numCell(), p2() (+7 more)
-
-### Community 3 - "Tableros y catalogo"
-Cohesion: 0.15
-Nodes (18): almacenBase(), almacenList(), bCarta, bStk, bTodas, chipMod, esModelo(), MOD_HEAD (+10 more)
 
 ### Community 4 - "usuarios.js"
 Cohesion: 0.18
 Nodes (14): enterApp(), goto(), pintarQuienSoy(), VIEWS, abrirUsuarios(), aplicarRol(), guardarUsuario(), loadUsuarios() (+6 more)
 
-### Community 5 - "Impresion"
-Cohesion: 0.15
-Nodes (12): FORMATO_DE_TIPO, FORMATOS, q(), cabeceraCarta(), cartaHTML(), materialesCarta(), piezaCarta(), printFichas() (+4 more)
+### Community 5 - "informes.js"
+Cohesion: 0.17
+Nodes (13): abrirInformes(), csvInforme(), cuandoSale(), descargarInforme(), DIAS_SEMANA, FRECUENCIAS, guardarInforme(), indicesCampos() (+5 more)
 
-### Community 6 - "informes.js"
-Cohesion: 0.19
-Nodes (12): abrirInformes(), csvInforme(), cuandoSale(), descargarInforme(), DIAS_SEMANA, FRECUENCIAS, guardarInforme(), INF_HEAD (+4 more)
+### Community 6 - "Impresion"
+Cohesion: 0.16
+Nodes (11): FORMATO_DE_TIPO, FORMATOS, q(), cabeceraCarta(), cartaHTML(), materialesCarta(), piezaCarta(), QC (+3 more)
 
 ### Community 7 - "Automatizaciones de fecha"
 Cohesion: 0.21
@@ -121,8 +121,8 @@ Cohesion: 0.38
 Nodes (10): api(), ensureGid(), ensureRows(), fetchRows(), NUMERICOS, repairNumeros(), repairStatus(), rng() (+2 more)
 
 ### Community 14 - "calidad.js"
-Cohesion: 0.42
-Nodes (7): calidadBase(), calidadList(), esNoApta(), notaLimpia(), pintarSelCalidad(), renderCalidad(), SEL_CAL
+Cohesion: 0.36
+Nodes (8): calidadBase(), calidadList(), esNoApta(), guardarCalidad(), notaLimpia(), pintarSelCalidad(), renderCalidad(), SEL_CAL
 
 ### Community 15 - "Historial de cambios"
 Cohesion: 0.42
@@ -156,17 +156,17 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ROWS` connect `Automatizaciones de fecha` to `Constantes del modelo`, `Control de OPs`, `Vista de planta`, `Impresion`?**
-  _High betweenness centrality (0.190) - this node is a cross-community bridge._
-- **Why does `guardarDespacho()` connect `Automatizaciones de fecha` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
+- **Why does `ROWS` connect `Automatizaciones de fecha` to `Tableros y catalogo`, `Constantes del modelo`, `Control de OPs`, `Vista de planta`, `calidad.js`?**
+  _High betweenness centrality (0.203) - this node is a cross-community bridge._
 - **Why does `renderResumen()` connect `Utilidades y fechas` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.081) - this node is a cross-community bridge._
+  _High betweenness centrality (0.080) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `refresh()` (e.g. with `autoFechas()` and `fillLists()`) actually correct?**
   _`refresh()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
   _48 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Tableros y catalogo` be split into smaller, more focused modules?**
+  _Cohesion score 0.11576354679802955 - nodes in this community are weakly interconnected._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
-  _Cohesion score 0.08547008547008547 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08262108262108261 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
   _Cohesion score 0.11 - nodes in this community are weakly interconnected._
