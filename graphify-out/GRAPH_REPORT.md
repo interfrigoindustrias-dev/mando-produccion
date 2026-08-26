@@ -1,11 +1,11 @@
-# Graph Report - .  (2026-08-25)
+# Graph Report - .  (2026-08-26)
 
 ## Corpus Check
-- Corpus is ~38,656 words - fits in a single context window. You may not need a graph.
+- Corpus is ~39,925 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 291 nodes · 435 edges · 28 communities (24 shown, 4 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.7)
+- 300 nodes · 450 edges · 28 communities (24 shown, 4 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -14,17 +14,17 @@
 - Utilidades y fechas
 - Tableros y catalogo
 - usuarios.js
+- Impresion
 - informes.js
 - Automatizaciones de fecha
 - Ayudantes de tableros
+- Configuracion del usuario
 - cronograma.js
 - Vista de planta
 - auth.php
 - Cliente de Google Sheets
 - calidad.js
-- Configuracion del usuario
 - Historial de cambios
-- Impresion
 - Autenticacion con Google
 - avisos.js
 - meta.js
@@ -44,8 +44,8 @@
 6. `pintarTarjeta()` - 7 edges
 7. `renderPlanta()` - 7 edges
 8. `api()` - 6 edges
-9. `paintRow()` - 6 edges
-10. `writeCells()` - 5 edges
+9. `kpis()` - 6 edges
+10. `paintRow()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `refresh()` --indirect_call--> `autoFechas()`  [INFERRED]
@@ -56,8 +56,8 @@
   src/js/dashboards.js → src/js/comun.js
 - `printFichas()` --references--> `ROWS`  [EXTRACTED]
   src/js/impresion.js → src/js/constantes.js
-- `render()` --references--> `SEL`  [EXTRACTED]
-  src/js/control.js → src/js/constantes.js
+- `kpis()` --indirect_call--> `s()`  [INFERRED]
+  src/js/control.js → src/js/formatos.js
 
 ## Import Cycles
 - None detected.
@@ -70,7 +70,7 @@ Nodes (21): APERTURAS, BUMPERS, C, CFG, CON_RIEL, DESPACHOS, EMPAQUE_VISOR, ESPE
 
 ### Community 1 - "Control de OPs"
 Cohesion: 0.15
-Nodes (21): PROCS, editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis(), medidaDe() (+13 more)
+Nodes (21): PROCS, SEL, editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis() (+13 more)
 
 ### Community 2 - "Utilidades y fechas"
 Cohesion: 0.11
@@ -84,49 +84,49 @@ Nodes (18): almacenBase(), almacenList(), bCarta, bStk, bTodas, chipMod, esModel
 Cohesion: 0.18
 Nodes (14): enterApp(), goto(), pintarQuienSoy(), VIEWS, abrirUsuarios(), aplicarRol(), guardarUsuario(), loadUsuarios() (+6 more)
 
-### Community 5 - "informes.js"
+### Community 5 - "Impresion"
+Cohesion: 0.15
+Nodes (12): FORMATO_DE_TIPO, FORMATOS, q(), cabeceraCarta(), cartaHTML(), materialesCarta(), piezaCarta(), printFichas() (+4 more)
+
+### Community 6 - "informes.js"
 Cohesion: 0.19
 Nodes (12): abrirInformes(), csvInforme(), cuandoSale(), descargarInforme(), DIAS_SEMANA, FRECUENCIAS, guardarInforme(), INF_HEAD (+4 more)
 
-### Community 6 - "Automatizaciones de fecha"
+### Community 7 - "Automatizaciones de fecha"
 Cohesion: 0.21
 Nodes (13): autoFechas(), autoPrioridades(), CAMPOS_PROCESO, ESCALA, fechaProgramada(), hoy0(), marcarInicioProduccion(), OFFSET (+5 more)
 
-### Community 7 - "Ayudantes de tableros"
-Cohesion: 0.22
+### Community 8 - "Ayudantes de tableros"
+Cohesion: 0.24
 Nodes (7): completa(), desp(), DETALLE_KPI, enProduccion(), enStock(), tablaMini(), verDetalleKpi()
 
-### Community 8 - "cronograma.js"
+### Community 9 - "Configuracion del usuario"
+Cohesion: 0.26
+Nodes (8): kpiCards(), aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), looksLikeId(), parseSheetId(), saveCfg(), s()
+
+### Community 10 - "cronograma.js"
 Cohesion: 0.27
 Nodes (11): calcularCronograma(), DIA_SEM, diasHabiles(), entradaEnPlanta(), fechaCorta(), MES_COR, pendienteCronograma(), RANK_PRIO (+3 more)
 
-### Community 9 - "Vista de planta"
+### Community 11 - "Vista de planta"
 Cohesion: 0.30
 Nodes (10): avisarProgramadas(), COLOR_PROC, etiquetaPrio(), metaTarjeta(), notaTarjeta(), pintarTarjeta(), plantaList(), plantaProgramadas (+2 more)
 
-### Community 10 - "auth.php"
+### Community 12 - "auth.php"
 Cohesion: 0.35
 Nodes (10): base64url(), callback(), guardar(), login(), logout(), paginaDestino(), pedirAGoogle(), responder() (+2 more)
 
-### Community 11 - "Cliente de Google Sheets"
+### Community 13 - "Cliente de Google Sheets"
 Cohesion: 0.38
 Nodes (10): api(), ensureGid(), ensureRows(), fetchRows(), NUMERICOS, repairNumeros(), repairStatus(), rng() (+2 more)
 
-### Community 12 - "calidad.js"
+### Community 14 - "calidad.js"
 Cohesion: 0.42
 Nodes (7): calidadBase(), calidadList(), esNoApta(), notaLimpia(), pintarSelCalidad(), renderCalidad(), SEL_CAL
 
-### Community 13 - "Configuracion del usuario"
-Cohesion: 0.33
-Nodes (5): aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), parseSheetId(), saveCfg()
-
-### Community 14 - "Historial de cambios"
+### Community 15 - "Historial de cambios"
 Cohesion: 0.42
 Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), renderHist(), shortUser()
-
-### Community 15 - "Impresion"
-Cohesion: 0.25
-Nodes (6): CAMPOS_MANO, printFichas(), QC, rotuloOP(), stickerHTML(), stkBtn
 
 ### Community 16 - "Autenticacion con Google"
 Cohesion: 0.43
@@ -149,7 +149,7 @@ Cohesion: 0.47
 Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
 
 ## Knowledge Gaps
-- **47 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `OFFSET`, `ESCALA` (+42 more)
+- **48 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `OFFSET`, `ESCALA` (+43 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -157,15 +157,15 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ROWS` connect `Automatizaciones de fecha` to `Constantes del modelo`, `Control de OPs`, `Vista de planta`, `Impresion`?**
-  _High betweenness centrality (0.178) - this node is a cross-community bridge._
+  _High betweenness centrality (0.190) - this node is a cross-community bridge._
 - **Why does `guardarDespacho()` connect `Automatizaciones de fecha` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.111) - this node is a cross-community bridge._
+  _High betweenness centrality (0.101) - this node is a cross-community bridge._
 - **Why does `renderResumen()` connect `Utilidades y fechas` to `Tableros y catalogo`?**
-  _High betweenness centrality (0.076) - this node is a cross-community bridge._
+  _High betweenness centrality (0.081) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `refresh()` (e.g. with `autoFechas()` and `fillLists()`) actually correct?**
   _`refresh()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
-  _47 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _48 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
   _Cohesion score 0.08547008547008547 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**

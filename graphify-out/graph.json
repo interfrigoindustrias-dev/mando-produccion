@@ -81,7 +81,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_auth",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "auth.php"
     },
@@ -92,7 +92,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_auth_login",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "login()"
     },
@@ -103,7 +103,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "src_auth_callback",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "callback()"
     },
@@ -114,7 +114,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_auth_token",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "token()"
     },
@@ -125,7 +125,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "src_auth_logout",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "logout()"
     },
@@ -136,7 +136,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_auth_guardar",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "guardar()"
     },
@@ -147,7 +147,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "src_auth_pediragoogle",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "pediragoogle()"
     },
@@ -158,7 +158,7 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "src_auth_paginadestino",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "paginadestino()"
     },
@@ -169,7 +169,7 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "src_auth_volver",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "volver()"
     },
@@ -180,7 +180,7 @@
       "source_location": "L215",
       "_origin": "ast",
       "id": "src_auth_responder",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "responder()"
     },
@@ -191,7 +191,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_auth_base64url",
-      "community": 10,
+      "community": 12,
       "community_name": "auth.php",
       "norm_label": "base64url()"
     },
@@ -213,7 +213,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_api",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api.js"
     },
@@ -224,7 +224,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_api_api",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api()"
     },
@@ -235,7 +235,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_api_rng",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "rng()"
     },
@@ -246,7 +246,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_api_fetchrows",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "fetchrows()"
     },
@@ -257,7 +257,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_api_ensuregid",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensuregid()"
     },
@@ -268,7 +268,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_api_ensurerows",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensurerows()"
     },
@@ -279,7 +279,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_api_setcheckboxui",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "setcheckboxui()"
     },
@@ -290,7 +290,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_api_repairstatus",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairstatus()"
     },
@@ -301,7 +301,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_api_numericos",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "numericos"
     },
@@ -312,7 +312,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_api_repairnumeros",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairnumeros()"
     },
@@ -323,7 +323,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_js_api_writecells",
-      "community": 11,
+      "community": 13,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "writecells()"
     },
@@ -400,7 +400,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auditoria",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "auditoria.js"
     },
@@ -411,7 +411,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_auditoria_log",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "log"
     },
@@ -422,7 +422,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_auditoria_ensurelog",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "ensurelog()"
     },
@@ -433,7 +433,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_auditoria_logchanges",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "logchanges()"
     },
@@ -444,7 +444,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_auditoria_logbulk",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "logbulk()"
     },
@@ -455,7 +455,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_js_auditoria_loadlog",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "loadlog()"
     },
@@ -466,7 +466,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_auditoria_shortuser",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "shortuser()"
     },
@@ -477,7 +477,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_js_auditoria_histof",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "histof()"
     },
@@ -488,7 +488,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_js_auditoria_renderhist",
-      "community": 14,
+      "community": 15,
       "community_name": "Historial de cambios",
       "norm_label": "renderhist()"
     },
@@ -587,7 +587,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_automatizaciones",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "automatizaciones.js"
     },
@@ -598,7 +598,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_automatizaciones_offset",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "offset"
     },
@@ -609,7 +609,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_automatizaciones_escala",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "escala"
     },
@@ -620,7 +620,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_js_automatizaciones_marcarinicioproduccion",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "marcarinicioproduccion()"
     },
@@ -631,7 +631,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autoprioridades",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autoprioridades()"
     },
@@ -642,7 +642,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_js_automatizaciones_hoy0",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "hoy0()"
     },
@@ -653,7 +653,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_automatizaciones_fechaprogramada",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "fechaprogramada()"
     },
@@ -664,7 +664,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autofechas",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autofechas()"
     },
@@ -675,7 +675,7 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "src_js_automatizaciones_tocarfechaproceso",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "tocarfechaproceso()"
     },
@@ -686,7 +686,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_js_automatizaciones_campos_proceso",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "campos_proceso"
     },
@@ -697,7 +697,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairfechasfalsas",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairfechasfalsas()"
     },
@@ -785,7 +785,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_calidad",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "calidad.js"
     },
@@ -796,7 +796,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_calidad_esnoapta",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "esnoapta()"
     },
@@ -807,7 +807,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_calidad_notalimpia",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "notalimpia()"
     },
@@ -818,7 +818,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_calidad_sel_cal",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "sel_cal"
     },
@@ -829,7 +829,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_calidad_calidadbase",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "calidadbase()"
     },
@@ -840,7 +840,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_js_calidad_calidadlist",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "calidadlist()"
     },
@@ -851,7 +851,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_js_calidad_rendercalidad",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "rendercalidad()"
     },
@@ -862,7 +862,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "src_js_calidad_pintarselcalidad",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "pintarselcalidad()"
     },
@@ -873,7 +873,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_js_calidad_guardarcalidad",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "guardarcalidad()"
     },
@@ -884,7 +884,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_calidad_notade",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "notade()"
     },
@@ -895,7 +895,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "src_js_calidad_malde",
-      "community": 12,
+      "community": 14,
       "community_name": "calidad.js",
       "norm_label": "malde()"
     },
@@ -906,7 +906,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_comun",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "comun.js"
     },
@@ -917,7 +917,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_comun_activas",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "activas()"
     },
@@ -928,7 +928,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_comun_completa",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "completa()"
     },
@@ -939,7 +939,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_comun_desp",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "desp()"
     },
@@ -950,7 +950,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_comun_puntos",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "puntos()"
     },
@@ -961,7 +961,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_comun_enproduccion",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enproduccion()"
     },
@@ -972,7 +972,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_comun_enstock",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enstock()"
     },
@@ -983,7 +983,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_comun_contador",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "contador()"
     },
@@ -994,7 +994,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_comun_detalle_kpi",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "detalle_kpi"
     },
@@ -1005,8 +1005,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_comun_kpicards",
-      "community": 7,
-      "community_name": "Ayudantes de tableros",
+      "community": 9,
+      "community_name": "Configuracion del usuario",
       "norm_label": "kpicards()"
     },
     {
@@ -1016,7 +1016,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_comun_verdetallekpi",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "verdetallekpi()"
     },
@@ -1027,7 +1027,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_comun_barras",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "barras()"
     },
@@ -1038,7 +1038,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_comun_tablamini",
-      "community": 7,
+      "community": 8,
       "community_name": "Ayudantes de tableros",
       "norm_label": "tablamini()"
     },
@@ -1049,7 +1049,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_config",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "config.js"
     },
@@ -1060,7 +1060,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_config_parsesheetid",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "parsesheetid()"
     },
@@ -1071,7 +1071,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_config_lookslikeid",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "lookslikeid()"
     },
@@ -1082,7 +1082,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_config_campos_empresa",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "campos_empresa"
     },
@@ -1093,7 +1093,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_config_loadcfg",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "loadcfg()"
     },
@@ -1104,7 +1104,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_config_savecfg",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "savecfg()"
     },
@@ -1115,7 +1115,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_config_cfgok",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "cfgok()"
     },
@@ -1126,7 +1126,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_config_aplicarcfgdeenlace",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "aplicarcfgdeenlace()"
     },
@@ -1137,7 +1137,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_config_enlacedeconfiguracion",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "enlacedeconfiguracion()"
     },
@@ -1148,7 +1148,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_js_config_opencfg",
-      "community": 13,
+      "community": 9,
       "community_name": "Configuracion del usuario",
       "norm_label": "opencfg()"
     },
@@ -1368,7 +1368,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_constantes_rows",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "rows"
     },
@@ -1379,8 +1379,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_constantes_sel",
-      "community": 0,
-      "community_name": "Constantes del modelo",
+      "community": 1,
+      "community_name": "Control de OPs",
       "norm_label": "sel"
     },
     {
@@ -1500,8 +1500,8 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "src_js_control_selap",
-      "community": 1,
-      "community_name": "Control de OPs",
+      "community": 0,
+      "community_name": "Constantes del modelo",
       "norm_label": "selap()"
     },
     {
@@ -1588,7 +1588,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_cronograma",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "cronograma.js"
     },
@@ -1599,7 +1599,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_cronograma_diashabiles",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "diashabiles()"
     },
@@ -1610,7 +1610,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_cronograma_pendientecronograma",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "pendientecronograma()"
     },
@@ -1621,7 +1621,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_cronograma_entradaenplanta",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "entradaenplanta()"
     },
@@ -1632,7 +1632,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_cronograma_rank_prio",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "rank_prio"
     },
@@ -1643,7 +1643,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_cronograma_calcularcronograma",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "calcularcronograma()"
     },
@@ -1654,7 +1654,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_js_cronograma_dia_sem",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "dia_sem"
     },
@@ -1665,7 +1665,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_cronograma_mes_cor",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "mes_cor"
     },
@@ -1676,7 +1676,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_js_cronograma_fechacorta",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "fechacorta()"
     },
@@ -1687,7 +1687,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_cronograma_rendercronograma",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "rendercronograma()"
     },
@@ -1698,7 +1698,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_js_cronograma_ritmoreal",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "ritmoreal()"
     },
@@ -1709,7 +1709,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_cronograma_redondo",
-      "community": 8,
+      "community": 10,
       "community_name": "cronograma.js",
       "norm_label": "redondo()"
     },
@@ -1841,7 +1841,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "src_js_dashboards_guardardespacho",
-      "community": 6,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "guardardespacho()"
     },
@@ -2132,13 +2132,90 @@
       "norm_label": "hintop()"
     },
     {
+      "label": "formatos.js",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_js_formatos",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "formatos.js"
+    },
+    {
+      "label": "FORMATO_DE_TIPO",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "src_js_formatos_formato_de_tipo",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "formato_de_tipo"
+    },
+    {
+      "label": "formatoDe()",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "src_js_formatos_formatode",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "formatode()"
+    },
+    {
+      "label": "s()",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "src_js_formatos_s",
+      "community": 9,
+      "community_name": "Configuracion del usuario",
+      "norm_label": "s()"
+    },
+    {
+      "label": "q()",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "src_js_formatos_q",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "q()"
+    },
+    {
+      "label": "FORMATOS",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "src_js_formatos_formatos",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "formatos"
+    },
+    {
+      "label": "piezasDe()",
+      "file_type": "code",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L140",
+      "_origin": "ast",
+      "id": "src_js_formatos_piezasde",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "piezasde()"
+    },
+    {
       "label": "impresion.js",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_impresion",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "impresion.js"
     },
@@ -2149,7 +2226,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_impresion_qc",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "qc"
     },
@@ -2160,7 +2237,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_impresion_rotuloop",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "rotuloop()"
     },
@@ -2171,29 +2248,51 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_impresion_stickerhtml",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "stickerhtml()"
     },
     {
-      "label": "CAMPOS_MANO",
+      "label": "cabeceraCarta()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L71",
+      "source_location": "L74",
       "_origin": "ast",
-      "id": "src_js_impresion_campos_mano",
-      "community": 15,
+      "id": "src_js_impresion_cabeceracarta",
+      "community": 5,
       "community_name": "Impresion",
-      "norm_label": "campos_mano"
+      "norm_label": "cabeceracarta()"
+    },
+    {
+      "label": "piezaCarta()",
+      "file_type": "code",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L106",
+      "_origin": "ast",
+      "id": "src_js_impresion_piezacarta",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "piezacarta()"
+    },
+    {
+      "label": "materialesCarta()",
+      "file_type": "code",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L116",
+      "_origin": "ast",
+      "id": "src_js_impresion_materialescarta",
+      "community": 5,
+      "community_name": "Impresion",
+      "norm_label": "materialescarta()"
     },
     {
       "label": "cartaHTML()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L77",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "src_js_impresion_cartahtml",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "cartahtml()"
     },
@@ -2201,10 +2300,10 @@
       "label": "printFichas()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L116",
+      "source_location": "L154",
       "_origin": "ast",
       "id": "src_js_impresion_printfichas",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "printfichas()"
     },
@@ -2212,10 +2311,10 @@
       "label": "pedirSticker()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L130",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_impresion_pedirsticker",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "pedirsticker()"
     },
@@ -2223,10 +2322,10 @@
       "label": "stkBtn",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L146",
+      "source_location": "L184",
       "_origin": "ast",
       "id": "src_js_impresion_stkbtn",
-      "community": 15,
+      "community": 5,
       "community_name": "Impresion",
       "norm_label": "stkbtn"
     },
@@ -2237,7 +2336,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_informes",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "informes.js"
     },
@@ -2248,7 +2347,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_js_informes_inf_head",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "inf_head"
     },
@@ -2259,7 +2358,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_informes_tipos_informe",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "tipos_informe"
     },
@@ -2270,7 +2369,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_informes_frecuencias",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "frecuencias"
     },
@@ -2281,7 +2380,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_informes_dias_semana",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "dias_semana"
     },
@@ -2292,7 +2391,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_js_informes_enrango",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "enrango()"
     },
@@ -2303,7 +2402,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_informes_periodode",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "periodode()"
     },
@@ -2314,7 +2413,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "src_js_informes_informes",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "informes"
     },
@@ -2325,7 +2424,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_js_informes_loadinformes",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "loadinformes()"
     },
@@ -2336,7 +2435,7 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_js_informes_csvinforme",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "csvinforme()"
     },
@@ -2347,7 +2446,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_js_informes_descargarinforme",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "descargarinforme()"
     },
@@ -2358,7 +2457,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "src_js_informes_abririnformes",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "abririnformes()"
     },
@@ -2369,7 +2468,7 @@
       "source_location": "L178",
       "_origin": "ast",
       "id": "src_js_informes_cuandosale",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "cuandosale()"
     },
@@ -2380,7 +2479,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "src_js_informes_pintarinformes",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "pintarinformes()"
     },
@@ -2391,7 +2490,7 @@
       "source_location": "L226",
       "_origin": "ast",
       "id": "src_js_informes_guardarinforme",
-      "community": 5,
+      "community": 6,
       "community_name": "informes.js",
       "norm_label": "guardarinforme()"
     },
@@ -2512,7 +2611,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_planta",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "planta.js"
     },
@@ -2523,7 +2622,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_planta_prio_ord",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "prio_ord"
     },
@@ -2534,7 +2633,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_planta_color_proc",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "color_proc"
     },
@@ -2545,7 +2644,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_planta_plantaprogramadas",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantaprogramadas"
     },
@@ -2556,7 +2655,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_planta_plantalist",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantalist()"
     },
@@ -2567,7 +2666,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_planta_metatarjeta",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "metatarjeta()"
     },
@@ -2578,7 +2677,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaprio",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaprio()"
     },
@@ -2589,7 +2688,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_js_planta_notatarjeta",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "notatarjeta()"
     },
@@ -2600,7 +2699,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_js_planta_pintartarjeta",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "pintartarjeta()"
     },
@@ -2611,7 +2710,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_js_planta_avisarprogramadas",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "avisarprogramadas()"
     },
@@ -2622,7 +2721,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "src_js_planta_renderplanta",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "renderplanta()"
     },
@@ -2633,7 +2732,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "src_js_planta_plantaenuso",
-      "community": 9,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantaenuso()"
     },
@@ -4883,6 +4982,18 @@
       "target": "src_js_comun_detalle_kpi"
     },
     {
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/js/comun.js",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_comun_kpicards",
+      "target": "src_js_formatos_s"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -5016,6 +5127,18 @@
       "source": "src_js_config_loadcfg",
       "target": "src_js_config_parsesheetid",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/js/config.js",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_config_lookslikeid",
+      "target": "src_js_formatos_s"
     },
     {
       "relation": "references",
@@ -5447,7 +5570,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/impresion.js",
-      "source_location": "L118",
+      "source_location": "L156",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_printfichas",
@@ -5855,6 +5978,18 @@
       "_origin": "ast",
       "source": "src_js_datos_refresh",
       "target": "src_js_control_render"
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/js/control.js",
+      "source_location": "L218",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_control_kpis",
+      "target": "src_js_formatos_s"
     },
     {
       "relation": "calls",
@@ -6737,19 +6872,97 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_formato_de_tipo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_formatode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_formatos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_piezasde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_q",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/formatos.js",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_formatos",
+      "target": "src_js_formatos_s",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
       "source_file": "src/js/impresion.js",
-      "source_location": "L71",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion_stickerhtml",
+      "target": "src_js_formatos_q"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
-      "target": "src_js_impresion_campos_mano",
+      "target": "src_js_impresion_cabeceracarta",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L77",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -6760,7 +6973,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L130",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion",
+      "target": "src_js_impresion_materialescarta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -6771,7 +6995,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L116",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion",
+      "target": "src_js_impresion_piezacarta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -6815,7 +7050,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L146",
+      "source_location": "L184",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -6832,6 +7067,42 @@
       "_origin": "ast",
       "source": "src_js_impresion_stickerhtml",
       "target": "src_js_impresion_rotuloop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L142",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion_cartahtml",
+      "target": "src_js_impresion_cabeceracarta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion_materialescarta",
+      "target": "src_js_impresion_piezacarta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/impresion.js",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_impresion_cartahtml",
+      "target": "src_js_impresion_materialescarta",
       "confidence_score": 1.0
     },
     {
@@ -8184,5 +8455,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a3d1c55d68d11297fbf8afffc219d6cefe3ba459"
+  "built_at_commit": "d87bbab443d0bfdeffcc0fc2da6fb8c6dc1856ef"
 }
