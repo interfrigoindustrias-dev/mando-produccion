@@ -94,6 +94,7 @@ function fillLists(){
   fill($("#s-tipo"), col(C.TIPO),   "Todos");
   fill($("#s-esp"),  col(C.ESP),    "Todos");
   fill($("#s-ap"),   col(C.AP),     "Todas");
+  fill($("#s-med"),  uniq(medidaDe),"Todas");
   $("#dl-cli").innerHTML = clientes.map(v=>`<option value="${esc(v)}">`).join("");
 }
 

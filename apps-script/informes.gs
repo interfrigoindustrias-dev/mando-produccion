@@ -24,12 +24,22 @@
  *   3. Ejecuta la función `instalar`. Google pedirá permiso una vez: acéptalo.
  *   4. Listo. Para comprobarlo sin esperar, ejecuta `enviarPrueba`.
  *
+ * BOTÓN DE PRUEBA DESDE LA APLICACIÓN (opcional pero recomendado)
+ *   Para que el botón «Probar correo» funcione, publica esto como aplicación web:
+ *     Implementar → Nueva implementación → Aplicación web
+ *     Ejecutar como: Yo     ·     Con acceso: Cualquier usuario
+ *   Copia el enlace que da Google y pégalo en la aplicación, en Informes.
+ *
+ *   El navegador dispara la petición pero no puede leer la respuesta (Google no
+ *   permite leerla desde otro dominio). No es un problema: la prueba se
+ *   comprueba mirando el buzón, que es de lo que se trata.
+ *
  * La pestaña INFORMES es el contrato con la aplicación web. Si allí cambian
  * las columnas, hay que cambiarlas aquí.
  */
 
 var HOJA_OP   = 'OP PUERTA';
-var HOJA_INF  = 'INFORMES';
+var HOJA_INF  = 'INFORMES';   // columnas A..H, ver informes.js
 var REMITENTE = 'Control de Producción Interfrigo';
 
 /* Columnas de OP PUERTA, en base 0. Debe coincidir con constantes.js. */
@@ -38,6 +48,46 @@ var C = {
   PRIO:12, OBS:21, FPROC:23, DESP:24, FDESP:25, ENS:26, FINI:27, CAL:36
 };
 var PROCS = [13,14,15,16,17,18,19,20];   // N..U
+
+/* ------------------------------------------------------------------ */
+/*  Aplicación web: permite disparar desde la aplicación               */
+/* ------------------------------------------------------------------ */
+
+/**
+ * ?a=prueba&para=alguien@dominio      correo de prueba
+ * ?a=enviar&fila=3                    manda ese informe ahora mismo
+ *
+ * Se responde siempre en texto plano: si algo falla, el mensaje queda en el
+ * registro de ejecuciones de Apps Script, que es donde se puede leer.
+ */
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  var salida = ContentService.createTextOutput();
+  try {
+    if (p.a === 'prueba') {
+      var para = String(p.para || Session.getEffectiveUser().getEmail() || '').trim();
+      if (!para) { return salida.setContent('sin destinatario'); }
+      MailApp.sendEmail({
+        to: para,
+        subject: 'Prueba de correo · Control de Producción Interfrigo',
+        body: 'Si estás leyendo esto, el envío automático de informes funciona.\n\n' +
+              'Enviado el ' + Utilities.formatDate(new Date(), tz(), 'dd/MM/yyyy HH:mm') + '.\n' +
+              'Cuota restante hoy: ' + MailApp.getRemainingDailyQuota() + ' correos.\n\n' +
+              '— No hace falta responder a este mensaje.',
+        name: REMITENTE
+      });
+      return salida.setContent('enviado a ' + para);
+    }
+    if (p.a === 'enviar') {
+      var n = revisarInformes(true, Number(p.fila) || 0);
+      return salida.setContent('informes enviados: ' + n);
+    }
+    return salida.setContent('cuota restante: ' + MailApp.getRemainingDailyQuota());
+  } catch (err) {
+    Logger.log('doGet: ' + err.message);
+    return salida.setContent('error: ' + err.message);
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Instalación                                                        */
@@ -72,7 +122,7 @@ function enviarPrueba() {
  * @param {boolean} forzar  ignora el calendario y el registro de último envío.
  * @return {number} informes enviados.
  */
-function revisarInformes(forzar) {
+function revisarInformes(forzar, soloFila) {
   var ss  = SpreadsheetApp.getActiveSpreadsheet();
   var hi  = ss.getSheetByName(HOJA_INF);
   if (!hi) { Logger.log('No existe la pestaña ' + HOJA_INF); return 0; }
@@ -91,8 +141,11 @@ function revisarInformes(forzar) {
       dia:    Number(r[3]) || 1,
       para:   String(r[4] || '').trim(),
       activo: r[5] !== false && String(r[5]).toUpperCase() !== 'FALSE',
-      ultimo: String(r[6] || '').trim()
+      ultimo: String(r[6] || '').trim(),
+      // Columna H: que columnas incluir, separadas por coma. Vacio = todas.
+      campos: String(r[7] || '').trim()
     };
+    if (soloFila && inf.fila !== soloFila) continue;
     if (!inf.nombre || !inf.activo || !inf.para) continue;
     if (!forzar && !leToca(inf, hoy)) continue;
     if (!forzar && yaSalio(inf, hoy)) continue;
@@ -132,6 +185,7 @@ function yaSalio(inf, hoy) {
 function enviarInforme(ss, inf, hoy) {
   var per  = periodo(inf.frec, hoy);
   var arm  = armar(ss, inf.tipo, per);
+  if (inf.campos) { arm = recortar(arm, inf.campos); }
   if (!arm.filas.length) {
     Logger.log('«' + inf.nombre + '»: sin filas en ' + per.etiqueta + ', no se envía.');
     return false;
@@ -212,7 +266,28 @@ function armar(ss, tipo, per) {
       : ['Orden','Tipo de puerta','Medidas','Cliente','Espesor','Puntos',
          'Fecha inicio','Fecha fin'];
 
-  return {csv: aCsv(cols, filas), filas: filas, puntos: hayPuntos ? puntos : null};
+  return {csv: aCsv(cols, filas), filas: filas, cols: cols,
+          puntos: hayPuntos ? puntos : null};
+}
+
+/** Deja solo las columnas pedidas, en el orden en que se pidieron.
+ *  Un nombre que no exista se ignora en silencio: es preferible un informe con
+ *  una columna de menos que ningun informe. */
+function recortar(arm, campos) {
+  var quiere = campos.split(',').map(function (x) { return x.trim().toLowerCase(); })
+                     .filter(function (x) { return x; });
+  var idx = [];
+  for (var i = 0; i < quiere.length; i++) {
+    for (var j = 0; j < arm.cols.length; j++) {
+      if (String(arm.cols[j]).toLowerCase() === quiere[i]) { idx.push(j); break; }
+    }
+  }
+  if (!idx.length) { return arm; }          // ninguna coincide: se manda entero
+  var cols = idx.map(function (j) { return arm.cols[j]; });
+  var filas = arm.filas.map(function (f) {
+    return idx.map(function (j) { return f[j]; });
+  });
+  return {csv: aCsv(cols, filas), filas: filas, puntos: arm.puntos, cols: cols};
 }
 
 /* ------------------------------------------------------------------ */

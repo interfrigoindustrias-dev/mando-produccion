@@ -99,3 +99,14 @@
 #a-tabla tbody tr.sel .op{font-weight:800}
 /* La primera columna es solo la casilla: que no se coma ancho de la tabla. */
 #a-tabla th:first-child,#a-tabla td:first-child{width:34px;text-align:center;padding-left:8px;padding-right:4px}
+
+/* Para quién quedó separada una puerta de stock. */
+.para{font-weight:700}
+#s-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}
+/* Nota de calidad vista desde almacén: corta, y entera al pasar el ratón. */
+.qnota-mini{display:block;max-width:210px;font-size:12px;color:var(--tx2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnota-mini.mal{color:#D64545;font-weight:600}
+.qnota-mini b{font-weight:800}
+/* Una puerta rechazada no puede pasar desapercibida en almacén. */
+#a-tabla tbody tr.noapta{box-shadow:inset 3px 0 0 #D64545}

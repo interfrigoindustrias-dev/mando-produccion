@@ -25,7 +25,7 @@
    cambiarlo tambien en el script.                                           */
 
 const INF_TAB  = "INFORMES";
-const INF_HEAD = ["NOMBRE","TIPO","FRECUENCIA","DIA","DESTINATARIOS","ACTIVO","ULTIMO ENVIO"];
+const INF_HEAD = ["NOMBRE","TIPO","FRECUENCIA","DIA","DESTINATARIOS","ACTIVO","ULTIMO ENVIO","CAMPOS"];
 
 /* Que sabe hacer cada informe. La funcion `filas` devuelve las puertas que
    entran, y `cols` como se escribe cada una. */
@@ -120,11 +120,11 @@ async function loadInformes(){
       await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A1`)}?valueInputOption=USER_ENTERED`,
         {method:"PUT", body: JSON.stringify({values:[
           INF_HEAD,
-          ["Producción mensual", "produccion", "mensual", 1, userMail, true, ""],
-          ["Despachos mensual",  "despachos",  "mensual", 1, userMail, true, ""]
+          ["Producción mensual", "produccion", "mensual", 1, userMail, true, "", ""],
+          ["Despachos mensual",  "despachos",  "mensual", 1, userMail, true, "", ""]
         ]})});
     }
-    const j = await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A2:G`)}?valueRenderOption=UNFORMATTED_VALUE`);
+    const j = await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A2:H`)}?valueRenderOption=UNFORMATTED_VALUE`);
     INFORMES = (j.values || [])
       .filter(r => String(r[0] ?? "").trim())
       .map((r, i) => ({
@@ -135,7 +135,9 @@ async function loadInformes(){
         dia:    num(r[3]) || 1,
         para:   String(r[4] ?? "").trim(),
         activo: tri(r[5]) !== false,
-        ultimo: String(r[6] ?? "").trim()
+        ultimo: String(r[6] ?? "").trim(),
+        // Columna H: que columnas lleva el CSV. Vacia = todas las del tipo.
+        campos: String(r[7] ?? "").trim()
       }));
   }catch(e){ console.warn("INFORMES:", e.message); INFORMES = []; }
   return INFORMES;
@@ -143,15 +145,26 @@ async function loadInformes(){
 
 /* ---------- CSV ---------- */
 
-/** Genera el CSV de un informe. Mismo formato que el botón ⇩ CSV. */
+/** Indices de las columnas elegidas, en el orden pedido. null = todas. */
+function indicesCampos(inf, T){
+  if(!inf.campos) return null;
+  const quiere = inf.campos.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
+  const idx = quiere.map(n => T.cols.findIndex(c => c.toLowerCase() === n)).filter(i => i >= 0);
+  // Si ninguna coincide se manda entero: mejor un informe de mas que uno vacio.
+  return idx.length ? idx : null;
+}
+
+/** Genera el CSV de un informe, con las columnas que se le hayan pedido. */
 function csvInforme(inf, ref){
   const T = TIPOS_INFORME[inf.tipo] || TIPOS_INFORME.produccion;
   const {desde, hasta, etiqueta} = periodoDe(inf.frec, ref);
   const filas = T.filas(ROWS, desde, hasta);
   const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const cuerpo = filas.map(({c}) => T.fila(c).map(q).join(";"));
+  const idx = indicesCampos(inf, T);
+  const solo = f => idx ? idx.map(i => f[i]) : f;
+  const cuerpo = filas.map(({c}) => solo(T.fila(c)).map(q).join(";"));
   // BOM al principio: sin el, Excel en español abre los acentos rotos.
-  const texto = "﻿" + [T.cols.map(q).join(";"), ...cuerpo].join("\r\n");
+  const texto = "﻿" + [solo(T.cols).map(q).join(";"), ...cuerpo].join("\r\n");
   return {texto, filas, etiqueta,
           nombre: `${inf.tipo}_${etiqueta.replace(/\s+/g,"_")}.csv`};
 }
@@ -170,6 +183,8 @@ function descargarInforme(i){
 
 function abrirInformes(){
   if(!puede("crear") && !puede("*")){ toast("No tienes permiso para gestionar informes","err"); return; }
+  const u = $("#inf-url");        if(u) u.value = META.scriptUrl || "";
+  const pp = $("#inf-prueba-para"); if(pp && !pp.value) pp.value = userMail || "";
   pintarInformes();
   $("#ov-informes").classList.remove("hide");
 }
@@ -210,6 +225,15 @@ function pintarInformes(){
           <input class="inp" data-i="${i}" data-campo="para" value="${esc(inf.para)}"
             placeholder="gerencia@interfrigo.com.co, jefe@interfrigo.com.co"></label>
       </div>
+      <div class="infcampos">
+        <span class="mut">Columnas del archivo</span>
+        ${T.cols ? T.cols.map(col=>{
+          const puesto = !inf.campos || inf.campos.toLowerCase().split(",")
+            .map(x=>x.trim()).includes(col.toLowerCase());
+          return `<label class="proc mini"><input type="checkbox" data-i="${i}" data-col="${esc(col)}"
+            ${puesto?"checked":""}><span>${esc(col)}</span></label>`;
+        }).join("") : ""}
+      </div>
       <div class="inff">
         <span class="mut">${esc(T.dice||"")} · <b>${cuandoSale(inf)}</b>${
           inf.ultimo ? ` · último envío ${esc(inf.ultimo)}` : " · aún no se ha enviado"}</span>
@@ -225,7 +249,7 @@ function pintarInformes(){
 /** Guarda una celda del informe. La fila 1 son encabezados. */
 async function guardarInforme(i, campo, valor){
   const inf = INFORMES[i]; if(!inf) return;
-  const col = {nombre:"A", tipo:"B", frec:"C", dia:"D", para:"E", activo:"F"}[campo];
+  const col = {nombre:"A", tipo:"B", frec:"C", dia:"D", para:"E", activo:"F", campos:"H"}[campo];
   if(!col) return;
   const antes = inf[campo];
   inf[campo] = valor;
@@ -236,7 +260,12 @@ async function guardarInforme(i, campo, valor){
                [{campo:`Informe · ${campo}`, antes:String(antes), despues:String(valor)}]);
     setSync("", "Guardado");
     // Cambiar la frecuencia cambia el control del día: hay que repintar.
-    if(campo === "frec" || campo === "tipo" || campo === "activo") pintarInformes();
+    if(campo === "frec" || campo === "tipo" || campo === "activo"){
+      // Cambiar de tipo cambia las columnas: las elegidas del tipo viejo ya no
+      // valen, así que se vuelve a «todas» en vez de dejar una mezcla inválida.
+      if(campo === "tipo" && inf.campos){ inf.campos = ""; guardarInforme(i, "campos", ""); }
+      pintarInformes();
+    }
   }catch(e){ inf[campo] = antes; pintarInformes(); toast(e.message, "err"); }
 }
 
@@ -244,9 +273,34 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const b = $("#btn-informes");
   if(b) b.onclick = abrirInformes;
 
+  const url = $("#inf-url");
+  if(url) url.addEventListener("change", ()=> guardarScriptUrl(url.value));
+  const pr = $("#inf-probar");
+  if(pr) pr.onclick = probarCorreo;
+
   const l = $("#inf-lista");
   if(l){
     l.addEventListener("change", ev=>{
+      // Casillas de columna: se guardan todas juntas, en el orden del tipo, para
+      // que el CSV no salga con las columnas desordenadas.
+      const col = ev.target.closest("[data-col]");
+      if(col){
+        const i = +col.dataset.i, inf = INFORMES[i];
+        const T = TIPOS_INFORME[inf.tipo] || TIPOS_INFORME.produccion;
+        const marcadas = [...document.querySelectorAll(`[data-col][data-i="${i}"]`)]
+          .filter(k=>k.checked).map(k=>k.dataset.col);
+        if(!marcadas.length){
+          col.checked = true;
+          toast("El informe necesita al menos una columna","err");
+          return;
+        }
+        // Vacio significa «todas»: mas robusto que listarlas, porque si mañana
+        // el tipo gana una columna, el informe la incluye sola.
+        const valor = marcadas.length === T.cols.length ? ""
+                    : T.cols.filter(c=>marcadas.includes(c)).join(", ");
+        guardarInforme(i, "campos", valor);
+        return;
+      }
       const el = ev.target.closest("[data-campo]"); if(!el) return;
       const v = el.type === "checkbox" ? el.checked
               : el.type === "number"   ? (num(el.value) || 1)
@@ -264,8 +318,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
         try{
           // Se vacia la fila en vez de eliminarla: borrar filas descuadraria el
           // numero de fila que cada informe tiene guardado.
-          await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A${inf.fila}:G${inf.fila}`)}?valueInputOption=USER_ENTERED`,
-            {method:"PUT", body: JSON.stringify({values:[["","","","","","",""]]})});
+          await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A${inf.fila}:H${inf.fila}`)}?valueInputOption=USER_ENTERED`,
+            {method:"PUT", body: JSON.stringify({values:[["","","","","","","",""]]})});
           logChanges("EDITA", "informe", inf.fila,
                      [{campo:"Informe borrado", antes:inf.nombre, despues:""}]);
           await loadInformes(); pintarInformes();
@@ -276,14 +330,45 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
   }
 
+/* Comprobar que el correo llega de verdad.
+   El navegador no puede mandar correo: lo manda el script de Google. Se le
+   dispara una peticion y no se lee la respuesta — Google no deja leerla desde
+   otro dominio — pero eso da igual: la prueba se comprueba mirando el buzon.  */
+async function probarCorreo(){
+  const url = String(META.scriptUrl || "").trim();
+  const para = $("#inf-prueba-para").value.trim() || userMail;
+  if(!url){
+    toast("Falta el enlace del script de Google","err");
+    $("#inf-url").focus();
+    return;
+  }
+  if(!url.startsWith("https://script.google.com/")){
+    toast("Ese enlace no parece de Apps Script","err");
+    return;
+  }
+  const b = $("#inf-probar"); b.disabled = true;
+  const antes = b.textContent; b.textContent = "Enviando…";
+  try{
+    await fetch(`${url}?a=prueba&para=${encodeURIComponent(para)}`, {mode:"no-cors"});
+    $("#inf-estado").className = "aviso ok";
+    $("#inf-estado").innerHTML = `Se pidió el correo de prueba a <b>${esc(para)}</b>.
+      Debería llegar en menos de un minuto. Si no llega, revisa la carpeta de
+      correo no deseado y que el script esté publicado con acceso
+      <b>«Cualquier usuario»</b>.`;
+  }catch(e){
+    $("#inf-estado").className = "aviso prog";
+    $("#inf-estado").textContent = "No se pudo contactar el script: " + e.message;
+  }finally{ b.disabled = false; b.textContent = antes; }
+}
+
   const add = $("#inf-add");
   if(add) add.onclick = async ()=>{
     add.disabled = true;
     try{
-      await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A:G`)}:append`+
+      await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A:H`)}:append`+
                 `?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
         {method:"POST", body: JSON.stringify({values:[
-          ["Informe nuevo","produccion","mensual",1,userMail,true,""]]})});
+          ["Informe nuevo","produccion","mensual",1,userMail,true,"",""]]})});
       await loadInformes(); pintarInformes();
       toast("Informe creado. Ponle nombre y destinatarios.","ok");
     }catch(e){ toast(e.message,"err"); }

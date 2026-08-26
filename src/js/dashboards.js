@@ -165,6 +165,18 @@ function almacenList(){
     eq(c[C.ESP],g("a-esp")) && eq(c[C.AP],g("a-ap")) && eq(desp(c),g("a-est")));
 }
 /** Selector de estado de despacho editable en la tabla. */
+/** La nota de calidad, vista desde almacen.
+ *  Calidad la escribe y almacen la necesita: es quien decide si la puerta sale.
+ *  Sin esto el rechazo se quedaba encerrado en el tablero de calidad. */
+function notaAlmacen(c){
+  const t = String(c[C.CAL] ?? "").trim();
+  if(!t) return `<span class="mut">—</span>`;
+  const mala = typeof esNoApta === "function" && esNoApta(c);
+  const texto = (typeof notaLimpia === "function") ? notaLimpia(c) : t;
+  return `<span class="qnota-mini${mala ? " mal" : ""}" title="${esc(t)}">${
+    mala ? '<b>NO APTA</b> ' : ""}${esc(texto)}</span>`;
+}
+
 function selDesp(r, v){
   const cur = DESPACHOS.includes(String(v??"").trim()) ? String(v).trim() : "";
   const k = cur==="Despachado"?"t-des" : cur==="Separado"?"t-sep" : cur==="Anulada"?"t-anu" : cur?"t-alm":"t-non";
@@ -197,19 +209,23 @@ function renderAlmacen(){
     ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
-  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado"],
+  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Calidad"],
     L.map(({r,c})=>[
       `<input type="checkbox" class="almck" data-alm="${r}"${SEL_ALM.has(r)?" checked":""}
          title="Marcar para imprimir">`,
       `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
-      esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP])]),
+      esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP]),
+      notaAlmacen(c)]),
     // La marca de selección viaja con la clase de la fila: al repintar la tabla
     // (cambiar un estado, tocar un filtro) la casilla se restauraba marcada pero
     // la fila perdía el resaltado, y quedaban diciendo cosas distintas.
     L.map(({r,c})=> [
       anulada(c) ? "anu" : desp(c)==="Separado" ? "sep" : "",
-      SEL_ALM.has(r) ? "sel" : ""
+      SEL_ALM.has(r) ? "sel" : "",
+      // Lo que calidad rechazo tiene que saltar a la vista en almacen: es lo
+      // que no puede salir a despacho.
+      (typeof esNoApta === "function" && esNoApta(c)) ? "noapta" : ""
     ].filter(Boolean).join(" ")));
   contador("#a-cnt", L.length, B.length, ["a-tipo","a-esp","a-ap","a-est"], "a-q");
 
@@ -250,12 +266,93 @@ const bCarta = $("#a-print-carta");
 if(bCarta) bCarta.onclick = ()=> printFichas([...SEL_ALM], "carta");
 const bStk = $("#a-print-stk");
 if(bStk) bStk.onclick = ()=> pedirSticker([...SEL_ALM]);
+/* ---------- Separar una puerta: hay que decir para quien ----------
+   Separar sin dueño no separa nada: al cabo de una semana nadie sabe por que
+   esa puerta esta apartada ni quien la pidio. Por eso el nombre es obligatorio.
+   El comprador se anexa al cliente de la ficha (ver SEP_MARCA en constantes). */
+
+let sepPendiente = null;      // {r, volver} mientras el dialogo esta abierto
+
+/** ¿Esta pagina pide comprador al separar? Solo puertas. */
+const pideComprador = () => !!$("#ov-separar");
+
+/** Pide el comprador y separa. Devuelve promesa: true si se separo. */
+function pedirSeparar(r){
+  return new Promise(resolve=>{
+    const row = ROWS.find(x=>x.r===r);
+    if(!row){ resolve(false); return; }
+    // Paneles no pide comprador: alli el dialogo no existe y se sigue el
+    // camino de siempre. Se comprueba con un bloque, no con un return, para que
+    // la proteccion sea visible tanto al leer como al revisar el codigo.
+    if($("#sep-para")){
+      sepPendiente = {r, resolve};
+      $("#sep-op").textContent  = "OP " + (row.c[C.OP] ?? "");
+      $("#sep-cli").textContent = clienteBase(row.c) || "—";
+      const ya = separadaPara(row.c);
+      $("#sep-para").value = ya;
+      $("#sep-aviso").textContent = ya
+        ? `Ya estaba separada para ${ya}. Si escribes otro nombre, lo reemplaza.`
+        : "";
+      $("#ov-separar").classList.remove("hide");
+      setTimeout(()=>$("#sep-para").focus(), 60);
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+/** Escribe el comprador y el estado Separado, en una sola operacion. */
+async function confirmarSeparar(){
+  if(!sepPendiente) return;
+  const {r, resolve} = sepPendiente;
+  const nombre = $("#sep-para").value.trim().toUpperCase();
+  if(!nombre){ toast("Escribe para quién queda separada","err"); return; }
+
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const c = row.c;
+  const antesCli = String(c[C.CLI] ?? ""), antesDesp = desp(c);
+  const nuevoCli = clienteBase(c) + SEP_MARCA + nombre;
+
+  const btn = $("#sep-ok"); btn.disabled = true;
+  writeSeq++;
+  c[C.CLI] = nuevoCli; c[C.DESP] = "Separado";
+  try{
+    await writeCells([{a1:`C${r}`, v:[[nuevoCli]]}, {a1:`Y${r}`, v:[["Separado"]]}]);
+    logChanges("EDITA", c[C.OP], r, [
+      {campo:"Estado despacho", antes:antesDesp, despues:"Separado"},
+      {campo:"Separada para",   antes:separadaPara({[C.CLI]:antesCli}), despues:nombre}
+    ]);
+    lastHash=""; setSync("","Guardado");
+    toast(`Separada para ${nombre}`,"ok");
+    sepPendiente = null;
+    const ov = $("#ov-separar"); if(ov) ov.classList.add("hide");
+    render(); renderDashVisible();
+    resolve(true);
+  }catch(e){
+    c[C.CLI] = antesCli; c[C.DESP] = antesDesp;
+    toast(e.message,"err");
+    resolve(false);
+  }finally{ btn.disabled = false; }
+}
+
+/** Cancelar: nada se escribe y el selector vuelve a su valor anterior. */
+function cancelarSeparar(){
+  const ov = $("#ov-separar"); if(ov) ov.classList.add("hide");
+  if(sepPendiente){ const {resolve} = sepPendiente; sepPendiente = null; resolve(false); }
+}
+
 /** Guarda el estado de despacho y aplica la regla 4 (fecha de despacho de hoy).
  *  Lo usan tanto Almacén como Planta. */
 async function guardarDespacho(r, val){
   const row=ROWS.find(x=>x.r===r); if(!row) return false;
   const antes=String(row.c[C.DESP]??"");
   if(antes===val) return false;
+  // Separar exige comprador. Se pide aqui y no en cada tablero para que la
+  // regla valga igual desde stock, almacen o planta.
+  if(val==="Separado" && pideComprador()){
+    const hecho = await pedirSeparar(r);
+    if(hecho !== null) return hecho;        // null = aqui no se pide, sigue abajo
+  }
   const ups=[{a1:`Y${r}`, v:[[val]]}], cambios=[{campo:"Estado despacho", antes, despues:val}];
   if(val==="Despachado" && !fmtDate(row.c[C.FDESP]) && CFG.auto!==false){
     const h=hoy();
@@ -490,6 +587,7 @@ function stockList(){
       if(m && !esModelo(c,m,false)) return false;
     }
     if(!eq(c[C.ESP],g("s-esp")) || !eq(c[C.AP],g("s-ap"))) return false;
+    if(!eq(medidaDe(c), g("s-med"))) return false;
     const fe=g("s-est");
     if(fe==="__none"){ if(desp(c)!=="") return false; } else if(!eq(desp(c),fe)) return false;
     const fa=g("s-av");
@@ -507,24 +605,55 @@ function renderStock(){
     ["Stock en proceso",B.filter(c=>!completa(c)).length, "Stock con avance menor al 100%"],
     ["Listadas",        L.length, "Filas mostradas con el filtro actual"]
   ]);
-  tablaMini("#s-tabla", ["OP","Material","Tipo","Dimensiones","Esp","Ap.","F. proceso","Avance","Estado"],
-    L.map(({c})=>{
+  tablaMini("#s-tabla",
+    ["OP","Material","Tipo","Dimensiones","Esp","Ap.","F. proceso","Avance","Estado","Separada para"],
+    L.map(({r,c})=>{
       const pc=Math.round(progreso(c).pct*100);
+      const para=separadaPara(c);
       return [`<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
         `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
         esc(fmtDate(c[C.FPROC])),
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
-        tagDesp(c[C.DESP])];
-    }));
-  contador("#s-cnt", L.length, B.length, ["s-mat","s-tipo","s-esp","s-ap","s-est","s-av"], "s-q");
+        selDesp(r, c[C.DESP]),
+        para ? `<span class="para">${esc(para)}</span>` : `<span class="mut">—</span>`];
+    }),
+    L.map(({c})=> separadaPara(c) ? "sep" : ""));
+  contador("#s-cnt", L.length, B.length,
+           ["s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"], "s-q");
   pintarChipModelo();
 }
-["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"].forEach(id=>{
+["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"].forEach(id=>{
   const e=$("#"+id); if(!e) return;
   e.addEventListener("input", renderStock);
   e.addEventListener("change", renderStock);
 });
-$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-mat","s-tipo","s-esp","s-ap","s-est","s-av"]
+/* El estado tambien se edita desde stock: es donde se decide separar una
+   puerta que se acaba de vender. */
+document.addEventListener("DOMContentLoaded", ()=>{
+  const ok = $("#sep-ok");       if(ok) ok.onclick = confirmarSeparar;
+  const ca = $("#sep-cancelar"); if(ca) ca.onclick = cancelarSeparar;
+  const inp = $("#sep-para");
+  if(inp) inp.addEventListener("keydown", e=>{ if(e.key === "Enter") confirmarSeparar(); });
+  // Cerrar por fuera o con Escape equivale a cancelar: si no, la promesa se
+  // quedaria colgada y el selector bloqueado para siempre.
+  const ov = $("#ov-separar");
+  if(ov) ov.addEventListener("mousedown", e=>{ if(e.target === ov) cancelarSeparar(); });
+  document.addEventListener("keydown", e=>{
+    if(e.key === "Escape" && ov && !ov.classList.contains("hide")) cancelarSeparar();
+  });
+});
+
+$("#s-tabla").addEventListener("change", async ev=>{
+  const el = ev.target.closest("[data-edit-desp]"); if(!el) return;
+  const r = +el.dataset.editDesp, val = el.value;
+  el.disabled = true;
+  const ok = await guardarDespacho(r, val);
+  el.disabled = false;
+  renderStock();                       // repinta con el valor real, se guardara o no
+  if(ok){ render(); }
+});
+
+$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"]
   .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; }); renderStock(); };
 
 function csvDe(nombre, cols, filas){

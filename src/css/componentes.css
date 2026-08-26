@@ -210,3 +210,16 @@ select.mini.ap.vacio{color:var(--tx3);font-weight:400}
 .inff{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;
   padding-top:10px;border-top:1px solid var(--line);font-size:12.5px}
 .inff b{color:var(--tx)}
+
+/* Columnas que lleva cada informe. */
+.infcampos{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;
+  padding-top:9px;border-top:1px dashed var(--line)}
+.infcampos > .mut{font-size:10.5px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;margin-right:4px}
+.proc.mini{padding:4px 8px;gap:6px}
+.proc.mini span{font-size:11.5px}
+.proc.mini input{width:13px;height:13px}
+/* Probar que el correo llega de verdad. */
+.infprueba{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;
+  padding:12px 13px;margin-top:12px;background:var(--bg);
+  border:1px solid var(--line);border-radius:var(--r)}

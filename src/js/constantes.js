@@ -35,6 +35,30 @@ const EMPAQUE_VISOR = {"SIN VISOR":0, "22 X 60":1.6, "30 X 60":1.8, "40 X 60":2.
 /** El tamaño de bumper solo aplica si se eligio un bumper de verdad. */
 const llevaBumper = v => !!String(v||"").trim() && String(v).trim().toUpperCase() !== "SIN BUMPER";
 
+/* SEPARAR UNA PUERTA DE STOCK
+   Una puerta de stock se fabrica sin dueño; al venderla hay que dejar constancia
+   de para quien queda. El nombre del comprador se anexa al del cliente en la
+   misma celda, separado por una flecha:
+
+       STOCK - INR FABRICA -> FRIGORIFICOS DEL NORTE
+
+   Se guarda ahi, y no en una columna nueva, porque asi viaja con la ficha a
+   cualquier informe, impresion o vista sin tocar la estructura de la hoja, y se
+   entiende leyendo la celda desde la propia hoja de calculo. */
+const SEP_MARCA = " -> ";
+/** Para quien esta separada, o "" si no lo esta. */
+const separadaPara = c => {
+  const t = String(c[C.CLI] ?? "");
+  const i = t.indexOf(SEP_MARCA);
+  return i < 0 ? "" : t.slice(i + SEP_MARCA.length).trim();
+};
+/** El cliente original, sin el comprador anexado. */
+const clienteBase = c => {
+  const t = String(c[C.CLI] ?? "");
+  const i = t.indexOf(SEP_MARCA);
+  return (i < 0 ? t : t.slice(0, i)).trim();
+};
+
 /** Una puerta terminada espera revision de calidad; aun no esta en almacen. */
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
 /** Una puerta anulada queda fuera de producción, almacén y stock. */

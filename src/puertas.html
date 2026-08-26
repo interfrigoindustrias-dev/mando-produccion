@@ -261,6 +261,7 @@
       <label class="f"><span>Tipo</span><select class="inp" id="s-tipo"></select></label>
       <label class="f"><span>Espesor</span><select class="inp" id="s-esp"></select></label>
       <label class="f"><span>Apertura</span><select class="inp" id="s-ap"></select></label>
+      <label class="f"><span>Dimensiones</span><select class="inp" id="s-med"></select></label>
       <label class="f"><span>Estado</span><select class="inp" id="s-est">
         <option value="">Todos</option><option>En Almacén</option><option>Separado</option>
         <option>Anulada</option><option value="__none">Sin estado</option></select></label>
@@ -461,9 +462,18 @@
   </header>
 
   <div class="aviso" id="inf-estado">
-    Para que salgan solos hay que instalar el script una vez en la hoja
-    (<b>Extensiones → Apps Script</b>). Mientras tanto, puedes descargar
-    cualquier informe aquí mismo con <b>Ver CSV</b>.
+    Los envía un script dentro de la hoja (<b>Extensiones → Apps Script</b>).
+    Si aún no lo has instalado, no sale ningún correo — puedes descargar
+    cualquier informe aquí mismo con <b>Ver CSV</b> mientras tanto.
+  </div>
+
+  <div class="infprueba">
+    <label class="f wide"><span>Enlace del script publicado</span>
+      <input class="inp" id="inf-url" placeholder="https://script.google.com/macros/s/…/exec"
+        autocomplete="off"></label>
+    <label class="f"><span>Probar enviando a</span>
+      <input class="inp" id="inf-prueba-para" placeholder="tu@correo.com" autocomplete="off"></label>
+    <button class="btn" id="inf-probar">✉ Probar correo</button>
   </div>
 
   <div id="inf-lista"></div>
@@ -505,6 +515,23 @@
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
     <button class="btn" id="cr-print">Imprimir</button>
     <button class="btn pri" data-close>Cerrar</button>
+  </div>
+</div></div>
+
+<!-- ============================== SEPARAR ============================== -->
+<div class="ov hide" id="ov-separar"><div class="mod" style="max-width:470px">
+  <header><h1 style="margin:0;font-size:17px">Separar puerta</h1></header>
+  <p class="mut" style="margin:6px 0 14px">
+    <b id="sep-op">—</b> · <span id="sep-cli">—</span></p>
+  <label class="f wide"><span class="req">¿Para quién queda separada?</span>
+    <input class="inp" id="sep-para" placeholder="Nombre del cliente que la compró"
+      autocomplete="off" maxlength="60"></label>
+  <p class="mut" id="sep-aviso" style="margin:8px 0 0;min-height:16px"></p>
+  <p class="mut" style="margin:10px 0 0">El nombre se anexa al cliente de la ficha,
+    así que viaja con la puerta a informes, impresiones y a la propia hoja.</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+    <button class="btn" id="sep-cancelar">Cancelar</button>
+    <button class="btn pri" id="sep-ok">Separar</button>
   </div>
 </div></div>
 
