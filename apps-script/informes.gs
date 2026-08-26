@@ -215,7 +215,9 @@ function revisarInformes(forzar, soloFila) {
       activo: r[5] !== false && String(r[5]).toUpperCase() !== 'FALSE',
       ultimo: String(r[6] || '').trim(),
       // Columna H: que columnas incluir, separadas por coma. Vacio = todas.
-      campos: String(r[7] || '').trim()
+      campos: String(r[7] || '').trim(),
+      // Columna I: condiciones. Vacia = sin filtrar.
+      cond: String(r[8] || '').trim()
     };
     if (soloFila && inf.fila !== soloFila) continue;
     if (!inf.nombre || !inf.activo || !inf.para) continue;
@@ -256,8 +258,7 @@ function yaSalio(inf, hoy) {
 
 function enviarInforme(ss, inf, hoy) {
   var per  = periodo(inf.frec, hoy);
-  var arm  = armar(ss, inf.tipo, per);
-  if (inf.campos) { arm = recortar(arm, inf.campos); }
+  var arm  = armar(ss, inf, per);
   if (!arm.filas.length) {
     Logger.log('«' + inf.nombre + '»: sin filas en ' + per.etiqueta + ', no se envía.');
     return false;
@@ -290,76 +291,221 @@ function enviarInforme(ss, inf, hoy) {
 /*  Informes                                                           */
 /* ------------------------------------------------------------------ */
 
-function armar(ss, tipo, per) {
-  var hoja = ss.getSheetByName(HOJA_OP);
-  var datos = hoja.getDataRange().getValues();
-  var cols, filas = [], puntos = 0, hayPuntos = false;
+/* ------------------------------------------------------------------ */
+/*  Catalogo de campos - CONTRATO con src/js/campos.js                 */
+/* ------------------------------------------------------------------ */
+
+/* Los mismos identificadores, el mismo nombre visible y el mismo calculo que
+   en la aplicacion. Si alli se anade un campo, hay que anadirlo aqui: si no,
+   la aplicacion ensenaria una columna que el correo no trae. */
+function catalogo() {
+  var F = [
+    ['op',     'Orden',                 function (c) { return c[C.OP]; },     'texto'],
+    ['cli',    'Cliente',               function (c) { return c[C.CLI]; },    'texto'],
+    ['clibase','Cliente sin comprador', function (c) { return baseCli(c); },  'texto'],
+    ['seppara','Separada para',         function (c) { return paraQuien(c); },'texto'],
+    ['lote',   'Fecha / lote',          function (c) { return fecha(c[C.FECHA]); }, 'fecha'],
+    ['ens',    'N.o de ensamble',       function (c) { return c[C.ENS]; },    'texto'],
+    ['prio',   'Prioridad',             function (c) { return c[C.PRIO]; },   'texto'],
+    ['comp',   'Complemento',           function (c) { return siNo(c[C.COMP]); },  'texto'],
+    ['stock',  'Stock',                 function (c) { return siNo(c[C.STOCK]); }, 'texto'],
+
+    ['tipo',   'Tipo de puerta',        function (c) { return c[C.TIPO]; },   'texto'],
+    ['mat',    'Material',              function (c) { return c[C.MAT]; },    'texto'],
+    ['med',    'Medidas',               function (c) { return medidas(c); },  'texto'],
+    ['ancho',  'Ancho vano',            function (c) { return c[C.ANCHO]; },  'num'],
+    ['alto',   'Alto vano',             function (c) { return c[C.ALTO]; },   'num'],
+    ['esp',    'Espesor',               function (c) { return c[C.ESP]; },    'num'],
+    ['ap',     'Apertura',              function (c) { return c[C.AP]; },     'texto'],
+    ['pts',    'Puntos',                function (c) { return c[C.PTS]; },    'num'],
+    ['marco',  'Tipo de marco',         function (c) { return c[C.MARCO]; },  'texto'],
+    ['visor',  'Visor',                 function (c) { return c[C.VISOR]; },  'texto'],
+    ['empv',   'Empaque visor',         function (c) { return c[C.EMPV]; },   'num'],
+    ['empvref','Referencia empaque',    function (c) { return c[C.EMPVREF]; },'texto'],
+    ['bump',   'Bumper',                function (c) { return c[C.BUMP]; },   'texto'],
+    ['tbump',  'Tamano bumper',         function (c) { return c[C.TBUMP]; },  'num'],
+    ['alff',   'Alfajor frontal',       function (c) { return siNo(c[C.ALFF]); }, 'texto'],
+    ['alfp',   'Alfajor posterior',     function (c) { return siNo(c[C.ALFP]); }, 'texto'],
+
+    ['av',     'Avance',                function (c) { return Math.round(avance(c) * 100) + '%'; }, 'num'],
+    ['desp',   'Estado despacho',       function (c) { return c[C.DESP]; },   'texto'],
+    ['obs',    'Observaciones',         function (c) { return c[C.OBS]; },    'texto'],
+    ['cal',    'Nota de calidad',       function (c) { return c[C.CAL]; },    'texto'],
+    ['noapta', 'No apta',               function (c) { return noApta(c) ? 'Si' : 'No'; }, 'texto'],
+
+    ['fini',   'Fecha inicio',          function (c) { return fecha(c[C.FINI]); },  'fecha'],
+    ['fproc',  'Fecha fin',             function (c) { return fecha(c[C.FPROC]); }, 'fecha'],
+    ['fdesp',  'Fecha despacho',        function (c) { return fecha(c[C.FDESP]); }, 'fecha'],
+    ['dias',   'Dias abierta',          function (c) { return diasAbierta(c); },    'num']
+  ];
+  var NOM = ['Corte perfil', 'Inyeccion', 'Accesorios', 'Corte marco', 'Marco',
+             'Corte riel', 'Riel', 'Embocinar'];
+  for (var i = 0; i < PROCS.length; i++) {
+    F.push(['p' + PROCS[i], NOM[i], (function (idx) {
+      return function (c) {
+        var v = c[idx];
+        if (v === '' || v === null || v === undefined) return 'no aplica';
+        return (v === true || String(v).toUpperCase() === 'TRUE') ? 'Si' : 'No';
+      };
+    })(PROCS[i]), 'texto']);
+  }
+  var m = {};
+  for (var k = 0; k < F.length; k++) {
+    m[F[k][0]] = {id: F[k][0], n: F[k][1], v: F[k][2], tipo: F[k][3]};
+  }
+  return {lista: F, mapa: m};
+}
+
+var SEP_MARCA = ' -> ';
+function paraQuien(c) {
+  var t = String(c[C.CLI] || ''), i = t.indexOf(SEP_MARCA);
+  return i < 0 ? '' : t.slice(i + SEP_MARCA.length).trim();
+}
+function baseCli(c) {
+  var t = String(c[C.CLI] || ''), i = t.indexOf(SEP_MARCA);
+  return (i < 0 ? t : t.slice(0, i)).trim();
+}
+function siNo(v) { return (v === true || String(v).toUpperCase() === 'TRUE') ? 'Si' : 'No'; }
+function noApta(c) {
+  return String(c[C.CAL] || '').trim().toUpperCase().indexOf('NO APTA') === 0;
+}
+function diasAbierta(c) {
+  var d = aFecha(c[C.FECHA]);
+  if (!d) { return ''; }
+  return Math.round((new Date() - d) / 864e5);
+}
+
+/* Columnas de fabrica de cada tipo, iguales que en la aplicacion. */
+var POR_DEFECTO = {
+  produccion: ['op', 'tipo', 'med', 'cli', 'esp', 'pts', 'fini', 'fproc'],
+  despachos:  ['fdesp', 'op', 'cli', 'tipo', 'med', 'ap', 'pts', 'ens'],
+  calidad:    ['fproc', 'op', 'cli', 'tipo', 'desp', 'noapta', 'cal'],
+  pendientes: ['op', 'cli', 'tipo', 'prio', 'pts', 'av', 'lote', 'dias'],
+  todas:      ['op', 'cli', 'tipo', 'med', 'pts', 'desp', 'fproc']
+};
+
+/* ------------------------------------------------------------------ */
+/*  Condiciones                                                        */
+/* ------------------------------------------------------------------ */
+
+/** Texto de la columna I -> lista de condiciones. */
+function leerCondiciones(txt, mapa) {
+  var out = [], partes = String(txt || '').split(';');
+  for (var i = 0; i < partes.length; i++) {
+    var t = partes[i].trim();
+    if (!t) { continue; }
+    var ops = ['!=', '=', '~', '>', '<'], puesto = false;
+    for (var j = 0; j < ops.length; j++) {
+      var k = t.indexOf(ops[j]);
+      if (k > 0) {
+        out.push({campo: t.slice(0, k).trim(), op: ops[j],
+                  valor: t.slice(k + ops[j].length).trim()});
+        puesto = true;
+        break;
+      }
+    }
+    if (!puesto) {
+      var p = t.split(/[ ]+/);
+      out.push({campo: (p[0] || '').trim(),
+                op: p[1] === 'lleno' ? 'lleno' : 'vacio', valor: ''});
+    }
+  }
+  return out.filter(function (c) { return mapa[c.campo]; });
+}
+
+function aNumero(v) {
+  if (v === null || v === undefined || v === '') { return null; }
+  var n = parseFloat(String(v).replace(',', '.'));
+  return isNaN(n) ? null : n;
+}
+function aTiempo(v) { var d = aFecha(v); return d ? d.getTime() : null; }
+
+/** La fila cumple la condicion? Mismo criterio que en la aplicacion. */
+function cumple(c, cond, mapa) {
+  var campo = mapa[cond.campo];
+  if (!campo) { return true; }
+  var bruto = campo.v(c);
+  var txt = String(bruto === null || bruto === undefined ? '' : bruto).trim();
+
+  if (cond.op === 'vacio') { return txt === ''; }
+  if (cond.op === 'lleno') { return txt !== ''; }
+
+  var esperado = String(cond.valor || '').trim();
+  if (cond.op === '~') {
+    return txt.toLowerCase().indexOf(esperado.toLowerCase()) >= 0;
+  }
+
+  if (campo.tipo === 'num' || campo.tipo === 'fecha') {
+    var a = campo.tipo === 'fecha' ? aTiempo(txt) : aNumero(txt);
+    var b = campo.tipo === 'fecha' ? aTiempo(esperado) : aNumero(esperado);
+    if (a !== null && b !== null) {
+      if (cond.op === '>')  { return a > b; }
+      if (cond.op === '<')  { return a < b; }
+      if (cond.op === '=')  { return a === b; }
+      if (cond.op === '!=') { return a !== b; }
+    }
+  }
+  var igual = txt.toLowerCase() === esperado.toLowerCase();
+  return cond.op === '!=' ? !igual : igual;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Armado                                                             */
+/* ------------------------------------------------------------------ */
+
+function armar(ss, inf, per) {
+  var cat = catalogo(), mapa = cat.mapa;
+  var conds = leerCondiciones(inf.cond, mapa);
+
+  var ids = String(inf.campos || '').split(',')
+    .map(function (x) { return x.trim(); })
+    .filter(function (x) { return mapa[x]; });
+  if (!ids.length) { ids = POR_DEFECTO[inf.tipo] || POR_DEFECTO.produccion; }
+
+  var datos = ss.getSheetByName(HOJA_OP).getDataRange().getValues();
+  var filas = [], puntos = 0, hayPuntos = ids.indexOf('pts') >= 0;
 
   for (var f = 1; f < datos.length; f++) {
     var c = datos[f];
-    if (!String(c[C.OP] || '').trim()) continue;              // fila vacía
-    if (String(c[C.DESP] || '').trim() === 'Anulada') continue;
+    if (!String(c[C.OP] || '').trim()) { continue; }
+    if (String(c[C.DESP] || '').trim() === 'Anulada') { continue; }
+    if (!entraPorTipo(c, inf.tipo, per)) { continue; }
 
-    if (tipo === 'despachos') {
-      if (String(c[C.DESP] || '').trim() !== 'Despachado') continue;
-      if (!enRango(c[C.FDESP], per)) continue;
-      filas.push([fecha(c[C.FDESP]), c[C.OP], c[C.CLI], c[C.TIPO],
-                  c[C.ANCHO], c[C.ALTO], c[C.AP], c[C.PTS], c[C.ENS]]);
-
-    } else if (tipo === 'calidad') {
-      if (!String(c[C.CAL] || '').trim()) continue;
-      if (!enRango(c[C.FPROC], per)) continue;
-      filas.push([fecha(c[C.FPROC]), c[C.OP], c[C.CLI], c[C.TIPO],
-                  c[C.DESP], c[C.CAL]]);
-
-    } else if (tipo === 'pendientes') {
-      if (completa(c)) continue;
-      var e = String(c[C.DESP] || '').trim();
-      if (e === 'Despachado' || e === 'En Almacén' || e === 'Terminado') continue;
-      filas.push([c[C.OP], c[C.CLI], c[C.TIPO], c[C.PRIO], c[C.PTS],
-                  Math.round(avance(c) * 100) + '%', fecha(c[C.FECHA])]);
-
-    } else {                                                   // producción
-      if (!completa(c)) continue;
-      if (!enRango(c[C.FPROC], per)) continue;
-      filas.push([c[C.OP], c[C.TIPO], medidas(c), c[C.CLI], c[C.ESP], c[C.PTS],
-                  fecha(c[C.FINI]), fecha(c[C.FPROC])]);
-      hayPuntos = true;
-      puntos += Number(c[C.PTS]) || 0;
+    var pasa = true;
+    for (var k = 0; k < conds.length; k++) {
+      if (!cumple(c, conds[k], mapa)) { pasa = false; break; }
     }
+    if (!pasa) { continue; }
+
+    var fila = [];
+    for (var j = 0; j < ids.length; j++) {
+      var v = mapa[ids[j]].v(c);
+      fila.push(v === null || v === undefined ? '' : v);
+    }
+    filas.push(fila);
+    if (hayPuntos) { puntos += Number(c[C.PTS]) || 0; }
   }
 
-  cols = tipo === 'despachos'
-      ? ['Fecha despacho','OP','Cliente','Tipo','Ancho','Alto','Apertura','Puntos','Ensamble']
-    : tipo === 'calidad'
-      ? ['Fecha','OP','Cliente','Tipo','Estado','Nota de calidad']
-    : tipo === 'pendientes'
-      ? ['OP','Cliente','Tipo','Prioridad','Puntos','Avance','Creada']
-      : ['Orden','Tipo de puerta','Medidas','Cliente','Espesor','Puntos',
-         'Fecha inicio','Fecha fin'];
-
+  var cols = ids.map(function (id) { return mapa[id].n; });
   return {csv: aCsv(cols, filas), filas: filas, cols: cols,
           puntos: hayPuntos ? puntos : null};
 }
 
-/** Deja solo las columnas pedidas, en el orden en que se pidieron.
- *  Un nombre que no exista se ignora en silencio: es preferible un informe con
- *  una columna de menos que ningun informe. */
-function recortar(arm, campos) {
-  var quiere = campos.split(',').map(function (x) { return x.trim().toLowerCase(); })
-                     .filter(function (x) { return x; });
-  var idx = [];
-  for (var i = 0; i < quiere.length; i++) {
-    for (var j = 0; j < arm.cols.length; j++) {
-      if (String(arm.cols[j]).toLowerCase() === quiere[i]) { idx.push(j); break; }
-    }
+/** El conjunto de partida del tipo: lo que no se puede decir con una condicion. */
+function entraPorTipo(c, tipo, per) {
+  var e = String(c[C.DESP] || '').trim();
+  if (tipo === 'despachos') {
+    return e === 'Despachado' && enRango(c[C.FDESP], per);
   }
-  if (!idx.length) { return arm; }          // ninguna coincide: se manda entero
-  var cols = idx.map(function (j) { return arm.cols[j]; });
-  var filas = arm.filas.map(function (f) {
-    return idx.map(function (j) { return f[j]; });
-  });
-  return {csv: aCsv(cols, filas), filas: filas, puntos: arm.puntos, cols: cols};
+  if (tipo === 'calidad') {
+    return !!String(c[C.CAL] || '').trim() && enRango(c[C.FPROC], per);
+  }
+  if (tipo === 'pendientes') {
+    return !completa(c) && e !== 'Despachado' && e !== 'En Almacen' &&
+           e !== 'En Almac\u00e9n' && e !== 'Terminado';
+  }
+  if (tipo === 'todas') { return true; }
+  return completa(c) && enRango(c[C.FPROC], per);
 }
 
 /* ------------------------------------------------------------------ */

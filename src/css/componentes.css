@@ -223,3 +223,20 @@ select.mini.ap.vacio{color:var(--tx3);font-weight:400}
 .infprueba{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;
   padding:12px 13px;margin-top:12px;background:var(--bg);
   border:1px solid var(--line);border-radius:var(--r)}
+
+/* Columnas y condiciones de un informe: plegados para que la tarjeta no crezca
+   de golpe con cuarenta casillas. */
+.infbloque{margin-top:11px;border-top:1px dashed var(--line);padding-top:9px}
+.infbloque summary{cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--tx2);user-select:none;padding:2px 0}
+.infbloque summary b{color:var(--acc)}
+.infbloque[open] summary{margin-bottom:9px}
+.infgrupos{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.infgrupo h5{margin:0 0 6px;font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--tx2)}
+.infgrupo .proc.mini{margin-bottom:4px}
+.infconds{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.infcond{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%}
+.infcond .inp.mini{padding:5px 8px;font-size:12.5px}
+.infcond select.inp.mini{max-width:190px}
+.infcond .btn.sm{margin-left:auto}

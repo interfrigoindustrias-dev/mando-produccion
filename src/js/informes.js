@@ -25,58 +25,62 @@
    cambiarlo tambien en el script.                                           */
 
 const INF_TAB  = "INFORMES";
-const INF_HEAD = ["NOMBRE","TIPO","FRECUENCIA","DIA","DESTINATARIOS","ACTIVO","ULTIMO ENVIO","CAMPOS"];
+const INF_HEAD = ["NOMBRE","TIPO","FRECUENCIA","DIA","DESTINATARIOS","ACTIVO","ULTIMO ENVIO","CAMPOS","CONDICIONES"];
 
-/* Que sabe hacer cada informe. La funcion `filas` devuelve las puertas que
-   entran, y `cols` como se escribe cada una. */
+/* Que filas entran en cada informe. Las COLUMNAS ya no dependen del tipo: se
+   eligen del catalogo completo (campos.js), asi que un informe puede llevar
+   cualquier dato de la hoja. El tipo solo decide el conjunto de partida, que es
+   lo que no se puede expresar con una condicion simple — «terminada dentro del
+   periodo» necesita saber cual es el periodo. */
 const TIPOS_INFORME = {
   produccion: {
     nombre: "Producción",
-    dice: "Puertas terminadas en el periodo, con sus puntos y sus fechas",
+    dice: "Puertas terminadas dentro del periodo",
     filas: (rows, desde, hasta) => rows.filter(({c}) =>
       rowActive(c) && !anulada(c) && completa(c) && enRango(c[C.FPROC], desde, hasta)),
-    // Columnas y orden pedidos por Interfrigo. «Fecha fin» es la fecha de
-    // proceso: el dia en que la puerta llego al 100%.
-    cols: ["Orden","Tipo de puerta","Medidas","Cliente","Espesor","Puntos",
-           "Fecha inicio","Fecha fin"],
-    fila: c => [c[C.OP], c[C.TIPO], medidaDe(c) || "", c[C.CLI],
-                num(c[C.ESP]), num(c[C.PTS]),
-                fmtDate(c[C.FINI]), fmtDate(c[C.FPROC])]
+    porDefecto: ["op","tipo","med","cli","esp","pts","fini","fproc"]
   },
   despachos: {
     nombre: "Despachos",
-    dice: "Lo que salió hacia cada cliente en el periodo",
+    dice: "Lo que salió hacia cada cliente dentro del periodo",
     filas: (rows, desde, hasta) => rows.filter(({c}) =>
       rowActive(c) && !anulada(c) && desp(c) === "Despachado" && enRango(c[C.FDESP], desde, hasta)),
-    cols: ["Fecha despacho","OP","Cliente","Tipo","Ancho","Alto","Apertura","Puntos","Ensamble"],
-    fila: c => [fmtDate(c[C.FDESP]), c[C.OP], c[C.CLI], c[C.TIPO], num(c[C.ANCHO]),
-                num(c[C.ALTO]), c[C.AP], num(c[C.PTS]), c[C.ENS]]
+    porDefecto: ["fdesp","op","cli","tipo","med","ap","pts","ens"]
   },
   calidad: {
     nombre: "Calidad",
-    dice: "Puertas rechazadas y el motivo anotado",
+    dice: "Puertas con nota de calidad dentro del periodo",
     filas: (rows, desde, hasta) => rows.filter(({c}) =>
       rowActive(c) && !anulada(c) && String(c[C.CAL] ?? "").trim() &&
       enRango(c[C.FPROC], desde, hasta)),
-    cols: ["Fecha","OP","Cliente","Tipo","Estado","Nota de calidad"],
-    fila: c => [fmtDate(c[C.FPROC]), c[C.OP], c[C.CLI], c[C.TIPO], desp(c), c[C.CAL]]
+    porDefecto: ["fproc","op","cli","tipo","desp","noapta","cal"]
   },
   pendientes: {
     nombre: "Pendientes",
-    dice: "Lo que queda por fabricar, con prioridad y antigüedad",
-    // Una foto del momento: no depende del periodo.
+    dice: "Lo que queda por fabricar, sin depender del periodo",
     filas: (rows) => rows.filter(({c}) =>
       rowActive(c) && !anulada(c) && !completa(c) &&
       !["Despachado","En Almacén","Terminado"].includes(desp(c))),
-    cols: ["OP","Cliente","Tipo","Prioridad","Puntos","Avance","Creada","Días abierta"],
-    fila: c => {
-      const f = toDate(c[C.FECHA]);
-      const dias = f ? Math.round((hoy0() - f) / 864e5) : "";
-      return [c[C.OP], c[C.CLI], c[C.TIPO], c[C.PRIO], num(c[C.PTS]),
-              Math.round(progreso(c).pct * 100) + "%", fmtDate(c[C.FECHA]), dias];
-    }
+    porDefecto: ["op","cli","tipo","prio","pts","av","lote","dias"]
+  },
+  todas: {
+    nombre: "Todas las fichas",
+    dice: "Toda la hoja; se acota con las condiciones",
+    // Sin recorte de partida salvo las anuladas: aqui mandan enteramente las
+    // condiciones. Es la opcion para un informe que no encaja en las anteriores.
+    // Las anuladas quedan fuera igual que en todo el resto de la aplicacion —
+    // dejarlas dentro hacia que la app contara 501 y el correo trajera 496.
+    filas: (rows) => rows.filter(({c}) => rowActive(c) && !anulada(c)),
+    porDefecto: ["op","cli","tipo","med","pts","desp","fproc"]
   }
 };
+
+/** Columnas de un informe: las suyas, o las de fábrica de su tipo. */
+function columnasDe(inf){
+  const T = TIPOS_INFORME[inf.tipo] || TIPOS_INFORME.produccion;
+  const ids = String(inf.campos || "").split(",").map(x=>x.trim()).filter(x=>CAMPO_POR_ID[x]);
+  return (ids.length ? ids : T.porDefecto).filter(id => CAMPO_POR_ID[id]);
+}
 
 const FRECUENCIAS = {
   mensual: {nombre:"Mensual", dice:"El día indicado de cada mes, con el mes anterior completo"},
@@ -120,11 +124,11 @@ async function loadInformes(){
       await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A1`)}?valueInputOption=USER_ENTERED`,
         {method:"PUT", body: JSON.stringify({values:[
           INF_HEAD,
-          ["Producción mensual", "produccion", "mensual", 1, userMail, true, "", ""],
-          ["Despachos mensual",  "despachos",  "mensual", 1, userMail, true, "", ""]
+          ["Producción mensual", "produccion", "mensual", 1, userMail, true, "", "", ""],
+          ["Despachos mensual",  "despachos",  "mensual", 1, userMail, true, "", "", ""]
         ]})});
     }
-    const j = await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A2:H`)}?valueRenderOption=UNFORMATTED_VALUE`);
+    const j = await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A2:I`)}?valueRenderOption=UNFORMATTED_VALUE`);
     INFORMES = (j.values || [])
       .filter(r => String(r[0] ?? "").trim())
       .map((r, i) => ({
@@ -137,7 +141,9 @@ async function loadInformes(){
         activo: tri(r[5]) !== false,
         ultimo: String(r[6] ?? "").trim(),
         // Columna H: que columnas lleva el CSV. Vacia = todas las del tipo.
-        campos: String(r[7] ?? "").trim()
+        campos: String(r[7] ?? "").trim(),
+        // Columna I: condiciones, ver campos.js. Vacia = sin filtrar.
+        cond:   String(r[8] ?? "").trim()
       }));
   }catch(e){ console.warn("INFORMES:", e.message); INFORMES = []; }
   return INFORMES;
@@ -145,27 +151,26 @@ async function loadInformes(){
 
 /* ---------- CSV ---------- */
 
-/** Indices de las columnas elegidas, en el orden pedido. null = todas. */
-function indicesCampos(inf, T){
-  if(!inf.campos) return null;
-  const quiere = inf.campos.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
-  const idx = quiere.map(n => T.cols.findIndex(c => c.toLowerCase() === n)).filter(i => i >= 0);
-  // Si ninguna coincide se manda entero: mejor un informe de mas que uno vacio.
-  return idx.length ? idx : null;
-}
-
-/** Genera el CSV de un informe, con las columnas que se le hayan pedido. */
+/** Genera el CSV de un informe: sus columnas, sus filas y sus condiciones. */
 function csvInforme(inf, ref){
   const T = TIPOS_INFORME[inf.tipo] || TIPOS_INFORME.produccion;
   const {desde, hasta, etiqueta} = periodoDe(inf.frec, ref);
-  const filas = T.filas(ROWS, desde, hasta);
+  const conds = leerCondiciones(inf.cond);
+  const ids   = columnasDe(inf);
+
+  const filas = T.filas(ROWS, desde, hasta).filter(({c}) => cumpleTodas(c, conds));
   const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const idx = indicesCampos(inf, T);
-  const solo = f => idx ? idx.map(i => f[i]) : f;
-  const cuerpo = filas.map(({c}) => solo(T.fila(c)).map(q).join(";"));
+  const cab = ids.map(id => CAMPO_POR_ID[id].n);
+  const cuerpo = filas.map(({c}) =>
+    ids.map(id => {
+      const f = CAMPO_POR_ID[id];
+      const v = f.v(c);
+      return q(v === null || v === undefined ? "" : v + (f.suf && v !== "" ? f.suf : ""));
+    }).join(";"));
+
   // BOM al principio: sin el, Excel en español abre los acentos rotos.
-  const texto = "﻿" + [solo(T.cols).map(q).join(";"), ...cuerpo].join("\r\n");
-  return {texto, filas, etiqueta,
+  const texto = "\ufeff" + [cab.map(q).join(";"), ...cuerpo].join("\r\n");
+  return {texto, filas, etiqueta, conds,
           nombre: `${inf.tipo}_${etiqueta.replace(/\s+/g,"_")}.csv`};
 }
 
@@ -225,15 +230,8 @@ function pintarInformes(){
           <input class="inp" data-i="${i}" data-campo="para" value="${esc(inf.para)}"
             placeholder="gerencia@interfrigo.com.co, jefe@interfrigo.com.co"></label>
       </div>
-      <div class="infcampos">
-        <span class="mut">Columnas del archivo</span>
-        ${T.cols ? T.cols.map(col=>{
-          const puesto = !inf.campos || inf.campos.toLowerCase().split(",")
-            .map(x=>x.trim()).includes(col.toLowerCase());
-          return `<label class="proc mini"><input type="checkbox" data-i="${i}" data-col="${esc(col)}"
-            ${puesto?"checked":""}><span>${esc(col)}</span></label>`;
-        }).join("") : ""}
-      </div>
+      ${bloqueColumnas(inf, i)}
+      ${bloqueCondiciones(inf, i)}
       <div class="inff">
         <span class="mut">${esc(T.dice||"")} · <b>${cuandoSale(inf)}</b>${
           inf.ultimo ? ` · último envío ${esc(inf.ultimo)}` : " · aún no se ha enviado"}</span>
@@ -246,10 +244,72 @@ function pintarInformes(){
   }).join("") || `<p class="mut" style="padding:20px 2px">Todavía no hay ningún informe.</p>`;
 }
 
+/* Columnas: todas las de la hoja, agrupadas. Marcar y desmarcar es mas rapido
+   que escribir nombres, y el orden del archivo es el del catalogo, no el del
+   clic — asi dos informes con las mismas columnas salen iguales. */
+function bloqueColumnas(inf, i){
+  const puestas = new Set(columnasDe(inf));
+  return `<details class="infbloque"${puestas.size ? "" : " open"}>
+    <summary>Columnas del archivo <b>${puestas.size}</b> de ${CAMPOS.length}</summary>
+    <div class="infgrupos">${GRUPOS_CAMPO.map(g=>`
+      <div class="infgrupo">
+        <h5>${esc(g)}</h5>
+        ${CAMPOS.filter(f=>f.g===g).map(f=>`
+          <label class="proc mini"><input type="checkbox" data-i="${i}" data-col="${f.id}"
+            ${puestas.has(f.id)?"checked":""}><span>${esc(f.n)}</span></label>`).join("")}
+      </div>`).join("")}</div>
+  </details>`;
+}
+
+/* Condiciones: se suman todas. Se eligieron sumadas y no alternadas porque
+   «tipo SE12 Y prioridad alta» es lo que se pide de verdad; poder alternar
+   añadiria una casilla de Y/O que casi nadie acertaria a la primera. */
+function bloqueCondiciones(inf, i){
+  const conds = leerCondiciones(inf.cond);
+  const fila = (cond, k) => {
+    const campo = CAMPO_POR_ID[cond.campo] || CAMPOS[0];
+    const ops = operadoresDe(campo.tipo);
+    const necesitaValor = OPERADORES[cond.op] && OPERADORES[cond.op].valor;
+    const valorCtrl = campo.ops
+      ? `<select class="inp mini" data-i="${i}" data-cond="${k}" data-parte="valor">
+           ${campo.ops.map(o=>`<option${o===cond.valor?" selected":""}>${esc(o)}</option>`).join("")}
+         </select>`
+      : campo.tipo === "sino"
+        ? `<select class="inp mini" data-i="${i}" data-cond="${k}" data-parte="valor">
+             ${["Sí","No"].map(o=>`<option${o===cond.valor?" selected":""}>${o}</option>`).join("")}
+           </select>`
+        : `<input class="inp mini" data-i="${i}" data-cond="${k}" data-parte="valor"
+             value="${esc(cond.valor)}" placeholder="${campo.tipo==="fecha"?"dd/mm/aaaa":"valor"}">`;
+    return `<div class="infcond">
+      <select class="inp mini" data-i="${i}" data-cond="${k}" data-parte="campo">
+        ${GRUPOS_CAMPO.map(g=>`<optgroup label="${esc(g)}">${
+          CAMPOS.filter(f=>f.g===g).map(f=>
+            `<option value="${f.id}"${f.id===cond.campo?" selected":""}>${esc(f.n)}</option>`).join("")
+        }</optgroup>`).join("")}
+      </select>
+      <select class="inp mini" data-i="${i}" data-cond="${k}" data-parte="op">
+        ${ops.map(([k2,o])=>`<option value="${esc(k2)}"${k2===cond.op?" selected":""}>${esc(o.n)}</option>`).join("")}
+      </select>
+      ${necesitaValor ? valorCtrl : `<span class="mut">—</span>`}
+      <button class="btn sm" data-i="${i}" data-quitar="${k}" title="Quitar condición">×</button>
+    </div>`;
+  };
+  return `<details class="infbloque"${conds.length?" open":""}>
+    <summary>Condiciones ${conds.length
+      ? `<b>${conds.length}</b>` : `<span class="mut">sin filtrar</span>`}</summary>
+    <div class="infconds">
+      ${conds.map(fila).join("")}
+      <button class="btn sm" data-i="${i}" data-anadir="1">+ Añadir condición</button>
+      <p class="mut" style="margin:8px 0 0">Se aplican todas a la vez. Una puerta
+        entra en el informe solo si las cumple todas.</p>
+    </div>
+  </details>`;
+}
+
 /** Guarda una celda del informe. La fila 1 son encabezados. */
 async function guardarInforme(i, campo, valor){
   const inf = INFORMES[i]; if(!inf) return;
-  const col = {nombre:"A", tipo:"B", frec:"C", dia:"D", para:"E", activo:"F", campos:"H"}[campo];
+  const col = {nombre:"A", tipo:"B", frec:"C", dia:"D", para:"E", activo:"F", campos:"H", cond:"I"}[campo];
   if(!col) return;
   const antes = inf[campo];
   inf[campo] = valor;
@@ -261,9 +321,8 @@ async function guardarInforme(i, campo, valor){
     setSync("", "Guardado");
     // Cambiar la frecuencia cambia el control del día: hay que repintar.
     if(campo === "frec" || campo === "tipo" || campo === "activo"){
-      // Cambiar de tipo cambia las columnas: las elegidas del tipo viejo ya no
-      // valen, así que se vuelve a «todas» en vez de dejar una mezcla inválida.
-      if(campo === "tipo" && inf.campos){ inf.campos = ""; guardarInforme(i, "campos", ""); }
+      // Ya no hace falta vaciar las columnas al cambiar de tipo: el catálogo es
+      // común a todos los tipos, así que lo elegido sigue siendo válido.
       pintarInformes();
     }
   }catch(e){ inf[campo] = antes; pintarInformes(); toast(e.message, "err"); }
@@ -283,24 +342,46 @@ document.addEventListener("DOMContentLoaded", ()=>{
     l.addEventListener("change", ev=>{
       // Casillas de columna: se guardan todas juntas, en el orden del tipo, para
       // que el CSV no salga con las columnas desordenadas.
+      // Columnas: se guardan todas juntas y en el orden del catalogo, no en el
+      // del clic, para que dos informes con las mismas columnas salgan iguales.
       const col = ev.target.closest("[data-col]");
       if(col){
-        const i = +col.dataset.i, inf = INFORMES[i];
-        const T = TIPOS_INFORME[inf.tipo] || TIPOS_INFORME.produccion;
-        const marcadas = [...document.querySelectorAll(`[data-col][data-i="${i}"]`)]
-          .filter(k=>k.checked).map(k=>k.dataset.col);
-        if(!marcadas.length){
+        const i = +col.dataset.i;
+        const marcadas = new Set([...document.querySelectorAll(`[data-col][data-i="${i}"]`)]
+          .filter(k=>k.checked).map(k=>k.dataset.col));
+        if(!marcadas.size){
           col.checked = true;
           toast("El informe necesita al menos una columna","err");
           return;
         }
-        // Vacio significa «todas»: mas robusto que listarlas, porque si mañana
-        // el tipo gana una columna, el informe la incluye sola.
-        const valor = marcadas.length === T.cols.length ? ""
-                    : T.cols.filter(c=>marcadas.includes(c)).join(", ");
-        guardarInforme(i, "campos", valor);
+        guardarInforme(i, "campos", CAMPOS.filter(f=>marcadas.has(f.id)).map(f=>f.id).join(", "));
         return;
       }
+
+      // Condiciones: se reescriben enteras cada vez. Guardar solo la parte
+      // tocada obligaria a reconciliar tres controles que se pisan entre si.
+      const cp = ev.target.closest("[data-cond]");
+      if(cp){
+        const i = +cp.dataset.i, k = +cp.dataset.cond, parte = cp.dataset.parte;
+        const inf = INFORMES[i];
+        const lista = leerCondiciones(inf.cond);
+        if(!lista[k]) return;
+        if(parte === "campo"){
+          lista[k].campo = cp.value;
+          // Al cambiar de campo, el operador y el valor viejos pueden no valer:
+          // se vuelve a «es» y se vacia, en vez de dejar algo incoherente.
+          const nuevo = CAMPO_POR_ID[cp.value];
+          const validos = operadoresDe(nuevo.tipo).map(([o])=>o);
+          if(!validos.includes(lista[k].op)) lista[k].op = validos[0];
+          lista[k].valor = nuevo.ops ? (nuevo.ops[0] || "") : (nuevo.tipo==="sino" ? "Sí" : "");
+        }
+        else if(parte === "op")    lista[k].op = cp.value;
+        else                       lista[k].valor = cp.value;
+        guardarInforme(i, "cond", escribirCondiciones(lista));
+        if(parte !== "valor") setTimeout(pintarInformes, 60);
+        return;
+      }
+
       const el = ev.target.closest("[data-campo]"); if(!el) return;
       const v = el.type === "checkbox" ? el.checked
               : el.type === "number"   ? (num(el.value) || 1)
@@ -308,6 +389,24 @@ document.addEventListener("DOMContentLoaded", ()=>{
       guardarInforme(+el.dataset.i, el.dataset.campo, v);
     });
     l.addEventListener("click", async ev=>{
+      const mas = ev.target.closest("[data-anadir]");
+      if(mas){
+        const i = +mas.dataset.i, inf = INFORMES[i];
+        const lista = leerCondiciones(inf.cond);
+        lista.push({campo:"tipo", op:"=", valor:(CAMPO_POR_ID.tipo.ops||[""])[0]});
+        guardarInforme(i, "cond", escribirCondiciones(lista));
+        setTimeout(pintarInformes, 60);
+        return;
+      }
+      const menos = ev.target.closest("[data-quitar]");
+      if(menos){
+        const i = +menos.dataset.i, k = +menos.dataset.quitar, inf = INFORMES[i];
+        const lista = leerCondiciones(inf.cond);
+        lista.splice(k, 1);
+        guardarInforme(i, "cond", escribirCondiciones(lista));
+        setTimeout(pintarInformes, 60);
+        return;
+      }
       const d = ev.target.closest("[data-descargar]");
       if(d){ descargarInforme(+d.dataset.descargar); return; }
       const x = ev.target.closest("[data-borrar]");
@@ -318,8 +417,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
         try{
           // Se vacia la fila en vez de eliminarla: borrar filas descuadraria el
           // numero de fila que cada informe tiene guardado.
-          await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A${inf.fila}:H${inf.fila}`)}?valueInputOption=USER_ENTERED`,
-            {method:"PUT", body: JSON.stringify({values:[["","","","","","","",""]]})});
+          await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A${inf.fila}:I${inf.fila}`)}?valueInputOption=USER_ENTERED`,
+            {method:"PUT", body: JSON.stringify({values:[["","","","","","","","",""]]})});
           logChanges("EDITA", "informe", inf.fila,
                      [{campo:"Informe borrado", antes:inf.nombre, despues:""}]);
           await loadInformes(); pintarInformes();
@@ -365,10 +464,10 @@ async function probarCorreo(){
   if(add) add.onclick = async ()=>{
     add.disabled = true;
     try{
-      await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A:H`)}:append`+
+      await api(`/values/${encodeURIComponent(`'${INF_TAB}'!A:I`)}:append`+
                 `?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
         {method:"POST", body: JSON.stringify({values:[
-          ["Informe nuevo","produccion","mensual",1,userMail,true,"",""]]})});
+          ["Informe nuevo","produccion","mensual",1,userMail,true,"","",""]]})});
       await loadInformes(); pintarInformes();
       toast("Informe creado. Ponle nombre y destinatarios.","ok");
     }catch(e){ toast(e.message,"err"); }
