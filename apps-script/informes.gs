@@ -24,6 +24,10 @@
  *   3. Ejecuta la función `instalar`. Google pedirá permiso una vez: acéptalo.
  *   4. Listo. Para comprobarlo sin esperar, ejecuta `enviarPrueba`.
  *
+ *   Si algo no sale como esperas, ejecuta `revisar`: dice que ve el script,
+ *   que informes tiene definidos y si el disparador quedo instalado. El
+ *   resultado sale en Registro de ejecuciones (Ver -> Registros).
+ *
  * BOTÓN DE PRUEBA DESDE LA APLICACIÓN (opcional pero recomendado)
  *   Para que el botón «Probar correo» funcione, publica esto como aplicación web:
  *     Implementar → Nueva implementación → Aplicación web
@@ -38,6 +42,12 @@
  * las columnas, hay que cambiarlas aquí.
  */
 
+/* SI ESTE SCRIPT ESTA SUELTO (creado desde script.google.com y no desde
+   Extensiones -> Apps Script de la hoja), no hay «hoja activa» y nada
+   funcionaria. Poniendo aqui el identificador de la hoja funciona igual en los
+   dos casos, que es lo que evita tener que empezar de cero si se creo suelto. */
+var HOJA_ID   = '1nTo2057FfCjoEtTvrdHDnevHepos4Gmzzy_6G5doNzU';
+
 var HOJA_OP   = 'OP PUERTA';
 var HOJA_INF  = 'INFORMES';   // columnas A..H, ver informes.js
 var REMITENTE = 'Control de Producción Interfrigo';
@@ -48,6 +58,12 @@ var C = {
   PRIO:12, OBS:21, FPROC:23, DESP:24, FDESP:25, ENS:26, FINI:27, CAL:36
 };
 var PROCS = [13,14,15,16,17,18,19,20];   // N..U
+
+/** La hoja de calculo, este script dentro de ella o suelto. */
+function hoja() {
+  if (HOJA_ID) { return SpreadsheetApp.openById(HOJA_ID); }
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
 
 /* ------------------------------------------------------------------ */
 /*  Aplicación web: permite disparar desde la aplicación               */
@@ -93,25 +109,81 @@ function doGet(e) {
 /*  Instalación                                                        */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Avisa por la ventana de la hoja si se puede, y siempre por el registro.
+ *
+ * `SpreadsheetApp.getUi()` solo existe cuando la ejecucion viene de la hoja
+ * abierta. Al ejecutar desde el editor de Apps Script —que es como se instala—
+ * lanza una excepcion, y el mensaje de exito hacia creer que algo habia
+ * fallado cuando en realidad ya estaba hecho.
+ */
+function avisar(texto) {
+  Logger.log(texto);
+  try {
+    SpreadsheetApp.getUi().alert(texto);
+  } catch (e) {
+    // Ejecutado desde el editor: no hay ventana. El registro basta.
+  }
+}
+
 function instalar() {
-  // Se borran los disparadores anteriores de esta función: si no, reinstalar
-  // duplicaría los envíos.
+  // Este script tiene que estar DENTRO de la hoja (Extensiones -> Apps Script).
+  // Si se crea suelto desde script.google.com no ve ninguna hoja y nada funciona.
+  var ss = hoja();
+  if (!ss) {
+    avisar('Este script no esta unido a ninguna hoja.\n\nAbrelo desde la hoja: Extensiones -> Apps Script, y pega el codigo alli.');
+    return;
+  }
+  if (!ss.getSheetByName(HOJA_INF)) {
+    avisar('Falta la pestaña INFORMES en la hoja.\n\nEntra una vez a la aplicacion: se crea sola.\nDespues vuelve aqui y ejecuta instalar otra vez.');
+    return;
+  }
+
+  // Se borran los disparadores anteriores de esta funcion: si no, reinstalar
+  // duplicaria los envios.
   var t = ScriptApp.getProjectTriggers();
   for (var i = 0; i < t.length; i++) {
     if (t[i].getHandlerFunction() === 'revisarInformes') ScriptApp.deleteTrigger(t[i]);
   }
   ScriptApp.newTrigger('revisarInformes').timeBased().atHour(7).everyDays(1).create();
-  SpreadsheetApp.getUi().alert(
-    'Listo.\n\nLos informes se revisarán cada día sobre las 7 de la mañana.\n' +
-    'Para probarlo ahora mismo, ejecuta la función enviarPrueba.');
+
+  avisar('Listo.\n\nLos informes se revisaran cada dia sobre las 7 de la mañana.\nPara probarlo ahora mismo, ejecuta la funcion enviarPrueba.');
 }
 
 /** Manda todos los informes activos ignorando el calendario. Para comprobar. */
 function enviarPrueba() {
   var n = revisarInformes(true);
-  SpreadsheetApp.getUi().alert(n
-    ? 'Se enviaron ' + n + ' informe(s) de prueba.'
-    : 'No hay informes activos con destinatarios y con filas en el periodo.');
+  avisar(n
+    ? 'Se enviaron ' + n + ' informe(s) de prueba. Revisa el buzon.'
+    : 'No se envio ninguno.\n\nRevisa que en la pestaña INFORMES haya al menos una fila con ACTIVO marcado, con destinatarios, y que su periodo tenga datos.');
+}
+
+/** Diagnostico: dice que ve el script y que le falta. */
+function revisar() {
+  var ss = hoja();
+  var l = [];
+  l.push('Hoja: ' + (ss ? ss.getName() : 'NO UNIDO A NINGUNA HOJA'));
+  if (ss) {
+    l.push('Pestaña ' + HOJA_OP + ': ' + (ss.getSheetByName(HOJA_OP) ? 'si' : 'NO'));
+    l.push('Pestaña ' + HOJA_INF + ': ' + (ss.getSheetByName(HOJA_INF) ? 'si' : 'NO'));
+    var hi = ss.getSheetByName(HOJA_INF);
+    if (hi) {
+      var d = hi.getDataRange().getValues();
+      l.push('Informes definidos: ' + Math.max(0, d.length - 1));
+      for (var i = 1; i < d.length; i++) {
+        if (String(d[i][0] || '').trim()) {
+          l.push('  · ' + d[i][0] + ' -> ' + (d[i][4] || 'SIN DESTINATARIOS') +
+                 (d[i][5] === false ? '  [INACTIVO]' : ''));
+        }
+      }
+    }
+  }
+  var tr = ScriptApp.getProjectTriggers().filter(function (t) {
+    return t.getHandlerFunction() === 'revisarInformes';
+  });
+  l.push('Disparador diario instalado: ' + (tr.length ? 'si' : 'NO — ejecuta instalar'));
+  l.push('Correos que puedes enviar hoy: ' + MailApp.getRemainingDailyQuota());
+  avisar(l.join('\n'));
 }
 
 /* ------------------------------------------------------------------ */
@@ -123,7 +195,7 @@ function enviarPrueba() {
  * @return {number} informes enviados.
  */
 function revisarInformes(forzar, soloFila) {
-  var ss  = SpreadsheetApp.getActiveSpreadsheet();
+  var ss  = hoja();
   var hi  = ss.getSheetByName(HOJA_INF);
   if (!hi) { Logger.log('No existe la pestaña ' + HOJA_INF); return 0; }
 
@@ -363,7 +435,7 @@ function aFecha(v) {
 
 function fecha(v) { var d = aFecha(v); return d ? f(d) : ''; }
 function f(d)     { return Utilities.formatDate(d, tz(), 'dd/MM/yyyy'); }
-function tz()     { return SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(); }
+function tz()     { return hoja().getSpreadsheetTimeZone(); }
 function redondear(n) { return Math.round(n * 10) / 10; }
 
 /** CSV con punto y coma, que es lo que Excel en español espera. */
