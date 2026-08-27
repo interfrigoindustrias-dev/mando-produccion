@@ -444,30 +444,44 @@ function renderModelos(){
   // La prioridad no interviene: el modelo se identifica por tipo, espesor,
   // apertura y medidas, que es lo que define fisicamente la puerta.
   const base = stockBase().map(x=>x.c);          // marcadas STOCK y sin despachar
-  const filas = MODELOS.map(m=>{
+
+  // Al elegir un tipo arriba, el inventario se queda solo con los modelos de ese
+  // tipo. Antes el filtro solo afectaba al listado de abajo, asi que la tabla
+  // seguia enseñando batientes mientras se miraban corredizas.
+  const fTipo = (()=>{ const e = $("#s-tipo"); return e ? e.value : ""; })();
+  const modelos = fTipo
+    ? MODELOS.filter(m => String(m.tipo ?? "").trim() === fTipo)
+    : MODELOS;
+
+  const filas = modelos.map(m=>{
     const hay = base.filter(c=>esModelo(c,m,false));
     return {m, hay,
       alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
+      // Terminada = fabricada y esperando el visto bueno de calidad. Estaba
+      // contada dentro del total pero sin columna propia, asi que las puertas
+      // que salian de planta parecian haberse evaporado hasta llegar a almacen.
+      term: hay.filter(c=>terminada(c)).length,
       sep:  hay.filter(c=>desp(c)==="Separado").length,
       // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
       prod: hay.filter(c=>!completa(c) && progreso(c).ok > 0).length,
       proy: hay.filter(c=>!completa(c) && progreso(c).ok === 0).length,
       tot:  hay.length};
   });
-  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, sep:a.sep+f.sep, prod:a.prod+f.prod,
-                                  proy:a.proy+f.proy, tot:a.tot+f.tot}),
-                         {alm:0,sep:0,prod:0,proy:0,tot:0});
+  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, term:a.term+f.term, sep:a.sep+f.sep,
+                                  prod:a.prod+f.prod, proy:a.proy+f.proy, tot:a.tot+f.tot}),
+                         {alm:0,term:0,sep:0,prod:0,proy:0,tot:0});
   const n = (v,cls) => `<td class="n ${v?(cls||""):"z"}">${v}</td>`;
   $("#m-tabla").innerHTML =
     `<thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
       <th title="Marcadas STOCK, terminadas y con estado En Almacén">En almacén</th>
+      <th title="Fabricadas y en estado Terminado: esperan revisión de calidad">Terminadas</th>
       <th title="Marcadas STOCK en estado Separado">Separadas</th>
       <th title="Empezadas: tienen al menos un proceso marcado">En producción</th>
       <th title="Creadas pero sin empezar: ningún proceso marcado todavía">Proyectadas</th>
       <th title="Todas las marcadas STOCK sin despachar">Total</th>
       <th title="Avance promedio de las que están en producción">Avance</th>
       <th></th></tr></thead><tbody>`+
-    filas.map(({m,hay,alm,sep,prod,proy,tot})=>{
+    filas.map(({m,hay,alm,term,sep,prod,proy,tot})=>{
       const abiertas = hay.filter(c=>!completa(c));
       const av = abiertas.length
         ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—";
@@ -475,32 +489,37 @@ function renderModelos(){
       <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
       <td class="num">${m.ancho??"—"}×${m.alto??"—"}</td><td class="num">${m.esp??"—"}</td>
       <td>${esc(m.ap||"—")}</td>
-      ${n(alm)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
+      ${n(alm)}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
       <td class="num">${av}</td>
       <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`;
     }).join("")+
     // Todo lo que esta en stock pero no encaja en ningun modelo del catalogo,
     // para que los totales cuadren y se vea que falta por definir.
     (()=>{
-      const otras = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)));
+      // Con un tipo elegido, esta fila solo cuenta las de ese tipo: si no, el
+      // total de la tabla no cuadraria con lo que se esta viendo.
+      const otras = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)))
+        .filter(c=>!fTipo || String(c[C.TIPO] ?? "").trim() === fTipo);
       if(!otras.length) return "";
       const oAlm = otras.filter(c=>completa(c) && desp(c)==="En Almacén").length;
+      const oTer = otras.filter(c=>terminada(c)).length;
       const oSep = otras.filter(c=>desp(c)==="Separado").length;
       const oPro = otras.filter(c=>!completa(c) && progreso(c).ok > 0).length;
       const oProy= otras.filter(c=>!completa(c) && progreso(c).ok === 0).length;
       const ab   = otras.filter(c=>!completa(c));
       const av   = ab.length ? Math.round(ab.reduce((a,c)=>a+progreso(c).pct,0)/ab.length*100)+"%" : "—";
       const det  = otras.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n");
-      T.alm+=oAlm; T.sep+=oSep; T.prod+=oPro; T.proy+=oProy; T.tot+=otras.length;
+      T.alm+=oAlm; T.term+=oTer; T.sep+=oSep; T.prod+=oPro; T.proy+=oProy; T.tot+=otras.length;
       return `<tr class="otras" title="${esc(det)}">
         <td class="mod">Sin modelo definido</td>
         <td colspan="4" class="sub">${otras.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
-        ${n(oAlm)}${n(oSep)}${n(oPro)}${n(oProy)}${n(otras.length)}
+        ${n(oAlm)}${n(oTer)}${n(oSep)}${n(oPro)}${n(oProy)}${n(otras.length)}
         <td class="num">${av}</td><td></td></tr>`;
     })()+
     `<tr class="tot"><td>TOTAL</td><td colspan="4"></td>
-      <td class="n">${T.alm}</td><td class="n">${T.sep}</td><td class="n">${T.prod}</td>
-      <td class="n">${T.proy}</td><td class="n">${T.tot}</td><td colspan="2"></td></tr></tbody>`;
+      <td class="n">${T.alm}</td><td class="n">${T.term}</td><td class="n">${T.sep}</td>
+      <td class="n">${T.prod}</td><td class="n">${T.proy}</td><td class="n">${T.tot}</td>
+      <td colspan="2"></td></tr></tbody>`;
 }
 
 /* Modelo elegido en el inventario de arriba. Al pulsar una fila, el listado de
@@ -624,8 +643,13 @@ function renderStock(){
 }
 ["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"].forEach(id=>{
   const e=$("#"+id); if(!e) return;
-  e.addEventListener("input", renderStock);
-  e.addEventListener("change", renderStock);
+  // El tipo tambien manda sobre el inventario de arriba, no solo sobre el
+  // listado: los dos tienen que enseñar lo mismo.
+  const pintar = id === "s-tipo"
+    ? ()=>{ renderStock(); renderModelos(); marcarFilaModelo(); }
+    : renderStock;
+  e.addEventListener("input", pintar);
+  e.addEventListener("change", pintar);
 });
 /* El estado tambien se edita desde stock: es donde se decide separar una
    puerta que se acaba de vender. */
@@ -654,7 +678,9 @@ $("#s-tabla").addEventListener("change", async ev=>{
 });
 
 $("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"]
-  .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; }); renderStock(); };
+  .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; });
+  // Limpiar devuelve el inventario entero, no solo el listado.
+  renderStock(); renderModelos(); };
 
 function csvDe(nombre, cols, filas){
   const q=v=>`"${String(v??"").replace(/<[^>]*>/g,"").replace(/"/g,'""')}"`;
