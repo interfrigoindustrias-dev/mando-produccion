@@ -522,46 +522,115 @@ function renderModelos(){
       <td colspan="2"></td></tr></tbody>`;
 }
 
-/* Modelo elegido en el inventario de arriba. Al pulsar una fila, el listado de
-   abajo se queda solo con esas puertas: se ve QUE puertas hay detras del numero,
-   que es la pregunta que sigue siempre a mirar el inventario. */
+/* Modelo abierto en el modal. Se guarda para poder repintarlo cuando cambia algo
+   —un estado, una separacion— sin que el modal se cierre bajo la mano. */
 let stockModelo = "";
 
-function pintarChipModelo(){
-  const box = $("#s-modelo");
-  if(!box) return;
-  box.classList.toggle("hide", !stockModelo);
-  if(stockModelo) box.innerHTML =
-    `Mostrando solo <b>${esc(stockModelo)}</b> <button class="x" id="s-modelo-x" title="Quitar">×</button>`;
+/* Pulsar un modelo abre sus puertas en un modal en vez de filtrar el listado de
+   abajo. Filtrar abajo obligaba a bajar la pagina, perder de vista la fila que
+   se acababa de pulsar y despues acordarse de limpiar el filtro; el modal
+   responde la pregunta —«¿que puertas hay detras de ese numero?»— sin moverse
+   del inventario y se cierra sin dejar rastro. */
+function abrirModelo(nombre){
+  const m = MODELOS.find(x => x.nombre === nombre);
+  const ov = $("#ov-modelo");
+  if(!m || !ov) return;              // paneles no tiene inventario por modelo
+  stockModelo = nombre;
+  pintarModeloModal();
+  ov.classList.remove("hide");
 }
-/* El chip del modelo solo existe en puertas: paneles no tiene inventario por
-   modelo. Sin esta comprobacion, dashboards.js reventaba aqui al cargar paneles
-   y dejaba sin enganchar todo lo de mas abajo. */
-const chipMod = $("#s-modelo");
-if(chipMod) chipMod.addEventListener("click", ev=>{
-  if(!ev.target.closest("#s-modelo-x")) return;
-  stockModelo=""; renderStock();
-});
-/** Marca visualmente la fila elegida del inventario. */
-function marcarFilaModelo(){
-  $$("#m-tabla tbody tr").forEach(tr=>{
-    const nom = tr.querySelector(".mod");
-    tr.classList.toggle("sel", !!stockModelo && nom && nom.textContent === stockModelo);
+
+/** Puertas de stock que son de ese modelo. */
+const puertasDeModelo = nombre => {
+  const m = MODELOS.find(x => x.nombre === nombre);
+  return m ? stockBase().filter(({c}) => esModelo(c, m, false)) : [];
+};
+
+function pintarModeloModal(){
+  // Todo el cuerpo va dentro de la comprobacion, y con un bloque en vez de un
+  // return: en paneles estos elementos no existen, y asi la proteccion se ve
+  // tanto al leer el codigo como al revisarlo con tools/comprobar_ids.py.
+  if(!stockModelo || !$("#mm-titulo")) return;
+  if($("#mm-titulo")){
+  const m = MODELOS.find(x => x.nombre === stockModelo);
+  const L = puertasDeModelo(stockModelo);
+
+  $("#mm-titulo").textContent = stockModelo;
+  $("#mm-sub").textContent = m
+    ? [m.tipo, `${m.ancho ?? "—"}×${m.alto ?? "—"}`, `${m.esp ?? "—"} mm`, m.ap]
+        .filter(Boolean).join(" · ")
+    : "";
+
+  const cuenta = (etq, n, tit) =>
+    `<div class="mmk" title="${esc(tit)}"><b>${n}</b><span>${etq}</span></div>`;
+  $("#mm-kpis").innerHTML =
+    cuenta("En almacén", L.filter(({c})=>completa(c) && desp(c)==="En Almacén").length,
+           "Terminadas y con estado En Almacén") +
+    cuenta("Terminadas", L.filter(({c})=>terminada(c)).length,
+           "Fabricadas, esperando revisión de calidad") +
+    cuenta("Separadas",  L.filter(({c})=>desp(c)==="Separado").length,
+           "Apartadas para un comprador") +
+    cuenta("En producción", L.filter(({c})=>!completa(c) && progreso(c).ok > 0).length,
+           "Empezadas: al menos un proceso marcado") +
+    cuenta("Proyectadas", L.filter(({c})=>!completa(c) && progreso(c).ok === 0).length,
+           "Creadas pero sin empezar") +
+    cuenta("Total", L.length, "Todas las de este modelo marcadas STOCK");
+
+  tablaMini("#mm-tabla", ["OP","Estado","Separada para","F. proceso","Avance","Calidad",""],
+    L.map(({r,c}) => {
+      const pc = Math.round(progreso(c).pct*100);
+      const para = separadaPara(c);
+      return [
+        `<span class="op">${esc(c[C.OP] ?? "")}</span>`,
+        selDesp(r, c[C.DESP]),
+        para ? `<span class="para">${esc(para)}</span>` : `<span class="mut">—</span>`,
+        esc(fmtDate(c[C.FPROC])),
+        `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
+        notaAlmacen(c),
+        `<button class="btn sm" data-ver-ficha="${r}">Ficha</button>`
+      ];
+    }),
+    L.map(({c}) => separadaPara(c) ? "sep" : ""));
+
+  $("#mm-vacio").classList.toggle("hide", L.length > 0);
+  }
+}
+
+/* Compatibilidad: el chip de abajo ya no existe, pero renderStock lo llamaba. */
+function pintarChipModelo(){}
+/* El modal del modelo solo existe en puertas: paneles no tiene inventario por
+   modelo. Sin comprobarlo, dashboards.js reventaba aqui al cargar paneles y
+   dejaba sin enganchar todo lo de mas abajo. */
+const mmTabla = $("#mm-tabla");
+if(mmTabla){
+  mmTabla.addEventListener("change", async ev=>{
+    const el = ev.target.closest("[data-edit-desp]"); if(!el) return;
+    el.disabled = true;
+    const ok = await guardarDespacho(+el.dataset.editDesp, el.value);
+    el.disabled = false;
+    pintarModeloModal();                 // el modal se queda abierto y al dia
+    renderStock(); renderModelos();
+    if(ok) render();
+  });
+  mmTabla.addEventListener("click", ev=>{
+    const b = ev.target.closest("[data-ver-ficha]"); if(!b) return;
+    const ov = $("#ov-modelo"); if(ov) ov.classList.add("hide");
+    openDet(+b.dataset.verFicha);
   });
 }
+/* Ya no se resalta ninguna fila: el modal es lo que indica que modelo se mira. */
+function marcarFilaModelo(){}
 
 /** «+ Crear»: abre el alta con el modelo ya cargado. */
 $("#m-tabla").addEventListener("click", ev=>{
-  // Un clic en la fila (no en «+ Crear») selecciona ese modelo abajo.
+  // Un clic en la fila (no en «+ Crear») abre ese modelo en un modal.
   if(!ev.target.closest("[data-mod]")){
     const tr = ev.target.closest("tbody tr");
     const nom = tr && tr.querySelector(".mod");
     if(!nom || tr.classList.contains("tot")) return;
     const modelo = nom.textContent.trim();
     if(!MODELOS.some(m=>m.nombre===modelo)) return;    // «Sin modelo definido»
-    stockModelo = (stockModelo===modelo) ? "" : modelo;  // volver a pulsar lo quita
-    renderStock(); marcarFilaModelo();
-    $("#s-tabla").scrollIntoView({behavior:"smooth", block:"start"});
+    abrirModelo(modelo);
     return;
   }
   const b = ev.target.closest("[data-mod]"); if(!b) return;
@@ -600,11 +669,6 @@ function stockList(){
     if(q && ![c[C.OP],c[C.TIPO],c[C.MAT],num(c[C.ANCHO]),num(c[C.ALTO])].join(" ").toLowerCase().includes(q)) return false;
     if(!eq(c[C.MAT],g("s-mat"))) return false;
     if(!eq(c[C.TIPO],g("s-tipo"))) return false;
-    // Filtro por modelo: se activa al pulsar una fila del inventario de arriba.
-    if(stockModelo){
-      const m = MODELOS.find(x=>x.nombre===stockModelo);
-      if(m && !esModelo(c,m,false)) return false;
-    }
     if(!eq(c[C.ESP],g("s-esp")) || !eq(c[C.AP],g("s-ap"))) return false;
     if(!eq(medidaDe(c), g("s-med"))) return false;
     const fe=g("s-est");
@@ -677,7 +741,7 @@ $("#s-tabla").addEventListener("change", async ev=>{
   if(ok){ render(); }
 });
 
-$("#s-clear").onclick = ()=>{ stockModelo=""; ["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"]
+$("#s-clear").onclick = ()=>{ ["s-q","s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"]
   .forEach(id=>{ const e=$("#"+id); if(e) e.value=""; });
   // Limpiar devuelve el inventario entero, no solo el listado.
   renderStock(); renderModelos(); };

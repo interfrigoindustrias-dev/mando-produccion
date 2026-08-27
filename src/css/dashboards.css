@@ -110,3 +110,14 @@
 .qnota-mini b{font-weight:800}
 /* Una puerta rechazada no puede pasar desapercibida en almacén. */
 #a-tabla tbody tr.noapta{box-shadow:inset 3px 0 0 #D64545}
+
+/* Modal de un modelo de stock: las cifras arriba y las puertas debajo. */
+.mmkpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;margin:14px 0 12px}
+.mmk{background:var(--bg2);padding:11px 13px}
+.mmk b{display:block;font-size:21px;font-weight:800;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.mmk span{display:block;margin-top:5px;font-size:10px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--tx2)}
+#mm-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}

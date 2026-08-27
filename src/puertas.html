@@ -163,8 +163,7 @@
         <option value="__none">Sin prioridad</option></select></label>
       <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
         <option value="pend" selected>Por fabricar (menos del 100%)</option>
-        <option value="open">Sin estado asignado</option>
-        <option value="">Todas</option>
+        <option value="">Todas las pendientes</option>
         <option value="wip">Iniciadas sin terminar</option></select></label>
       <label class="f"><span>Ordenar</span><select class="inp" id="p-ord">
         <option value="prioop" selected>Prioridad y OP</option>
@@ -272,7 +271,6 @@
       <span class="cnt" id="s-cnt"></span>
       <button class="btn sm" id="s-csv">⇩ CSV</button>
     </div>
-    <div class="aviso hide" id="s-modelo"></div>
     <div class="tw"><table id="s-tabla"></table></div>
   </section>
 </main>
@@ -514,6 +512,26 @@
 
   <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
     <button class="btn" id="cr-print">Imprimir</button>
+    <button class="btn pri" data-close>Cerrar</button>
+  </div>
+</div></div>
+
+<!-- ============================== MODELO ============================== -->
+<div class="ov hide" id="ov-modelo"><div class="mod mod-ancho">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px" id="mm-titulo">—</h1>
+      <p class="mut" style="margin:4px 0 0" id="mm-sub"></p>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="mmkpis" id="mm-kpis"></div>
+  <div class="tw" style="max-height:52vh"><table id="mm-tabla"></table></div>
+  <p class="mut hide" id="mm-vacio" style="padding:22px 2px">
+    No hay ninguna puerta de este modelo en stock ahora mismo.</p>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
     <button class="btn pri" data-close>Cerrar</button>
   </div>
 </div></div>

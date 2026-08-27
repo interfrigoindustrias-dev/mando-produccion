@@ -32,23 +32,19 @@ function plantaList(){
   plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
-    // Una puerta terminada ya salió de planta: la revisa calidad. Se va de esta
-    // vista pase lo que pase con el filtro, igual que las despachadas.
-    const e = desp(c);
-    if(e==="Terminado" || e==="En Almacén" || e==="Despachado") return false;
+    // Planta ve UNICAMENTE lo que no tiene estado. En cuanto una puerta recibe
+    // uno —terminada, separada, en almacen, despachada— deja de ser trabajo de
+    // planta y pasa a serlo de otro: mantenerla a la vista solo estorba.
+    if(desp(c)) return false;
 
-    // «Por fabricar» es lo que planta necesita ver: todo lo que no llega al 100%,
-    // tenga o no estado. Antes se exigía además no tener estado, y eso escondía
-    // puertas a medio hacer que ya estaban separadas para un cliente.
     if(fe==="pend" && p>=1) return false;
-    if(fe==="open" && (e || p>=1)) return false;
     if(fe==="wip"  && !(p>0 && p<1)) return false;
     if(fp==="__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
     else if(fp && String(c[C.PRIO]??"").trim().toUpperCase()!==fp) return false;
     if(q && ![c[C.OP],c[C.CLI]].join(" ").toLowerCase().includes(q)) return false;
     // Solo lo que ya toca: si la fecha de proceso es futura, la puerta todavía
     // no entra a planta. Sin fecha se muestra, porque no hay nada que esperar.
-    if((fe==="pend" || fe==="open") && !verProgramadas){
+    if(fe!=="wip" && !verProgramadas){
       const f = toDate(c[C.FPROC]);
       if(f){
         const h=new Date(); h.setHours(0,0,0,0);
@@ -148,9 +144,6 @@ function pintarTarjeta(r){
   set("listo", pc>=100 ? '<span class="plisto">COMPLETA</span>' : "");
   card.classList.toggle("lista", pc>=100);
 
-  // No se pisa el selector si el operario lo tiene abierto.
-  const sel = card.querySelector(".pdesp");
-  if(sel && sel.value !== desp(c) && document.activeElement !== sel) sel.value = desp(c);
 
   if(cambioLaFila) plantaDibujada = "";
 }
@@ -215,10 +208,8 @@ function renderPlanta(){
         <span class="met" data-f="fecha">${esc(fmtDate(c[C.FPROC]))||"sin fecha"}</span>
         <span class="pts" data-f="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
         <span class="av"  data-f="av">${pc}%</span>
-        <select class="pdesp" data-desp="${r}" title="Estado de despacho">
-          <option value=""${desp(c)?"":" selected"}>Sin estado</option>
-          ${DESPACHOS.map(d=>`<option${d===desp(c)?" selected":""}>${d}</option>`).join("")}
-        </select>
+        <button class="pterm" data-term="${r}"
+          title="Darla por terminada: pasa a Calidad">Terminada</button>
         <span data-f="listo">${pc>=100?'<span class="plisto">COMPLETA</span>':""}</span>
       </div>
       ${notaTarjeta(c)}
@@ -231,12 +222,28 @@ function renderPlanta(){
 let plantaOcupada = 0;
 const plantaEnUso = () => Date.now() - plantaOcupada < 1500;
 
-$("#p-lista").addEventListener("change", async ev=>{
-  const el=ev.target.closest("[data-desp]"); if(!el) return;
-  el.disabled=true;
-  const ok=await guardarDespacho(+el.dataset.desp, el.value);
-  el.disabled=false;
-  if(ok){ plantaDibujada=""; renderPlanta(); render(); }
+/* «Terminada» es el unico estado que planta puede poner, y es el que arranca el
+   resto del flujo: la puerta sale de aqui y aparece en Calidad para que la
+   revisen. Un desplegable con los cinco estados invitaba a que planta mandara
+   cosas directamente a almacen, saltandose la revision. */
+$("#p-lista").addEventListener("click", async ev=>{
+  const b = ev.target.closest("[data-term]"); if(!b) return;
+  const r = +b.dataset.term;
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+
+  const pc = Math.round(progreso(row.c).pct*100);
+  if(pc < 100 && !confirm(
+      `La OP ${row.c[C.OP]} va por el ${pc}%.\n\n¿Darla por terminada igualmente?`)) return;
+
+  b.disabled = true;
+  plantaOcupada = Date.now();
+  const ok = await guardarDespacho(r, "Terminado");
+  b.disabled = false;
+  plantaOcupada = Date.now();
+  if(ok){
+    toast(`OP ${row.c[C.OP]} terminada · pasa a Calidad`, "ok");
+    plantaDibujada = ""; renderPlanta(); render(); renderDashVisible();
+  }
 });
 $("#p-lista").addEventListener("click", async ev=>{
   const b=ev.target.closest(".pb"); if(!b) return;
