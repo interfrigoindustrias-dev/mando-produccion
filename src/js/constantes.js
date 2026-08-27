@@ -10,19 +10,23 @@
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email";
 const LOG_TAB = MOD.logTab;      // propia de cada módulo, ver modulo.js
 const LOG_HEAD = ["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"];
-const NCOL = 37;                       // A..AK
-const LAST_COL = "AK";
+const NCOL = 38;                       // A..AL
+const LAST_COL = "AL";
 
 /* Las listas siguientes son copia EXACTA de la validacion de datos de la hoja.
    Si alli cambian, aqui tambien: una opcion que la hoja no acepte se guarda
    igual pero queda marcada en rojo y rompe los informes. */
+/* URGENTE lo pone una persona, nunca la automatizacion: es una decision, no
+   algo en lo que el trabajo se convierte por llevar tiempo esperando. */
+const PRIORIDADES = ["URGENTE","ALTA","MEDIA","BAJA"];
+
 const MATERIALES = ["PP 9002","INOX 304","GLASSLINER","PP-PANEL","OTRO"];
 const TIPOS = ["SE12","SM20","480","BATIENTE","BATIENTE DOBLE","VAIVEN SENCILLA","VAIVEN DOBLE","OFICINA","EMERGENCIA","EMERGENCIA DOBLE"];
 const ESPESORES = ["40","50","62","70","80","92","100","112"];
 // La hoja valida SX,DX,DH,VAIVEN en las filas nuevas; VD y BD siguen en filas
 // antiguas, asi que se conservan para no marcarlas como invalidas.
 const APERTURAS = ["SX","DX","DH","VAIVEN","VD","BD"];
-const DESPACHOS = ["Terminado","Separado","En Almacén","Despachado","Anulada"];
+const DESPACHOS = ["Terminado","En Almacén","Despachado","Anulada"];
 
 /* --- Especificacion (columnas AC..AK) --- */
 const TIPOS_MARCO = ["SIN MARCO","ALUMINIO 2X1","ALUMINIO 2X1 CON ALETA","ALUMINIO 3X1",
@@ -35,36 +39,46 @@ const EMPAQUE_VISOR = {"SIN VISOR":0, "22 X 60":1.6, "30 X 60":1.8, "40 X 60":2.
 /** El tamaño de bumper solo aplica si se eligio un bumper de verdad. */
 const llevaBumper = v => !!String(v||"").trim() && String(v).trim().toUpperCase() !== "SIN BUMPER";
 
-/* SEPARAR UNA PUERTA DE STOCK
-   Una puerta de stock se fabrica sin dueño; al venderla hay que dejar constancia
-   de para quien queda. El nombre del comprador se anexa al del cliente en la
-   misma celda, separado por una flecha:
+/* SEPARAR UNA PUERTA — LA RESERVA NO ES UNA ETAPA
+   Estaba metida en ESTADO DESPACHO, junto a Terminado, En Almacen y
+   Despachado. Pero «separada» no dice DONDE esta la puerta, dice QUIEN la
+   tiene apartada, y las dos cosas pasan a la vez: lo normal es una puerta
+   separada Y en almacen. Al compartir celda, una excluia a la otra.
 
-       STOCK - INR FABRICA -> FRIGORIFICOS DEL NORTE
+   Ahora son dos ejes independientes:
+     ESTADO DESPACHO (Y)  -> donde esta: Terminado, En Almacen, Despachado
+     SEPARADA PARA (AL)   -> quien la tiene apartada, o nadie
 
-   Se guarda ahi, y no en una columna nueva, porque asi viaja con la ficha a
-   cualquier informe, impresion o vista sin tocar la estructura de la hoja, y se
-   entiende leyendo la celda desde la propia hoja de calculo. */
+   El nombre del comprador se guardaba antes anexado al cliente con una flecha.
+   Se conserva la lectura de ese formato para no perder lo ya escrito, pero lo
+   nuevo va a su columna. */
 const SEP_MARCA = " -> ";
+
 /** Para quien esta separada, o "" si no lo esta. */
 const separadaPara = c => {
+  const propio = String(c[C.SEPA] ?? "").trim();
+  if(propio) return propio;
+  // Formato antiguo: el comprador anexado al cliente. Se sigue leyendo para
+  // que nada desaparezca hasta que la reparacion lo mueva a su sitio.
   const t = String(c[C.CLI] ?? "");
   const i = t.indexOf(SEP_MARCA);
   return i < 0 ? "" : t.slice(i + SEP_MARCA.length).trim();
 };
-/** El cliente original, sin el comprador anexado. */
+/** El cliente, sin el comprador que el formato antiguo le anexaba. */
 const clienteBase = c => {
   const t = String(c[C.CLI] ?? "");
   const i = t.indexOf(SEP_MARCA);
   return (i < 0 ? t : t.slice(0, i)).trim();
 };
+const separada = c => separadaPara(c) !== "";
 
-/* URGENTE: separada para un cliente y todavia sin terminar.
-   Es el caso peor de la planta —hay alguien esperandola y no esta hecha— asi
-   que pasa por delante incluso de las de prioridad ALTA. Se le dice «urgente»
-   y no «ultra alta» porque en la tablet se lee de un vistazo y explica que
-   hacer, no solo donde va en la lista. */
-const urgente = c => desp(c) === "Separado" && progreso(c).pct < 1;
+/* URGENTE tiene dos origenes y se distinguen a proposito: uno es una decision
+   y el otro una consecuencia, y no se corrigen igual. */
+/** Alguien la marco urgente a mano. */
+const urgenteManual = c => String(c[C.PRIO] ?? "").trim().toUpperCase() === "URGENTE";
+/** Separada y sin terminar: hay un comprador esperando algo que no esta hecho. */
+const urgenteAuto = c => separada(c) && progreso(c).pct < 1;
+const urgente = c => urgenteManual(c) || urgenteAuto(c);
 
 /** Una puerta terminada espera revision de calidad; aun no esta en almacen. */
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
@@ -86,7 +100,8 @@ const C = {FECHA:0,OP:1,CLI:2,COMP:3,STOCK:4,MAT:5,TIPO:6,ANCHO:7,ALTO:8,PTS:9,E
            EMPVREF:33,   // AH  EMPAQUE VISOR REFERENCIA
            BUMP:34,      // AI  BUMPER
            TBUMP:35,     // AJ  TAMANO BUMPER
-           CAL:36};      // AK  NOTAS DE CALIDAD
+           CAL:36,       // AK  NOTAS DE CALIDAD
+           SEPA:37};     // AL  SEPARADA PARA
 const PROCS = [
   {i:13,c:"N",k:"CORTE PERFIL",s:"CP"}, {i:14,c:"O",k:"INYECCION",s:"IN"},
   {i:15,c:"P",k:"ACCESORIOS",s:"AC"},   {i:16,c:"Q",k:"CORTE MARCO",s:"CM"},

@@ -111,7 +111,7 @@ function tagDesp(v){
 }
 /* Edición en línea: prioridad como selector y ensamble como campo de texto.
    Se guardan al cambiar (o al salir del campo) y quedan en el historial. */
-const PRIOS = ["ALTA","MEDIA","BAJA"];
+const PRIOS = PRIORIDADES;
 function selAp(r, v){
   const cur = String(v??"").trim().toUpperCase();
   const conocida = APERTURAS.includes(cur);

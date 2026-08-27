@@ -75,7 +75,7 @@ function entradaEnPlanta(c){
   return e > h ? e : h;
 }
 
-const RANK_PRIO = {ALTA:0, MEDIA:1, SIN:2, BAJA:3};
+const RANK_PRIO = {URGENTE:-1, ALTA:0, MEDIA:1, SIN:2, BAJA:3};
 
 /** Reparte el pendiente en el plazo de la meta, al ritmo de la meta. */
 function calcularCronograma(){

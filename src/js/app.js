@@ -94,6 +94,9 @@ async function enterApp(){
     if(nf) toast(`Hoja ampliada: ${nf} fila(s) añadida(s)`,"ok");
   }catch(e){ console.warn("filas:", e.message); }
   await loadLog();                // el historial hace falta para poder reparar
+  await sincronizarValidacion();        // la hoja ofrece las mismas opciones
+  const ns = await repairSeparadas();   // la reserva se muda a su columna
+  if(ns) toast(`${ns} separada(s) pasadas a su propia columna`,"ok");
   const nr = await repairFechasFalsas();
   if(nr) toast(`${nr} fecha(s) de proceso restaurada(s)`,"ok");
   // El escalado va ANTES: subir una puerta a ALTA cambia su fecha programada,

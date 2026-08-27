@@ -89,14 +89,14 @@
         <option value="open">Abiertas (&lt;100%)</option></select></label>
       <label class="f"><span>Despacho</span><select class="inp" id="f-desp">
         <option value="">Todos</option><option>Terminado</option><option>En Almacén</option>
-        <option>Despachado</option><option>Separado</option><option>Anulada</option>
+        <option>Despachado</option><option>Anulada</option>
         <option value="__none">Sin estado</option></select></label>
       <label class="f"><span>Ensamble</span><select class="inp" id="f-ens">
         <option value="">Todas</option>
         <option value="si">Con ensamble</option>
         <option value="no">Sin ensamble</option></select></label>
       <label class="f"><span>Prioridad</span><select class="inp" id="f-prio">
-        <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
+        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
       <label class="f"><span>Material</span><select class="inp" id="f-mat"></select></label>
       <label class="f"><span>Tipo</span><select class="inp" id="f-tipo"></select></label>
       <label class="f"><span>Espesor</span><select class="inp" id="f-esp"></select></label>
@@ -160,7 +160,7 @@
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="p-q" placeholder="OP o proyecto…" autocomplete="off"></label>
       <label class="f"><span>Prioridad</span><select class="inp" id="p-prio">
-        <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option>
+        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option>
         <option value="__none">Sin prioridad</option></select></label>
       <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
         <option value="pend" selected>Por fabricar (menos del 100%)</option>
@@ -238,7 +238,7 @@
       <label class="f"><span>Espesor</span><select class="inp" id="a-esp"></select></label>
       <label class="f"><span>Apertura</span><select class="inp" id="a-ap"></select></label>
       <label class="f"><span>Estado</span><select class="inp" id="a-est">
-        <option value="">Todos</option><option>En Almacén</option><option>Separado</option></select></label>
+        <option value="">Todos</option><option>En Almacén</option><option>Despachado</option></select></label>
       <button class="btn sm" id="a-clear">Limpiar</button>
       <div class="grow"></div>
       <button class="btn sm" id="a-todas">Seleccionar todas</button>
@@ -294,7 +294,7 @@
           <label class="f auto"><span>Fecha de creación</span>
             <input class="inp ro" id="n-fecha" readonly tabindex="-1" title="Se pone sola al crear la ficha"></label>
           <label class="f"><span>Cantidad de puertas</span><input class="inp" id="n-qty" type="number" min="1" max="40" value="1"></label>
-          <label class="f"><span>Prioridad</span><select class="inp" id="n-prio"><option value="">—</option><option>ALTA</option><option>MEDIA</option><option value="BAJA" selected>BAJA</option></select></label>
+          <label class="f"><span>Prioridad</span><select class="inp" id="n-prio"><option value="">—</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option value="BAJA" selected>BAJA</option></select></label>
         </div>
         <label class="f" style="margin-top:12px"><span class="req">Cliente / proyecto</span>
           <input class="inp big" id="n-cli" required list="dl-cli" placeholder="FRIO PANEL"><datalist id="dl-cli"></datalist></label>
@@ -372,7 +372,7 @@
     <label class="f"><span>Fecha despacho</span><input class="inp" id="d-fdesp" placeholder="dd/mm/aaaa"></label>
     <label class="f"><span>Fecha proceso</span><input class="inp" id="d-fproc" placeholder="dd/mm/aaaa"></label>
     <label class="f"><span>Prioridad</span><select class="inp" id="d-prio">
-      <option value="">—</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
+      <option value="">—</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
     <label class="f"><span>N° ensamble</span><input class="inp" id="d-ens"></label>
   </div>
   <label class="f" style="margin-top:12px"><span>Observaciones</span><textarea class="inp" id="d-obs" rows="2"></textarea></label>

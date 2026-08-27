@@ -46,7 +46,7 @@ function openDet(r){
     $("#d-pts").value = num(c[C.PTS]) ?? "";
   }
   $("#d-fdesp").value = fmtDate(c[C.FDESP]); $("#d-fproc").value = fmtDate(c[C.FPROC]);
-  $("#d-prio").value = ["ALTA","MEDIA","BAJA"].includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
+  $("#d-prio").value = PRIORIDADES.includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
   $("#d-ens").value = c[C.ENS]??""; $("#d-obs").value = c[C.OBS]??"";
   $("#d-row").textContent = "Fila "+r;
   $("#ov-det").classList.remove("hide");

@@ -34,7 +34,7 @@ const CAMPOS = [
   {id:"lote",   n:"Fecha / lote",      g:"Identificación", tipo:"texto", v:c=>fmtDate(c[C.FECHA])},
   {id:"ens",    n:"N.º de ensamble",   g:"Identificación", tipo:"texto", v:c=>c[C.ENS]},
   {id:"prio",   n:"Prioridad",         g:"Identificación", tipo:"lista", v:c=>c[C.PRIO],
-   ops:["ALTA","MEDIA","BAJA"]},
+   ops:PRIORIDADES},
   {id:"comp",   n:"Complemento",       g:"Identificación", tipo:"sino",  v:c=>tri(c[C.COMP])===true?"Sí":"No"},
   {id:"stock",  n:"Stock",             g:"Identificación", tipo:"sino",  v:c=>tri(c[C.STOCK])===true?"Sí":"No"},
 

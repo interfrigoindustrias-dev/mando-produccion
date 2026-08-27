@@ -21,7 +21,7 @@
    Además, al marcar Despachado se rellena la fecha de despacho si está vacía.
 
    Todo corre en el navegador: se dispara cuando alguien abre o usa la app.    */
-const OFFSET = {ALTA:0, MEDIA:3, BAJA:8};
+const OFFSET = {URGENTE:0, ALTA:0, MEDIA:3, BAJA:8};
 
 /* ESCALADO DE PRIORIDAD — nada se queda atrás para siempre.
    Una puerta espera su turno para entrar a planta y, pasado un margen, sube a
@@ -33,6 +33,10 @@ const OFFSET = {ALTA:0, MEDIA:3, BAJA:8};
 
    El cambio se escribe en la columna M y queda en el historial como AUTO, para
    que se vea que lo hizo el sistema y no una persona. */
+/* URGENTE no esta aqui, y es deliberado: nada escala hasta urgente. Urgente lo
+   decide una persona; si el tiempo bastara para llegar, acabaria siendolo todo
+   y la palabra dejaria de significar nada. Lo que espera demasiado sube a ALTA
+   y ahi se queda. */
 const ESCALA = {MEDIA: 3 + 2, BAJA: 8 + 5};
 
 /** Fecha de inicio de producción: la columna AB de la hoja.
@@ -201,4 +205,62 @@ async function repairFechasFalsas(){
     render(); renderDashVisible();
     return ups.length;
   }catch(e){ console.warn("restaurar fechas:", e.message); return 0; }
+}
+
+
+/* ============================== MIGRACION ==============================
+   «Separado» dejo de ser una etapa y paso a ser una columna propia (AL). Esto
+   mueve lo que quedo escrito con el formato viejo, una sola vez y sin perder
+   nada:
+
+     · el comprador —que iba anexado al cliente con una flecha— pasa a AL
+     · el cliente recupera su nombre limpio
+     · la etapa pasa a «En Almacen», que es donde estan de verdad
+
+   Si una separada no dice para quien, se marca SIN INDICAR en vez de dejarla
+   en blanco: perder el dato de que esta reservada seria peor que no saber el
+   comprador. Es idempotente: solo toca filas que todavia digan «Separado». */
+const SIN_COMPRADOR = "SIN INDICAR";
+
+async function repairSeparadas(){
+  const ups = [], logs = [];
+  for(const {r, c} of ROWS){
+    if(!rowActive(c)) continue;
+    const eraEstado = String(c[C.DESP] ?? "").trim() === "Separado";
+    const conFlecha = String(c[C.CLI] ?? "").includes(SEP_MARCA);
+    // Hay dos restos del formato viejo, y los dos hay que limpiar: la etapa
+    // «Separado», y el comprador anexado al cliente. Este segundo aparece
+    // tambien en puertas ya despachadas, que nunca dejarian de arrastrarlo.
+    if(!eraEstado && !conFlecha) continue;
+    if(String(c[C.SEPA] ?? "").trim() && !conFlecha && !eraEstado) continue;
+
+    const comprador = separadaPara(c) || (eraEstado ? SIN_COMPRADOR : "");
+    const limpio = clienteBase(c);
+
+    if(comprador && comprador !== String(c[C.SEPA] ?? "").trim()){
+      ups.push({a1:`AL${r}`, v:[[comprador]]});
+      c[C.SEPA] = comprador;
+    }
+    // La etapa solo se corrige si «Separado» la estaba ocupando: una puerta ya
+    // despachada se queda despachada.
+    if(eraEstado){
+      ups.push({a1:`Y${r}`, v:[["En Almacén"]]});
+      c[C.DESP] = "En Almacén";
+    }
+    if(limpio !== String(c[C.CLI] ?? "")){
+      ups.push({a1:`C${r}`, v:[[limpio]]});
+      c[C.CLI] = limpio;
+    }
+    if(!ups.length) continue;
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Separada para",
+               antes: eraEstado ? "(estado Separado)" : "(anexado al cliente)",
+               despues: comprador || "—"});
+  }
+  if(!ups.length) return 0;
+  try{
+    await writeCells(ups);
+    logBulk(logs);
+    render(); renderDashVisible();
+    return logs.length;
+  }catch(e){ console.warn("separadas:", e.message); return 0; }
 }

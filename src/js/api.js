@@ -133,3 +133,37 @@ async function writeCells(list){
   } finally { busyWrites--; }
 }
 
+
+
+/* ============================== VALIDACION DE LA HOJA ==============================
+   La aplicacion y la hoja tienen que ofrecer las mismas opciones. Si se añade
+   URGENTE aqui pero no alli, quien escriba directo en la hoja no lo encuentra,
+   y la celda le queda marcada como invalida.
+
+   Se comprueba antes de escribir: reponer la validacion en cada arranque
+   gastaria una peticion por nada casi siempre.                                */
+async function sincronizarValidacion(){
+  const gid = await ensureGid();
+  if(gid === null) return 0;
+
+  const listas = [
+    {col: 12, ops: PRIORIDADES},                      // M  prioridad
+    {col: 24, ops: DESPACHOS}                         // Y  estado de despacho
+  ];
+  const req = listas.map(({col, ops}) => ({
+    setDataValidation:{
+      range:{sheetId:gid, startRowIndex:1, endRowIndex:MIN_FILAS,
+             startColumnIndex:col, endColumnIndex:col+1},
+      rule:{condition:{type:"ONE_OF_LIST",
+                       values: ops.map(v=>({userEnteredValue:v}))},
+            showCustomUi:true, strict:false}
+    }
+  }));
+  try{
+    await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:req})});
+    // El encabezado de la columna nueva, para que se entienda desde la hoja.
+    await api(`/values/${encodeURIComponent(rng("AL1"))}?valueInputOption=USER_ENTERED`,
+      {method:"PUT", body: JSON.stringify({values:[["SEPARADA PARA"]]})});
+    return 1;
+  }catch(e){ console.warn("validacion:", e.message); return 0; }
+}

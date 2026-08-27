@@ -165,6 +165,44 @@ function almacenList(){
     eq(c[C.ESP],g("a-esp")) && eq(c[C.AP],g("a-ap")) && eq(desp(c),g("a-est")));
 }
 /** Selector de estado de despacho editable en la tabla. */
+/* La reserva se edita donde se lee. Antes se hacia eligiendo «Separado» en el
+   estado de despacho, y por eso una puerta no podia estar separada y en almacen
+   a la vez. Ahora se pulsa la propia celda. */
+function celdaSeparar(r, para){
+  return para
+    ? `<span class="para" data-separar="${r}" title="Cambiar comprador">${esc(para)}</span>
+       <button class="x sep-x" data-soltar="${r}" title="Soltar la reserva">×</button>`
+    : `<button class="btn sm" data-separar="${r}">Separar</button>`;
+}
+
+/** Suelta la reserva: la puerta vuelve a estar libre. */
+async function soltarSeparada(r){
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const antes = separadaPara(row.c);
+  if(!antes) return;
+  if(!confirm(`La OP ${row.c[C.OP]} está separada para ${antes}.\n\n¿Soltarla?`)) return;
+  row.c[C.SEPA] = "";
+  try{
+    await writeCells([{a1:`AL${r}`, v:[[""]]}]);
+    logChanges("EDITA", row.c[C.OP], r, [{campo:"Separada para", antes, despues:""}]);
+    toast("Reserva soltada","ok");
+    render(); renderDashVisible(); pintarModeloModal();
+  }catch(e){ row.c[C.SEPA] = antes; toast(e.message,"err"); }
+}
+
+/** Pulsar la celda de reserva, desde cualquier tabla. */
+async function clicSeparar(ev){
+  const x = ev.target.closest("[data-soltar]");
+  if(x){ await soltarSeparada(+x.dataset.soltar); return true; }
+  const s = ev.target.closest("[data-separar]");
+  if(s){
+    await pedirSeparar(+s.dataset.separar);
+    render(); renderDashVisible(); pintarModeloModal();
+    return true;
+  }
+  return false;
+}
+
 /** La nota de calidad, vista desde almacen.
  *  Calidad la escribe y almacen la necesita: es quien decide si la puerta sale.
  *  Sin esto el rechazo se quedaba encerrado en el tablero de calidad. */
@@ -310,17 +348,18 @@ async function confirmarSeparar(){
 
   const row = ROWS.find(x=>x.r===r); if(!row) return;
   const c = row.c;
-  const antesCli = String(c[C.CLI] ?? ""), antesDesp = desp(c);
-  const nuevoCli = clienteBase(c) + SEP_MARCA + nombre;
+  const antes = separadaPara(c);
 
   const btn = $("#sep-ok"); btn.disabled = true;
   writeSeq++;
-  c[C.CLI] = nuevoCli; c[C.DESP] = "Separado";
+  c[C.SEPA] = nombre;
   try{
-    await writeCells([{a1:`C${r}`, v:[[nuevoCli]]}, {a1:`Y${r}`, v:[["Separado"]]}]);
+    // Solo la reserva. La etapa (Y) no se toca: una puerta puede estar
+    // separada y en almacen a la vez, que era justamente lo que no se podia
+    // decir cuando las dos cosas compartian celda.
+    await writeCells([{a1:`AL${r}`, v:[[nombre]]}]);
     logChanges("EDITA", c[C.OP], r, [
-      {campo:"Estado despacho", antes:antesDesp, despues:"Separado"},
-      {campo:"Separada para",   antes:separadaPara({[C.CLI]:antesCli}), despues:nombre}
+      {campo:"Separada para", antes, despues:nombre}
     ]);
     lastHash=""; setSync("","Guardado");
     toast(`Separada para ${nombre}`,"ok");
@@ -329,7 +368,7 @@ async function confirmarSeparar(){
     render(); renderDashVisible();
     resolve(true);
   }catch(e){
-    c[C.CLI] = antesCli; c[C.DESP] = antesDesp;
+    c[C.SEPA] = antes;
     toast(e.message,"err");
     resolve(false);
   }finally{ btn.disabled = false; }
@@ -347,12 +386,7 @@ async function guardarDespacho(r, val){
   const row=ROWS.find(x=>x.r===r); if(!row) return false;
   const antes=String(row.c[C.DESP]??"");
   if(antes===val) return false;
-  // Separar exige comprador. Se pide aqui y no en cada tablero para que la
-  // regla valga igual desde stock, almacen o planta.
-  if(val==="Separado" && pideComprador()){
-    const hecho = await pedirSeparar(r);
-    if(hecho !== null) return hecho;        // null = aqui no se pide, sigue abajo
-  }
+
   const ups=[{a1:`Y${r}`, v:[[val]]}], cambios=[{campo:"Estado despacho", antes, despues:val}];
   if(val==="Despachado" && !fmtDate(row.c[C.FDESP]) && CFG.auto!==false){
     const h=hoy();
@@ -583,7 +617,7 @@ function pintarModeloModal(){
       return [
         `<span class="op">${esc(c[C.OP] ?? "")}</span>`,
         selDesp(r, c[C.DESP]),
-        para ? `<span class="para">${esc(para)}</span>` : `<span class="mut">—</span>`,
+        celdaSeparar(r, para),
         esc(fmtDate(c[C.FPROC])),
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
         notaAlmacen(c),
@@ -645,7 +679,7 @@ $("#m-tabla").addEventListener("click", ev=>{
   $("#n-ap").value  = m.ap;
   $("#n-ancho").value = m.ancho ?? "";
   $("#n-alto").value  = m.alto ?? "";
-  $("#n-prio").value = ["ALTA","MEDIA","BAJA"].includes(m.prio) ? m.prio : "";
+  $("#n-prio").value = PRIORIDADES.includes(m.prio) ? m.prio : "";
   $("#n-qty").value = "1";
   hintOp();
   $("#ov-nueva").classList.remove("hide");
@@ -698,7 +732,7 @@ function renderStock(){
         esc(fmtDate(c[C.FPROC])),
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
         selDesp(r, c[C.DESP]),
-        para ? `<span class="para">${esc(para)}</span>` : `<span class="mut">—</span>`];
+        celdaSeparar(r, para)];
     }),
     L.map(({c})=> separadaPara(c) ? "sep" : ""));
   contador("#s-cnt", L.length, B.length,
@@ -729,6 +763,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.addEventListener("keydown", e=>{
     if(e.key === "Escape" && ov && !ov.classList.contains("hide")) cancelarSeparar();
   });
+});
+
+["#s-tabla","#a-tabla","#mm-tabla"].forEach(sel=>{
+  const t = $(sel); if(t) t.addEventListener("click", clicSeparar);
 });
 
 $("#s-tabla").addEventListener("change", async ev=>{

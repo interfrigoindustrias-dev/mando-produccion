@@ -6,7 +6,7 @@
 "use strict";
 
 /* ---------- Planta: tablet del jefe de planta ---------- */
-const PRIO_ORD = {ALTA:0, MEDIA:1, BAJA:2, "":3};
+const PRIO_ORD = {URGENTE:-1, ALTA:0, MEDIA:1, BAJA:2, "":3};
 /* Tonos de la paleta de marca (#0A4283) para que cada tarjeta se distinga sin
    perder la identidad visual. La prioridad ALTA y MEDIA mandan sobre el tono. */
 /* Un color por proceso: gama que parte del azul de marca y recorre
@@ -32,12 +32,12 @@ function plantaList(){
   plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
-    // Planta ve lo que no tiene estado, MAS las separadas sin terminar: esas
-    // ya tienen comprador esperando, asi que siguen siendo trabajo de planta
-    // aunque lleven estado. El resto —terminada, en almacen, despachada— ya es
+    // Planta ve lo que no tiene etapa asignada, MAS las separadas sin terminar:
+    // esas tienen comprador esperando algo que no esta hecho, asi que siguen
+    // siendo trabajo de planta aunque figuren en almacen. El resto ya es
     // trabajo de otro y mantenerlo a la vista solo estorba.
     const urge = urgente(c);
-    if(desp(c) && !urge) return false;
+    if(desp(c) && !urgenteAuto(c)) return false;
 
     if(fe==="urge" && !urge) return false;
     if(fe==="pend" && p>=1) return false;
@@ -58,8 +58,10 @@ function plantaList(){
   });
   const ord=$("#p-ord").value;
   const porOp = (a,b)=>String(a.c[C.OP]).localeCompare(String(b.c[C.OP]),"es",{numeric:true});
-  // -1 deja las urgentes por delante de ALTA, que es 0.
-  const prioDe = x => urgente(x.c) ? -1
+  /* Orden de ataque. La urgente marcada a mano va antes que la automatica:
+     alguien la puso ahi mirando algo que el sistema no sabe. */
+  const prioDe = x => urgenteManual(x.c) ? -2
+    : urgenteAuto(x.c) ? -1
     : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
   L.sort((a,b)=>{
     if(ord==="op") return porOp(a,b);
@@ -89,10 +91,17 @@ const metaTarjeta = c => [
 
 const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDAD</span>';
 
-/** Distintivo de la tarjeta: urgente manda sobre la prioridad escrita. */
-const etiquetaPlanta = c => urgente(c)
-  ? `<span class="tag t-urg" title="Separada para ${esc(separadaPara(c) || "un cliente")} y sin terminar">URGENTE</span>`
-  : etiquetaPrio(String(c[C.PRIO]??"").trim().toUpperCase());
+/* Distintivo de la tarjeta. Las dos urgencias se pintan distinto porque no se
+   arreglan igual: la manual se quita cambiando la prioridad, la automatica se
+   quita terminando la puerta o soltando la reserva. */
+const etiquetaPlanta = c => {
+  if(urgenteManual(c))
+    return `<span class="tag t-urg" title="Marcada urgente a mano">URGENTE</span>`;
+  if(urgenteAuto(c))
+    return `<span class="tag t-urg-auto" title="Separada para ${
+      esc(separadaPara(c))} y todavía sin terminar">URGENTE · VENDIDA</span>`;
+  return etiquetaPrio(String(c[C.PRIO]??"").trim().toUpperCase());
+};
 
 /* Observaciones: lo que hay que saber ANTES de tocar la puerta («GOLPEADA»,
    «lleva visor de 30x60»…). Si no hay nada, el hueco no ocupa sitio. */
@@ -136,7 +145,8 @@ function pintarTarjeta(r){
 
   // Color de la tarjeta segun la prioridad
   ["ALTA","MEDIA","BAJA"].forEach(p=>card.classList.toggle("prio-"+p, prio===p));
-  card.classList.toggle("urg", urgente(c));
+  card.classList.toggle("urg", urgenteManual(c));
+  card.classList.toggle("urg-auto", urgenteAuto(c) && !urgenteManual(c));
 
   // Procesos. Que un proceso pase a aplicar (o deje de hacerlo) cambia la fila
   // de botones entera: eso si obliga a reconstruir.
@@ -189,14 +199,17 @@ function avisarProgramadas(){
    por la mañana, y hasta ahora habia que contarlo a ojo tarjeta por tarjeta. */
 function pintarResumenPlanta(L){
   const caja = $("#p-resumen"); if(!caja) return;
-  const urg = L.filter(({c})=>urgente(c)).length;
+  const urgM = L.filter(({c})=>urgenteManual(c)).length;
+  const urgA = L.filter(({c})=>urgenteAuto(c) && !urgenteManual(c)).length;
+  const urg = urgM + urgA;
   const emp = L.filter(({c})=>progreso(c).ok > 0).length;
   const pts = L.reduce((a,{c})=>a + (num(c[C.PTS])||0), 0);
   const dato = (v, k, cls) =>
     `<div class="pr${cls?" "+cls:""}"><b>${v}</b><span>${k}</span></div>`;
   caja.innerHTML =
     dato(L.length, "En producción") +
-    (urg ? dato(urg, "Urgentes", "urg") : "") +
+    (urgM ? dato(urgM, "Urgentes", "urg") : "") +
+    (urgA ? dato(urgA, "Vendidas a medias", "urg") : "") +
     dato(emp, "Empezadas") +
     dato(L.length - emp, "Sin empezar") +
     dato(Math.round(pts*10)/10, "Puntos");
@@ -228,7 +241,7 @@ function renderPlanta(){
       return `<button class="pb ${v?"on":"off"}" style="--pc:${COLOR_PROC[pr.i]}"
         data-r="${r}" data-i="${pr.i}"><span class="ic"></span>${pr.k}</button>`;
     }).join("");
-    return `<div class="pcard${prio?" prio-"+prio:""}${pc>=100?" lista":""}${urgente(c)?" urg":""}" data-r="${r}">
+    return `<div class="pcard${prio?" prio-"+prio:""}${pc>=100?" lista":""}${urgenteManual(c)?" urg":urgenteAuto(c)?" urg-auto":""}" data-r="${r}">
       <div class="ph">
         <span class="op"  data-f="op">${esc(c[C.OP]??"")}</span>
         <span class="cli" data-f="cli">${esc(c[C.CLI]??"")}</span>

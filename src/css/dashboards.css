@@ -121,3 +121,8 @@
 .mmk span{display:block;margin-top:5px;font-size:10px;font-weight:600;
   letter-spacing:.07em;text-transform:uppercase;color:var(--tx2)}
 #mm-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}
+
+/* La reserva se edita donde se lee. */
+.para{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.sep-x{margin-left:6px;font-size:14px;line-height:1;opacity:.55}
+.sep-x:hover{opacity:1;color:var(--bad)}
