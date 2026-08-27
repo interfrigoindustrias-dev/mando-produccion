@@ -142,3 +142,20 @@
 .pterm:disabled{opacity:.5;cursor:default}
 /* En una tarjeta ya completa el botón es lo siguiente que hay que hacer. */
 .pcard.lista .pterm{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* Cuánto trabajo hay en planta: lo primero que se mira al llegar. */
+.presumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.pr{background:var(--bg2);padding:12px 14px}
+.pr b{display:block;font-size:26px;font-weight:800;line-height:1;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pr span{display:block;margin-top:6px;font-size:10.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--tx2)}
+/* Si hay urgentes, la cifra tiene que doler un poco. */
+.pr.urg b{color:var(--bad)}
+.pr.urg span{color:var(--bad)}
+
+/* URGENTE: separada para un cliente y sin terminar. Manda sobre la prioridad. */
+.tag.t-urg{background:var(--bad);color:#fff;border-color:var(--bad)}
+.pcard.urg{border-color:var(--bad);box-shadow:inset 4px 0 0 var(--bad)}

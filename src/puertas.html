@@ -164,6 +164,7 @@
         <option value="__none">Sin prioridad</option></select></label>
       <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
         <option value="pend" selected>Por fabricar (menos del 100%)</option>
+        <option value="urge">Solo urgentes (separadas sin terminar)</option>
         <option value="">Todas las pendientes</option>
         <option value="wip">Iniciadas sin terminar</option></select></label>
       <label class="f"><span>Ordenar</span><select class="inp" id="p-ord">
@@ -176,6 +177,7 @@
       <button class="btn sm" id="btn-crono" title="Repartir lo pendiente en días">🗓 Cronograma</button>
       <span class="cnt" id="p-cnt"></span>
     </div>
+    <div id="p-resumen" class="presumen"></div>
     <div id="p-prog-aviso" class="aviso prog hide"></div>
     <div id="p-lista" class="planta"></div>
     <div class="empty hide" id="p-empty">No hay puertas pendientes con ese filtro.</div>

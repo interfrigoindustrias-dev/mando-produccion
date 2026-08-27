@@ -59,6 +59,13 @@ const clienteBase = c => {
   return (i < 0 ? t : t.slice(0, i)).trim();
 };
 
+/* URGENTE: separada para un cliente y todavia sin terminar.
+   Es el caso peor de la planta —hay alguien esperandola y no esta hecha— asi
+   que pasa por delante incluso de las de prioridad ALTA. Se le dice «urgente»
+   y no «ultra alta» porque en la tablet se lee de un vistazo y explica que
+   hacer, no solo donde va en la lista. */
+const urgente = c => desp(c) === "Separado" && progreso(c).pct < 1;
+
 /** Una puerta terminada espera revision de calidad; aun no esta en almacen. */
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
 /** Una puerta anulada queda fuera de producción, almacén y stock. */

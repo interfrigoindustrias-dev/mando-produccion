@@ -32,11 +32,14 @@ function plantaList(){
   plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
-    // Planta ve UNICAMENTE lo que no tiene estado. En cuanto una puerta recibe
-    // uno —terminada, separada, en almacen, despachada— deja de ser trabajo de
-    // planta y pasa a serlo de otro: mantenerla a la vista solo estorba.
-    if(desp(c)) return false;
+    // Planta ve lo que no tiene estado, MAS las separadas sin terminar: esas
+    // ya tienen comprador esperando, asi que siguen siendo trabajo de planta
+    // aunque lleven estado. El resto —terminada, en almacen, despachada— ya es
+    // trabajo de otro y mantenerlo a la vista solo estorba.
+    const urge = urgente(c);
+    if(desp(c) && !urge) return false;
 
+    if(fe==="urge" && !urge) return false;
     if(fe==="pend" && p>=1) return false;
     if(fe==="wip"  && !(p>0 && p<1)) return false;
     if(fp==="__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
@@ -55,7 +58,9 @@ function plantaList(){
   });
   const ord=$("#p-ord").value;
   const porOp = (a,b)=>String(a.c[C.OP]).localeCompare(String(b.c[C.OP]),"es",{numeric:true});
-  const prioDe = x => PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3;
+  // -1 deja las urgentes por delante de ALTA, que es 0.
+  const prioDe = x => urgente(x.c) ? -1
+    : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
   L.sort((a,b)=>{
     if(ord==="op") return porOp(a,b);
     if(ord==="avance") return progreso(a.c).pct - progreso(b.c).pct;
@@ -83,6 +88,11 @@ const metaTarjeta = c => [
 ].filter(Boolean).join(" · ");
 
 const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDAD</span>';
+
+/** Distintivo de la tarjeta: urgente manda sobre la prioridad escrita. */
+const etiquetaPlanta = c => urgente(c)
+  ? `<span class="tag t-urg" title="Separada para ${esc(separadaPara(c) || "un cliente")} y sin terminar">URGENTE</span>`
+  : etiquetaPrio(String(c[C.PRIO]??"").trim().toUpperCase());
 
 /* Observaciones: lo que hay que saber ANTES de tocar la puerta («GOLPEADA»,
    «lleva visor de 30x60»…). Si no hay nada, el hueco no ocupa sitio. */
@@ -113,7 +123,7 @@ function pintarTarjeta(r){
   set("op",  esc(c[C.OP]??""));
   set("cli", esc(c[C.CLI]??""));
   set("met", metaTarjeta(c));
-  set("prio", etiquetaPrio(prio));
+  set("prio", etiquetaPlanta(c));
   set("fecha", esc(fmtDate(c[C.FPROC]))||"sin fecha");
   set("pts", `${num(c[C.PTS])??"—"}<em>pts</em>`);
 
@@ -126,6 +136,7 @@ function pintarTarjeta(r){
 
   // Color de la tarjeta segun la prioridad
   ["ALTA","MEDIA","BAJA"].forEach(p=>card.classList.toggle("prio-"+p, prio===p));
+  card.classList.toggle("urg", urgente(c));
 
   // Procesos. Que un proceso pase a aplicar (o deje de hacerlo) cambia la fila
   // de botones entera: eso si obliga a reconstruir.
@@ -174,9 +185,27 @@ function avisarProgramadas(){
   if(ck) ck.onchange = ()=>{ plantaDibujada=""; renderPlanta(); };
 }
 
+/* Cuanto trabajo hay en planta, en grande. Es lo primero que se mira al llegar
+   por la mañana, y hasta ahora habia que contarlo a ojo tarjeta por tarjeta. */
+function pintarResumenPlanta(L){
+  const caja = $("#p-resumen"); if(!caja) return;
+  const urg = L.filter(({c})=>urgente(c)).length;
+  const emp = L.filter(({c})=>progreso(c).ok > 0).length;
+  const pts = L.reduce((a,{c})=>a + (num(c[C.PTS])||0), 0);
+  const dato = (v, k, cls) =>
+    `<div class="pr${cls?" "+cls:""}"><b>${v}</b><span>${k}</span></div>`;
+  caja.innerHTML =
+    dato(L.length, "En producción") +
+    (urg ? dato(urg, "Urgentes", "urg") : "") +
+    dato(emp, "Empezadas") +
+    dato(L.length - emp, "Sin empezar") +
+    dato(Math.round(pts*10)/10, "Puntos");
+}
+
 function renderPlanta(){
   const L=plantaList();
   avisarProgramadas();
+  pintarResumenPlanta(L);
   const cnt=$("#p-cnt");
   cnt.innerHTML = `<b>${L.length}</b> de ${activas().length} OP`;
   cnt.classList.toggle("on", L.length!==activas().length);
@@ -199,12 +228,12 @@ function renderPlanta(){
       return `<button class="pb ${v?"on":"off"}" style="--pc:${COLOR_PROC[pr.i]}"
         data-r="${r}" data-i="${pr.i}"><span class="ic"></span>${pr.k}</button>`;
     }).join("");
-    return `<div class="pcard${prio?" prio-"+prio:""}${pc>=100?" lista":""}" data-r="${r}">
+    return `<div class="pcard${prio?" prio-"+prio:""}${pc>=100?" lista":""}${urgente(c)?" urg":""}" data-r="${r}">
       <div class="ph">
         <span class="op"  data-f="op">${esc(c[C.OP]??"")}</span>
         <span class="cli" data-f="cli">${esc(c[C.CLI]??"")}</span>
         <span class="met" data-f="met">${metaTarjeta(c)}</span>
-        <span data-f="prio">${etiquetaPrio(prio)}</span>
+        <span data-f="prio">${etiquetaPlanta(c)}</span>
         <span class="met" data-f="fecha">${esc(fmtDate(c[C.FPROC]))||"sin fecha"}</span>
         <span class="pts" data-f="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
         <span class="av"  data-f="av">${pc}%</span>
