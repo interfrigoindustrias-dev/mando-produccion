@@ -228,14 +228,16 @@ async function repairSeparadas(){
     if(!rowActive(c)) continue;
     const eraEstado = String(c[C.DESP] ?? "").trim() === "Separado";
     const conFlecha = String(c[C.CLI] ?? "").includes(SEP_MARCA);
+    // Una reserva ya en su columna pero sin el anexo en el cliente: hay que
+    // reponerlo, que es lo que hace que se vea en impresiones e informes.
+    const faltaAnexo = String(c[C.SEPA] ?? "").trim() && !conFlecha;
     // Hay dos restos del formato viejo, y los dos hay que limpiar: la etapa
     // «Separado», y el comprador anexado al cliente. Este segundo aparece
     // tambien en puertas ya despachadas, que nunca dejarian de arrastrarlo.
-    if(!eraEstado && !conFlecha) continue;
-    if(String(c[C.SEPA] ?? "").trim() && !conFlecha && !eraEstado) continue;
+    if(!eraEstado && !conFlecha && !faltaAnexo) continue;
+
 
     const comprador = separadaPara(c) || (eraEstado ? SIN_COMPRADOR : "");
-    const limpio = clienteBase(c);
 
     if(comprador && comprador !== String(c[C.SEPA] ?? "").trim()){
       ups.push({a1:`AL${r}`, v:[[comprador]]});
@@ -247,9 +249,12 @@ async function repairSeparadas(){
       ups.push({a1:`Y${r}`, v:[["En Almacén"]]});
       c[C.DESP] = "En Almacén";
     }
-    if(limpio !== String(c[C.CLI] ?? "")){
-      ups.push({a1:`C${r}`, v:[[limpio]]});
-      c[C.CLI] = limpio;
+    // El cliente lleva el comprador anexado: asi viaja a impresiones e informes
+    // sin que cada vista tenga que conocer la columna nueva.
+    const conAnexo = comprador ? clienteBase(c) + SEP_MARCA + comprador : clienteBase(c);
+    if(conAnexo !== String(c[C.CLI] ?? "")){
+      ups.push({a1:`C${r}`, v:[[conAnexo]]});
+      c[C.CLI] = conAnexo;
     }
     if(!ups.length) continue;
     logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Separada para",

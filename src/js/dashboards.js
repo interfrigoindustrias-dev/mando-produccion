@@ -181,13 +181,21 @@ async function soltarSeparada(r){
   const antes = separadaPara(row.c);
   if(!antes) return;
   if(!confirm(`La OP ${row.c[C.OP]} está separada para ${antes}.\n\n¿Soltarla?`)) return;
+  const antesCli = String(row.c[C.CLI] ?? "");
+  const limpio = clienteBase(row.c);
   row.c[C.SEPA] = "";
+  row.c[C.CLI]  = limpio;
   try{
-    await writeCells([{a1:`AL${r}`, v:[[""]]}]);
-    logChanges("EDITA", row.c[C.OP], r, [{campo:"Separada para", antes, despues:""}]);
+    // Se quita de los dos sitios: dejar el nombre pegado al cliente de una
+    // puerta ya libre haria creer que sigue apartada.
+    await writeCells([{a1:`AL${r}`, v:[[""]]}, {a1:`C${r}`, v:[[limpio]]}]);
+    logChanges("EDITA", row.c[C.OP], r, [
+      {campo:"Separada para", antes, despues:""},
+      {campo:"Cliente", antes:antesCli, despues:limpio}
+    ]);
     toast("Reserva soltada","ok");
     render(); renderDashVisible(); pintarModeloModal();
-  }catch(e){ row.c[C.SEPA] = antes; toast(e.message,"err"); }
+  }catch(e){ row.c[C.SEPA] = antes; row.c[C.CLI] = antesCli; toast(e.message,"err"); }
 }
 
 /** Pulsar la celda de reserva, desde cualquier tabla. */
@@ -247,14 +255,14 @@ function renderAlmacen(){
     ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
-  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Calidad"],
+  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Separada para","Calidad"],
     L.map(({r,c})=>[
       `<input type="checkbox" class="almck" data-alm="${r}"${SEL_ALM.has(r)?" checked":""}
          title="Marcar para imprimir">`,
-      `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
+      `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(clienteBase(c)), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
       esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP]),
-      notaAlmacen(c)]),
+      celdaSeparar(r, separadaPara(c)), notaAlmacen(c)]),
     // La marca de selección viaja con la clase de la fila: al repintar la tabla
     // (cambiar un estado, tocar un filtro) la casilla se restauraba marcada pero
     // la fila perdía el resaltado, y quedaban diciendo cosas distintas.
@@ -350,16 +358,27 @@ async function confirmarSeparar(){
   const c = row.c;
   const antes = separadaPara(c);
 
+  const antesCli = String(c[C.CLI] ?? "");
+  const nuevoCli = clienteBase(c) + SEP_MARCA + nombre;
+
   const btn = $("#sep-ok"); btn.disabled = true;
   writeSeq++;
   c[C.SEPA] = nombre;
+  c[C.CLI]  = nuevoCli;
   try{
-    // Solo la reserva. La etapa (Y) no se toca: una puerta puede estar
-    // separada y en almacen a la vez, que era justamente lo que no se podia
-    // decir cuando las dos cosas compartian celda.
-    await writeCells([{a1:`AL${r}`, v:[[nombre]]}]);
+    /* La reserva se guarda en DOS sitios, y cada uno hace algo distinto:
+         AL       es el dato limpio, con el que se filtra y se cuenta
+         CLIENTE  lleva el nombre anexado, y por eso viaja solo a impresiones,
+                  informes y a cualquier vista que enseñe el cliente
+       La etapa (Y) no se toca: una puerta puede estar separada Y en almacen,
+       que era justamente lo que no se podia decir compartiendo celda. */
+    await writeCells([
+      {a1:`AL${r}`, v:[[nombre]]},
+      {a1:`C${r}`,  v:[[nuevoCli]]}
+    ]);
     logChanges("EDITA", c[C.OP], r, [
-      {campo:"Separada para", antes, despues:nombre}
+      {campo:"Separada para", antes, despues:nombre},
+      {campo:"Cliente", antes:antesCli, despues:nuevoCli}
     ]);
     lastHash=""; setSync("","Guardado");
     toast(`Separada para ${nombre}`,"ok");
@@ -368,7 +387,7 @@ async function confirmarSeparar(){
     render(); renderDashVisible();
     resolve(true);
   }catch(e){
-    c[C.SEPA] = antes;
+    c[C.SEPA] = antes; c[C.CLI] = antesCli;
     toast(e.message,"err");
     resolve(false);
   }finally{ btn.disabled = false; }
