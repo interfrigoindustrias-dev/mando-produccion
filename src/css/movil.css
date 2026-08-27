@@ -1,0 +1,166 @@
+/* Ajustes para telefono y tablet
+   Proyecto: Control de Produccion - Interfrigo
+   Se carga el ULTIMO para poder corregir lo que definan los demas. */
+
+/* ============================== MOVIL ==============================
+   Lo que se pidio: que la pantalla no se mueva ni se reacomode sola, y que
+   todo quepa. Las cuatro causas de que se moviera, por orden de molestia:
+
+   1. iOS amplia la pagina en cuanto se toca un campo de menos de 16 px, y no
+      la devuelve. Es lo que hacia que «se acomodara» al escribir. Se arregla
+      con el tamaño de letra, no con el zoom: es la unica forma limpia.
+   2. El doble toque tambien amplia. `touch-action: manipulation` lo desactiva
+      sin tocar el desplazamiento normal.
+   3. El rebote al llegar al final arrastraba la pagina entera y en Android
+      disparaba el recargar-tirando. `overscroll-behavior` lo corta.
+   4. Cualquier elemento mas ancho que la pantalla creaba desplazamiento
+      lateral, y bastaba rozarlo para descuadrar todo.
+
+   Se usa `dvh` y no `vh` en las alturas: en el movil la barra del navegador
+   aparece y desaparece, y con `vh` el contenido salta cada vez.            */
+
+html, body{
+  overflow-x: hidden;              /* nada se desplaza de lado */
+  overscroll-behavior: none;       /* sin rebote ni recargar-tirando */
+}
+body{
+  touch-action: manipulation;      /* sin ampliar al doble toque */
+  -webkit-text-size-adjust: 100%;  /* Safari no reescala el texto al girar */
+}
+
+/* Nada puede ser mas ancho que la pantalla. Las tablas y los diagramas se
+   desplazan DENTRO de su caja, que es lo que hace `.tw`. */
+img, svg, video, canvas{max-width:100%; height:auto}
+
+@media (max-width: 820px){
+
+  /* ---------- campos: 16 px o iOS amplia ----------
+     Se nombran uno a uno los sitios que definen un tamaño menor. Una regla
+     suelta como `.inp{font-size:16px}` no basta: `.bar .inp` pesa mas y gana
+     aunque este en otro archivo, y los campos seguian disparando el zoom. */
+  .inp, select.inp, textarea.inp, input, select, textarea,
+  .bar .inp, .bar select.inp,
+  .mini, select.mini, select.mini.ap,
+  .infcond .inp.mini, .infcond select.inp.mini,
+  #mm-tabla .mini, #a-tabla .mini, #s-tabla .mini, #us-tabla .mini{
+    font-size: 16px;
+  }
+  /* Con el texto mas grande, la caja tambien: si no, el texto no cabe. */
+  .bar .inp{ height: 40px; padding: 8px 10px }
+  .bar select.inp{ padding-right: 26px }
+  .mini{ padding: 6px 8px }
+  /* La etiqueta puede seguir siendo pequeña: el zoom solo lo dispara el campo. */
+  label.f > span{ font-size: 10.5px }
+
+  /* ---------- cabecera: dos filas como mucho ---------- */
+  header{
+    padding: 8px 10px;
+    gap: 8px;
+    row-gap: 8px;
+  }
+  header .btn.sm{ padding: 7px 10px }        /* dedo, no raton */
+  /* La cabecera es fija: cada fila que ocupa es una fila menos de datos. Con
+     todo a tamaño de escritorio se partia en cuatro y se comia el 23% de la
+     pantalla. Se recorta lo que no aporta en un movil:
+       · el correo — la inicial ya identifica a quien entro
+       · el distintivo del rol — se consulta en el panel de usuarios
+       · el texto del estado de sincronia — el punto de color ya lo dice
+     Con eso cabe en dos filas mas las pestañas. */
+  header .chip #u-mail{ display: none }
+  header .chip .rolchip{ display: none }
+  header .chip{ padding: 3px 4px 3px 6px }
+  #sync #sync-t{ display: none }
+  #btn-nueva{ padding: 7px 11px; font-size: 12.5px }
+
+  /* Las pestañas se deslizan de lado en vez de partirse en tres filas: seis
+     pestañas apiladas se comian media pantalla antes de ver un dato. */
+  .tabs{
+    order: 10; width: 100%;
+    overflow-x: auto; overflow-y: hidden;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .tabs::-webkit-scrollbar{ display: none }
+  .tab{ flex: none; scroll-snap-align: start; padding: 9px 13px }
+
+  /* ---------- filtros ---------- */
+  .bar{ gap: 7px }
+  .bar .f{ width: 100% }                     /* uno por linea: dos era ilegible */
+  .bar .f.wide{ width: 100% }
+  .bar .btn{ height: 36px; font-size: 13px }
+
+  /* ---------- tablas ---------- */
+  /* La altura sale del hueco que queda de verdad, no de un numero fijo: con la
+     cabecera en dos filas, restar 250 px dejaba la tabla fuera de pantalla. */
+  .tw{ max-height: 62dvh }
+  table{ font-size: 12.5px }
+  td, th{ padding: 8px 7px }
+
+  /* ---------- tarjetas de KPI ---------- */
+  .kpis{ grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 6px }
+  .kpi{ padding: 8px 10px }
+  .kpi b{ font-size: 18px }
+
+  /* ---------- ventanas ---------- */
+  /* A pantalla casi completa: una ventana centrada con margenes desperdicia
+     espacio justo donde menos hay. */
+  .ov{ padding: 0 }
+  .mod, .mod-ancho{
+    max-width: 100%; width: 100%;
+    max-height: 100dvh; height: 100dvh;
+    border-radius: 0; border: 0;
+    padding: 16px 14px calc(16px + env(safe-area-inset-bottom));
+  }
+  .mod .grid, .mod .grid.g2{ grid-template-columns: 1fr }
+  .mod .bar .f{ width: 100% }
+
+  /* ---------- planta: es la vista que se usa de pie ---------- */
+  .pcard{ padding: 12px }
+  .ph{ gap: 7px }
+  .pb{ min-height: 46px; font-size: 12.5px }  /* objetivo de dedo, no de raton */
+  .pterm{ width: 100%; margin-left: 0; margin-top: 8px; padding: 12px 16px; font-size: 14px }
+
+  /* ---------- calidad e informes ---------- */
+  .qh{ gap: 8px }
+  .qh .btn{ margin-left: 0 }
+  .qacc{ gap: 8px }
+  .qacc .btn{ flex: 1 }
+  .infcond{ gap: 6px }
+  .infcond select.inp.mini{ max-width: 100%; width: 100% }
+  .infcond .btn.sm{ margin-left: 0 }
+  .infprueba{ flex-direction: column; align-items: stretch }
+  .crmeta{ gap: 7px }
+  .crmn{ margin-left: 0; width: 100% }
+}
+
+/* ---------- telefono estrecho ---------- */
+@media (max-width: 430px){
+  header .logo.sm{ width: 84px }
+  .modbtn{ padding: 6px 9px; font-size: 12.5px }
+  /* Con la pantalla asi de estrecha, el titulo de la vista no cabe junto a
+     todo lo demas: se prioriza lo que se toca. */
+  #btn-nueva span{ display: none }
+  .kpis{ grid-template-columns: 1fr 1fr }
+  .tw{ max-height: 58dvh }
+}
+
+/* ---------- tablet de planta ----------
+   Planta es una lista vertical de una columna a proposito, no una rejilla: se
+   usa de pie, y una tarjeta a todo el ancho deja los botones de proceso lo
+   bastante grandes para darles con guante. Aqui solo se ajusta el tamaño del
+   objetivo, no el numero de columnas. */
+@media (min-width: 620px) and (max-width: 1180px){
+  .pb{ min-height: 52px }
+  .pterm{ min-height: 48px }
+}
+
+/* En una pantalla tactil el paso del raton no existe: sin esto, el color de
+   «hover» se queda pegado en el ultimo boton que se toco. */
+@media (hover: none){
+  .btn:hover{ border-color: var(--line) }
+  .btn.pri:hover{ background: var(--acc) }
+  .pterm:hover{ background: transparent; color: var(--acc) }
+  .pcard.lista .pterm:hover{ background: var(--acc); color: #fff }
+}
