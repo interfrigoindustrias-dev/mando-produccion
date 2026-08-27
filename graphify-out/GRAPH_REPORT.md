@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-27)
 
 ## Corpus Check
-- Corpus is ~44,697 words - fits in a single context window. You may not need a graph.
+- Corpus is ~44,871 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 337 nodes · 521 edges · 29 communities (25 shown, 4 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.73)
+- 337 nodes · 522 edges · 29 communities (25 shown, 4 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 15 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -57,8 +57,8 @@
   src/js/dashboards.js → src/js/comun.js
 - `renderAlmacen()` --indirect_call--> `enProduccion()`  [INFERRED]
   src/js/dashboards.js → src/js/comun.js
-- `printFichas()` --references--> `ROWS`  [EXTRACTED]
-  src/js/impresion.js → src/js/constantes.js
+- `renderAlmacen()` --indirect_call--> `separada()`  [INFERRED]
+  src/js/dashboards.js → src/js/constantes.js
 
 ## Import Cycles
 - None detected.
@@ -162,16 +162,16 @@ Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ROWS` connect `Automatizaciones de fecha` to `Tableros y catalogo`, `Constantes del modelo`, `Control de OPs`, `Impresion`, `Vista de planta`, `calidad.js`?**
-  _High betweenness centrality (0.199) - this node is a cross-community bridge._
+  _High betweenness centrality (0.189) - this node is a cross-community bridge._
 - **Why does `renderResumen()` connect `Utilidades y fechas` to `Tableros y catalogo`?**
   _High betweenness centrality (0.073) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `renderAlmacen()` (e.g. with `enProduccion()` and `separada()`) actually correct?**
+  _`renderAlmacen()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
   _52 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
-  _Cohesion score 0.1140819964349376 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11229946524064172 - nodes in this community are weakly interconnected._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
   _Cohesion score 0.07862903225806452 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
   _Cohesion score 0.11 - nodes in this community are weakly interconnected._
-- **Should `Impresion` be split into smaller, more focused modules?**
-  _Cohesion score 0.14705882352941177 - nodes in this community are weakly interconnected._
