@@ -295,6 +295,8 @@
             <input class="inp ro" id="n-fecha" readonly tabindex="-1" title="Se pone sola al crear la ficha"></label>
           <label class="f"><span>Cantidad de puertas</span><input class="inp" id="n-qty" type="number" min="1" max="40" value="1"></label>
           <label class="f"><span>Prioridad</span><select class="inp" id="n-prio"><option value="">—</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option value="BAJA" selected>BAJA</option></select></label>
+          <details class="prioayuda"><summary>¿Qué implica cada prioridad?</summary>
+            <div id="n-prio-ayuda"></div></details>
         </div>
         <label class="f" style="margin-top:12px"><span class="req">Cliente / proyecto</span>
           <input class="inp big" id="n-cli" required list="dl-cli" placeholder="FRIO PANEL"><datalist id="dl-cli"></datalist></label>

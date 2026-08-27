@@ -106,7 +106,7 @@ function tagPrio(v){
 }
 function tagDesp(v){
   const s=String(v||"").trim();
-  const k = s==="Despachado"?"t-des" : s==="Separado"?"t-sep" : s==="Anulada"?"t-anu" : s?"t-alm":"t-non";
+  const k = s==="Despachado"?"t-des" : s==="Anulada"?"t-anu" : s?"t-alm":"t-non";
   return `<span class="tag ${k}">${esc(s||"—")}</span>`;
 }
 /* Edición en línea: prioridad como selector y ensamble como campo de texto.

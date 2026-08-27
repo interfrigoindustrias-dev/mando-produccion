@@ -148,6 +148,29 @@ function initForm(){
     };
     $("#n-bump").onchange = verBumper; verBumper();
   }
+  /* Que implica cada prioridad, dicho donde se elige. Se arma desde OFFSET y
+     ESCALA en vez de escribirlo a mano: si mañana cambian los dias, el texto
+     cambia con ellos y no queda un manual mintiendo al lado del control. */
+  const caja = $("#n-prio-ayuda");
+  if(caja){
+    const dias = d => d === 0 ? "hoy mismo" : `a los ${d} días`;
+    const linea = (p, txt, cls) =>
+      `<div class="ayp"><b${cls?` class="${cls}"`:""}>${p}</b><span>${txt}</span></div>`;
+    caja.innerHTML = [
+      linea("URGENTE",
+        `Entra a planta ${dias(OFFSET.URGENTE)} y va la primera de todas. Solo se pone ` +
+        `a mano: ninguna puerta llega a urgente por llevar tiempo esperando.`),
+      linea("ALTA", `Entra a planta ${dias(OFFSET.ALTA)}.`),
+      linea("MEDIA",
+        `Entra a planta ${dias(OFFSET.MEDIA)}. Si al día ${ESCALA.MEDIA} sigue sin hacerse, sube sola a ALTA.`),
+      linea("BAJA",
+        `Entra a planta ${dias(OFFSET.BAJA)}. Si al día ${ESCALA.BAJA} sigue sin hacerse, sube sola a ALTA.`),
+      linea("URGENTE · VENDIDA",
+        `No se elige: lo es sola cualquier puerta separada para un cliente que ` +
+        `todavía no esté al 100%.`, "ayp-auto")
+    ].join("");
+  }
+
   $("#n-procs").innerHTML = PROCS.map(p=>
     `<label class="proc"><input type="checkbox" data-i="${p.i}" checked><span>${p.k}</span></label>`).join("");
   $("#n-fecha").value = hoy();

@@ -31,6 +31,8 @@ const CAMPOS = [
   {id:"clibase",n:"Cliente sin comprador", g:"Identificación", tipo:"texto",
    v:c=>clienteBase(c)},
   {id:"seppara",n:"Separada para",     g:"Identificación", tipo:"texto", v:c=>separadaPara(c)},
+  {id:"sepsi",  n:"¿Separada?",         g:"Identificación", tipo:"sino",
+   v:c=>separada(c)?"Sí":"No"},
   {id:"lote",   n:"Fecha / lote",      g:"Identificación", tipo:"texto", v:c=>fmtDate(c[C.FECHA])},
   {id:"ens",    n:"N.º de ensamble",   g:"Identificación", tipo:"texto", v:c=>c[C.ENS]},
   {id:"prio",   n:"Prioridad",         g:"Identificación", tipo:"lista", v:c=>c[C.PRIO],

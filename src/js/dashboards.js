@@ -155,7 +155,7 @@ $("#r-hoy").onclick = ()=>{ $("#r-dia").value = iso(new Date()); renderResumen()
 /* ---------- En almacén (hoja EN ALMACÉN) ----------
    Base: terminadas y almacenadas, más las separadas. */
 const almacenBase = () => activas().filter(({c})=>
-  (completa(c) && desp(c)==="En Almacén") || desp(c)==="Separado");
+  (completa(c) && desp(c)==="En Almacén") || separada(c));
 function almacenList(){
   const q=$("#a-q").value.trim().toLowerCase(), g=id=>$("#"+id).value;
   const eq=(v,f)=>!f||String(v??"").trim()===f;
@@ -225,7 +225,7 @@ function notaAlmacen(c){
 
 function selDesp(r, v){
   const cur = DESPACHOS.includes(String(v??"").trim()) ? String(v).trim() : "";
-  const k = cur==="Despachado"?"t-des" : cur==="Separado"?"t-sep" : cur==="Anulada"?"t-anu" : cur?"t-alm":"t-non";
+  const k = cur==="Despachado"?"t-des" : cur==="Anulada"?"t-anu" : cur?"t-alm":"t-non";
   return `<select class="mini tag ${k}" data-edit-desp="${r}">
     <option value=""${cur?"":" selected"}>—</option>`+
     DESPACHOS.map(d=>`<option${d===cur?" selected":""}>${d}</option>`).join("")+`</select>`;
@@ -251,23 +251,23 @@ function renderAlmacen(){
   kpiCards("#a-kpis",[
     ["Total en almacén", B.length, "Terminadas y almacenadas, más las separadas", 1],
     ["En almacén", B.filter(c=>desp(c)==="En Almacén").length, "Avance 100% con estado En Almacén"],
-    ["Separadas",  B.filter(c=>desp(c)==="Separado").length,   "Estado de despacho Separado"],
+    ["Separadas",  B.filter(separada).length, "Apartadas para un comprador (columna SEPARADA PARA)"],
     ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
-  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Separada para","Calidad"],
+  tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Separada para"],
     L.map(({r,c})=>[
       `<input type="checkbox" class="almck" data-alm="${r}"${SEL_ALM.has(r)?" checked":""}
          title="Marcar para imprimir">`,
       `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(clienteBase(c)), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
       esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP]),
-      celdaSeparar(r, separadaPara(c)), notaAlmacen(c)]),
+      celdaSeparar(r, separadaPara(c))]),
     // La marca de selección viaja con la clase de la fila: al repintar la tabla
     // (cambiar un estado, tocar un filtro) la casilla se restauraba marcada pero
     // la fila perdía el resaltado, y quedaban diciendo cosas distintas.
     L.map(({r,c})=> [
-      anulada(c) ? "anu" : desp(c)==="Separado" ? "sep" : "",
+      anulada(c) ? "anu" : separada(c) ? "sep" : "",
       SEL_ALM.has(r) ? "sel" : "",
       // Lo que calidad rechazo tiene que saltar a la vista en almacen: es lo
       // que no puede salir a despacho.
@@ -433,7 +433,7 @@ $("#a-tabla").addEventListener("change", async ev=>{
   }
   const el=ev.target.closest("[data-edit-desp]"); if(!el) return;
   const val=el.value;
-  const k = val==="Despachado"?"t-des" : val==="Separado"?"t-sep" : val==="Anulada"?"t-anu" : val?"t-alm":"t-non";
+  const k = val==="Despachado"?"t-des" : val==="Anulada"?"t-anu" : val?"t-alm":"t-non";
   el.className="mini tag "+k;
   if(await guardarDespacho(+el.dataset.editDesp, val)){ renderAlmacen(); render(); }
   else renderAlmacen();
@@ -514,7 +514,7 @@ function renderModelos(){
       // contada dentro del total pero sin columna propia, asi que las puertas
       // que salian de planta parecian haberse evaporado hasta llegar a almacen.
       term: hay.filter(c=>terminada(c)).length,
-      sep:  hay.filter(c=>desp(c)==="Separado").length,
+      sep:  hay.filter(separada).length,
       // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
       prod: hay.filter(c=>!completa(c) && progreso(c).ok > 0).length,
       proy: hay.filter(c=>!completa(c) && progreso(c).ok === 0).length,
@@ -556,7 +556,7 @@ function renderModelos(){
       if(!otras.length) return "";
       const oAlm = otras.filter(c=>completa(c) && desp(c)==="En Almacén").length;
       const oTer = otras.filter(c=>terminada(c)).length;
-      const oSep = otras.filter(c=>desp(c)==="Separado").length;
+      const oSep = otras.filter(separada).length;
       const oPro = otras.filter(c=>!completa(c) && progreso(c).ok > 0).length;
       const oProy= otras.filter(c=>!completa(c) && progreso(c).ok === 0).length;
       const ab   = otras.filter(c=>!completa(c));
@@ -621,7 +621,7 @@ function pintarModeloModal(){
            "Terminadas y con estado En Almacén") +
     cuenta("Terminadas", L.filter(({c})=>terminada(c)).length,
            "Fabricadas, esperando revisión de calidad") +
-    cuenta("Separadas",  L.filter(({c})=>desp(c)==="Separado").length,
+    cuenta("Separadas",  L.filter(({c})=>separada(c)).length,
            "Apartadas para un comprador") +
     cuenta("En producción", L.filter(({c})=>!completa(c) && progreso(c).ok > 0).length,
            "Empezadas: al menos un proceso marcado") +
