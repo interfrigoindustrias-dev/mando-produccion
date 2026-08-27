@@ -1,10 +1,10 @@
 # Graph Report - .  (2026-08-27)
 
 ## Corpus Check
-- Corpus is ~44,520 words - fits in a single context window. You may not need a graph.
+- Corpus is ~44,697 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 337 nodes · 520 edges · 29 communities (25 shown, 4 thin omitted)
+- 337 nodes · 521 edges · 29 communities (25 shown, 4 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
@@ -39,8 +39,8 @@
 ## God Nodes (most connected - your core abstractions)
 1. `ROWS` - 15 edges
 2. `render()` - 10 edges
-3. `pintarModeloModal()` - 9 edges
-4. `renderAlmacen()` - 8 edges
+3. `renderAlmacen()` - 9 edges
+4. `pintarModeloModal()` - 9 edges
 5. `renderPlanta()` - 8 edges
 6. `api()` - 7 edges
 7. `renderCalidad()` - 7 edges
@@ -168,7 +168,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
   _52 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
-  _Cohesion score 0.11229946524064172 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1140819964349376 - nodes in this community are weakly interconnected._
 - **Should `Constantes del modelo` be split into smaller, more focused modules?**
   _Cohesion score 0.07862903225806452 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
