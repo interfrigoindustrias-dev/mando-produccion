@@ -906,7 +906,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_campos",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "campos.js"
     },
@@ -917,7 +917,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_campos_campos",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "campos"
     },
@@ -928,7 +928,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_campos_campo_por_id",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "campo_por_id"
     },
@@ -939,7 +939,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_js_campos_grupos_campo",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "grupos_campo"
     },
@@ -950,7 +950,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_campos_operadores",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "operadores"
     },
@@ -961,7 +961,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_campos_operadoresde",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "operadoresde()"
     },
@@ -972,7 +972,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_js_campos_leercondiciones",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "leercondiciones()"
     },
@@ -983,7 +983,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "src_js_campos_escribircondiciones",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "escribircondiciones()"
     },
@@ -994,7 +994,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_campos_anumero",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "anumero()"
     },
@@ -1005,7 +1005,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_js_campos_atiempo",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "atiempo()"
     },
@@ -1016,7 +1016,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "src_js_campos_cumple",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "cumple()"
     },
@@ -1027,7 +1027,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "src_js_campos_cumpletodas",
-      "community": 8,
+      "community": 9,
       "community_name": "campos.js",
       "norm_label": "cumpletodas()"
     },
@@ -1038,7 +1038,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_comun",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "comun.js"
     },
@@ -1049,7 +1049,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_comun_activas",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "activas()"
     },
@@ -1060,7 +1060,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_comun_completa",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "completa()"
     },
@@ -1071,7 +1071,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_comun_desp",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "desp()"
     },
@@ -1082,7 +1082,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_comun_puntos",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "puntos()"
     },
@@ -1093,7 +1093,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_comun_enproduccion",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enproduccion()"
     },
@@ -1104,7 +1104,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_comun_enstock",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enstock()"
     },
@@ -1115,7 +1115,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_comun_contador",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "contador()"
     },
@@ -1126,7 +1126,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_comun_detalle_kpi",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "detalle_kpi"
     },
@@ -1137,7 +1137,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_comun_kpicards",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "kpicards()"
     },
@@ -1148,7 +1148,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_comun_verdetallekpi",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "verdetallekpi()"
     },
@@ -1159,7 +1159,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_comun_barras",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "barras()"
     },
@@ -1170,7 +1170,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_comun_tablamini",
-      "community": 9,
+      "community": 10,
       "community_name": "Ayudantes de tableros",
       "norm_label": "tablamini()"
     },
@@ -1181,7 +1181,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_config",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "config.js"
     },
@@ -1192,7 +1192,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_config_parsesheetid",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "parsesheetid()"
     },
@@ -1203,7 +1203,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_config_lookslikeid",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "lookslikeid()"
     },
@@ -1214,7 +1214,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_config_campos_empresa",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "campos_empresa"
     },
@@ -1225,7 +1225,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_config_loadcfg",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "loadcfg()"
     },
@@ -1236,7 +1236,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_config_savecfg",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "savecfg()"
     },
@@ -1247,7 +1247,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_config_cfgok",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "cfgok()"
     },
@@ -1258,7 +1258,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_config_aplicarcfgdeenlace",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "aplicarcfgdeenlace()"
     },
@@ -1269,7 +1269,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_config_enlacedeconfiguracion",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "enlacedeconfiguracion()"
     },
@@ -1280,7 +1280,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_js_config_opencfg",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "opencfg()"
     },
@@ -1291,7 +1291,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_constantes",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "constantes.js"
     },
@@ -1302,7 +1302,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_constantes_log_head",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "log_head"
     },
@@ -1313,7 +1313,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_constantes_materiales",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "materiales"
     },
@@ -1324,7 +1324,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_constantes_tipos",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "tipos"
     },
@@ -1335,7 +1335,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_constantes_espesores",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "espesores"
     },
@@ -1347,7 +1347,7 @@
       "_origin": "ast",
       "id": "src_js_constantes_aperturas",
       "community": 1,
-      "community_name": "Control de OPs",
+      "community_name": "Constantes del modelo",
       "norm_label": "aperturas"
     },
     {
@@ -1368,7 +1368,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_js_constantes_tipos_marco",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "tipos_marco"
     },
@@ -1379,7 +1379,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_constantes_visores",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "visores"
     },
@@ -1390,7 +1390,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_constantes_bumpers",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "bumpers"
     },
@@ -1401,7 +1401,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_constantes_tam_bumper",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "tam_bumper"
     },
@@ -1412,7 +1412,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_js_constantes_empaque_visor",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "empaque_visor"
     },
@@ -1423,7 +1423,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_constantes_llevabumper",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "llevabumper()"
     },
@@ -1434,7 +1434,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_constantes_separadapara",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "separadapara()"
     },
@@ -1445,18 +1445,29 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_constantes_clientebase",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "clientebase()"
+    },
+    {
+      "label": "urgente()",
+      "file_type": "code",
+      "source_file": "src/js/constantes.js",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "src_js_constantes_urgente",
+      "community": 1,
+      "community_name": "Constantes del modelo",
+      "norm_label": "urgente()"
     },
     {
       "label": "terminada()",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L63",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_constantes_terminada",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "terminada()"
     },
@@ -1464,10 +1475,10 @@
       "label": "anulada()",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L65",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_constantes_anulada",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "anulada()"
     },
@@ -1475,10 +1486,10 @@
       "label": "CON_RIEL",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L67",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "src_js_constantes_con_riel",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "con_riel"
     },
@@ -1486,10 +1497,10 @@
       "label": "C",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L70",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_constantes_c",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "c"
     },
@@ -1497,10 +1508,10 @@
       "label": "PROCS",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L83",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "src_js_constantes_procs",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "procs"
     },
@@ -1508,10 +1519,10 @@
       "label": "CFG",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L91",
+      "source_location": "L98",
       "_origin": "ast",
       "id": "src_js_constantes_cfg",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "cfg"
     },
@@ -1519,10 +1530,10 @@
       "label": "ROWS",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L93",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "src_js_constantes_rows",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "rows"
     },
@@ -1530,11 +1541,11 @@
       "label": "SEL",
       "file_type": "code",
       "source_file": "src/js/constantes.js",
-      "source_location": "L94",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "src_js_constantes_sel",
       "community": 1,
-      "community_name": "Control de OPs",
+      "community_name": "Constantes del modelo",
       "norm_label": "sel"
     },
     {
@@ -1544,7 +1555,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_control",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "control.js"
     },
@@ -1555,7 +1566,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_js_control_fsel",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "fsel"
     },
@@ -1566,7 +1577,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_control_medidade",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "medidade()"
     },
@@ -1577,7 +1588,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_js_control_filtered",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "filtered()"
     },
@@ -1588,7 +1599,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_js_control_filtrosactivos",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "filtrosactivos()"
     },
@@ -1599,7 +1610,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_control_numord",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "numord()"
     },
@@ -1610,7 +1621,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_control_filllists",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "filllists()"
     },
@@ -1621,7 +1632,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_control_tagprio",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "tagprio()"
     },
@@ -1632,7 +1643,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_js_control_tagdesp",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "tagdesp()"
     },
@@ -1643,7 +1654,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "src_js_control_prios",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "prios"
     },
@@ -1654,7 +1665,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_control_selap",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "selap()"
     },
@@ -1665,7 +1676,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_control_selprio",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "selprio()"
     },
@@ -1676,7 +1687,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "src_js_control_editcampo",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "editcampo()"
     },
@@ -1687,7 +1698,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "src_js_control_render",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "render()"
     },
@@ -1698,7 +1709,7 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "src_js_control_kpis",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "kpis()"
     },
@@ -1709,7 +1720,7 @@
       "source_location": "L227",
       "_origin": "ast",
       "id": "src_js_control_paintrow",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "paintrow()"
     },
@@ -1720,7 +1731,7 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "src_js_control_setproc",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "setproc()"
     },
@@ -1731,7 +1742,7 @@
       "source_location": "L278",
       "_origin": "ast",
       "id": "src_js_control_syncsel",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "syncsel()"
     },
@@ -1742,7 +1753,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_cronograma",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "cronograma.js"
     },
@@ -1753,7 +1764,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_cronograma_diashabiles",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "diashabiles()"
     },
@@ -1764,7 +1775,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_cronograma_pendientecronograma",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "pendientecronograma()"
     },
@@ -1775,7 +1786,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_cronograma_entradaenplanta",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "entradaenplanta()"
     },
@@ -1786,7 +1797,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_cronograma_rank_prio",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "rank_prio"
     },
@@ -1797,7 +1808,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_cronograma_calcularcronograma",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "calcularcronograma()"
     },
@@ -1808,7 +1819,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_js_cronograma_dia_sem",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "dia_sem"
     },
@@ -1819,7 +1830,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_cronograma_mes_cor",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "mes_cor"
     },
@@ -1830,7 +1841,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_js_cronograma_fechacorta",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "fechacorta()"
     },
@@ -1841,7 +1852,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_cronograma_rendercronograma",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "rendercronograma()"
     },
@@ -1852,7 +1863,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_js_cronograma_ritmoreal",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "ritmoreal()"
     },
@@ -1863,7 +1874,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_cronograma_redondo",
-      "community": 11,
+      "community": 12,
       "community_name": "cronograma.js",
       "norm_label": "redondo()"
     },
@@ -2006,8 +2017,8 @@
       "source_location": "L277",
       "_origin": "ast",
       "id": "src_js_dashboards_pidecomprador",
-      "community": 1,
-      "community_name": "Control de OPs",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "pidecomprador()"
     },
     {
@@ -2017,8 +2028,8 @@
       "source_location": "L280",
       "_origin": "ast",
       "id": "src_js_dashboards_pedirseparar",
-      "community": 1,
-      "community_name": "Control de OPs",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "pedirseparar()"
     },
     {
@@ -2028,7 +2039,7 @@
       "source_location": "L305",
       "_origin": "ast",
       "id": "src_js_dashboards_confirmarseparar",
-      "community": 1,
+      "community": 3,
       "community_name": "Control de OPs",
       "norm_label": "confirmarseparar()"
     },
@@ -2050,8 +2061,8 @@
       "source_location": "L346",
       "_origin": "ast",
       "id": "src_js_dashboards_guardardespacho",
-      "community": 1,
-      "community_name": "Control de OPs",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "guardardespacho()"
     },
     {
@@ -2303,7 +2314,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_ficha",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "ficha.js"
     },
@@ -2315,7 +2326,7 @@
       "_origin": "ast",
       "id": "src_js_ficha_opendet",
       "community": 1,
-      "community_name": "Control de OPs",
+      "community_name": "Constantes del modelo",
       "norm_label": "opendet()"
     },
     {
@@ -2325,7 +2336,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_ficha_dstk",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "dstk"
     },
@@ -2336,7 +2347,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_js_ficha_initform",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "initform()"
     },
@@ -2347,7 +2358,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_ficha_nextop",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "nextop()"
     },
@@ -2358,7 +2369,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "src_js_ficha_targetrows",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "targetrows()"
     },
@@ -2369,7 +2380,7 @@
       "source_location": "L180",
       "_origin": "ast",
       "id": "src_js_ficha_hintop",
-      "community": 3,
+      "community": 1,
       "community_name": "Constantes del modelo",
       "norm_label": "hintop()"
     },
@@ -2413,7 +2424,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_formatos_s",
-      "community": 10,
+      "community": 11,
       "community_name": "Configuracion del usuario",
       "norm_label": "s()"
     },
@@ -2897,7 +2908,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_planta",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "planta.js"
     },
@@ -2908,7 +2919,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_planta_prio_ord",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "prio_ord"
     },
@@ -2919,7 +2930,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_planta_color_proc",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "color_proc"
     },
@@ -2930,7 +2941,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_planta_plantaprogramadas",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "plantaprogramadas"
     },
@@ -2941,7 +2952,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_planta_plantalist",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "plantalist()"
     },
@@ -2949,10 +2960,10 @@
       "label": "metaTarjeta()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L78",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "src_js_planta_metatarjeta",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "metatarjeta()"
     },
@@ -2960,21 +2971,32 @@
       "label": "etiquetaPrio()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L85",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaprio",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaprio()"
+    },
+    {
+      "label": "etiquetaPlanta()",
+      "file_type": "code",
+      "source_file": "src/js/planta.js",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "src_js_planta_etiquetaplanta",
+      "community": 8,
+      "community_name": "Vista de planta",
+      "norm_label": "etiquetaplanta()"
     },
     {
       "label": "notaTarjeta()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L89",
+      "source_location": "L99",
       "_origin": "ast",
       "id": "src_js_planta_notatarjeta",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "notatarjeta()"
     },
@@ -2982,10 +3004,10 @@
       "label": "pintarTarjeta()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L103",
+      "source_location": "L113",
       "_origin": "ast",
       "id": "src_js_planta_pintartarjeta",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "pintartarjeta()"
     },
@@ -2993,21 +3015,32 @@
       "label": "avisarProgramadas()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L152",
+      "source_location": "L163",
       "_origin": "ast",
       "id": "src_js_planta_avisarprogramadas",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "avisarprogramadas()"
+    },
+    {
+      "label": "pintarResumenPlanta()",
+      "file_type": "code",
+      "source_file": "src/js/planta.js",
+      "source_location": "L190",
+      "_origin": "ast",
+      "id": "src_js_planta_pintarresumenplanta",
+      "community": 8,
+      "community_name": "Vista de planta",
+      "norm_label": "pintarresumenplanta()"
     },
     {
       "label": "renderPlanta()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L177",
+      "source_location": "L205",
       "_origin": "ast",
       "id": "src_js_planta_renderplanta",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "renderplanta()"
     },
@@ -3015,10 +3048,10 @@
       "label": "plantaEnUso()",
       "file_type": "code",
       "source_file": "src/js/planta.js",
-      "source_location": "L223",
+      "source_location": "L252",
       "_origin": "ast",
       "id": "src_js_planta_plantaenuso",
-      "community": 12,
+      "community": 8,
       "community_name": "Vista de planta",
       "norm_label": "plantaenuso()"
     },
@@ -5635,7 +5668,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L65",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5668,7 +5701,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L70",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5679,7 +5712,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L91",
+      "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5701,7 +5734,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L67",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5778,7 +5811,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L83",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5789,7 +5822,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L93",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5800,7 +5833,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L94",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5833,7 +5866,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/constantes.js",
-      "source_location": "L63",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_constantes",
@@ -5860,6 +5893,17 @@
       "_origin": "ast",
       "source": "src_js_constantes",
       "target": "src_js_constantes_tipos_marco",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/constantes.js",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_constantes",
+      "target": "src_js_constantes_urgente",
       "confidence_score": 1.0
     },
     {
@@ -5963,7 +6007,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/planta.js",
-      "source_location": "L133",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_pintartarjeta",
@@ -6071,7 +6115,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/planta.js",
-      "source_location": "L104",
+      "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_pintartarjeta",
@@ -8224,7 +8268,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L152",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8246,7 +8290,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L85",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_planta",
+      "target": "src_js_planta_etiquetaplanta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/planta.js",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8257,7 +8312,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L78",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8268,7 +8323,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L89",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8279,7 +8334,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L103",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_planta",
+      "target": "src_js_planta_pintarresumenplanta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/planta.js",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8290,7 +8356,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L223",
+      "source_location": "L252",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8334,7 +8400,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L177",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta",
@@ -8346,7 +8412,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L178",
+      "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_renderplanta",
@@ -8358,7 +8424,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L115",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_pintartarjeta",
@@ -8370,7 +8436,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L206",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_renderplanta",
@@ -8382,11 +8448,23 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L116",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_planta_etiquetaplanta",
+      "target": "src_js_planta_etiquetaprio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/planta.js",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_pintartarjeta",
-      "target": "src_js_planta_etiquetaprio",
+      "target": "src_js_planta_etiquetaplanta",
       "confidence_score": 1.0
     },
     {
@@ -8394,11 +8472,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L207",
+      "source_location": "L236",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_renderplanta",
-      "target": "src_js_planta_etiquetaprio",
+      "target": "src_js_planta_etiquetaplanta",
       "confidence_score": 1.0
     },
     {
@@ -8406,7 +8484,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L122",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_pintartarjeta",
@@ -8418,7 +8496,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L215",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_renderplanta",
@@ -8430,7 +8508,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L188",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_renderplanta",
@@ -8442,11 +8520,23 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/planta.js",
-      "source_location": "L174",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_planta_avisarprogramadas",
       "target": "src_js_planta_renderplanta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/planta.js",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_planta_renderplanta",
+      "target": "src_js_planta_pintarresumenplanta",
       "confidence_score": 1.0
     },
     {
@@ -9256,5 +9346,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "675e16bac624ccb140cea0045eea3f33b7a8a9fe"
+  "built_at_commit": "a0bf60ea91b4e173c9e763f3a0466ff829c624aa"
 }
