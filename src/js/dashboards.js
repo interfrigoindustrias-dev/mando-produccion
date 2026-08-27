@@ -259,7 +259,10 @@ function renderAlmacen(){
     L.map(({r,c})=>[
       `<input type="checkbox" class="almck" data-alm="${r}"${SEL_ALM.has(r)?" checked":""}
          title="Marcar para imprimir">`,
-      `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(clienteBase(c)), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
+      // El cliente COMPLETO, con el comprador anexado. Se enseñaba recortado
+      // porque hay columna propia al lado, pero el nombre anexado es
+      // justamente lo que se quiere ver: es el que viaja a todas partes.
+      `<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""), esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
       `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
       esc(fmtDate(c[C.FPROC])), tri(c[C.COMP])?"Sí":"", tri(c[C.STOCK])?"Sí":"", selDesp(r, c[C.DESP]),
       celdaSeparar(r, separadaPara(c))]),
@@ -742,11 +745,14 @@ function renderStock(){
     ["Listadas",        L.length, "Filas mostradas con el filtro actual"]
   ]);
   tablaMini("#s-tabla",
-    ["OP","Material","Tipo","Dimensiones","Esp","Ap.","F. proceso","Avance","Estado","Separada para"],
+    ["OP","Cliente","Material","Tipo","Dimensiones","Esp","Ap.","F. proceso","Avance","Estado","Separada para"],
     L.map(({r,c})=>{
       const pc=Math.round(progreso(c).pct*100);
       const para=separadaPara(c);
-      return [`<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
+      // El cliente, con el comprador anexado si la tienen: es donde se ve que
+      // una puerta de stock ya tiene dueño sin mirar otra columna.
+      return [`<span class="op">${esc(c[C.OP]??"")}</span>`, esc(c[C.CLI]??""),
+        esc(c[C.MAT]??""), esc(c[C.TIPO]??""),
         `${num(c[C.ANCHO])??"—"} x ${num(c[C.ALTO])??"—"}`, esc(c[C.ESP]??""), esc(c[C.AP]??""),
         esc(fmtDate(c[C.FPROC])),
         `<span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span><span class="pct">${pc}%</span>`,
