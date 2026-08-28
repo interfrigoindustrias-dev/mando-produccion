@@ -79,3 +79,33 @@ ocho procesos, los mismos tipos y materiales. Es un punto de partida para poder
 trabajar, no una decisión: en cuanto se sepa cómo son las fichas de panel de
 verdad, hay que llevar ese modelo a la configuración del módulo — columnas,
 procesos, listas de valores— en vez de dejarlo fijo en `constantes.js`.
+
+
+## El modelo de datos es de cada producto
+
+`src/js/modelo.js` declara **cómo es cada producto**: sus columnas en la hoja,
+sus procesos y las listas de valores que acepta. El resto del código lee de ahí.
+
+```js
+const MODELO = MODELOS_DATOS[MOD.id];   // el de esta página
+const C = MODELO.col;                   // columnas
+const PROCS = MODELO.procs;             // procesos
+```
+
+Antes esto vivía en `constantes.js`, común a los dos productos. Como una puerta
+y un panel no se parecen, las diferencias se tapaban con comprobaciones sueltas
+repartidas por el código — llegó a haber **31**, y varias rompieron la carga de
+paneles. Con el modelo en su sitio, divergir es cambiar un objeto, no perseguir
+condiciones por veinte archivos.
+
+### Estado de cada modelo
+
+| | Puertas | Paneles |
+|---|---|---|
+| Columnas | 38 (A..AL), definitivas | heredadas de puertas |
+| Procesos | los 8 de puerta | **heredados: provisional** |
+| Listas | tipos, aperturas, marco, visor, bumper | heredadas |
+
+`MODELO_PANELES` lleva la marca `provisional: true`. Mientras siga ahí, la ficha
+de panel está ofreciendo campos de puerta —riel, embocinado, visor, bumper— que
+un panel no tiene. Falta la estructura real de la pestaña `PANEL`.

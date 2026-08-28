@@ -10,8 +10,9 @@
 const SCOPE = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email";
 const LOG_TAB = MOD.logTab;      // propia de cada módulo, ver modulo.js
 const LOG_HEAD = ["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"];
-const NCOL = 38;                       // A..AL
-const LAST_COL = "AL";
+/* La forma de la hoja la declara el producto, no este archivo. Ver modelo.js */
+const NCOL = MODELO.ncol;
+const LAST_COL = MODELO.lastCol;
 
 /* Las listas siguientes son copia EXACTA de la validacion de datos de la hoja.
    Si alli cambian, aqui tambien: una opcion que la hoja no acepte se guarda
@@ -20,22 +21,18 @@ const LAST_COL = "AL";
    algo en lo que el trabajo se convierte por llevar tiempo esperando. */
 const PRIORIDADES = ["URGENTE","ALTA","MEDIA","BAJA"];
 
-const MATERIALES = ["PP 9002","INOX 304","GLASSLINER","PP-PANEL","OTRO"];
-const TIPOS = ["SE12","SM20","480","BATIENTE","BATIENTE DOBLE","VAIVEN SENCILLA","VAIVEN DOBLE","OFICINA","EMERGENCIA","EMERGENCIA DOBLE"];
-const ESPESORES = ["40","50","62","70","80","92","100","112"];
-// La hoja valida SX,DX,DH,VAIVEN en las filas nuevas; VD y BD siguen en filas
-// antiguas, asi que se conservan para no marcarlas como invalidas.
-const APERTURAS = ["SX","DX","DH","VAIVEN","VD","BD"];
+const MATERIALES = MODELO.listas.MATERIALES;
+const TIPOS      = MODELO.listas.TIPOS;
+const ESPESORES  = MODELO.listas.ESPESORES;
+const APERTURAS  = MODELO.listas.APERTURAS;
 const DESPACHOS = ["Terminado","En Almacén","Despachado","Anulada"];
 
 /* --- Especificacion (columnas AC..AK) --- */
-const TIPOS_MARCO = ["SIN MARCO","ALUMINIO 2X1","ALUMINIO 2X1 CON ALETA","ALUMINIO 3X1",
-                     "ALUMINIO 3X1 1/2",'ALUMINIO 4"',"PVC 80","PVC 110","PVC 130"];
-const VISORES = ["SIN VISOR","22 X 60","30 X 60","40 X 60"];
-const BUMPERS = ["SIN BUMPER","BUMPER BLANCO","BUMPER NEGRO"];
-const TAM_BUMPER = ["25","30","40","50","60","100"];
-/** Empaque que corresponde a cada visor (pestaña Datos Calculo de la hoja). */
-const EMPAQUE_VISOR = {"SIN VISOR":0, "22 X 60":1.6, "30 X 60":1.8, "40 X 60":2.2};
+const TIPOS_MARCO   = MODELO.listas.TIPOS_MARCO;
+const VISORES       = MODELO.listas.VISORES;
+const BUMPERS       = MODELO.listas.BUMPERS;
+const TAM_BUMPER    = MODELO.listas.TAM_BUMPER;
+const EMPAQUE_VISOR = MODELO.empaqueVisor;
 /** El tamaño de bumper solo aplica si se eligio un bumper de verdad. */
 const llevaBumper = v => !!String(v||"").trim() && String(v).trim().toUpperCase() !== "SIN BUMPER";
 
@@ -84,33 +81,15 @@ const urgente = c => urgenteManual(c) || urgenteAuto(c);
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
 /** Una puerta anulada queda fuera de producción, almacén y stock. */
 const anulada = c => String(c[C.DESP]??"").trim()==="Anulada";
-// Tipos corredizos: son los únicos que llevan riel (según el histórico de la hoja)
-const CON_RIEL = new Set(["SE12","SM20","480"]);
+// Tipos corredizos: son los unicos que llevan riel.
+const CON_RIEL = new Set(MODELO.conRiel);
 
-// índices de columna (0 = A)
-const C = {FECHA:0,OP:1,CLI:2,COMP:3,STOCK:4,MAT:5,TIPO:6,ANCHO:7,ALTO:8,PTS:9,ESP:10,AP:11,PRIO:12,
-           OBS:21,STATUS:22,FPROC:23,DESP:24,FDESP:25,ENS:26,
-           // Ampliacion de la hoja (agosto 2026)
-           FINI:27,      // AB  FECHA DE INICIO DE PRODUCCION
-           ALFF:28,      // AC  ALFAJOR FRONTAL      (casilla)
-           ALFP:29,      // AD  ALFAJOR POSTERIOR    (casilla)
-           MARCO:30,     // AE  TIPO DE MARCO
-           VISOR:31,     // AF  VISOR
-           EMPV:32,      // AG  EMPAQUE DE VISOR VARIABLE (se calcula solo)
-           EMPVREF:33,   // AH  EMPAQUE VISOR REFERENCIA
-           BUMP:34,      // AI  BUMPER
-           TBUMP:35,     // AJ  TAMANO BUMPER
-           CAL:36,       // AK  NOTAS DE CALIDAD
-           SEPA:37};     // AL  SEPARADA PARA
-const PROCS = [
-  {i:13,c:"N",k:"CORTE PERFIL",s:"CP"}, {i:14,c:"O",k:"INYECCION",s:"IN"},
-  {i:15,c:"P",k:"ACCESORIOS",s:"AC"},   {i:16,c:"Q",k:"CORTE MARCO",s:"CM"},
-  {i:17,c:"R",k:"MARCO",s:"MA"},        {i:18,c:"S",k:"CORTE RIEL",s:"CR"},
-  {i:19,c:"T",k:"RIEL",s:"RI"},         {i:20,c:"U",k:"EMBOCINAR",s:"EM"}
-];
+// Columnas y procesos: los declara el producto en modelo.js
+const C = MODELO.col;
+const PROCS = MODELO.procs;
 
 /* ------------------------------ estado ------------------------------ */
-let CFG = {clientId:"", sheetId:"", tab:"OP PUERTA", poll:20, dateFmt:"DMY", brand:""};
+let CFG = {clientId:"", sheetId:"", tab:MOD.tabPorDefecto || "", poll:20, dateFmt:"DMY", brand:""};
 let token=null, tokenExp=0, userMail="";
 let ROWS = [];              // {r:<fila 1-based>, c:[27 valores]}
 let SEL = new Set();        // filas seleccionadas (nº de fila de la hoja)

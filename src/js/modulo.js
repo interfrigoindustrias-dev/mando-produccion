@@ -30,6 +30,7 @@ const MODULOS = {
     colorOscuro: "#5c9ceb",
     // Pestañas auxiliares. Los módulos pueden compartir documento, así que
     // cada uno necesita las suyas: si no, mezclarían historial y catálogo.
+    tabPorDefecto: "OP PUERTA",
     logTab: "LOG APP",         // ya existe con el historial de puertas
     modelosTab: "MODELOS"
   },
@@ -40,6 +41,7 @@ const MODULOS = {
     pagina: "paneles.html",
     color: "#0B6B4F",          // verde, para distinguirlo de un vistazo
     colorOscuro: "#3fbe90",
+    tabPorDefecto: "PANEL",
     logTab: "LOG PANELES",
     modelosTab: "MODELOS PANELES"
   }

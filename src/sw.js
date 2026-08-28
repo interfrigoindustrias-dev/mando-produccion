@@ -19,6 +19,7 @@ const ARMAZON = [
   "css/planta.css",
   "css/impresion.css",
   "js/modulo.js",
+  "js/modelo.js",
   "js/constantes.js",
   "js/util.js",
   "js/config.js",
