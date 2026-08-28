@@ -16,7 +16,7 @@ function openDet(r){
               ["Puntos",c[C.PTS]],["Complemento",si(c[C.COMP])],["Stock",si(c[C.STOCK])],
               // Especificacion nueva de la hoja (AC..AJ)
               ["Marco",c[C.MARCO]],["Visor",c[C.VISOR]],["Empaque visor",c[C.EMPV]],
-              ["Bumper",c[C.BUMP]],
+              ["Bumper",c[C.BUMP]],["Sello",c[C.SELLO]],
               // El tamaño solo se enseña si lleva bumper: si no, confunde.
               ...(llevaBumper(c[C.BUMP]) ? [["Tamaño bumper",c[C.TBUMP]]] : []),
               ["Alfajor frontal",si(c[C.ALFF])],["Alfajor posterior",si(c[C.ALFP])],
@@ -44,6 +44,8 @@ function openDet(r){
     $("#d-ap").innerHTML = `<option value="">—</option>`+APERTURAS.map(v=>op1(v,c[C.AP])).join("");
     $("#d-ap").value = APERTURAS.includes(String(c[C.AP])) ? String(c[C.AP]) : "";
     $("#d-pts").value = num(c[C.PTS]) ?? "";
+    $("#d-sello").innerHTML = `<option value="">—</option>`+SELLOS.map(v=>op1(v,c[C.SELLO])).join("");
+    $("#d-sello").value = SELLOS.includes(String(c[C.SELLO])) ? String(c[C.SELLO]) : "";
   }
   $("#d-fdesp").value = fmtDate(c[C.FDESP]); $("#d-fproc").value = fmtDate(c[C.FPROC]);
   $("#d-prio").value = PRIORIDADES.includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
@@ -86,7 +88,8 @@ $("#d-save").onclick = async ()=>{
                [C.ENS,"AA","N° ensamble",$("#d-ens").value.trim(),false],
                ...($("#d-ap") ? [
                  [C.PTS,"J","Puntos",numCell($("#d-pts").value),false],
-                 [C.AP,"L","Apertura",$("#d-ap").value,false]] : []),
+                 [C.AP,"L","Apertura",$("#d-ap").value,false],
+                 [C.SELLO,"AM","Sello",$("#d-sello").value,false]] : []),
                [C.ANCHO,"H","Ancho vano",numCell($("#d-ancho").value),false],
                [C.ALTO,"I","Alto vano",numCell($("#d-alto").value),false],
                [C.OBS,"V","Observaciones",$("#d-obs").value.trim(),false]];
@@ -132,6 +135,7 @@ function initForm(){
     $("#n-marco").innerHTML = TIPOS_MARCO.map(v=>opt(v,"ALUMINIO 2X1")).join("");
     $("#n-visor").innerHTML = VISORES.map(v=>opt(v,"SIN VISOR")).join("");
     $("#n-bump").innerHTML  = BUMPERS.map(v=>opt(v,"SIN BUMPER")).join("");
+    $("#n-sello").innerHTML = SELLOS.map(v=>opt(v,"NO APLICA")).join("");
     $("#n-tbump").innerHTML = `<option value="">—</option>`+TAM_BUMPER.map(v=>opt(v)).join("");
 
     // El empaque del visor no se teclea: sale de la tabla Datos Calculo de la hoja.
@@ -238,6 +242,7 @@ $("#form-new").addEventListener("submit", async ev=>{
         c[C.EMPV]=EMPAQUE_VISOR[$("#n-visor").value] ?? "";
         c[C.EMPVREF]=$("#n-empvref").value.trim();
         c[C.BUMP]=$("#n-bump").value;
+        c[C.SELLO]=$("#n-sello").value;
         c[C.TBUMP]= llevaBumper($("#n-bump").value) ? numCell($("#n-tbump").value) : "";
       }
       PROCS.forEach(p=>{ c[p.i] = aplica.get(p.i) ? false : ""; });

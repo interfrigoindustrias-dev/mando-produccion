@@ -57,6 +57,7 @@ const CAMPOS = [
   {id:"tbump",  n:"Tamaño bumper",     g:"Especificación", tipo:"num",   v:c=>num(c[C.TBUMP])},
   {id:"alff",   n:"Alfajor frontal",   g:"Especificación", tipo:"sino",  v:c=>tri(c[C.ALFF])===true?"Sí":"No"},
   {id:"alfp",   n:"Alfajor posterior", g:"Especificación", tipo:"sino",  v:c=>tri(c[C.ALFP])===true?"Sí":"No"},
+  {id:"sello",  n:"Sello",             g:"Especificación", tipo:"lista", v:c=>c[C.SELLO], ops:SELLOS},
 
   /* --- avance y estado --- */
   {id:"av",     n:"Avance",            g:"Estado", tipo:"num",

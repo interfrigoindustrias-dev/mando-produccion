@@ -148,7 +148,8 @@ async function sincronizarValidacion(){
 
   const listas = [
     {col: 12, ops: PRIORIDADES},                      // M  prioridad
-    {col: 24, ops: DESPACHOS}                         // Y  estado de despacho
+    {col: 24, ops: DESPACHOS},                        // Y  estado de despacho
+    {col: 38, ops: SELLOS}                            // AM sello
   ];
   const req = listas.map(({col, ops}) => ({
     setDataValidation:{
@@ -162,8 +163,8 @@ async function sincronizarValidacion(){
   try{
     await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:req})});
     // El encabezado de la columna nueva, para que se entienda desde la hoja.
-    await api(`/values/${encodeURIComponent(rng("AL1"))}?valueInputOption=USER_ENTERED`,
-      {method:"PUT", body: JSON.stringify({values:[["SEPARADA PARA"]]})});
+    await api(`/values/${encodeURIComponent(rng("AL1:AM1"))}?valueInputOption=USER_ENTERED`,
+      {method:"PUT", body: JSON.stringify({values:[["SEPARADA PARA","SELLO"]]})});
     return 1;
   }catch(e){ console.warn("validacion:", e.message); return 0; }
 }

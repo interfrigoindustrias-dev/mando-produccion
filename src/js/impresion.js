@@ -34,6 +34,8 @@ function stickerHTML(row){
       ? ["Visor", c[C.VISOR]] : null,
     llevaBumper(c[C.BUMP])
       ? ["Bumper", `${c[C.BUMP]}${String(c[C.TBUMP]??"").trim()?" · "+num(c[C.TBUMP]):""}`] : null,
+    String(c[C.SELLO]??"").trim() && String(c[C.SELLO]).toUpperCase()!=="NO APLICA"
+      ? ["Sello", c[C.SELLO]] : null,
     tri(c[C.ALFF])===true || tri(c[C.ALFP])===true
       ? ["Alfajor", [tri(c[C.ALFF])===true?"frontal":"", tri(c[C.ALFP])===true?"posterior":""]
           .filter(Boolean).join(" + ")] : null
@@ -98,6 +100,7 @@ function cabeceraCarta(c){
       ${cel("Apertura", c[C.AP])}${cel("Puntos", num(c[C.PTS]))}
       ${cel("Tipo de marco", c[C.MARCO], 2)}${cel("Visor", c[C.VISOR])}
       ${cel("Bumper", bumper)}${cel("Alfajor", alfajor)}
+      ${cel("Sello", c[C.SELLO])}
     </div>
     <div class="c-obs"><em>Observaciones</em><span>${esc(c[C.OBS] ?? "")}</span></div>`;
 }

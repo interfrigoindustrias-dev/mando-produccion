@@ -32,6 +32,7 @@ const TIPOS_MARCO   = MODELO.listas.TIPOS_MARCO;
 const VISORES       = MODELO.listas.VISORES;
 const BUMPERS       = MODELO.listas.BUMPERS;
 const TAM_BUMPER    = MODELO.listas.TAM_BUMPER;
+const SELLOS        = MODELO.listas.SELLOS || [];
 const EMPAQUE_VISOR = MODELO.empaqueVisor;
 /** El tamaño de bumper solo aplica si se eligio un bumper de verdad. */
 const llevaBumper = v => !!String(v||"").trim() && String(v).trim().toUpperCase() !== "SIN BUMPER";

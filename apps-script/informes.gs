@@ -55,7 +55,8 @@ var REMITENTE = 'Control de Producción Interfrigo';
 /* Columnas de OP PUERTA, en base 0. Debe coincidir con constantes.js. */
 var C = {
   FECHA:0, OP:1, CLI:2, MAT:5, TIPO:6, ANCHO:7, ALTO:8, PTS:9, ESP:10, AP:11,
-  PRIO:12, OBS:21, FPROC:23, DESP:24, FDESP:25, ENS:26, FINI:27, CAL:36
+  PRIO:12, OBS:21, FPROC:23, DESP:24, FDESP:25, ENS:26, FINI:27, CAL:36,
+  SEPA:37, SELLO:38
 };
 var PROCS = [13,14,15,16,17,18,19,20];   // N..U
 
@@ -304,6 +305,7 @@ function catalogo() {
     ['cli',    'Cliente',               function (c) { return c[C.CLI]; },    'texto'],
     ['clibase','Cliente sin comprador', function (c) { return baseCli(c); },  'texto'],
     ['seppara','Separada para',         function (c) { return paraQuien(c); },'texto'],
+    ['sepsi',  'Separada',              function (c) { return paraQuien(c) ? 'Si' : 'No'; }, 'texto'],
     ['lote',   'Fecha / lote',          function (c) { return fecha(c[C.FECHA]); }, 'fecha'],
     ['ens',    'N.o de ensamble',       function (c) { return c[C.ENS]; },    'texto'],
     ['prio',   'Prioridad',             function (c) { return c[C.PRIO]; },   'texto'],
@@ -326,6 +328,7 @@ function catalogo() {
     ['tbump',  'Tamano bumper',         function (c) { return c[C.TBUMP]; },  'num'],
     ['alff',   'Alfajor frontal',       function (c) { return siNo(c[C.ALFF]); }, 'texto'],
     ['alfp',   'Alfajor posterior',     function (c) { return siNo(c[C.ALFP]); }, 'texto'],
+    ['sello',  'Sello',                 function (c) { return c[C.SELLO]; },  'texto'],
 
     ['av',     'Avance',                function (c) { return Math.round(avance(c) * 100) + '%'; }, 'num'],
     ['desp',   'Estado despacho',       function (c) { return c[C.DESP]; },   'texto'],
@@ -358,6 +361,9 @@ function catalogo() {
 
 var SEP_MARCA = ' -> ';
 function paraQuien(c) {
+  // La columna propia manda; el nombre anexado al cliente es el formato viejo.
+  var propio = String(c[C.SEPA] || '').trim();
+  if (propio) { return propio; }
   var t = String(c[C.CLI] || ''), i = t.indexOf(SEP_MARCA);
   return i < 0 ? '' : t.slice(i + SEP_MARCA.length).trim();
 }

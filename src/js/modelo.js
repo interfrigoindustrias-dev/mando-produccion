@@ -17,8 +17,8 @@
    las listas, aqui tambien: un valor que la hoja no acepte se guarda igual pero
    queda marcado y descuadra los informes. */
 const MODELO_PUERTAS = {
-  ncol: 38,
-  lastCol: "AL",
+  ncol: 39,
+  lastCol: "AM",
 
   // Indices de columna, empezando en 0 = A
   col: {
@@ -35,7 +35,8 @@ const MODELO_PUERTAS = {
     BUMP:34,      // AI  BUMPER
     TBUMP:35,     // AJ  TAMANO BUMPER
     CAL:36,       // AK  NOTAS DE CALIDAD
-    SEPA:37       // AL  SEPARADA PARA
+    SEPA:37,      // AL  SEPARADA PARA
+    SELLO:38      // AM  SELLO
   },
 
   procs: [
@@ -57,7 +58,10 @@ const MODELO_PUERTAS = {
                   "ALUMINIO 3X1 1/2",'ALUMINIO 4"',"PVC 80","PVC 110","PVC 130"],
     VISORES: ["SIN VISOR","22 X 60","30 X 60","40 X 60"],
     BUMPERS: ["SIN BUMPER","BUMPER BLANCO","BUMPER NEGRO"],
-    TAM_BUMPER: ["25","30","40","50","60","100"]
+    TAM_BUMPER: ["25","30","40","50","60","100"],
+    /* Como cierra la puerta contra el piso. Es de fabricacion, igual que el
+       espesor o la apertura: cambia el perfil inferior y el empaque. */
+    SELLOS: ["SELLO AL SUELO","SELLO A TOPE","NO APLICA"]
   },
 
   /** Empaque que corresponde a cada visor (pestaña Datos Calculo de la hoja). */
