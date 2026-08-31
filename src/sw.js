@@ -31,6 +31,7 @@ const ARMAZON = [
   "js/control.js",
   "js/ficha.js",
   "js/comun.js",
+  "js/secuencia.js",
   "js/planta.js",
   "js/dashboards.js",
   "js/impresion.js",

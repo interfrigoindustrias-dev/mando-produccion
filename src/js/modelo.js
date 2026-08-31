@@ -80,29 +80,109 @@ const MODELO_PUERTAS = {
 };
 
 /* ============================== PANELES ==============================
-   PROVISIONAL. Hoy es una copia del modelo de puertas, que es exactamente lo
-   que la aplicacion venia usando: hereda columnas y procesos de puerta porque
-   nunca se declararon los suyos.
+   Un panel no se parece a una puerta y su hoja tampoco: otras columnas, otros
+   procesos y una unidad de trabajo distinta —el metro cuadrado en vez de la
+   pieza—. Todo eso se declara aqui.
 
-   PENDIENTE de la estructura real de la pestaña PANEL. Cuando se conozca, esto
-   es lo unico que hay que cambiar — el resto del codigo lee de aqui.
+   COLUMNAS CONFIRMADAS (A..J y M..O)
+     A  fecha de creacion      se pone sola al crear la ficha
+     B  cliente                no se puede editar despues
+     C  OP                     se asigna sola; varias lineas comparten OP
+                               con sufijo: 163-1, 163-2...
+     D  prioridad
+     E  cantidad de paneles
+     F  largo del panel        el ancho es siempre ANCHO_PANEL
+     G  producto               tipo de panel
+     H  ranurado
+     I  cara A
+     J  cara B
+     M  PERFIL     |
+     N  INYECCION  |  los tres procesos
+     O  LIMPIEZA   |
 
-   Un panel no lleva riel ni embocinado, y no tiene visor ni bumper, asi que
-   `procs`, `col` y `listas` van a cambiar casi por completo. */
+   POR CONFIRMAR — marcadas abajo con «revisar». Escribir en una columna que ya
+   tenga datos los destruiria, asi que hasta confirmarlas la aplicacion no
+   escribe en ellas. */
+const ANCHO_PANEL = 1.16;          // metros; el largo es lo unico que varia
+
 const MODELO_PANELES = {
-  ncol: MODELO_PUERTAS.ncol,
-  lastCol: MODELO_PUERTAS.lastCol,
-  col: MODELO_PUERTAS.col,
-  procs: MODELO_PUERTAS.procs,
-  listas: MODELO_PUERTAS.listas,
-  empaqueVisor: MODELO_PUERTAS.empaqueVisor,
-  conRiel: MODELO_PUERTAS.conRiel,
-  provisional: true,
+  ncol: 20,
+  lastCol: "T",
+
+  col: {
+    FECHA:0,     // A  fecha de creacion
+    CLI:1,       // B  cliente
+    OP:2,        // C  OP
+    PRIO:3,      // D  prioridad
+    CANT:4,      // E  cantidad de paneles
+    LARGO:5,     // F  largo del panel (m)
+    PROD:6,      // G  producto
+    RANU:7,      // H  ranurado
+    CARA_A:8,    // I  cara A
+    CARA_B:9,    // J  cara B
+    ESP:10,      // K  revisar: espesor
+    OBS:11,      // L  revisar: observaciones
+    // M, N, O -> procesos
+    STATUS:15,   // P  revisar: avance calculado
+    DESP:16,     // Q  revisar: estado
+    FPROC:17,    // R  revisar: fecha de proceso
+    FDESP:18,    // S  revisar: fecha de despacho
+    FINI:19      // T  revisar: inicio de produccion
+  },
+
+  /** Columnas que aun no estan confirmadas: la aplicacion no escribe en ellas
+   *  mientras sigan aqui. Vaciar esta lista cuando se confirme la hoja. */
+  columnasPorConfirmar: ["ESP","OBS","STATUS","DESP","FPROC","FDESP","FINI"],
+
+  procs: [
+    {i:12, c:"M", k:"PERFIL",    s:"PE"},
+    {i:13, c:"N", k:"INYECCION", s:"IN"},
+    {i:14, c:"O", k:"LIMPIEZA",  s:"LI"}
+  ],
+
+  listas: {
+    /* Revisar contra la validacion de datos de la hoja: un valor que ella no
+       acepte se guarda igual pero descuadra los informes. */
+    PRODUCTOS: ["PANEL 2\"","PANEL 3\"","PANEL 4\"","PANEL 5\"","PANEL 6\""],
+    ESPESORES: ["2\"","3\"","4\"","5\"","6\""],
+    RANURADOS: ["SIN RANURAR","RANURADO"],
+    CARAS: ["LISA","GRAFADA","INOX","GLASSLINER"],
+    MATERIALES: [], TIPOS: [], APERTURAS: [],
+    TIPOS_MARCO: [], VISORES: [], BUMPERS: [], TAM_BUMPER: [], SELLOS: []
+  },
+
+  /** El trabajo de panel se mide en metros cuadrados, no en piezas. */
+  ancho: ANCHO_PANEL,
+  metros: c => (num(c[MODELO_PANELES.col.CANT]) || 0) *
+               (num(c[MODELO_PANELES.col.LARGO]) || 0) * ANCHO_PANEL,
+
+  /* ESCALADO DE PRIORIDAD — por escalones, no de un salto.
+     URGENTE  se antepone a todo; no escala ni caduca.
+     ALTA     entra a la cola inmediata.
+     MEDIA    espera 4 dias y sube a ALTA.
+     BAJA     espera 8 dias, sube a MEDIA, y desde ahi otros 4 hasta ALTA.
+     Los dias se cuentan desde que entro en ese nivel, no desde la creacion:
+     si no, una BAJA recien ascendida a MEDIA saltaria a ALTA el mismo dia. */
+  escalado: {
+    BAJA:  {dias: 8, a: "MEDIA"},
+    MEDIA: {dias: 4, a: "ALTA"}
+  },
+
+  /** Secuencia de fabricacion: se agrupan pedidos del mismo espesor hasta
+   *  acumular este tope, y entonces cede el turno. Cambiar el espesor obliga a
+   *  reajustar la maquina, asi que agrupar ahorra paradas; pero agrupar sin
+   *  limite deja esperando a los demas espesores. */
+  lotePorEspesor: 200,          // m2
+
+  empaqueVisor: {},
+  conRiel: [],
+
   tiene: {
-    especificacion: true,
-    calidad: false,      // paneles no tiene la vista de calidad
-    stock: true,
-    cronograma: false    // ni cronograma: no hay meta de produccion
+    especificacion: false,   // sin marco, visor ni bumper
+    calidad: false,
+    stock: false,            // no hay inventario por modelo
+    cronograma: false,
+    metrosCuadrados: true    // la unidad de trabajo es el m2
   }
 };
 
