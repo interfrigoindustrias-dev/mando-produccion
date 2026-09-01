@@ -1,10 +1,10 @@
 # Graph Report - mando-produccion  (2026-08-31)
 
 ## Corpus Check
-- Corpus is ~47,386 words - fits in a single context window. You may not need a graph.
+- Corpus is ~48,424 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 339 nodes · 484 edges · 34 communities (29 shown, 5 thin omitted)
+- 349 nodes · 498 edges · 35 communities (30 shown, 5 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 10 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -26,6 +26,7 @@
 - Impresion
 - Configuracion del usuario
 - Historial de cambios
+- poliuretano.js
 - secuencia.js
 - Autenticacion con Google
 - avisos.js
@@ -68,7 +69,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (34 total, 5 thin omitted)
+## Communities (35 total, 5 thin omitted)
 
 ### Community 0 - "Tableros y catalogo"
 Cohesion: 0.09
@@ -138,44 +139,48 @@ Nodes (5): aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), parseSheetId(), save
 Cohesion: 0.36
 Nodes (8): ensureLog(), histOf(), loadLog(), LOG, logBulk(), logChanges(), renderHist(), shortUser()
 
-### Community 17 - "secuencia.js"
+### Community 17 - "poliuretano.js"
+Cohesion: 0.36
+Nodes (7): consumoPor(), kgPoliuretano(), mesDe(), MESES_ES, nombreMes(), resumenPoliuretano(), semanaDe()
+
+### Community 18 - "secuencia.js"
 Cohesion: 0.36
 Nodes (8): desdeCuandoEnSuNivel(), diasEnCola(), espesorDe(), m2De(), marcar(), ORDEN_PRIO, prioridadQueTocaria(), secuenciaPaneles()
 
-### Community 18 - "Autenticacion con Google"
+### Community 19 - "Autenticacion con Google"
 Cohesion: 0.43
 Nodes (6): avisarReconectar(), ensureToken(), entrarConGoogle(), paginaActual(), pedirToken(), programarRenovacion()
 
-### Community 19 - "avisos.js"
+### Community 20 - "avisos.js"
 Cohesion: 0.52
 Nodes (6): abrirAvisos(), avisosNuevos(), cerrarAvisos(), marcarVisto(), pintarTimbre(), ultimoVisto()
 
-### Community 20 - "Ficha de la puerta"
+### Community 21 - "Ficha de la puerta"
 Cohesion: 0.38
 Nodes (4): dStk, hintOp(), initForm(), targetRows()
 
-### Community 22 - "meta.js"
+### Community 23 - "meta.js"
 Cohesion: 0.29
 Nodes (3): META, META_DEF, META_HEAD
 
-### Community 23 - "comprobar_ids.py"
+### Community 24 - "comprobar_ids.py"
 Cohesion: 0.52
 Nodes (6): ids_de(), leer(), main(), protegido_en_linea(), El propio renglon comprueba antes de usar., scripts_de()
 
-### Community 24 - "Navegacion y arranque"
+### Community 25 - "Navegacion y arranque"
 Cohesion: 0.40
 Nodes (3): enterApp(), pintarQuienSoy(), VIEWS
 
-### Community 25 - "Instalacion como app"
+### Community 26 - "Instalacion como app"
 Cohesion: 0.47
 Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
 
-### Community 26 - "modelo.js"
-Cohesion: 0.50
+### Community 27 - "modelo.js"
+Cohesion: 0.40
 Nodes (3): MODELO_PANELES, MODELO_PUERTAS, MODELOS_DATOS
 
 ## Knowledge Gaps
-- **61 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+56 more)
+- **62 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+57 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -183,15 +188,15 @@ Nodes (3): MODELO_PANELES, MODELO_PUERTAS, MODELOS_DATOS
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `separada()` connect `Tableros y catalogo` to `Constantes del modelo`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `renderAlmacen()` connect `Tableros y catalogo` to `Ayudantes de tableros`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Why does `enProduccion()` connect `Ayudantes de tableros` to `Tableros y catalogo`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `renderAlmacen()` (e.g. with `enProduccion()` and `separada()`) actually correct?**
   _`renderAlmacen()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
-  _61 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _62 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
   _Cohesion score 0.08961593172119488 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
