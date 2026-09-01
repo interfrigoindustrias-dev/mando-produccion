@@ -18,44 +18,93 @@ table.lineas .inp.sm{ padding:6px 8px; font-size:13px; min-width:0; width:100% }
 table.lineas .inp.num{ text-align:right; max-width:88px }
 table.lineas td.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap }
 
-/* ------------------------------ planta: la cola ------------------------------ */
-/* URGENTE no lo pone el tiempo, lo pone una persona: se ve distinto a proposito. */
-.pcard.prio-URGENTE{ border-left:4px solid var(--bad) }
+/* ------------------------------ planta: la cola ------------------------------
+   La tarjeta se reparte a lo ancho en cuatro bloques —quien es, cuanto mide,
+   que falta y como va— porque en una pantalla de taller ancha apilarlo todo a
+   la izquierda deja media pantalla vacia y obliga a leer en zigzag.
 
-.pcard .pc-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+   Por debajo de 1100 px vuelven a apilarse: planta tambien se usa en tablet,
+   de pie, y ahi lo que manda es el tamaño del dedo. */
+.pcard.prio-URGENTE{ --tone:#e0392c; border-left-width:16px;
+  background:color-mix(in srgb,#e0392c 18%,var(--bg2)) }
+
+/* El hueco sobrante se reparte entre quien es y cuanto mide, en vez de
+   acumularse todo detras del nombre del cliente: asi las cifras quedan
+   repartidas por el centro y no pegadas a los botones. */
+.pcard{
+  display:grid; gap:14px 24px; align-items:center;
+  grid-template-columns:minmax(260px,1.1fr) minmax(300px,1fr) auto auto;
+}
+.pcard > *{ min-width:0 }
+
+.pc-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
 .pc-n{
-  display:grid; place-items:center; min-width:26px; height:26px; padding:0 6px;
-  border-radius:999px; background:var(--bg3); color:var(--tx2);
-  font-size:12px; font-weight:700; font-variant-numeric:tabular-nums;
+  display:grid; place-items:center; min-width:28px; height:28px; padding:0 7px;
+  border-radius:999px; background:color-mix(in srgb,var(--tone) 22%,var(--bg2));
+  color:var(--tx); font-size:13px; font-weight:800; font-variant-numeric:tabular-nums;
 }
+.pcard .op{ font-size:20px; font-weight:800 }
 .pc-esp{
-  margin-left:auto; padding:2px 8px; border-radius:999px;
-  background:var(--soft); color:var(--acc); font-weight:700; font-size:12px;
+  padding:3px 10px; border-radius:999px;
+  background:color-mix(in srgb,var(--tone) 18%,var(--bg2));
+  border:1px solid color-mix(in srgb,var(--tone) 40%,transparent);
+  color:var(--tx); font-weight:800; font-size:13px;
 }
-.pc-cli{ font-weight:600; margin-top:6px }
-.pc-met{ color:var(--tx2); font-size:13px; margin-top:2px }
-.pc-cifras{
-  display:flex; gap:14px; flex-wrap:wrap; margin-top:8px;
-  font-size:12px; color:var(--tx2);
+.pc-cli{ font-weight:700; font-size:16px; margin-top:7px }
+.pc-met{ color:var(--tx2); font-size:13.5px; margin-top:3px }
+
+/* Las cifras son con lo que se decide: se leen de un vistazo, no en una linea
+   de texto corrido. */
+.pc-cifras{ display:flex; gap:26px; flex-wrap:wrap; justify-content:space-between }
+.pc-cifras span{ display:flex; flex-direction:column; gap:2px; white-space:nowrap }
+.pc-cifras b{
+  font-size:21px; font-weight:800; line-height:1.1;
+  color:var(--tx); font-variant-numeric:tabular-nums;
 }
-.pc-cifras b{ color:var(--tx); font-variant-numeric:tabular-nums }
-.pc-procs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
-.pc-pie{ display:flex; align-items:center; gap:10px; margin-top:10px }
-.pc-pie .pbar{ flex:1 }
+.pc-cifras i{
+  font-style:normal; font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--tx3);
+}
+
+.pc-procs{ display:flex; gap:10px; flex-wrap:wrap }
+.pc-procs .pb{ min-width:130px; min-height:48px }
+
+.pc-pie{ display:flex; flex-direction:column; align-items:stretch; gap:8px; min-width:170px }
+.pc-pie .pbar{ width:100% }
+.pc-pie .pct{ font-size:12px; color:var(--tx2); text-align:center }
+.pc-pie .pterm{ min-height:44px; font-size:14px; font-weight:700 }
+
+/* Pantalla intermedia: dos columnas. Arriba quien es y cuanto mide, abajo lo
+   que hay que hacer y como va. Sigue usando el ancho, en vez de estrecharse a
+   una columna con media pantalla vacia al lado. */
+@media (max-width:1400px){
+  .pcard{ grid-template-columns:minmax(220px,1fr) auto }
+  .pc-cifras{ justify-content:flex-start }
+  .pc-procs{ justify-self:start }
+  .pc-pie{ justify-self:end }
+}
+@media (max-width:1100px){
+  .pcard{ grid-template-columns:1fr; gap:12px }
+  .pc-cifras{ gap:20px }
+  .pc-procs .pb{ flex:1 }
+  .pc-pie{ flex-direction:row; align-items:center; min-width:0 }
+  .pc-pie .pbar{ flex:1; width:auto }
+  .pc-pie .pterm{ flex:none; padding-inline:20px }
+}
 
 /* Cada cambio de espesor es una parada de maquina. Se anuncia en la propia
    cola, en el sitio exacto donde toca hacerlo, y no en una nota aparte. */
 .setup{
-  display:flex; align-items:center; gap:10px; margin:18px 0 8px;
-  padding:9px 14px; border-radius:var(--r);
-  background:color-mix(in srgb, var(--warn) 12%, var(--bg2));
+  display:flex; align-items:center; gap:10px; margin:20px 0 8px;
+  padding:11px 16px; border-radius:var(--r);
+  background:color-mix(in srgb, var(--warn) 14%, var(--bg2));
   border:1px solid color-mix(in srgb, var(--warn) 45%, transparent);
-  color:var(--tx); font-size:13px; font-weight:600;
+  color:var(--tx); font-size:14px; font-weight:600;
 }
-.setup .ico{ font-size:16px; line-height:1 }
+.setup .ico{ font-size:17px; line-height:1 }
 .tanda-fin{
-  margin:6px 0 2px; padding:6px 14px;
-  color:var(--tx2); font-size:12px; text-align:right;
+  margin:6px 0 2px; padding:6px 16px;
+  color:var(--tx2); font-size:12.5px; text-align:right;
   border-top:1px dashed var(--line);
 }
 

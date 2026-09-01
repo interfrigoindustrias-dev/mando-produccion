@@ -92,28 +92,37 @@ function renderPlanta(){
         ${v===true?"✓ ":""}${esc(pr.k)}</button>`;
     }).join("");
 
+    /* La tarjeta se reparte a lo ancho en cuatro bloques: quien es, cuanto
+       mide, que falta por hacer y como va. En vertical se apilan solos. */
     trozos.push(`<article class="pcard ${prio?"prio-"+prio:""} ${prio==="URGENTE"?"urg":""}"
         data-r="${x.r}">
-      <div class="pc-top">
-        <span class="pc-n">${i+1}</span>
-        <span class="op" data-f="op">${esc(c[C.OP]??"")}</span>
-        <span data-f="prio">${etiquetaPrio(x.prioridad)}</span>
-        <span class="pc-esp" title="Espesor por el que se agrupa">${esc(x.espesor)}</span>
+      <div class="pc-id">
+        <div class="pc-top">
+          <span class="pc-n">${i+1}</span>
+          <span class="op" data-f="op">${esc(c[C.OP]??"")}</span>
+          <span data-f="prio">${etiquetaPrio(x.prioridad)}</span>
+          <span class="pc-esp" title="Espesor por el que se agrupa">${esc(x.espesor)}</span>
+        </div>
+        <div class="pc-cli" data-f="cli">${esc(c[C.CLI]??"")}</div>
+        <div class="pc-met" data-f="met">${esc(c[C.PROD]??"")} ·
+          ${n0(c[C.CANT])} panel(es) de ${n2(c[C.LARGO])} m ·
+          ${esc(c[C.RANU]??"")} · ${esc(c[C.CARA_A]??"")}/${esc(c[C.CARA_B]??"")}</div>
       </div>
-      <div class="pc-cli" data-f="cli">${esc(c[C.CLI]??"")}</div>
-      <div class="pc-met" data-f="met">${esc(c[C.PROD]??"")} ·
-        ${n0(c[C.CANT])} panel(es) de ${n2(c[C.LARGO])} m ·
-        ${esc(c[C.RANU]??"")} · ${esc(c[C.CARA_A]??"")}/${esc(c[C.CARA_B]??"")}</div>
+
       <div class="pc-cifras">
-        <span title="Metros cuadrados de esta línea"><b>${n2(x.m2)}</b> m²</span>
-        <span title="Metros acumulados sin cambiar el montaje">acum. <b>${n2(x.acumulado)}</b> m²</span>
-        <span title="Días esperando en la cola">espera <b>${textoEspera(x.dias)}</b></span>
+        <span title="Metros cuadrados de esta línea"><b>${n2(x.m2)}</b><i>m² de la línea</i></span>
+        <span title="Metros acumulados sin cambiar el montaje de la máquina">
+          <b>${n2(x.acumulado)}</b><i>m² sin cambiar montaje</i></span>
+        <span title="Lo que lleva esperando en la cola">
+          <b>${textoEspera(x.dias)}</b><i>esperando</i></span>
       </div>
+
       <div class="pc-procs">${botones}</div>
+
       <div class="pc-pie">
         <span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span>
         <span class="pct">${pc}%</span>
-        <button class="btn sm pri" data-term="${x.r}">Terminar</button>
+        <button class="btn pri pterm" data-term="${x.r}">Terminar</button>
       </div>
     </article>`);
   });
