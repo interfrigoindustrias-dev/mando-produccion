@@ -82,6 +82,10 @@ const urgente = c => urgenteManual(c) || urgenteAuto(c);
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
 /** Una puerta anulada queda fuera de producción, almacén y stock. */
 const anulada = c => String(c[C.DESP]??"").trim()==="Anulada";
+/* Despachada = salio por la puerta. No es trabajo de nadie ya, asi que no
+   aparece en ninguna vista operativa: solo en Control de OPs, que es el
+   historico completo. */
+const despachada = c => String(c[C.DESP]??"").trim()==="Despachado";
 // Tipos corredizos: son los unicos que llevan riel.
 const CON_RIEL = new Set(MODELO.conRiel);
 

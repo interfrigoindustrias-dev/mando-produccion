@@ -153,9 +153,12 @@ $("#r-dia").onchange = renderResumen;
 $("#r-hoy").onclick = ()=>{ $("#r-dia").value = iso(new Date()); renderResumen(); };
 
 /* ---------- En almacén (hoja EN ALMACÉN) ----------
-   Base: terminadas y almacenadas, más las separadas. */
+   Base: terminadas y almacenadas, más las separadas — pero nunca las que ya
+   salieron. Una separada sigue siendo separada despues de despacharse, y esa
+   condicion la devolvia a la vista: cinco puertas entregadas figuraban en
+   almacen. Lo despachado solo se ve en Control de OPs. */
 const almacenBase = () => activas().filter(({c})=>
-  (completa(c) && desp(c)==="En Almacén") || separada(c));
+  !despachada(c) && ((completa(c) && desp(c)==="En Almacén") || separada(c)));
 function almacenList(){
   const q=$("#a-q").value.trim().toLowerCase(), g=id=>$("#"+id).value;
   const eq=(v,f)=>!f||String(v??"").trim()===f;
@@ -713,7 +716,7 @@ $("#m-tabla").addEventListener("click", ev=>{
    criterio algo más estrecho (solo almacén o sin estado), por eso el «Stock total»
    del Resumen puede diferir en un par de unidades. Cada tarjeta indica el suyo. */
 const stockBase = () => activas().filter(({c})=>
-  tri(c[C.STOCK])===true && desp(c)!=="Despachado" && !anulada(c));
+  tri(c[C.STOCK])===true && !despachada(c) && !anulada(c));
 function stockList(){
   const q=$("#s-q").value.trim().toLowerCase();
   // Un filtro que no existe en esta pagina simplemente no filtra. Puertas y

@@ -41,7 +41,12 @@ function percentil(xs, p){
 function renderResumen(){
   const todas = activas().filter(({c})=>!anuladaP(c));
   const hechas = fabricadas();
-  const abiertas = todas.filter(({c})=>progreso(c).pct < 1);
+  /* Pendiente es lo que queda por hacer, no lo que quedo a medias en la hoja:
+     una linea despachada ya no es trabajo de nadie aunque le falte marcar un
+     proceso, y contarla inflaba los m2 pendientes. Los totales y lo fabricado
+     si la siguen incluyendo: eso es historia, y la historia no se borra al
+     despachar. */
+  const abiertas = todas.filter(({c})=>progreso(c).pct < 1 && !despachadaP(c));
   const sum = (xs, f) => xs.reduce((s,x)=>s+(f(x.c)||0), 0);
 
   /* ---------- 1. cuanto se fabrica ---------- */
@@ -111,7 +116,7 @@ function renderResumen(){
       e.hechos += m;
       const d = diasDeFabricacion(c);
       if(d !== null) e.dias.push(d);
-    } else e.pend += m;
+    } else if(!despachadaP(c)) e.pend += m;   // despachada = ya no esta pendiente
     porProd.set(k, e);
   });
   tablaMini("#r-productos",

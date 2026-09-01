@@ -37,6 +37,9 @@ function plantaList(){
     // siendo trabajo de planta aunque figuren en almacen. El resto ya es
     // trabajo de otro y mantenerlo a la vista solo estorba.
     const urge = urgente(c);
+    // Primero lo despachado, siempre: la excepcion de las separadas urgentes
+    // devolvia a planta puertas que ya habian salido.
+    if(despachada(c)) return false;
     if(desp(c) && !urgenteAuto(c)) return false;
 
     if(fe==="urge" && !urge) return false;

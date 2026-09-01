@@ -40,6 +40,10 @@ const SEL_CAL = new Set();
 function calidadBase(){
   return ROWS.filter(({c})=>{
     if(!rowActive(c) || anulada(c)) return false;
+    // Lo despachado ya salio: no es trabajo de calidad ni de nadie. Va antes
+    // que la excepcion de «no apta», o una rechazada que se acabo despachando
+    // se quedaria aqui para siempre.
+    if(despachada(c)) return false;
     if(esNoApta(c)) return true;               // rechazada: sigue aqui hasta arreglarse
     // «Terminado» es una declaracion humana: la puerta esta hecha. Vale por si
     // sola, aunque falte marcar algun proceso — si se exigiera el 100% una
