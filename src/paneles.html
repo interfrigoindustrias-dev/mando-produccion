@@ -205,7 +205,7 @@
 </div>
 
 <!-- ============================== MODAL NUEVA FICHA ============================== -->
-<div class="ov hide" id="ov-nueva"><div class="mod" style="max-width:1080px">
+<div class="ov hide" id="ov-nueva"><div class="mod ancha">
   <header style="display:flex;align-items:center;gap:12px">
     <h1 class="grow" style="margin:0;font-size:17px">Nueva ficha de paneles</h1>
     <button class="x" data-close>&#215;</button>
@@ -255,7 +255,7 @@
 </div></div>
 
 <!-- ============================== MODAL DETALLE ============================== -->
-<div class="ov hide" id="ov-det"><div class="mod" style="max-width:760px">
+<div class="ov hide" id="ov-det"><div class="mod ancha">
   <header style="display:flex;align-items:flex-start;gap:12px">
     <div class="grow">
       <div class="op" style="font-size:24px" id="d-op"></div>
@@ -267,25 +267,30 @@
     datos con los que el pedido se identifica fuera de la aplicaci&#243;n &#8212;en el correo, en la
     remisi&#243;n, en la llamada&#8212; y si cambian aqu&#237; deja de poder cruzarse con nada.</p>
 
-  <div id="d-calc" class="nota"></div>
+  <div class="det-cols">
+    <div class="det-main">
+      <div id="d-calc" class="nota"></div>
 
-  <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2)">Procesos</h2>
-  <div id="d-procs" class="procs-btn"></div>
+      <h2 class="det-h">Procesos</h2>
+      <div id="d-procs" class="procs-btn"></div>
 
-  <form class="form" id="form-det" autocomplete="off">
-    <div class="grid" id="d-campos" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))"></div>
-    <div class="sticky-actions">
-      <div class="grow"></div>
-      <button type="button" class="btn" data-close>Cerrar</button>
-      <button type="submit" class="btn pri" id="d-save">Guardar cambios</button>
+      <form class="form" id="form-det" autocomplete="off">
+        <h2 class="det-h">Datos de la línea</h2>
+        <div class="grid" id="d-campos"></div>
+        <div class="sticky-actions">
+          <div class="grow"></div>
+          <button type="button" class="btn" data-close>Cerrar</button>
+          <button type="submit" class="btn pri" id="d-save">Guardar cambios</button>
+        </div>
+      </form>
     </div>
-  </form>
 
-  <div style="margin-top:18px">
-    <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);display:flex;align-items:center;gap:8px">
-      Historial <button class="btn sm" id="d-hist-r" title="Recargar historial"
-        style="margin-left:auto">&#10227;</button></h2>
-    <div id="d-hist" class="hist"></div>
+    <aside class="det-hist">
+      <h2 class="det-h">Historial
+        <button class="btn sm" id="d-hist-r" title="Recargar historial"
+          style="margin-left:auto">&#10227;</button></h2>
+      <div id="d-hist" class="hist"></div>
+    </aside>
   </div>
 </div></div>
 

@@ -5,18 +5,69 @@
    fabricacion con sus avisos de cambio de montaje, y el almacen agrupado por
    pedido. Todo lo demas sale de las hojas compartidas.                       */
 
-/* ------------------------------ ficha: editor de lineas ------------------------------ */
-table.lineas{ width:100%; border-collapse:collapse; font-size:13px }
+/* ------------------------------ las fichas ------------------------------
+   La ficha es donde se mira un pedido entero, y hasta ahora cabia en 760 px
+   con media pantalla en negro a los lados. Aqui usa el ancho que haya: no por
+   llenarlo, sino porque lo que se consulta —las lineas de un pedido y lo que
+   se le ha hecho a cada una— es ancho por naturaleza y partido en trozos
+   estrechos obliga a recordar en vez de a leer. */
+.mod.ancha{ max-width:none; width:min(1720px, 96vw) }
+.mod.ancha .form{ max-width:none }
+.mod.ancha .gid{ grid-template-columns:170px 170px minmax(260px,1fr) }
+@media (max-width:700px){ .mod.ancha .gid{ grid-template-columns:1fr } }
+
+/* ---- ficha nueva: el editor de lineas ---- */
+table.lineas{ width:100%; border-collapse:collapse; font-size:13.5px }
 table.lineas th{
   text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em;
-  color:var(--tx2); font-weight:600; padding:6px 6px; border-bottom:1px solid var(--line);
+  color:var(--tx2); font-weight:600; padding:8px 8px; border-bottom:1px solid var(--line);
   white-space:nowrap;
 }
-table.lineas td{ padding:4px 6px; vertical-align:middle; border-bottom:1px solid var(--line) }
-table.lineas .ln{ color:var(--tx3); font-variant-numeric:tabular-nums; width:24px }
-table.lineas .inp.sm{ padding:6px 8px; font-size:13px; min-width:0; width:100% }
-table.lineas .inp.num{ text-align:right; max-width:88px }
-table.lineas td.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap }
+table.lineas td{ padding:6px 8px; vertical-align:middle; border-bottom:1px solid var(--line) }
+table.lineas tr:last-child td{ border-bottom:0 }
+table.lineas .ln{
+  color:var(--tx3); font-variant-numeric:tabular-nums;
+  width:34px; font-weight:700; font-size:15px;
+}
+table.lineas .inp.sm{ padding:9px 10px; font-size:13.5px; min-width:0; width:100% }
+table.lineas .inp.num{ text-align:right }
+/* Las cifras calculadas se leen como cifras, no como texto de relleno. */
+table.lineas td.num{
+  text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;
+  font-weight:700; font-size:15px; color:var(--tx); width:110px;
+}
+table.lineas td.num.mut{ color:var(--tx3) }
+/* Cantidad y largo son cortos: no tienen por que ocupar lo mismo que un
+   producto o un acabado. */
+table.lineas th:nth-child(3), table.lineas td:nth-child(3),
+table.lineas th:nth-child(4), table.lineas td:nth-child(4){ width:110px }
+table.lineas th:last-child, table.lineas td:last-child{ width:44px }
+
+#n-totales{ font-size:14px }
+#n-totales b{ color:var(--tx); font-size:16px; font-variant-numeric:tabular-nums }
+
+/* ---- ficha de detalle: los datos a un lado, lo que ha pasado al otro ---- */
+.det-cols{ display:grid; grid-template-columns:minmax(0,1.9fr) minmax(280px,1fr); gap:22px }
+.det-main{ min-width:0 }
+.det-hist{
+  min-width:0; border-left:1px solid var(--line); padding-left:22px;
+  max-height:62dvh; overflow:auto;
+}
+.det-h{
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--tx2); border-bottom:1px solid var(--line);
+  padding-bottom:9px; margin:0 0 13px;
+}
+.det-main .det-h{ margin-top:20px }
+.det-main > .det-h:first-child{ margin-top:0 }
+#d-campos{ grid-template-columns:repeat(auto-fit,minmax(190px,1fr)) }
+
+@media (max-width:1000px){
+  .det-cols{ grid-template-columns:1fr; gap:8px }
+  .det-hist{ border-left:0; padding-left:0; border-top:1px solid var(--line);
+             padding-top:16px; max-height:none }
+}
 
 /* ------------------------------ planta: la cola ------------------------------
    La tarjeta se reparte a lo ancho en cuatro bloques —quien es, cuanto mide,
@@ -156,11 +207,15 @@ table.lineas td.num{ text-align:right; font-variant-numeric:tabular-nums; white-
   border:1px solid color-mix(in srgb, var(--warn) 45%, transparent);
 }
 
-/* ------------------------------ detalle de la linea ------------------------------ */
-.procs-btn{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 16px }
+/* ------------------------------ detalle de la linea ------------------------------
+   Los procesos se marcan desde aqui igual que desde la tabla, asi que necesitan
+   el mismo tamaño que en planta: el boton cuadrado de la tabla, de 24 px, es
+   para ver de un vistazo, no para acertarle. */
+.procs-btn{ display:flex; gap:10px; flex-wrap:wrap; margin:0 0 8px }
 .procs-btn .p{
-  width:auto; padding:8px 14px; border-radius:var(--r);
-  font-size:13px; font-weight:600;
+  width:auto; min-width:150px; min-height:46px; padding:0 18px;
+  border-radius:var(--r); font-size:13.5px; font-weight:700;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
 }
 
 /* Una linea anulada sigue estando, pero ya no cuenta para nada. */
