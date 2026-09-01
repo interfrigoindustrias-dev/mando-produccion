@@ -3,25 +3,63 @@
 Un panel no se parece a una puerta y su hoja tampoco. Lo que los distingue está
 declarado en `src/js/modelo.js` (`MODELO_PANELES`) y `src/js/secuencia.js`.
 
-## Columnas
+## Columnas — confirmadas contra la hoja
 
-| Col | Campo | Notas |
+| Col | Campo | |
 |---|---|---|
-| A | Fecha de creación | se pone sola al crear la ficha |
-| B | Cliente | no editable después |
-| C | OP | se asigna sola; varias líneas comparten OP con sufijo `163-1`, `163-2` |
-| D | Prioridad | |
-| E | Cantidad de paneles | |
-| F | Largo del panel | el ancho es siempre **1,16 m** |
-| G | Producto | tipo de panel |
-| H | Ranurado | |
-| I | Cara A | |
-| J | Cara B | |
+| A | FECHA | lote; a veces texto («agosto - 1») |
+| B | CLIENTE | no editable después |
+| C | OP | varias líneas comparten OP: `163-1`, `163-2` |
+| D | PRIORIDAD | |
+| E | CANT | paneles |
+| F | LARGO | metros; el ancho es siempre **1,16** |
+| G | PRODUCTO | lleva el espesor en el nombre: `PANEL 3"` |
+| H | RANURADO | |
+| I | CARA A | |
+| J | CARA B | |
+| K | UNIDAD | poliuretano por panel (kg) — fórmula de la hoja |
+| L | TOTAL | poliuretano de la línea (kg) — fórmula de la hoja |
 | M · N · O | PERFIL · INYECCIÓN · LIMPIEZA | los tres procesos |
+| P | M2 | |
+| Q | STATUS | |
+| R | COMIENZO PROCESO | |
+| S | FIN PROCESO | |
+| T | ESTADO | |
+| U | FECHA DE DESPACHO | |
 
-**K, L y de P en adelante están sin confirmar.** Mientras figuren en
-`columnasPorConfirmar`, la aplicación **no escribe** en ellas: escribir sobre una
-columna que ya tuviera datos los destruiría.
+El espesor **no tiene columna**: se deduce del producto. `PANEL 3"` agrupa con
+`PANEL 3"`, y de ahí sale el agrupamiento de la secuencia de fabricación.
+
+## Poliuretano
+
+La hoja lo calcula en K y L. La fórmula, deducida de sus datos y verificada:
+
+```
+UNIDAD = largo × 1,16 × espesor(m) × 38      kg por panel
+TOTAL  = UNIDAD × cantidad                    kg de la línea
+```
+
+El **38 es la densidad del poliuretano inyectado en kg/m³**: aparece con cuatro
+decimales de precisión (37,9999), no es un coeficiente de ajuste. El espesor en
+metros son las pulgadas del producto redondeadas al milímetro — 3″ → 0,076.
+
+Comprobado contra la fila de AMERICAN BLUE (22 paneles de 2,45 m, PANEL 3″):
+
+```
+UNIDAD  hoja 8,208     calculado 8,207696
+TOTAL   hoja 180,569   calculado 180,569312   desvío 0,0002 %
+```
+
+`poliuretano.js` **lee** lo que trae la hoja y solo calcula cuando la celda está
+vacía. La fórmula se usa además para comprobar que ambas cuadran: si un día la
+de la hoja cambia y ésta no, `revisarPoliuretano()` lo dice en vez de callarlo.
+
+El consumo se agrupa por mes, por semana y por producto. Las filas cuyo lote es
+texto («agosto - 1») entran en el consumo mensual —para eso basta el mes— pero
+no en el semanal.
+
+Como referencia, el gasto por metro cuadrado sale del espesor: 3″ → 2,89 kg/m²,
+4″ → 3,88, 6″ → 5,78.
 
 ## La unidad de trabajo es el metro cuadrado
 
