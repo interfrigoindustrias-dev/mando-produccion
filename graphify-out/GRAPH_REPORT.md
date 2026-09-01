@@ -1,7 +1,7 @@
 # Graph Report - mando-produccion  (2026-08-31)
 
 ## Corpus Check
-- 66 files · ~58,434 words
+- 66 files · ~58,443 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
