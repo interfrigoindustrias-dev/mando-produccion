@@ -71,15 +71,6 @@ function stickerHTML(row){
 
 /* ---------- Hoja carta: una sola pagina por puerta ---------- */
 
-const MESES_CARTA = ["enero","febrero","marzo","abril","mayo","junio","julio",
-                     "agosto","septiembre","octubre","noviembre","diciembre"];
-
-/** El MES de fin de proceso, que es lo que se sigue en planta; no el dia. */
-function mesFin(c){
-  const f = toDate(c[C.FPROC]);
-  return f ? `${MESES_CARTA[f.getMonth()]} ${f.getFullYear()}` : "—";
-}
-
 /* Cabecera: lo que identifica la puerta. Igual en los cuatro formatos porque
    la pregunta «¿de que puerta hablamos?» no cambia entre familias. */
 function cabeceraCarta(c, F){
@@ -111,7 +102,7 @@ function cabeceraCarta(c, F){
         ${cel("Material", c[C.MAT])}${cel("Tipo", c[C.TIPO])}
         ${cel("Ancho vano", num(c[C.ANCHO]))}${cel("Alto vano", num(c[C.ALTO]))}
         ${cel("Espesor mm", num(c[C.ESP]))}${cel("Apertura", c[C.AP])}
-        ${cel("Sello", c[C.SELLO])}${cel("Mes fin proceso", mesFin(c))}
+        ${cel("Sello", c[C.SELLO])}${cel("Creación OP", fmtDate(c[C.FECHA]))}
         ${cel("Tipo de marco", c[C.MARCO], 2)}${cel("Visor", c[C.VISOR])}
         ${cel("Bumper", bumper)}
         ${cel("Alfajor frontal", si(c[C.ALFF]))}${cel("Alfajor posterior", si(c[C.ALFP]))}

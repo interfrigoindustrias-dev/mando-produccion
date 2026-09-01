@@ -17,15 +17,18 @@ const ORDEN_PRIO = {URGENTE: 0, ALTA: 1, MEDIA: 2, BAJA: 3, "": 4};
 /** Metros cuadrados de una linea. */
 const m2De = c => (num(c[C.CANT]) || 0) * (num(c[C.LARGO]) || 0) * (MODELO.ancho || 1);
 
-/** El espesor por el que se agrupa. Si no hay columna propia, se deduce del
- *  producto: «PANEL 3"» agrupa con «PANEL 3"». */
+/** El espesor por el que se agrupa. No hay columna propia: se lee del nombre
+ *  del producto, que lo trae en pulgadas o en milimetros.
+ *
+ *  Lo que agrupa es el ESPESOR, no el producto: un PANEL 3" y un PISO 3" piden
+ *  el mismo montaje de maquina, asi que hacerlos seguidos ahorra un ajuste. */
 function espesorDe(c){
-  const propio = String(c[C.ESP] ?? "").trim();
-  if(propio) return propio;
-  const prod = String(c[C.PROD] ?? "").trim();
-  const m = prod.match(/(\d+(?:[.,]\d+)?)\s*(?:"|''|pulg)/i);
-  return m ? m[1].replace(",", ".") + '"' : (prod || "sin espesor");
+  const etiqueta = typeof etiquetaEspesor === "function"
+    ? etiquetaEspesor(c[C.PROD]) : "";
+  return etiqueta || String(c[C.PROD] ?? "").trim() || "sin espesor";
 }
+/** Milimetros del espesor, para poder ordenar «40 mm» junto a «3"». */
+const espesorMmDe = c => (typeof espesorMm === "function" ? espesorMm(c[C.PROD]) : null);
 
 /** Dias que lleva la linea esperando, desde que se creo. */
 function diasEnCola(c){
@@ -99,7 +102,9 @@ function secuenciaPaneles(lineas){
       // Se empieza por el espesor con mas trabajo acumulado: agrupa mejor.
       const pendientes = [...grupos.entries()]
         .map(([esp, xs])=>({esp, xs, m2: xs.reduce((s,x)=>s+m2De(x.c), 0)}))
-        .sort((a,b)=>b.m2-a.m2 || a.esp.localeCompare(b.esp, "es", {numeric:true}));
+        .sort((a,b)=>b.m2-a.m2 ||
+          ((espesorMmDe(a.xs[0].c) ?? 1e9) - (espesorMmDe(b.xs[0].c) ?? 1e9)) ||
+          a.esp.localeCompare(b.esp, "es", {numeric:true}));
 
       // URGENTE no espera a nadie: pasa entera, sin agrupar ni cortar.
       if(prio === "URGENTE"){

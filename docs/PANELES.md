@@ -27,8 +27,40 @@ declarado en `src/js/modelo.js` (`MODELO_PANELES`) y `src/js/secuencia.js`.
 | T | ESTADO | |
 | U | FECHA DE DESPACHO | |
 
-El espesor **no tiene columna**: se deduce del producto. `PANEL 3"` agrupa con
-`PANEL 3"`, y de ahí sale el agrupamiento de la secuencia de fabricación.
+## El producto, y el espesor que lleva dentro
+
+El espesor **no tiene columna**: se lee del nombre del producto. Y ese nombre
+viene de dos maneras, en pulgadas y en milímetros. La lista de la hoja son
+catorce, dos familias, ordenadas por espesor creciente — que es la prueba de
+que ambas formas dicen lo mismo:
+
+| | 40 mm | 2″ | 60 mm | 3″ | 80 mm | 4″ | 5″ | 6″ |
+|---|---|---|---|---|---|---|---|---|
+| mm | 40 | 51 | 60 | 76 | 80 | 102 | 127 | 152 |
+| kg/m² | 1,52 | 1,94 | 2,28 | 2,89 | 3,04 | 3,88 | 4,83 | 5,78 |
+
+Las mismas ocho medidas existen como **PANEL** y como **PISO**.
+
+Leer solo las pulgadas dejaba sin espesor a los de milímetros, y sin espesor no
+hay metros cuadrados, ni poliuretano, ni sitio en la cola por montaje: se
+quedaban fuera de todo. `espesorMm()` lee las dos formas.
+
+**Lo que agrupa es el espesor, no el producto.** Un `PANEL 3"` y un `PISO 3"`
+piden el mismo montaje de máquina, así que hacerlos seguidos ahorra un ajuste y
+la secuencia los pone juntos.
+
+El producto **se busca escribiendo**, no se despliega: con catorce opciones en
+dos familias, escribir «60» y quedarse con los dos que la llevan es más rápido
+que recorrer la lista. Es como funciona en la propia hoja.
+
+Al guardar se comprueba que del producto pueda leerse el espesor, y se
+comprueba **antes de escribir nada**: media ficha guardada con una línea sin
+espesor deja un pedido a medias en la hoja.
+
+> **Por confirmar:** al PISO se le aplica el mismo ancho de 1,16 m que al panel,
+> que es lo único que se sabe. Si el piso se fabrica en otro ancho hay que
+> declararlo aparte, porque cambiaría sus metros cuadrados y con ellos el
+> poliuretano calculado.
 
 ## Poliuretano
 

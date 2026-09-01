@@ -88,9 +88,11 @@
   border-bottom:.4mm solid #000}
 .c-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:1.1mm 2.5mm}
 .c-grid div{font-size:5.4pt;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-  line-height:1.1;overflow:hidden}
+  line-height:1.1;min-width:0}
+/* El valor se parte en dos renglones antes que recortarse: «VAIVEN SENCI…»
+   no identifica la puerta. */
 .c-grid b{display:block;font-size:8.5pt;font-weight:900;letter-spacing:-.02em;margin-top:.2mm;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  line-height:1.05;overflow-wrap:anywhere}
 .c-dib{flex:none;display:flex;gap:2mm;align-items:center}
 .c-dib img{height:40mm;width:auto;max-width:58mm;object-fit:contain}
 
@@ -99,7 +101,7 @@
 .c-obs em{font-style:normal;font-size:5.6pt;font-weight:900;letter-spacing:.1em;
   text-transform:uppercase;flex:none}
 .c-obs span{font-size:7.6pt;font-weight:600;flex:1;line-height:1.25;
-  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  overflow-wrap:anywhere}
 
 /* --- opciones propias del formato --- */
 .c-ops{display:flex;gap:4mm;flex-wrap:wrap;padding:1.6mm 0;flex:none;
@@ -107,7 +109,7 @@
 .c-opg h5{margin:0 0 .8mm;font-size:5.6pt;font-weight:900;letter-spacing:.1em;
   text-transform:uppercase}
 .c-op1{display:inline-flex;align-items:center;gap:1.2mm;font-size:6.4pt;
-  font-weight:700;margin:0 3mm .7mm 0;white-space:nowrap}
+  font-weight:700;margin:0 3mm .7mm 0}
 .c-op1 .box{width:3mm;height:3mm;border:.35mm solid #000;flex:none}
 .c-op1 .box.rd{border-radius:50%}
 .c-raya{display:inline-block;width:14mm;border-bottom:.3mm solid #000;height:2.6mm}
@@ -137,25 +139,20 @@
 .carta.pocas .c-mat{column-count:2}
 /* Con pocas piezas el despiece ocupa lo suyo y ni un milimetro mas: el resto
    de la hoja es para los renglones de notas. */
-.carta.pocas .c-mat{flex:0 1 auto}
-.carta.c4 .c-mat{column-count:4;column-gap:3mm}
-/* Con cuatro columnas cada una es mas estrecha: el tipo baja lo justo para que
-   el nombre de la pieza no se corte a media palabra. */
-.carta.c4 .c-it{font-size:6pt;padding:.35mm 0}
-.carta.c4 .c-it .bx{width:2.8mm;height:2.8mm}
-.carta.c4 .c-it .rf{font-size:5.2pt;max-width:18mm}
-.carta.c4 .c-it .qt{width:8mm;height:2.8mm}
-.carta.c4 .c-blq h4{font-size:5.8pt}
-.carta.c4 .c-blq{margin-bottom:1.4mm}
+.carta.pocas .c-mat{flex:0 0 auto}
 .c-blq{break-inside:avoid;page-break-inside:avoid;margin-bottom:2.4mm}
 .c-blq h4{margin:0 0 1mm;font-size:6.6pt;font-weight:900;letter-spacing:.06em;
   text-transform:uppercase;border-bottom:.35mm solid #000;padding-bottom:.4mm}
-.c-it{display:flex;align-items:center;gap:1.5mm;padding:.7mm 0;font-size:7.2pt;line-height:1.15}
-.c-it .bx{width:3.4mm;height:3.4mm;border:.35mm solid #000;flex:none}
-.c-it .nm{flex:1;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* Arriba y no al centro: cuando el nombre ocupa dos renglones, la casilla
+   debe quedar a la altura del primero, que es donde se lee. */
+.c-it{display:flex;align-items:flex-start;gap:1.5mm;padding:.7mm 0;font-size:7.2pt;line-height:1.15}
+.c-it .bx{width:3.4mm;height:3.4mm;border:.35mm solid #000;flex:none;margin-top:.4mm}
+.c-it .nm{flex:1;min-width:0;font-weight:700;overflow-wrap:anywhere}
 .c-it .nm em{font-style:normal;font-weight:400;margin-left:1mm}
+/* La referencia nunca se parte ni se recorta: es lo que se teclea para pedir
+   el repuesto, y media referencia no sirve para nada. */
 .c-it .rf{flex:none;font-size:6pt;font-weight:400;letter-spacing:.01em;white-space:nowrap;
-  max-width:24mm;overflow:hidden;text-overflow:ellipsis}
+  align-self:flex-start;margin-top:.5mm}
 /* Raya para la cantidad: una caja sola invita a marcar, no a escribir. */
 .c-it .qt{width:10mm;height:3.4mm;border-bottom:.35mm solid #000;flex:none;
   font-size:4.4pt;text-align:right;font-weight:700}
@@ -171,6 +168,19 @@
 .carta.denso .c-it .bx{width:3.1mm;height:3.1mm}
 .carta.denso .c-blq{margin-bottom:1.8mm}
 .carta.denso .c-dib img{height:38mm}
+
+/* DEBE IR DESPUES DE .denso: las hojas mas cargadas llevan las dos clases y
+   estas reglas pesan lo mismo, asi que gana la ultima escrita. Al reves,
+   .denso pisaba estos ajustes y las cuatro columnas se desbordaban. */
+.carta.c4 .c-mat{column-count:4;column-gap:3mm}
+/* Con cuatro columnas cada una es mas estrecha: el tipo baja lo justo para que
+   el nombre de la pieza no se corte a media palabra. */
+.carta.c4 .c-it{font-size:6pt;padding:.15mm 0;line-height:1.08}
+.carta.c4 .c-it .bx{width:2.6mm;height:2.6mm}
+.carta.c4 .c-it .rf{font-size:5.2pt}
+.carta.c4 .c-it .qt{width:7mm;height:2.6mm}
+.carta.c4 .c-blq h4{font-size:5.8pt;margin-bottom:.5mm}
+.carta.c4 .c-blq{margin-bottom:.9mm}
 
 /* --- espacio en blanco para escribir en planta ---
    Los formatos con pocas piezas dejaban media hoja vacia. Ese hueco se

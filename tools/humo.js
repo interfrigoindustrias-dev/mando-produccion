@@ -344,6 +344,53 @@ function comprueba(nombre, cond, detalle){
     comprueba("no pisa K ni L, que son fórmula de la hoja", kl);
   }
 
+  console.log("\n=== el producto: catorce opciones, y se busca escribiendo ===");
+  const dl = $("#dl-productos");
+  comprueba("la página trae la lista de productos", !!dl);
+  const productos = dl ? [...dl.querySelectorAll("option")].map(o=>o.value) : [];
+  comprueba("están las dos familias y las dos formas de medir",
+    productos.length === 14 &&
+    productos.includes('PANEL 40 mm') && productos.includes('PANEL 6"') &&
+    productos.includes('PISO 40 mm')  && productos.includes('PISO 6"'),
+    productos.length + " opciones: " + productos.join(" · "));
+  const campoProd = $('#n-lineas [data-f="PROD"]');
+  comprueba("el producto se escribe y se filtra, no se despliega",
+    campoProd && campoProd.tagName === "INPUT" &&
+    campoProd.getAttribute("list") === "dl-productos",
+    campoProd ? campoProd.tagName + " list=" + campoProd.getAttribute("list") : "no está");
+
+  /* De los catorce tiene que poder leerse el espesor: sin el no hay metros
+     cuadrados, ni poliuretano, ni sitio en la cola por montaje. */
+  const sinEspesor = productos.filter(p => w.espesorMm(p) === null);
+  comprueba("de los catorce se lee el espesor", !sinEspesor.length,
+    "sin espesor: " + sinEspesor.join(", "));
+  comprueba("los milímetros y las pulgadas dan lo mismo donde deben",
+    w.espesorMm('PANEL 40 mm') === 40 && w.espesorMm('PANEL 3"') === 76 &&
+    w.espesorMm('PISO 6"') === 152,
+    `40mm→${w.espesorMm('PANEL 40 mm')} · 3"→${w.espesorMm('PANEL 3"')} · 6"→${w.espesorMm('PISO 6"')}`);
+  comprueba("un PANEL y un PISO del mismo espesor comparten montaje",
+    w.etiquetaEspesor('PANEL 3"') === w.etiquetaEspesor('PISO 3"'),
+    `${w.etiquetaEspesor('PANEL 3"')} vs ${w.etiquetaEspesor('PISO 3"')}`);
+
+  console.log("\n=== una línea sin espesor no se guarda ===");
+  ESCRITURAS = [];
+  $("#btn-nueva").dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 60));
+  $("#n-cli").value = "PRUEBA SIN ESPESOR";
+  const unica = $$("#n-lineas tr")[0];
+  unica.querySelector('[data-f="CANT"]').value = "5";
+  unica.querySelector('[data-f="LARGO"]').value = "2";
+  unica.querySelector('[data-f="PROD"]').value = "PANEL RARO";
+  $("#form-new").dispatchEvent(new w.Event("submit", {bubbles:true, cancelable:true}));
+  await new Promise(r => setTimeout(r, 400));
+  comprueba("no escribe nada en la hoja",
+    !ESCRITURAS.filter(e => /^A\d+:U\d+$/.test(e.a1)).length,
+    ESCRITURAS.map(e=>e.a1).join(", "));
+  comprueba("y dice cuál es el problema",
+    /espesor/i.test($("#toast").textContent),
+    "aviso: " + $("#toast").textContent.trim().slice(0, 110));
+  $("#ov-nueva").classList.add("hide");
+
   console.log("\n=== las demás vistas, entrando por las pestañas ===");
   for(const vista of ["planta","resumen","almacen"]){
     const antes = errConsola.length;

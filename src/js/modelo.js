@@ -135,13 +135,40 @@ const ANCHO_PANEL = 1.16;          // metros; el largo es lo unico que varia
    densidad del poliuretano inyectado en kg/m3, no un coeficiente cualquiera. */
 const DENSIDAD_POLIURETANO = 38;   // kg/m3
 
-/** Espesor en metros de cada producto: pulgadas x 0,0254, al milimetro.
- *  Confirmado para 3" (0,076). El resto sigue la misma regla. */
+/* EL ESPESOR SE LEE DEL NOMBRE DEL PRODUCTO, y el nombre viene de dos maneras:
+   en pulgadas —PANEL 3"— y en milimetros —PANEL 40 mm—. La lista de la hoja
+   mezcla las dos y esta ordenada por espesor creciente, que es la prueba de
+   que ambas dicen lo mismo:
+
+     40 mm · 2" (51) · 60 mm · 3" (76) · 80 mm · 4" (102) · 5" (127) · 6" (152)
+
+   Leer solo las pulgadas dejaba a los de milimetros sin espesor, y sin espesor
+   no hay poliuretano ni agrupamiento por montaje: se quedaban fuera de todo. */
+
+/** Espesor en MILIMETROS, o null si el nombre no lo dice. */
+function espesorMm(producto){
+  const t = String(producto || "");
+  const mm = t.match(/(\d+(?:[.,]\d+)?)\s*mm\b/i);
+  if(mm) return Math.round(parseFloat(mm[1].replace(",", ".")));
+  const pulg = t.match(/(\d+(?:[.,]\d+)?)\s*(?:"|''|pulg)/i);
+  if(pulg) return Math.round(parseFloat(pulg[1].replace(",", ".")) * 25.4);
+  return null;
+}
+
+/** Espesor en metros, al milimetro. 3" -> 0,076 */
 function espesorMetros(producto){
-  const m = String(producto || "").match(/(\d+(?:[.,]\d+)?)\s*(?:"|''|pulg)/i);
-  if(!m) return null;
-  const pulgadas = parseFloat(m[1].replace(",", "."));
-  return Math.round(pulgadas * 0.0254 * 1000) / 1000;
+  const mm = espesorMm(producto);
+  return mm === null ? null : mm / 1000;
+}
+
+/** Como se nombra ese espesor en planta. Un PANEL 3" y un PISO 3" tienen el
+ *  mismo espesor, asi que comparten montaje de maquina y se agrupan juntos:
+ *  la etiqueta es del espesor, no del producto. */
+function etiquetaEspesor(producto){
+  const mm = espesorMm(producto);
+  if(mm === null) return "";
+  const t = String(producto || "");
+  return /mm\b/i.test(t) ? mm + " mm" : Math.round(mm / 25.4) + '"';
 }
 
 const MODELO_PANELES = {
@@ -177,7 +204,11 @@ const MODELO_PANELES = {
   ],
 
   listas: {
-    PRODUCTOS: ['PANEL 2"','PANEL 3"','PANEL 4"','PANEL 5"','PANEL 6"'],
+    /* Copia EXACTA del desplegable de la hoja, y en su orden: va por espesor
+       creciente, mezclando las dos formas de nombrarlo. */
+    PRODUCTOS: ['PANEL 40 mm','PANEL 2"','PANEL 60 mm','PANEL 3"','PANEL 80 mm',
+                'PANEL 4"','PANEL 5"','PANEL 6"',
+                'PISO 40 mm','PISO 2"','PISO 3"','PISO 4"','PISO 5"','PISO 6"'],
     RANURADOS: ["RANURADO","SIN RANURAR"],
     CARAS: ["9002","INOX","GLASSLINER"],
     ESTADOS: ["EN PROCESO","TERMINADO","DESPACHADO","ANULADA"],
@@ -191,6 +222,10 @@ const MODELO_PANELES = {
 
   /** Kilos de poliuretano de la linea, calculados. Se usan para rellenar las
    *  filas nuevas y para comprobar que lo que trae la hoja cuadra. */
+  /* NOTA sobre PISO: se le aplica el mismo ancho de 1,16 m que al panel, que
+     es lo unico que se sabe. Si el piso se fabrica en otro ancho, hay que
+     declararlo aparte: cambiaria los metros cuadrados y con ellos el
+     poliuretano calculado. */
   poliuretano(c){
     const esp = espesorMetros(c[6]);
     if(esp === null) return null;

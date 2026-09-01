@@ -13,6 +13,23 @@
 const opcionesDe = (lista, sel) => (lista||[])
   .map(v=>`<option${sel===v?" selected":""}>${esc(v)}</option>`).join("");
 
+/* EL PRODUCTO SE BUSCA, NO SE DESPLIEGA.
+   Son catorce, en dos familias y con el espesor escrito de dos maneras —«3"» y
+   «60 mm»—. En un desplegable eso es una lista larga por la que hay que bajar;
+   escribiendo «60» aparecen los dos que llevan 60 y se acabo, que es como se
+   hace en la propia hoja. Un datalist da esa busqueda sin dependencias. */
+function llenarProductos(){
+  const dl = $("#dl-productos");
+  if(!dl) return;
+  dl.innerHTML = (MODELO.listas.PRODUCTOS || [])
+    .map(v=>`<option value="${esc(v)}">`).join("");
+}
+
+/** Sin espesor legible no hay metros cuadrados, ni poliuretano, ni sitio en la
+ *  cola por montaje: es lo minimo que un producto tiene que decir. */
+const productoValido = v =>
+  typeof espesorMm === "function" ? espesorMm(v) !== null : !!String(v||"").trim();
+
 /** Una fila del creador. Cada una acabara siendo una linea de la hoja. */
 function lineaHTML(n){
   const L = MODELO.listas;
@@ -21,7 +38,8 @@ function lineaHTML(n){
     <td data-et="Prioridad"><select class="inp sm" data-f="PRIO">${opcionesDe(PRIORIDADES, "MEDIA")}</select></td>
     <td data-et="Cant"><input class="inp sm num" data-f="CANT" type="number" min="1" step="1" placeholder="0" required></td>
     <td data-et="Largo (m)"><input class="inp sm num" data-f="LARGO" type="number" min="0" step="0.01" placeholder="0,00" required></td>
-    <td data-et="Producto"><select class="inp sm" data-f="PROD" required>${opcionesDe(L.PRODUCTOS)}</select></td>
+    <td data-et="Producto"><input class="inp sm" data-f="PROD" list="dl-productos"
+      placeholder="Buscar producto…" autocomplete="off" required></td>
     <td data-et="Ranurado"><select class="inp sm" data-f="RANU">${opcionesDe(L.RANURADOS)}</select></td>
     <td data-et="Cara A"><select class="inp sm" data-f="CARA_A">${opcionesDe(L.CARAS)}</select></td>
     <td data-et="Cara B"><select class="inp sm" data-f="CARA_B">${opcionesDe(L.CARAS)}</select></td>
@@ -104,6 +122,7 @@ function hintOp(){
 }
 
 function initForm(){
+  llenarProductos();
   const tb = $("#n-lineas");
   if(tb && !tb.children.length) anadirLinea();
   // La fecha de creacion es SIEMPRE la de hoy, y se pone aqui y no solo al
@@ -128,6 +147,15 @@ $("#form-new").addEventListener("submit", async ev=>{
     const trs = $$("#n-lineas tr");
     if(!trs.length) throw new Error("La ficha no tiene ninguna línea");
     if(!cli) throw new Error("Falta el cliente");
+    /* Se comprueba ANTES de escribir nada: media ficha guardada con una línea
+       sin espesor deja un pedido a medias en la hoja. */
+    for(const [k, tr] of trs.entries()){
+      const v = tr.querySelector('[data-f="PROD"]').value.trim();
+      if(!productoValido(v)){
+        throw new Error(`Línea ${k+1}: «${v || "sin producto"}» no dice el espesor. ` +
+          `Elige uno de la lista (${(MODELO.listas.PRODUCTOS||[]).slice(0,3).join(", ")}…).`);
+      }
+    }
 
     const filas = targetRows(trs.length);
     await ensureRows(Math.max(...filas));
@@ -201,7 +229,7 @@ const CAMPOS_EDITABLES = [
   {k:"PRIO",   et:"Prioridad", tipo:"lista", lista:()=>PRIORIDADES},
   {k:"CANT",   et:"Cantidad",  tipo:"numero"},
   {k:"LARGO",  et:"Largo (m)", tipo:"numero"},
-  {k:"PROD",   et:"Producto",  tipo:"lista", lista:()=>MODELO.listas.PRODUCTOS},
+  {k:"PROD",   et:"Producto",  tipo:"busca", lista:()=>MODELO.listas.PRODUCTOS},
   {k:"RANU",   et:"Ranurado",  tipo:"lista", lista:()=>MODELO.listas.RANURADOS},
   {k:"CARA_A", et:"Cara A",    tipo:"lista", lista:()=>MODELO.listas.CARAS},
   {k:"CARA_B", et:"Cara B",    tipo:"lista", lista:()=>MODELO.listas.CARAS},
@@ -221,6 +249,12 @@ function openDet(r){
 
   $("#d-campos").innerHTML = CAMPOS_EDITABLES.map(f=>{
     const v = c[C[f.k]] ?? "";
+    // Un campo con muchas opciones se busca escribiendo, igual que en la hoja.
+    if(f.tipo === "busca"){
+      return `<label class="f"><span>${esc(f.et)}</span>
+        <input class="inp" data-d="${f.k}" list="dl-productos" autocomplete="off"
+          value="${esc(String(v).trim())}"></label>`;
+    }
     if(f.tipo === "lista"){
       const lista = f.lista() || [];
       const cur = String(v).trim();
@@ -295,6 +329,13 @@ $("#form-det").addEventListener("submit", async ev=>{
                     antes: (k==="FECHA"||k==="FDESP") ? fmtDate(antes) : String(antes),
                     despues: String(nuevo)});
     });
+
+    // El producto tampoco puede quedarse sin espesor al editar.
+    const prod = $$("#d-campos [data-d]").find(e=>e.dataset.d === "PROD");
+    if(prod && !productoValido(prod.value.trim())){
+      throw new Error(`«${prod.value.trim() || "sin producto"}» no dice el espesor. ` +
+        `Elige uno de la lista.`);
+    }
 
     if(!ups.length){ $("#ov-det").classList.add("hide"); return; }
 
