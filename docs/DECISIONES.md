@@ -426,3 +426,22 @@ tarjeta con el resto vacio — justo lo contrario de lo que se busca al apilar.
 
 Un punto de corte que cambia `grid-template-columns` tiene que deshacer tambien
 lo que coloco a los hijos dentro de la rejilla anterior.
+
+## 22. Dos clases en el mismo elemento: manda la ultima escrita
+
+Las hojas mas cargadas llevan `class="carta denso c4"`. `.carta.denso .c-it` y
+`.carta.c4 .c-it` pesan exactamente lo mismo, asi que decide el ORDEN en el
+archivo, no cual parece mas especifico al leerlo.
+
+`.c4` estaba escrito antes que `.denso`, de modo que `.denso` lo pisaba entero:
+todos los ajustes de las cuatro columnas —tipo mas pequeño, menos aire— no
+hacian absolutamente nada. El sintoma fue que el formato 2 recortaba dos
+docenas de piezas por el costado mientras el CSS parecia correcto, y apretarlo
+mas no cambiaba nada porque el bloque que apretaba nunca se aplicaba.
+
+Como se caza: leer el `getComputedStyle` del elemento real, no la hoja de
+estilos. `padding: 1.88px` cuando la regla dice `.15mm` delata al instante que
+gana otra regla.
+
+Si dos bloques pueden tocar el mismo elemento, el mas especifico en INTENCION
+va ultimo, con un comentario que diga por que el orden importa.
