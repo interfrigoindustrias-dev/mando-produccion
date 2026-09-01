@@ -183,7 +183,9 @@ function cartaHTML(row){
      Cada opcion pesa metro y medio: ocupa mas que una linea de despiece. */
   const carga = piezasDe(n) + 1.5 * (F.opciones || [])
     .reduce((a, g) => a + g.items.length, 0);
-  const clase = carga > 95 ? " denso c4"
+  /* El umbral baja a 85: con los diagramas mas grandes la cabecera ocupa mas,
+     y el formato 1 —90 de carga— dejaba de caber en tres columnas. */
+  const clase = carga > 85 ? " denso c4"
               : carga > 40 ? " denso"
               : " pocas";
   return `<div class="carta${clase}">

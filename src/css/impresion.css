@@ -92,7 +92,7 @@
 .c-grid b{display:block;font-size:8.5pt;font-weight:900;letter-spacing:-.02em;margin-top:.2mm;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-dib{flex:none;display:flex;gap:2mm;align-items:center}
-.c-dib img{height:26mm;width:auto;max-width:38mm;object-fit:contain}
+.c-dib img{height:40mm;width:auto;max-width:58mm;object-fit:contain}
 
 .c-obs{display:flex;align-items:baseline;gap:2.5mm;padding:1.2mm 0;flex:none;
   border-bottom:.4mm solid #000;min-height:5mm}
@@ -167,7 +167,7 @@
 .carta.denso .c-it{font-size:6.6pt;padding:.5mm 0}
 .carta.denso .c-it .bx{width:3.1mm;height:3.1mm}
 .carta.denso .c-blq{margin-bottom:1.8mm}
-.carta.denso .c-dib img{height:24mm}
+.carta.denso .c-dib img{height:38mm}
 
 /* --- pie --- */
 .c-pie{flex:none;border-top:.6mm solid #000;padding-top:1.4mm;margin-top:1.4mm}
@@ -181,10 +181,29 @@
 @media print{
   /* Sin esto Chrome omite los fondos: el logo y las franjas negras no se imprimen */
   *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
-  html,body{background:#fff !important}
+
+  /* VARIAS HOJAS A LA VEZ.
+     La pantalla necesita `html,body{height:100%}` y `overflow-x:hidden` —lo
+     primero para que la aplicacion ocupe la ventana, lo segundo para que en el
+     movil nada se desplace de lado—. Al imprimir, las dos cosas juntas recortan
+     todo a UNA pagina: se seleccionaban diez fichas y salia una, y el sobrante
+     asomaba como una franja al costado. Aqui se sueltan las dos. */
+  html,body{
+    background:#fff !important;
+    height:auto !important; min-height:0 !important;
+    overflow:visible !important;
+    margin:0 !important; padding:0 !important;
+  }
   body>*{display:none !important}
-  #print{display:block !important}
+  #print{display:block !important; width:auto !important; height:auto !important;
+         overflow:visible !important; position:static !important}
   .stk{border:0;margin:0}          /* el borde lo da el troquel del sticker */
+
+  /* `break-after` es lo que entienden los navegadores actuales; page-break-after
+     se queda por los que aun no. La ultima no fuerza salto, o sale una hoja en
+     blanco al final de cada tanda. */
+  .carta, .stk{break-after:page; page-break-after:always}
+  .carta:last-child, .stk:last-child{break-after:auto; page-break-after:auto}
 }
 /* El tamaño de página lo fija #page-rule, que se inyecta al imprimir. */
 @media (max-width:760px){
