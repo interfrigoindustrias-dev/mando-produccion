@@ -445,3 +445,48 @@ gana otra regla.
 
 Si dos bloques pueden tocar el mismo elemento, el mas especifico en INTENCION
 va ultimo, con un comentario que diga por que el orden importa.
+
+## 27. Una lista copiada a mano se queda vieja, y no avisa
+
+Las listas desplegables estaban escritas en `modelo.js`, copiadas mirando la
+hoja. Se quedaron cortas dos veces seguidas: faltaban **nueve de los catorce
+productos** y **doce de los quince acabados**. Y lo peor no es el numero: el
+fallo no da ninguna señal. La opcion simplemente no esta, quien la necesita no
+puede elegirla, y nada en la pantalla dice por que.
+
+Copiar con mas cuidado no arregla nada — la copia envejece igual la proxima vez
+que alguien añada un acabado en la hoja.
+
+**La hoja manda.** `paneles-listas.js` lee la validacion de datos de la propia
+hoja al arrancar, con una peticion:
+
+```
+GET ?ranges='PANEL'!A2:U13&includeGridData=true
+    &fields=sheets.data.rowData.values.dataValidation.condition
+```
+
+y sustituye las listas del modelo. Lo que queda en `modelo.js` es el respaldo:
+lo que se ofrece mientras la lectura no ha llegado, o si falla. La ficha dice de
+donde salieron, para que quien eche una opcion en falta sepa donde mirar.
+
+**Y paneles ya no escribe validacion en la hoja.** Antes `sincronizarValidacion`
+copiaba las listas del modelo a las columnas de prioridad y estado. Con la hoja
+como autoridad eso es al reves y es peligroso: pisaria la lista buena con una
+que ya se ha quedado vieja dos veces. `validaciones: []`.
+
+La casilla de verificacion de los procesos es otra cosa y si se sigue
+escribiendo: no es una lista, y una fila nueva no hereda el formato de las de
+arriba.
+
+## 28. Los datos de fabricacion no se resumen
+
+En los acabados habia puesto `INOX` y `GLASSLINER`. La hoja dice `INOX 304 CAL
+28`, `INOX 430 CAL 18`… — serie **y** calibre, catorce combinaciones. «INOX» a
+secas no es una version corta de eso: es una que no se puede fabricar, porque no
+dice ni la serie ni el espesor de la lamina.
+
+Lo mismo con el producto: `PANEL 3"` y `PANEL 60 mm` no son dos formas de
+escribir lo mismo, son dos espesores distintos (76 y 60 mm).
+
+Cuando un valor de una lista describe como se fabrica algo, hay que traerlo
+entero. Resumirlo es inventarselo.

@@ -93,6 +93,32 @@ no en el semanal.
 Como referencia, el gasto por metro cuadrado sale del espesor: 3″ → 2,89 kg/m²,
 4″ → 3,88, 6″ → 5,78.
 
+## Las listas las manda la hoja
+
+Las columnas con desplegable —prioridad, producto, ranurado, cara A, cara B y
+estado— **no** toman sus opciones de `modelo.js`. La aplicación lee la
+validación de datos de la propia hoja al arrancar, en una sola petición, y
+sustituye con ella las listas del modelo.
+
+Lo que queda escrito en `modelo.js` es el respaldo: lo que se ofrece mientras
+esa lectura no ha llegado, o si falla. La ventana de ficha nueva dice de dónde
+salieron las opciones, para que quien eche una en falta sepa dónde mirar.
+
+El motivo está en la decisión 27: la copia a mano se quedó corta dos veces
+—faltaban nueve productos y doce acabados— y ese fallo no da ninguna señal.
+
+**Paneles no escribe validación en la hoja.** Con la hoja como autoridad,
+escribir la copia sería pisar la lista buena con una vieja. La única excepción
+es la casilla de verificación de los tres procesos en las filas nuevas, que no
+es una lista y que una fila nueva no hereda.
+
+Los acabados, por ejemplo, son quince, con serie **y** calibre:
+
+```
+9002 · TELA · INOX 304 CAL 28/26/24/22/20/18
+              INOX 430 CAL 28/26/24/22/20/18 · ALFAJOR
+```
+
 ## La unidad de trabajo es el metro cuadrado
 
 ```

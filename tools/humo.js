@@ -89,6 +89,20 @@ function escribir(tab, a1, valores){
   }
 }
 
+/* Validacion de datos de la pestaña PANEL, por indice de columna. Son a
+   proposito DISTINTAS de las que trae el modelo —sobran opciones y falta
+   alguna— para poder comprobar que manda la hoja y no la copia del codigo. */
+const VALIDACION_HOJA = {
+  3:  ["URGENTE","ALTA","MEDIA","BAJA"],                      // D  prioridad
+  6:  ['PANEL 40 mm','PANEL 2"','PANEL 60 mm','PANEL 3"','PANEL 80 mm',
+       'PANEL 4"','PANEL 5"','PANEL 6"','PANEL 8"',           // G  producto
+       'PISO 40 mm','PISO 2"','PISO 3"','PISO 4"','PISO 5"','PISO 6"'],
+  7:  ["RANURADO","SIN RANURAR","MACHIHEMBRADO"],             // H  ranurado
+  8:  ["9002","TELA","INOX 304 CAL 28","INOX 430 CAL 18","ALFAJOR","LAMINA CRUDA"],
+  9:  ["9002","TELA","INOX 304 CAL 28","INOX 430 CAL 18","ALFAJOR","LAMINA CRUDA"],
+  19: ["EN PROCESO","TERMINADO","DESPACHADO","ANULADA"]       // T  estado
+};
+
 /* ------------------------------ red falsa ------------------------------ */
 function hacerFetch(){
   return async (url, opts={}) => {
@@ -114,7 +128,12 @@ function hacerFetch(){
     }
     if(u.includes(":batchUpdate")){
       (cuerpo.requests||[]).forEach(r=>{
-        if(r.setDataValidation) VALIDACIONES.push(r.setDataValidation.range);
+        if(r.setDataValidation){
+          const sv = r.setDataValidation;
+          VALIDACIONES.push(Object.assign({}, sv.range, {
+            tipo: sv.rule && sv.rule.condition ? sv.rule.condition.type : "ninguna"
+          }));
+        }
       });
       return ok({replies:[]});
     }
@@ -122,6 +141,21 @@ function hacerFetch(){
       const rango = decodeURIComponent(u.split("/values/")[1].split("?")[0]);
       const {tab, a1} = celdasDe(rango);
       return ok({values: leer(tab, a1)});
+    }
+    // La cuadricula con la validacion: es de donde la aplicacion saca las listas.
+    if(u.includes("includeGridData=true")){
+      const filas = [];
+      for(let f = 0; f < 12; f++){
+        const values = [];
+        for(let c = 0; c < 21; c++){
+          values.push(VALIDACION_HOJA[c]
+            ? {dataValidation:{condition:{type:"ONE_OF_LIST",
+                values: VALIDACION_HOJA[c].map(v=>({userEnteredValue:v}))}}}
+            : {});
+        }
+        filas.push({values});
+      }
+      return ok({sheets:[{data:[{rowData: filas}]}]});
     }
     if(u.includes("?fields=")){
       return ok({sheets: Object.keys(DATOS).map((t,i)=>({properties:{
@@ -186,7 +220,10 @@ async function arrancar(pagina, tab){
        w.document.querySelectorAll("#tb tr").length) break;
   }
   await new Promise(r => setTimeout(r, 300));
-  return {w, dom, fallos, errConsola};
+  /* Un `const` de nivel superior NO cuelga de window: vive en el ambito lexico
+     global del contexto. Para mirar MODELO y compañia hay que evaluar ahi. */
+  const leer = expr => vm.runInContext(expr, dom.getInternalVMContext());
+  return {w, dom, fallos, errConsola, leer};
 }
 
 /* ------------------------------ comprobaciones ------------------------------ */
@@ -200,7 +237,7 @@ function comprueba(nombre, cond, detalle){
 (async ()=>{
   /* ============ PANELES ============ */
   console.log("\n=== paneles.html — arranque natural ===");
-  const {w, fallos, errConsola} = await arrancar("paneles.html", "PANEL");
+  const {w, fallos, errConsola, leer} = await arrancar("paneles.html", "PANEL");
   const $ = s => w.document.querySelector(s);
   const $$ = s => [...w.document.querySelectorAll(s)];
 
@@ -229,9 +266,9 @@ function comprueba(nombre, cond, detalle){
     fuera.map(e=>e.a1).join(", "));
   const valPanel = VALIDACIONES.filter(v => v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
   const cols = [...new Set(valPanel.map(v=>v.startColumnIndex))].sort((a,b)=>a-b);
-  comprueba("los desplegables van a D (prioridad) y T (estado)",
-    JSON.stringify(cols) === "[3,19]", "columnas tocadas: " + JSON.stringify(cols));
-  comprueba("NO se toca la columna M, que aquí es la casilla de PERFIL",
+  comprueba("no se toca ninguna validación de la hoja de paneles",
+    !cols.length, "columnas tocadas: " + JSON.stringify(cols));
+  comprueba("y menos la columna M, que aquí es la casilla de PERFIL",
     !cols.includes(12));
 
   console.log("\n=== marcar un proceso ===");
@@ -348,10 +385,13 @@ function comprueba(nombre, cond, detalle){
   const dl = $("#dl-productos");
   comprueba("la página trae la lista de productos", !!dl);
   const productos = dl ? [...dl.querySelectorAll("option")].map(o=>o.value) : [];
+  /* No se fija el numero: lo decide la hoja, que es justo lo que se arreglo.
+     Lo que si tiene que cumplirse es que esten las dos familias y las dos
+     formas de nombrar el espesor. */
   comprueba("están las dos familias y las dos formas de medir",
-    productos.length === 14 &&
-    productos.includes('PANEL 40 mm') && productos.includes('PANEL 6"') &&
-    productos.includes('PISO 40 mm')  && productos.includes('PISO 6"'),
+    productos.length >= 10 &&
+    productos.some(p=>/^PANEL/.test(p)) && productos.some(p=>/^PISO/.test(p)) &&
+    productos.some(p=>/mm$/i.test(p))  && productos.some(p=>/"$/.test(p)),
     productos.length + " opciones: " + productos.join(" · "));
   const campoProd = $('#n-lineas [data-f="PROD"]');
   comprueba("el producto se escribe y se filtra, no se despliega",
@@ -361,16 +401,16 @@ function comprueba(nombre, cond, detalle){
 
   /* De los catorce tiene que poder leerse el espesor: sin el no hay metros
      cuadrados, ni poliuretano, ni sitio en la cola por montaje. */
-  const sinEspesor = productos.filter(p => w.espesorMm(p) === null);
-  comprueba("de los catorce se lee el espesor", !sinEspesor.length,
+  const sinEspesor = productos.filter(p => leer(`espesorMm(${JSON.stringify(p)})`) === null);
+  comprueba("de todos se lee el espesor", !sinEspesor.length,
     "sin espesor: " + sinEspesor.join(", "));
   comprueba("los milímetros y las pulgadas dan lo mismo donde deben",
-    w.espesorMm('PANEL 40 mm') === 40 && w.espesorMm('PANEL 3"') === 76 &&
-    w.espesorMm('PISO 6"') === 152,
-    `40mm→${w.espesorMm('PANEL 40 mm')} · 3"→${w.espesorMm('PANEL 3"')} · 6"→${w.espesorMm('PISO 6"')}`);
+    leer(`espesorMm("PANEL 40 mm")`) === 40 && leer(`espesorMm('PANEL 3"')`) === 76 &&
+    leer(`espesorMm('PISO 6"')`) === 152,
+    `40mm→${leer(`espesorMm("PANEL 40 mm")`)} · 3"→${leer(`espesorMm('PANEL 3"')`)} · 6"→${leer(`espesorMm('PISO 6"')`)}`);
   comprueba("un PANEL y un PISO del mismo espesor comparten montaje",
-    w.etiquetaEspesor('PANEL 3"') === w.etiquetaEspesor('PISO 3"'),
-    `${w.etiquetaEspesor('PANEL 3"')} vs ${w.etiquetaEspesor('PISO 3"')}`);
+    leer(`etiquetaEspesor('PANEL 3"')`) === leer(`etiquetaEspesor('PISO 3"')`),
+    `${leer(`etiquetaEspesor('PANEL 3"')`)} vs ${leer(`etiquetaEspesor('PISO 3"')`)}`);
 
   console.log("\n=== una línea sin espesor no se guarda ===");
   ESCRITURAS = [];
@@ -390,6 +430,42 @@ function comprueba(nombre, cond, detalle){
     /espesor/i.test($("#toast").textContent),
     "aviso: " + $("#toast").textContent.trim().slice(0, 110));
   $("#ov-nueva").classList.add("hide");
+
+  console.log("\n=== las listas las manda la hoja, no la copia del código ===");
+  const desdeHoja = (nombre, col) => {
+    const enModelo = leer("MODELO.listas." + nombre) || [];
+    const enHoja = VALIDACION_HOJA[col];
+    return enModelo.length === enHoja.length && enModelo.every((v,i)=>v === enHoja[i]);
+  };
+  comprueba("productos: los de la hoja, incluido uno que el modelo no traía",
+    desdeHoja("PRODUCTOS", 6) && leer("MODELO.listas.PRODUCTOS").includes('PANEL 8"'),
+    leer("MODELO.listas.PRODUCTOS").length + ": " + leer("MODELO.listas.PRODUCTOS").join(" · "));
+  comprueba("acabados: los de la hoja", desdeHoja("CARAS", 8),
+    leer("MODELO.listas.CARAS").length + ": " + leer("MODELO.listas.CARAS").join(" · "));
+  comprueba("ranurado y estado, también",
+    desdeHoja("RANURADOS", 7) && desdeHoja("ESTADOS", 19),
+    "ranurado: " + leer("MODELO.listas.RANURADOS").join(" · "));
+  comprueba("el buscador de producto se rehizo con la lista nueva",
+    [...$("#dl-productos").querySelectorAll("option")].map(o=>o.value)
+      .includes('PANEL 8"'),
+    $("#dl-productos").querySelectorAll("option").length + " opciones");
+  comprueba("y la ficha dice de dónde salieron",
+    /le[ií]dos de la hoja/i.test($("#n-origen-listas").textContent),
+    $("#n-origen-listas").textContent.trim());
+
+  /* Escribir la copia en la hoja seria peor que no hacer nada: pisaria la
+     lista buena con una que ya se ha quedado vieja dos veces.
+     La casilla de verificacion de los procesos es otra cosa y SI se escribe:
+     una fila nueva no hereda el formato de las de arriba. */
+  const valEnPanel = VALIDACIONES.filter(v =>
+    v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
+  const listasEscritas = valEnPanel.filter(v => v.tipo === "ONE_OF_LIST");
+  comprueba("paneles NO escribe ningún desplegable en la hoja", !listasEscritas.length,
+    "columnas: " + [...new Set(listasEscritas.map(v=>v.startColumnIndex))].join(", "));
+  const casillas = valEnPanel.filter(v => v.tipo === "BOOLEAN");
+  comprueba("pero sí la casilla de los tres procesos en las filas nuevas",
+    [12,13,14].every(c => casillas.some(v => v.startColumnIndex === c)),
+    "columnas: " + [...new Set(casillas.map(v=>v.startColumnIndex))].join(", "));
 
   console.log("\n=== las demás vistas, entrando por las pestañas ===");
   for(const vista of ["planta","resumen","almacen"]){
@@ -439,8 +515,9 @@ function comprueba(nombre, cond, detalle){
     !p.w.document.getElementById("app").classList.contains("hide"));
   comprueba("puertas pinta su tabla",
     p.w.document.querySelectorAll("#tb tr").length > 0);
-  const valPuerta = VALIDACIONES.map(v=>v.startColumnIndex).filter(v=>v!==undefined);
-  comprueba("puertas sigue validando M, Y y AM",
+  const valPuerta = VALIDACIONES.filter(v => v.tipo === "ONE_OF_LIST")
+    .map(v=>v.startColumnIndex).filter(v=>v!==undefined);
+  comprueba("puertas sigue escribiendo sus desplegables en M, Y y AM",
     [12,24,38].every(c => valPuerta.includes(c)),
     "columnas: " + JSON.stringify([...new Set(valPuerta)].sort((a,b)=>a-b)));
 

@@ -210,7 +210,15 @@ const MODELO_PANELES = {
                 'PANEL 4"','PANEL 5"','PANEL 6"',
                 'PISO 40 mm','PISO 2"','PISO 3"','PISO 4"','PISO 5"','PISO 6"'],
     RANURADOS: ["RANURADO","SIN RANURAR"],
-    CARAS: ["9002","INOX","GLASSLINER"],
+    /* Los quince acabados de la hoja, en su orden. Antes habia tres inventados
+       —«INOX», «GLASSLINER»— que no existen: el acabado lleva serie Y calibre,
+       y son datos de fabricacion distintos. */
+    CARAS: ["9002","TELA",
+            "INOX 304 CAL 28","INOX 304 CAL 26","INOX 304 CAL 24",
+            "INOX 304 CAL 22","INOX 304 CAL 20","INOX 304 CAL 18",
+            "INOX 430 CAL 28","INOX 430 CAL 26","INOX 430 CAL 24",
+            "INOX 430 CAL 22","INOX 430 CAL 20","INOX 430 CAL 18",
+            "ALFAJOR"],
     ESTADOS: ["EN PROCESO","TERMINADO","DESPACHADO","ANULADA"],
     MATERIALES: [], TIPOS: [], APERTURAS: [], ESPESORES: [],
     TIPOS_MARCO: [], VISORES: [], BUMPERS: [], TAM_BUMPER: [], SELLOS: []
@@ -250,9 +258,20 @@ const MODELO_PANELES = {
   /* DONDE ESCRIBE LA APLICACION — ver la nota equivalente en puertas. */
   statusCol: "Q",
   numericos: [{k:"CANT", n:"Cantidad"}, {k:"LARGO", n:"Largo"}],
-  validaciones: [{k:"PRIO", lista:"PRIORIDADES"},
-                 {k:"DESP", lista:"ESTADOS"}],
+
+  /* AQUI NO SE ESCRIBE NINGUNA VALIDACION, Y ES A PROPOSITO.
+     Las listas de abajo son una copia, y una copia se queda vieja: ya paso dos
+     veces —faltaban nueve productos y doce acabados—. Escribirlas en la hoja
+     empeoraria el problema, porque la copia equivocada pisaria la buena.
+     La hoja manda: paneles-listas.js las LEE de alli al arrancar, y lo de aqui
+     solo sirve mientras esa lectura no ha llegado. */
+  validaciones: [],
   encabezados: {},
+
+  /** Que columna toma su lista de que sitio. La clave es la del modelo; el
+   *  valor, el nombre de la lista en `listas`. */
+  listasEnHoja: {PRIO:"PRIORIDADES", PROD:"PRODUCTOS", RANU:"RANURADOS",
+                 CARA_A:"CARAS", CARA_B:"CARAS", DESP:"ESTADOS"},
 
   /** K y L son formula de la hoja: se leen, nunca se escriben. */
   soloLectura: ["POLI_UNI","POLI_TOT"],

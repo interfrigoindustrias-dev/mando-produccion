@@ -84,6 +84,12 @@ async function enterApp(){
 
   pintarQuienSoy();
   $("#gate").classList.add("hide"); $("#app").classList.remove("hide");
+  /* Las listas desplegables las manda la hoja, no una copia en el codigo. Se
+     leen ANTES de montar el formulario, que es quien las reparte. */
+  if(typeof leerListasDeLaHoja === "function"){
+    await leerListasDeLaHoja();
+    if(typeof pintarOrigenListas === "function") pintarOrigenListas();
+  }
   initForm();
   // El dia de referencia es del resumen de puertas; paneles no lo tiene.
   const dia = $("#r-dia"); if(dia) dia.value = iso(new Date());
