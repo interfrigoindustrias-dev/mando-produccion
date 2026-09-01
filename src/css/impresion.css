@@ -135,6 +135,9 @@
 .c-mat{flex:1 1 auto;min-height:0;overflow:hidden;
   column-gap:4mm;column-fill:balance;column-count:3}
 .carta.pocas .c-mat{column-count:2}
+/* Con pocas piezas el despiece ocupa lo suyo y ni un milimetro mas: el resto
+   de la hoja es para los renglones de notas. */
+.carta.pocas .c-mat{flex:0 1 auto}
 .carta.c4 .c-mat{column-count:4;column-gap:3mm}
 /* Con cuatro columnas cada una es mas estrecha: el tipo baja lo justo para que
    el nombre de la pieza no se corte a media palabra. */
@@ -169,14 +172,42 @@
 .carta.denso .c-blq{margin-bottom:1.8mm}
 .carta.denso .c-dib img{height:38mm}
 
-/* --- pie --- */
-.c-pie{flex:none;border-top:.6mm solid #000;padding-top:1.4mm;margin-top:1.4mm}
-.c-proc{display:flex;flex-wrap:wrap;gap:1.2mm 4mm;margin-bottom:1.8mm}
+/* --- espacio en blanco para escribir en planta ---
+   Los formatos con pocas piezas dejaban media hoja vacia. Ese hueco se
+   convierte en renglones: en planta siempre se anota algo —una medida que no
+   cuadro, un cambio que pidio el cliente— y hasta ahora se escribia encima de
+   la lista. Los formatos densos no lo llevan: ahi no sobra un milimetro y la
+   lista de piezas manda. */
+.c-notas{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+  margin-top:2mm;padding-top:1.2mm;border-top:.4mm solid #000;overflow:hidden}
+.c-notas em{font-style:normal;font-size:5.6pt;font-weight:900;letter-spacing:.1em;
+  text-transform:uppercase;flex:none;margin-bottom:1mm}
+.c-ren{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+  justify-content:space-between;overflow:hidden}
+.c-ren i{display:block;border-bottom:.3mm dotted #555;height:6.5mm;flex:none}
+
+/* --- pie: quien lo hizo y quien responde ---
+   Firmar sobre una raya suelta no dice quien firmo: la letra no se lee. Cada
+   responsable tiene nombre, firma y fecha por separado, con altura de verdad
+   para escribir con esfero sobre una mesa de taller. */
+.c-pie{flex:none;border-top:.6mm solid #000;padding-top:1.6mm;margin-top:1.6mm}
+.c-proc{display:flex;flex-wrap:wrap;gap:1.2mm 4mm;margin-bottom:2mm}
 .c-proc span{display:flex;align-items:center;gap:1.3mm;font-size:6.2pt;font-weight:800;
   text-transform:uppercase;letter-spacing:.04em}
-.c-firmas{display:grid;grid-template-columns:repeat(auto-fit,minmax(40mm,1fr));gap:6mm;margin-top:1mm}
-.c-firmas div{border-top:.35mm solid #000;padding-top:1mm;font-size:6pt;font-weight:800;
-  text-transform:uppercase;letter-spacing:.07em;text-align:center}
+.c-proc .box{width:3mm;height:3mm;border:.35mm solid #000;flex:none}
+
+.c-firmas{display:grid;grid-template-columns:repeat(auto-fit,minmax(46mm,1fr));gap:4mm}
+.c-fir{border:.35mm solid #000;padding:1.2mm 1.6mm 1.6mm}
+.c-fir h6{margin:0 0 1.2mm;font-size:5.8pt;font-weight:900;letter-spacing:.09em;
+  text-transform:uppercase;line-height:1.1}
+.c-fir label{display:flex;align-items:flex-end;gap:1.5mm;font-size:5pt;font-weight:800;
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.4mm}
+.c-fir label:last-child{margin-bottom:0}
+.c-fir label i{flex:1;border-bottom:.3mm solid #000;height:5.5mm}
+/* La fecha se escribe en tres huecos: dia, mes y año no caben en una raya sola
+   sin que cada quien la parta donde quiera. */
+.c-fir .f3{display:flex;gap:1.2mm;flex:1}
+.c-fir .f3 i{flex:1}
 
 @media print{
   /* Sin esto Chrome omite los fondos: el logo y las franjas negras no se imprimen */

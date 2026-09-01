@@ -172,6 +172,26 @@ function materialesCarta(F, n){
       </div>`).join("")}</div>`;
 }
 
+/* Un responsable: nombre legible, firma y fecha. La rubrica sola no sirve —
+   nadie la reconoce seis meses despues, cuando hay que preguntar quien armo
+   esta puerta. */
+function firmaCarta(t){
+  return `<div class="c-fir">
+    <h6>${esc(t)}</h6>
+    <label>Nombre<i></i></label>
+    <label>Firma<i></i></label>
+    <label>Fecha<span class="f3"><i></i><i></i><i></i></span></label>
+  </div>`;
+}
+
+/* Renglones para escribir a mano. Solo donde sobra hoja: en los formatos
+   densos el despiece necesita hasta el ultimo milimetro. */
+function notasCarta(clase){
+  if(clase.includes("denso")) return "";
+  return `<div class="c-notas"><em>Notas de producción</em>
+    <div class="c-ren">${Array.from({length: 6}, () => "<i></i>").join("")}</div></div>`;
+}
+
 function cartaHTML(row){
   const c = row.c;
   const n = formatoDe(c);
@@ -193,11 +213,12 @@ function cartaHTML(row){
     ${opcionesCarta(F)}
     ${medidasCarta(F)}
     ${materialesCarta(F, n)}
+    ${notasCarta(clase)}
     <div class="c-pie">
       <div class="c-proc">${PROCS.map(pr =>
         tri(c[pr.i]) === null ? "" : `<span><span class="box"></span>${pr.k}</span>`).join("")}</div>
       <div class="c-firmas">${(F.firmas || ["Solicitado por"])
-        .concat(["Control de calidad"]).map(f => `<div>${esc(f)}</div>`).join("")}</div>
+        .concat(["Control de calidad"]).map(firmaCarta).join("")}</div>
     </div>
   </div>`;
 }
