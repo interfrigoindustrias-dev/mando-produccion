@@ -385,3 +385,44 @@ Dos detalles que costaron encontrar y que conviene no repetir:
   comprobaciones de las vistas salían «ok» sobre una página vacía.
 
 `deploy.sh` la ejecuta antes de publicar y se detiene si está en rojo.
+
+## 24. Un automatismo no puede tomar una decision de una persona
+
+Al marcar el ultimo proceso de un panel, la aplicacion sellaba la fecha de fin,
+ponia el estado en TERMINADO y la linea desaparecia de planta. Parecia comodo y
+no lo era: entre marcar la limpieza y poder cargar el panel caben una revision,
+un retoque o que alguien lo de por bueno, y mientras tanto aparecia en almacen
+algo que seguia en la maquina.
+
+La distincion que faltaba: **marcar un proceso es una observacion —esto se ha
+hecho—; dar una linea por terminada es una decision**, y tiene consecuencias
+para quien va a despacharla. Lo primero lo hace quien fabrica sobre la marcha;
+lo segundo lo pulsa alguien.
+
+La regla, entonces: un automatismo puede rellenar lo que se deduce sin ambiguedad
+de un hecho ya ocurrido —la fecha de hoy cuando se empieza, los metros cuando
+cambia el largo—. No puede cerrar un estado del que depende el trabajo de otra
+persona.
+
+Se nota tambien en la interfaz: la linea al 100 % no se atenua como una tarea
+cumplida, se resalta. Es el unico sitio de la cola donde queda algo que decidir.
+
+## 25. Reutilizar un nombre de clase entre productos
+
+Al marcar el 100 % se añadio la clase `lista` a la tarjeta. Pero `.pcard.lista`
+ya existia en `planta.css`, que es de puertas, con `opacity:.55` — de modo que
+la tarjeta que mas tenia que destacar era la unica que se apagaba.
+
+En paneles se llama `pc-lista`. Las hojas compartidas se cargan enteras aunque
+la pagina sea de otro producto: un nombre de clase generico en una de ellas es
+un nombre ocupado para todos.
+
+## 26. `justify-self` sobrevive al cambio de disposicion
+
+La tarjeta de planta usa `justify-self: start` y `end` cuando tiene dos columnas.
+Al bajar a una sola, esas dos reglas seguian aplicandose y encogian cada bloque
+a su contenido: los botones y la barra de avance ocupaban un tercio de la
+tarjeta con el resto vacio — justo lo contrario de lo que se busca al apilar.
+
+Un punto de corte que cambia `grid-template-columns` tiene que deshacer tambien
+lo que coloco a los hijos dentro de la rejilla anterior.

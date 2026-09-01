@@ -249,6 +249,67 @@ function comprueba(nombre, cond, detalle){
       "columnas escritas: " + letras.join(", "));
   }
 
+  console.log("\n=== llegar al 100 % NO cierra la línea ===");
+  /* Esta es la regla que se cambio: marcar el ultimo proceso dice lo que se ha
+     hecho, no que la linea este lista para almacen. Eso lo decide una persona
+     con el boton Terminar. */
+  ESCRITURAS = [];
+  const fila = $$('#tb tr[data-r]')[0];
+  const rMarca = +fila.dataset.r;
+  // Solo los que faltan: el paso anterior ya marco uno, y volver a pulsarlo
+  // lo desmarcaria en vez de completar la linea.
+  for(const b of [...fila.querySelectorAll(".p.off")]){
+    b.dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 220));
+  }
+  await new Promise(r => setTimeout(r, 400));
+  const trasMarcar = ESCRITURAS.filter(e=>e.tab==="PANEL").map(e=>e.a1.replace(/\d+/g,""));
+  const avance = Math.round(
+    [12,13,14].filter(i => DATOS.PANEL[rMarca-1][i] === true).length / 3 * 100);
+  comprueba("los tres procesos quedan marcados", avance === 100, "avance: " + avance + "%");
+  comprueba("NO sella el fin de proceso (S)", !trasMarcar.includes("S"),
+    "columnas escritas: " + [...new Set(trasMarcar)].join(", "));
+  comprueba("NO pone el estado en TERMINADO (T)", !trasMarcar.includes("T"),
+    "estado en la hoja: " + DATOS.PANEL[rMarca-1][19]);
+
+  console.log("\n=== la línea al 100 % sigue en planta, esperando ===");
+  $$(".tab").find(t=>t.dataset.view==="planta")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 300));
+  const tarjeta = $(`#p-lista .pcard[data-r="${rMarca}"]`);
+  comprueba("la tarjeta sigue en la cola", !!tarjeta);
+  comprueba("y se marca como lista para terminar",
+    tarjeta && tarjeta.classList.contains("pc-lista"),
+    tarjeta ? "clases: " + tarjeta.className.trim() : "");
+
+  console.log("\n=== Terminar es lo que la cierra y la manda a almacén ===");
+  ESCRITURAS = [];
+  if(tarjeta){
+    tarjeta.querySelector("[data-term]")
+      .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 500));
+  }
+  const trasTerminar = ESCRITURAS.filter(e=>e.tab==="PANEL")
+    .map(e=>e.a1.replace(/\d+/g,""));
+  comprueba("sella el fin de proceso en S", trasTerminar.includes("S"),
+    "columnas escritas: " + [...new Set(trasTerminar)].join(", "));
+  comprueba("pone el estado TERMINADO en T",
+    String(DATOS.PANEL[rMarca-1][19]).toUpperCase() === "TERMINADO",
+    "estado: " + DATOS.PANEL[rMarca-1][19]);
+  comprueba("sale de la cola de planta",
+    !$(`#p-lista .pcard[data-r="${rMarca}"]`));
+
+  $$(".tab").find(t=>t.dataset.view==="almacen")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 300));
+  comprueba("y aparece en almacén",
+    $("#a-lista").textContent.includes(String(DATOS.PANEL[rMarca-1][2])),
+    "almacén dice: " + $("#a-lista").textContent.trim().slice(0, 90));
+
+  $$(".tab").find(t=>t.dataset.view==="control")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 200));
+
   console.log("\n=== crear una ficha de dos líneas ===");
   ESCRITURAS = [];
   $("#btn-nueva").dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
@@ -270,6 +331,12 @@ function comprueba(nombre, cond, detalle){
   comprueba("escribe dos filas completas A..U", nuevas.length === 2,
     "filas escritas: " + nuevas.length);
   if(nuevas.length === 2){
+    const dosDigitos = n => String(n).padStart(2, "0");
+    const ahora = new Date();
+    const hoyTxt = `${dosDigitos(ahora.getDate())}/${dosDigitos(ahora.getMonth()+1)}/${ahora.getFullYear()}`;
+    comprueba("la fecha de creación es la de hoy",
+      nuevas.every(e => e.valores[0][0] === hoyTxt),
+      "escrito: " + nuevas.map(e=>e.valores[0][0]).join(" y ") + " · hoy: " + hoyTxt);
     const ops = nuevas.map(e => e.valores[0][2]);
     comprueba("las dos líneas comparten OP con sufijo",
       ops[0] === opNueva + "-1" && ops[1] === opNueva + "-2", "OP: " + ops.join(" y "));

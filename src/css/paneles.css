@@ -137,10 +137,15 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
 @media (max-width:1100px){
   .pcard{ grid-template-columns:1fr; gap:12px }
   .pc-cifras{ gap:20px }
-  .pc-procs .pb{ flex:1 }
+  /* Se deshace el justify-self del corte anterior: con una sola columna, lo
+     que hacia era encoger cada bloque a su contenido y dejar la tarjeta medio
+     vacia, justo lo contrario de lo que se busca al apilar. */
+  .pc-procs, .pc-pie{ justify-self:stretch }
+  .pc-procs .pb{ flex:1 1 0 }
   .pc-pie{ flex-direction:row; align-items:center; min-width:0 }
   .pc-pie .pbar{ flex:1; width:auto }
-  .pc-pie .pterm{ flex:none; padding-inline:20px }
+  .pc-pie .pct{ flex:none }
+  .pc-pie .pterm{ flex:none; padding-inline:24px }
 }
 
 /* Cada cambio de espesor es una parada de maquina. Se anuncia en la propia
@@ -235,14 +240,16 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
 
   /* ---------- ficha nueva: cada línea, una tarjeta ---------- */
   table.lineas thead{ display:none }
-  table.lineas, table.lineas tbody, table.lineas tr, table.lineas td{ display:block }
+  table.lineas, table.lineas tbody, table.lineas td{ display:block }
+  /* Rejilla de dos columnas y no inline-block: con dos celdas al 48 % el
+     espacio en blanco entre ellas cuenta como ancho y la segunda se caia a la
+     linea siguiente. Con rejilla ese problema no existe. */
   table.lineas tr{
-    position:relative;
+    position:relative; display:grid; grid-template-columns:1fr 1fr; gap:10px 10px;
     border:1px solid var(--line); border-radius:var(--r2);
-    padding:12px 12px 10px; margin-bottom:12px; background:var(--bg);
+    padding:34px 12px 12px; margin-bottom:12px; background:var(--bg);
   }
-  table.lineas td{ border:0; padding:0 0 9px }
-  table.lineas td:last-child{ padding-bottom:0 }
+  table.lineas td{ border:0; padding:0; grid-column:span 2; min-width:0 }
   /* Sin la cabecera, cada campo tiene que decir lo que es. */
   table.lineas td::before{
     content:attr(data-et);
@@ -252,24 +259,26 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
   }
   /* El número de línea y el botón de quitar van en la esquina, no en su fila. */
   table.lineas .ln{
-    position:absolute; top:10px; right:52px; padding:0;
-    font-size:13px; color:var(--tx2);
+    position:absolute; top:11px; left:12px; padding:0;
+    font-size:12px; color:var(--tx2); letter-spacing:.05em; text-transform:uppercase;
   }
   table.lineas .ln::before{ content:"Línea "; display:inline; margin:0; font-size:13px }
   table.lineas td.quitar{
-    position:absolute; top:6px; right:8px; padding:0; width:auto;
+    position:absolute; top:6px; right:8px; padding:0; width:auto; grid-column:auto;
   }
   table.lineas td.quitar::before{ content:none }
-  /* Cantidad, largo y las dos cifras caben de dos en dos. */
+  /* Cantidad y largo son dos numeros cortos, y los metros y los kilos su
+     resultado: van emparejados, que es como se leen. */
   table.lineas td:nth-child(3), table.lineas td:nth-child(4),
   table.lineas td:nth-child(9), table.lineas td:nth-child(10){
-    display:inline-block; width:48%; vertical-align:top;
+    grid-column:span 1; width:auto;
   }
-  table.lineas td:nth-child(4), table.lineas td:nth-child(10){ margin-left:4% }
-  table.lineas td.num{ text-align:left; width:48% }
+  table.lineas td.num{ text-align:left; width:auto }
   table.lineas .inp.num{ text-align:left; max-width:none }
-  table.lineas th:nth-child(3), table.lineas td:nth-child(3),
-  table.lineas th:nth-child(4), table.lineas td:nth-child(4){ width:48% }
+  /* Las cifras calculadas, separadas de los campos: no se escriben, salen. */
+  table.lineas td:nth-child(9), table.lineas td:nth-child(10){
+    border-top:1px solid var(--line); padding-top:9px; margin-top:2px;
+  }
 
   /* ---------- control: la OP siempre a la vista ---------- */
   #tb .stick, #v-control thead .stick{ position:sticky; z-index:2; background:var(--bg2) }
@@ -281,9 +290,9 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
   .pc-cifras span{ white-space:normal }
   .pc-cifras b{ font-size:18px }
   .pc-procs{ gap:8px }
-  .pc-procs .pb{ min-width:0; flex:1 1 30% }
+  .pc-procs .pb{ min-width:0; flex:1 1 0; padding-inline:4px; font-size:12px }
   .pc-pie{ flex-wrap:wrap }
-  .pc-pie .pterm{ width:100%; margin-top:4px }
+  .pc-pie .pterm{ width:100%; margin-top:6px; padding-inline:0 }
 
   /* ---------- almacén ---------- */
   /* La tabla de un pedido tiene nueve columnas: se desplaza dentro de su caja
@@ -301,3 +310,13 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
   .mod.ancha{ width:100%; padding:14px }
   .det-hist{ max-height:none }
 }
+
+/* Una linea con los tres procesos hechos no esta terminada: esta ESPERANDO que
+   alguien la de por terminada. Es el unico sitio de la cola donde queda algo
+   que decidir, asi que se ve, en vez de atenuarse como una tarea cumplida. */
+.pcard.pc-lista{
+  border-color:color-mix(in srgb, var(--ok) 55%, transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb, var(--ok) 35%, transparent), var(--sh);
+}
+.pcard.pc-lista .pc-pie .pct{ color:var(--ok); font-weight:700 }
+.pcard.pc-lista .pterm{ background:var(--ok); border-color:var(--ok); color:#fff }

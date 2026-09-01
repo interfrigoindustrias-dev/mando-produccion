@@ -98,7 +98,7 @@ function renderPlanta(){
     /* La tarjeta se reparte a lo ancho en cuatro bloques: quien es, cuanto
        mide, que falta por hacer y como va. En vertical se apilan solos. */
     trozos.push(`<article class="pcard ${prio?"prio-"+prio:""} ${prio==="URGENTE"?"urg":""}
-        ${pc>=100?"lista":""}" data-r="${x.r}">
+        ${pc>=100?"pc-lista":""}" data-r="${x.r}">
       <div class="pc-id">
         <div class="pc-top">
           <span class="pc-n">${i+1}</span>
@@ -174,7 +174,7 @@ function pintarTarjeta(r){
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100 ? "full" : ""; }
   const pct = card.querySelector(".pct");
   if(pct) pct.textContent = pc >= 100 ? "lista para terminar" : pc + "%";
-  card.classList.toggle("lista", pc >= 100);
+  card.classList.toggle("pc-lista", pc >= 100);
 }
 
 /* ------------------------------ marcar desde planta ------------------------------ */

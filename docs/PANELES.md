@@ -179,16 +179,43 @@ OP del almacén es una decisión, no un descuido.
 
 ## Automatismos
 
-1. **La prioridad sube sola.** BAJA espera 8 días y pasa a MEDIA; MEDIA espera 4
-   y pasa a ALTA. Los días se cuentan desde que la línea **está** en su nivel,
-   leyendo el historial: si no, una BAJA recién ascendida saltaría a ALTA el
-   mismo día. URGENTE lo pone una persona y no caduca.
-2. **La primera marca sella el COMIENZO** (columna R) y ya no se vuelve a tocar.
-3. **La última marca sella el FIN** (S) y deja la línea en TERMINADO (T), que es
-   lo que mira almacén. Solo si no estaba ya completa: desmarcar y volver a
-   marcar una línea vieja le reescribía la fecha de hoy, y el resumen contaba
-   como fabricado hoy algo hecho hace semanas.
+Son cuatro, y la linea que los separa importa: **marcar procesos dice lo que se
+ha hecho; el estado dice donde esta la linea.** Lo primero lo hace quien
+fabrica, sobre la marcha. Lo segundo es una decision, y la toma una persona.
+
+1. **La fecha de creacion** se pone sola al guardar la ficha, y es la de hoy
+   —del reloj, no de lo que quedara escrito en el campo—. De ella cuelga toda
+   la antiguedad: los dias en cola, el escalado de prioridad y los tiempos de
+   entrega del resumen.
+
+2. **La primera marca sella el COMIENZO** (columna R) y ya no se vuelve a
+   tocar: interesa cuando se empezo, no la ultima vez que alguien toco una
+   casilla.
+
+3. **El boton Terminar sella el FIN** (S) y pone el estado en TERMINADO (T).
+   Es lo unico que saca la linea de planta y la hace aparecer en almacen.
+
 4. **Pasar a DESPACHADO sella la fecha de despacho** (U).
+
+### Llegar al 100 % no cierra nada
+
+Antes si: marcar el ultimo proceso ponia la fecha de fin, cambiaba el estado a
+TERMINADO y la linea desaparecia de planta en el acto. Estaba mal por dos
+razones.
+
+La practica: entre marcar la limpieza y poder cargar el panel en el camion
+caben una revision, un retoque o simplemente que alguien lo de por bueno. Con
+el cierre automatico, la linea salia de la cola antes de que eso pasara y
+aparecia en almacen algo que seguia en la maquina.
+
+Y la de fondo: nadie habia decidido nada. Una casilla marcada es una
+observacion; dar una linea por terminada es una decision, con consecuencias
+para quien va a despacharla.
+
+Ahora una linea al 100 % **se queda en la cola**, resaltada en verde y con
+«lista para terminar» en lugar del porcentaje. Es el unico sitio de planta
+donde queda algo que decidir, asi que se ve. Pulsar Terminar es lo que la
+cierra.
 
 ## Lo que queda por comprobar
 
