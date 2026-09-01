@@ -129,19 +129,32 @@
 
 /* Cada grupo se mantiene entero: partir «Fin de carrera» entre dos columnas
    obliga a buscar el resto en la otra punta de la hoja. */
+/* El numero de columnas depende de cuantas piezas hay, no es fijo. Con cuatro
+   siempre, un formato de 20 piezas dejaba media hoja en blanco y otro de 90
+   quedaba en letra diminuta: la hoja se lee de pie, junto a la puerta. */
 .c-mat{flex:1 1 auto;min-height:0;overflow:hidden;
-  column-count:4;column-gap:3.5mm;column-fill:balance}
-.c-blq{break-inside:avoid;page-break-inside:avoid;margin-bottom:1.6mm}
-.c-blq h4{margin:0 0 .7mm;font-size:5.5pt;font-weight:900;letter-spacing:.06em;
+  column-gap:4mm;column-fill:balance;column-count:3}
+.carta.pocas .c-mat{column-count:2}
+.carta.c4 .c-mat{column-count:4;column-gap:3mm}
+/* Con cuatro columnas cada una es mas estrecha: el tipo baja lo justo para que
+   el nombre de la pieza no se corte a media palabra. */
+.carta.c4 .c-it{font-size:6pt;padding:.35mm 0}
+.carta.c4 .c-it .bx{width:2.8mm;height:2.8mm}
+.carta.c4 .c-it .rf{font-size:5.2pt;max-width:18mm}
+.carta.c4 .c-it .qt{width:8mm;height:2.8mm}
+.carta.c4 .c-blq h4{font-size:5.8pt}
+.carta.c4 .c-blq{margin-bottom:1.4mm}
+.c-blq{break-inside:avoid;page-break-inside:avoid;margin-bottom:2.4mm}
+.c-blq h4{margin:0 0 1mm;font-size:6.6pt;font-weight:900;letter-spacing:.06em;
   text-transform:uppercase;border-bottom:.35mm solid #000;padding-bottom:.4mm}
-.c-it{display:flex;align-items:center;gap:1.2mm;padding:.35mm 0;font-size:5.9pt;line-height:1.1}
-.c-it .bx{width:2.7mm;height:2.7mm;border:.35mm solid #000;flex:none}
+.c-it{display:flex;align-items:center;gap:1.5mm;padding:.7mm 0;font-size:7.2pt;line-height:1.15}
+.c-it .bx{width:3.4mm;height:3.4mm;border:.35mm solid #000;flex:none}
 .c-it .nm{flex:1;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .c-it .nm em{font-style:normal;font-weight:400;margin-left:1mm}
-.c-it .rf{flex:none;font-size:5pt;font-weight:400;letter-spacing:.01em;white-space:nowrap;
-  max-width:19mm;overflow:hidden;text-overflow:ellipsis}
+.c-it .rf{flex:none;font-size:6pt;font-weight:400;letter-spacing:.01em;white-space:nowrap;
+  max-width:24mm;overflow:hidden;text-overflow:ellipsis}
 /* Raya para la cantidad: una caja sola invita a marcar, no a escribir. */
-.c-it .qt{width:8mm;height:2.7mm;border-bottom:.35mm solid #000;flex:none;
+.c-it .qt{width:10mm;height:3.4mm;border-bottom:.35mm solid #000;flex:none;
   font-size:4.4pt;text-align:right;font-weight:700}
 
 /* Formato aun sin definir: pauta en blanco para escribir a mano. */
@@ -149,11 +162,12 @@
   display:block;overflow:hidden;padding-top:1mm}
 .c-libre i{display:block;border-bottom:.3mm dotted #444;height:6.6mm}
 
-/* Version densa: los formatos con muchas piezas aprietan un punto mas. */
-.carta.denso .c-it{font-size:5.5pt;padding:.25mm 0}
-.carta.denso .c-it .bx{width:2.5mm;height:2.5mm}
-.carta.denso .c-blq{margin-bottom:1.2mm}
-.carta.denso .c-dib img{height:22mm}
+/* Los formatos largos aprietan medio punto; no mas, o deja de leerse a un
+   palmo, que es la distancia real a la que se usa la hoja. */
+.carta.denso .c-it{font-size:6.6pt;padding:.5mm 0}
+.carta.denso .c-it .bx{width:3.1mm;height:3.1mm}
+.carta.denso .c-blq{margin-bottom:1.8mm}
+.carta.denso .c-dib img{height:24mm}
 
 /* --- pie --- */
 .c-pie{flex:none;border-top:.6mm solid #000;padding-top:1.4mm;margin-top:1.4mm}

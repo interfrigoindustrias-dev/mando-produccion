@@ -176,9 +176,17 @@ function cartaHTML(row){
   const c = row.c;
   const n = formatoDe(c);
   const F = FORMATOS[n] || {nombre: "Formato sin definir", imagenes: []};
-  // Con muchas piezas la hoja se aprieta un punto mas para no pasar de pagina.
-  const denso = piezasDe(n) > 70 ? " denso" : "";
-  return `<div class="carta${denso}">
+  /* Cuantas columnas y de que tamaño depende de la CARGA de la hoja, no solo
+     del numero de piezas: las opciones de arriba tambien comen alto, y contarlas
+     aparte hacia que el formato 2 —83 piezas mas 14 opciones— recortara dos
+     docenas de lineas por abajo mientras el 1, con mas piezas, cabia de sobra.
+     Cada opcion pesa metro y medio: ocupa mas que una linea de despiece. */
+  const carga = piezasDe(n) + 1.5 * (F.opciones || [])
+    .reduce((a, g) => a + g.items.length, 0);
+  const clase = carga > 95 ? " denso c4"
+              : carga > 40 ? " denso"
+              : " pocas";
+  return `<div class="carta${clase}">
     ${cabeceraCarta(c, F)}
     ${opcionesCarta(F)}
     ${medidasCarta(F)}
