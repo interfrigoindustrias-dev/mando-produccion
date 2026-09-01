@@ -16,11 +16,13 @@ function goto(v){
   if(!VIEWS.includes(v)) return;
   $$(".tab").forEach(x=>x.setAttribute("aria-selected", String(x.dataset.view===v)));
   VIEWS.forEach(x=>$("#v-"+x).classList.toggle("hide", x!==v));
-  if(v==="planta")  renderPlanta();
-  if(v==="calidad") renderCalidad();
-  if(v==="resumen") renderResumen();
-  if(v==="almacen") renderAlmacen();
-  if(v==="stock"){ renderStock(); renderModelos(); }
+  /* Cada vista la pinta el modulo de su producto. Se llama solo a la que
+     existe: puertas y paneles no comparten tableros, y dar por hecho que
+     estan todos rompia la navegacion en la pagina que no los tuviera. */
+  const pintar = {planta:"renderPlanta", calidad:"renderCalidad", resumen:"renderResumen",
+                  almacen:"renderAlmacen", stock:"renderStock"}[v];
+  if(pintar && typeof window[pintar] === "function") window[pintar]();
+  if(v==="stock" && typeof renderModelos === "function") renderModelos();
 }
 $$(".tab").forEach(t=>t.onclick=()=>goto(t.dataset.view));
 
@@ -83,30 +85,35 @@ async function enterApp(){
   pintarQuienSoy();
   $("#gate").classList.add("hide"); $("#app").classList.remove("hide");
   initForm();
-  $("#r-dia").value = iso(new Date());
+  // El dia de referencia es del resumen de puertas; paneles no lo tiene.
+  const dia = $("#r-dia"); if(dia) dia.value = iso(new Date());
   await detectSep();          // separador de fórmulas según la región del documento
   await refresh(false);
   await repairStatus();       // sana los #ERROR! que pudieran quedar de versiones previas
   const nn = await repairNumeros();   // deshace los números que se guardaron como fecha
   if(nn) toast(`${nn} valor(es) numérico(s) corregido(s)`,"ok");
+  /* Las reparaciones y automatismos que siguen son propios de cada producto.
+     Se invocan solo si esta pagina los trae: antes se llamaban a ciegas, y la
+     pagina de paneles ejecutaba los de puertas contra su propia hoja. */
+  const si = async (nombre, msg) => {
+    if(typeof window[nombre] !== "function") return;
+    const n = await window[nombre]();
+    if(n && msg) toast(msg(n), "ok");
+  };
   try{                                // la hoja siempre con al menos MIN_FILAS filas
     const nf = await ensureRows(MIN_FILAS, 0);
     if(nf) toast(`Hoja ampliada: ${nf} fila(s) añadida(s)`,"ok");
   }catch(e){ console.warn("filas:", e.message); }
   await loadLog();                // el historial hace falta para poder reparar
   await sincronizarValidacion();        // la hoja ofrece las mismas opciones
-  const ns = await repairSeparadas();   // la reserva se muda a su columna
-  if(ns) toast(`${ns} separada(s) pasadas a su propia columna`,"ok");
-  const nr = await repairFechasFalsas();
-  if(nr) toast(`${nr} fecha(s) de proceso restaurada(s)`,"ok");
-  // El escalado va ANTES: subir una puerta a ALTA cambia su fecha programada,
+  await si("repairSeparadas",    n=>`${n} separada(s) pasadas a su propia columna`);
+  await si("repairFechasFalsas", n=>`${n} fecha(s) de proceso restaurada(s)`);
+  // El escalado va ANTES: subir una OP de prioridad cambia su fecha programada,
   // y si se hiciera después quedaría con la fecha de la prioridad vieja.
-  const np = await autoPrioridades();
-  if(np) toast(`${np} puerta(s) subieron a prioridad ALTA por antigüedad`,"ok");
-  const n = await autoFechas();   // programa las fechas de proceso según prioridad
-  if(n) toast(`${n} fecha(s) de proceso programada(s)`,"ok");
+  await si("autoPrioridades", n=>`${n} OP subieron de prioridad por antigüedad`);
+  await si("autoFechas",      n=>`${n} fecha(s) de proceso programada(s)`);
   restartPoll();
-  await loadModelos();        // catálogo de modelos de stock
+  if(typeof loadModelos === "function") await loadModelos();   // catálogo de stock
   // La meta solo existe en puertas: paneles no tiene cronograma.
   if(typeof loadMeta === "function") await loadMeta();
   if(typeof loadInformes === "function") await loadInformes();

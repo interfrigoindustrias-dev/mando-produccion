@@ -85,15 +85,18 @@ async function repairStatus(){
   const bad = ROWS.filter(x=>rowActive(x.c) &&
     typeof x.c[C.STATUS]==="string" && x.c[C.STATUS].trim().startsWith("#"));
   if(!bad.length) return;
-  await writeCells(bad.slice(0,80).map(x=>({a1:`W${x.r}`, v:[[ progreso(x.c).pct ]]})));
+  await writeCells(bad.slice(0,80).map(x=>({a1:`${STATUS_COL}${x.r}`, v:[[ progreso(x.c).pct ]]})));
   bad.slice(0,80).forEach(x=>{ x.c[C.STATUS] = progreso(x.c).pct; });
   toast(`${Math.min(bad.length,80)} celda(s) de STATUS reparada(s)`,"ok");
 }
 /** Repara campos numéricos que Sheets convirtió en fecha.
  *  Ocurría al escribir "1.5": en es-CO se interpreta como 1 de mayo y se guarda
  *  el número de serie (46143). El valor original se reconstruye como día.mes. */
-const NUMERICOS = [{i:C.ANCHO,col:"H",n:"Ancho vano"},{i:C.ALTO,col:"I",n:"Alto vano"},
-                   {i:C.PTS,col:"J",n:"Puntos"},{i:C.ESP,col:"K",n:"Espesor"}];
+/* Cuales son numericos lo dice el producto, no este archivo: un panel no tiene
+   ni vano ni puntos, y en su hoja esas letras son otra cosa. */
+const NUMERICOS = (MODELO.numericos||[])
+  .filter(x => C[x.k] !== undefined)
+  .map(x => ({i: C[x.k], col: A1(C[x.k]), n: x.n}));
 async function repairNumeros(){
   const ups=[], logs=[];
   for(const {r,c} of ROWS){
@@ -146,11 +149,16 @@ async function sincronizarValidacion(){
   const gid = await ensureGid();
   if(gid === null) return 0;
 
-  const listas = [
-    {col: 12, ops: PRIORIDADES},                      // M  prioridad
-    {col: 24, ops: DESPACHOS},                        // Y  estado de despacho
-    {col: 38, ops: SELLOS}                            // AM sello
-  ];
+  /* Que columnas llevan desplegable lo declara el producto. Antes estaban
+     escritas a mano con las letras de puertas, y en la hoja de paneles la
+     columna 12 no es la prioridad sino la casilla de PERFIL: ponerle un
+     desplegable le quitaba la casilla. */
+  const CATALOGO = {PRIORIDADES, DESPACHOS, SELLOS,
+                    ESTADOS: MODELO.listas.ESTADOS || []};
+  const listas = (MODELO.validaciones||[])
+    .filter(v => C[v.k] !== undefined && (CATALOGO[v.lista]||[]).length)
+    .map(v => ({col: C[v.k], ops: CATALOGO[v.lista]}));
+  if(!listas.length) return 0;
   const req = listas.map(({col, ops}) => ({
     setDataValidation:{
       range:{sheetId:gid, startRowIndex:1, endRowIndex:MIN_FILAS,
@@ -162,9 +170,12 @@ async function sincronizarValidacion(){
   }));
   try{
     await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:req})});
-    // El encabezado de la columna nueva, para que se entienda desde la hoja.
-    await api(`/values/${encodeURIComponent(rng("AL1:AM1"))}?valueInputOption=USER_ENTERED`,
-      {method:"PUT", body: JSON.stringify({values:[["SEPARADA PARA","SELLO"]]})});
+    // Encabezados de las columnas que la aplicacion añadio, para que se
+    // entiendan desde la hoja. Solo los que declara este producto.
+    for(const [rango, valores] of Object.entries(MODELO.encabezados||{})){
+      await api(`/values/${encodeURIComponent(rng(rango))}?valueInputOption=USER_ENTERED`,
+        {method:"PUT", body: JSON.stringify({values:[valores]})});
+    }
     return 1;
   }catch(e){ console.warn("validacion:", e.message); return 0; }
 }

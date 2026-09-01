@@ -29,22 +29,33 @@ async function refresh(silent){
         catch(e){ console.error("render/"+nombre, e); toast("Fallo al pintar "+nombre+": "+e.message,"err"); }
       }
     }
-    autoPrioridades().then(autoFechas);          // escala por antigüedad y reprograma fechas
+    // Propios de cada producto: solo si esta pagina los trae.
+    if(typeof autoPrioridades === "function"){
+      autoPrioridades().then(()=> typeof autoFechas === "function" && autoFechas());
+    }
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){
     setSync("err", "Error"); if(!silent) toast(e.message,"err"); console.error(e);
   }
 }
 /** Repinta el dashboard que esté a la vista tras un refresco de datos. */
+/* Se recorre lo que esta pagina tiene de verdad. Puertas y paneles no comparten
+   tableros, y nombrarlos todos daba por hecho vistas que no existen. */
 function renderDashVisible(){
-  if(!$("#v-planta").classList.contains("hide")){
+  const visible = id => { const e=$("#v-"+id); return e && !e.classList.contains("hide"); };
+  if(visible("planta")){
+    // Mientras alguien esta marcando en planta, repintar le borraria el gesto.
     if(typeof plantaEnUso === "function" && plantaEnUso()) return;
-    renderPlanta();
+    if(typeof renderPlanta === "function") renderPlanta();
+    return;
   }
-  else if($("#v-calidad") && !$("#v-calidad").classList.contains("hide")) renderCalidad();
-  else if(!$("#v-resumen").classList.contains("hide")) renderResumen();
-  else if(!$("#v-almacen").classList.contains("hide")) renderAlmacen();
-  else if(!$("#v-stock").classList.contains("hide")){ renderStock(); renderModelos(); }
+  for(const [id, fn] of [["calidad","renderCalidad"],["resumen","renderResumen"],
+                         ["almacen","renderAlmacen"],["stock","renderStock"]]){
+    if(!visible(id)) continue;
+    if(typeof window[fn] === "function") window[fn]();
+    if(id==="stock" && typeof renderModelos === "function") renderModelos();
+    return;
+  }
 }
 function restartPoll(){
   stopPoll();

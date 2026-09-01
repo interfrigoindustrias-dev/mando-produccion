@@ -1,0 +1,119 @@
+/* Piezas propias de paneleria
+   Proyecto: Control de Produccion - Interfrigo
+
+   Solo lo que puertas no tiene: el editor de lineas de la ficha, la cola de
+   fabricacion con sus avisos de cambio de montaje, y el almacen agrupado por
+   pedido. Todo lo demas sale de las hojas compartidas.                       */
+
+/* ------------------------------ ficha: editor de lineas ------------------------------ */
+table.lineas{ width:100%; border-collapse:collapse; font-size:13px }
+table.lineas th{
+  text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--tx2); font-weight:600; padding:6px 6px; border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+table.lineas td{ padding:4px 6px; vertical-align:middle; border-bottom:1px solid var(--line) }
+table.lineas .ln{ color:var(--tx3); font-variant-numeric:tabular-nums; width:24px }
+table.lineas .inp.sm{ padding:6px 8px; font-size:13px; min-width:0; width:100% }
+table.lineas .inp.num{ text-align:right; max-width:88px }
+table.lineas td.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap }
+
+/* ------------------------------ planta: la cola ------------------------------ */
+/* URGENTE no lo pone el tiempo, lo pone una persona: se ve distinto a proposito. */
+.pcard.prio-URGENTE{ border-left:4px solid var(--bad) }
+
+.pcard .pc-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.pc-n{
+  display:grid; place-items:center; min-width:26px; height:26px; padding:0 6px;
+  border-radius:999px; background:var(--bg3); color:var(--tx2);
+  font-size:12px; font-weight:700; font-variant-numeric:tabular-nums;
+}
+.pc-esp{
+  margin-left:auto; padding:2px 8px; border-radius:999px;
+  background:var(--soft); color:var(--acc); font-weight:700; font-size:12px;
+}
+.pc-cli{ font-weight:600; margin-top:6px }
+.pc-met{ color:var(--tx2); font-size:13px; margin-top:2px }
+.pc-cifras{
+  display:flex; gap:14px; flex-wrap:wrap; margin-top:8px;
+  font-size:12px; color:var(--tx2);
+}
+.pc-cifras b{ color:var(--tx); font-variant-numeric:tabular-nums }
+.pc-procs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
+.pc-pie{ display:flex; align-items:center; gap:10px; margin-top:10px }
+.pc-pie .pbar{ flex:1 }
+
+/* Cada cambio de espesor es una parada de maquina. Se anuncia en la propia
+   cola, en el sitio exacto donde toca hacerlo, y no en una nota aparte. */
+.setup{
+  display:flex; align-items:center; gap:10px; margin:18px 0 8px;
+  padding:9px 14px; border-radius:var(--r);
+  background:color-mix(in srgb, var(--warn) 12%, var(--bg2));
+  border:1px solid color-mix(in srgb, var(--warn) 45%, transparent);
+  color:var(--tx); font-size:13px; font-weight:600;
+}
+.setup .ico{ font-size:16px; line-height:1 }
+.tanda-fin{
+  margin:6px 0 2px; padding:6px 14px;
+  color:var(--tx2); font-size:12px; text-align:right;
+  border-top:1px dashed var(--line);
+}
+
+/* ------------------------------ almacen por pedido ------------------------------ */
+.almacen{ display:grid; gap:14px }
+.pedido{
+  border:1px solid var(--line); border-radius:var(--r2);
+  background:var(--bg2); padding:12px 14px; box-shadow:var(--sh);
+}
+/* Un pedido completo se puede cargar entero: es la unica diferencia que
+   importa aqui, asi que es la unica que se ve de lejos. */
+.pedido.completo{ border-left:4px solid var(--ok) }
+.pedido.parcial{ border-left:4px solid var(--line2); opacity:.92 }
+.pedido-top{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px }
+.pedido-cli{ font-weight:600 }
+.pedido table.mini{ width:100%; font-size:13px }
+.pedido table.mini td{ padding:5px 8px; border-top:1px solid var(--line) }
+.pedido table.mini td.num{ text-align:right; font-variant-numeric:tabular-nums }
+.pedido .sub{ color:var(--tx3); font-size:12px }
+
+/* ------------------------------ resumen ------------------------------ */
+.dash-3{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)) }
+
+/* El plazo de entrega es UN numero y lo demas es su explicacion: si se enseñan
+   todos igual, quien atiende al cliente no sabe cual decir por telefono. */
+.entrega{ display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap }
+.entrega-num{
+  display:grid; place-items:center; min-width:120px; padding:14px 18px;
+  border-radius:var(--r2); background:var(--soft); color:var(--acc);
+}
+.entrega-num b{ font-size:40px; line-height:1; font-variant-numeric:tabular-nums }
+.entrega-num span{ font-size:12px; text-transform:uppercase; letter-spacing:.08em }
+.entrega-txt{ flex:1; min-width:260px; font-size:13px; color:var(--tx2) }
+.entrega-txt b{ color:var(--tx) }
+.entrega-txt ul{ margin:8px 0; padding-left:18px }
+.entrega-txt li{ margin:3px 0 }
+
+.nota{
+  margin:10px 0; padding:9px 13px; border-radius:var(--r);
+  background:var(--bg3); color:var(--tx2); font-size:13px;
+}
+.nota b{ color:var(--tx) }
+.nota.ok{
+  background:color-mix(in srgb, var(--ok) 10%, var(--bg2));
+  border:1px solid color-mix(in srgb, var(--ok) 35%, transparent);
+}
+.nota.warn{
+  background:color-mix(in srgb, var(--warn) 12%, var(--bg2));
+  border:1px solid color-mix(in srgb, var(--warn) 45%, transparent);
+}
+
+/* ------------------------------ detalle de la linea ------------------------------ */
+.procs-btn{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 16px }
+.procs-btn .p{
+  width:auto; padding:8px 14px; border-radius:var(--r);
+  font-size:13px; font-weight:600;
+}
+
+/* Una linea anulada sigue estando, pero ya no cuenta para nada. */
+#tb tr.anu{ opacity:.5 }
+#tb tr.anu .op{ text-decoration:line-through }

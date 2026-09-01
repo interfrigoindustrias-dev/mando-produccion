@@ -55,7 +55,9 @@ def ids_de(pagina):
 
 
 def scripts_de(pagina):
-    return set(re.findall(r'<script src="js/([a-z_]+\.js)"', leer(pagina)))
+    # El guion cuenta: los modulos de paneleria se llaman paneles-control.js
+    # y con el patron anterior no aparecian, asi que quedaban sin comprobar.
+    return set(re.findall(r'<script src="js/([A-Za-z0-9_-]+\.js)"', leer(pagina)))
 
 
 def protegido_en_linea(linea, ident, pos):

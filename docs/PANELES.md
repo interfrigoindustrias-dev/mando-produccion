@@ -110,8 +110,98 @@ OP       prioridad   días  espesor    m2    acum   setup
 160-1    BAJA          2   3"       139.2   185.6
 ```
 
-## Pendiente
+## Las vistas
 
-Con las columnas confirmadas: nueva ficha multilínea, edición, Control de OPs
-con sus filtros, la vista de Planta sobre esta secuencia, Resumen de m² y
-tiempos de entrega, y Almacén.
+Paneles no comparte ni una vista con puertas. Su página carga `paneles-*.js` y
+**no** carga `control.js`, `ficha.js`, `planta.js`, `dashboards.js` ni
+`automatizaciones.js`: ver la decisión 22.
+
+### Nueva ficha — `paneles-ficha.js`
+
+Un pedido de paneles casi nunca es «N unidades iguales»: el mismo cliente pide
+22 de 3″ de 2,45 m y 8 de 4″ de 3 m a la vez. Por eso el creador es un **editor
+de líneas**, no un contador como el de puertas.
+
+Todas las líneas comparten OP con sufijo: `163-1`, `163-2`. Con una sola línea
+la OP va limpia, sin sufijo. La fecha y el número de OP se ponen solos.
+
+Los metros y los kilos se calculan **mientras se escribe**: es el dato con el
+que se decide, y verlo solo después de guardar obliga a rehacer la ficha.
+
+Las columnas K y L se dejan **vacías** al crear. Son fórmula de la hoja: si está
+extendida, la hoja las rellena; escribir un número encima la borraría.
+
+### Editar — mismo archivo
+
+Se puede cambiar todo menos la **OP** y el **cliente**. No es una limitación
+técnica: son los dos datos con los que el pedido se identifica fuera de la
+aplicación —en el correo, en la remisión, en la llamada del cliente— y si
+cambian aquí deja de poder cruzarse con nada.
+
+Cambiar cantidad o largo reescribe los m² en la misma tanda: es un dato
+derivado y no puede quedarse desfasado.
+
+### Control de OPs — `paneles-control.js`
+
+Todas las columnas, con prioridad y estado editables en línea. Los contadores
+no cuentan unidades: cuentan **m² pendientes** y **kg de poliuretano
+pendientes**, que es lo que se pide al proveedor.
+
+### Planta — `paneles-planta.js`
+
+Enseña la cola en el orden que calcula `secuencia.js` y **anuncia cada cambio de
+montaje** en el sitio exacto donde toca hacerlo, cerrando la tanda anterior con
+los metros que se hicieron sin tocar la máquina.
+
+`Terminar` es lo único que planta decide sobre el estado, y es lo que hace que
+la línea salga de la cola y aparezca en almacén. Un desplegable con todos los
+estados invitaría a despachar sin pasar por almacén.
+
+### Resumen — `paneles-resumen.js`
+
+Tres preguntas: cuánto se fabrica (m² por mes y por producto), cuánto se tarda,
+y cuánto poliuretano se gasta.
+
+El **plazo de entrega** sale del mayor de dos números, más un 15 % de margen:
+lo que se ha tardado históricamente (percentil 90) y lo que tardaría la cola
+actual en vaciarse al ritmo de los últimos 60 días. Sube cuando entra trabajo y
+baja cuando la cola se vacía, así que hay que mirarlo el día que se promete.
+
+La producción por mes cuenta el mes en que la línea se **acabó**, no aquel en
+que entró el pedido.
+
+### Almacén — `paneles-almacen.js`
+
+Agrupado por OP, porque un pedido se despacha entero. Un pedido está COMPLETO
+cuando ninguna de sus líneas sigue en fabricación; los incompletos quedan abajo
+y dicen cuántas faltan. Despachar uno incompleto pide confirmación: sacar media
+OP del almacén es una decisión, no un descuido.
+
+## Automatismos
+
+1. **La prioridad sube sola.** BAJA espera 8 días y pasa a MEDIA; MEDIA espera 4
+   y pasa a ALTA. Los días se cuentan desde que la línea **está** en su nivel,
+   leyendo el historial: si no, una BAJA recién ascendida saltaría a ALTA el
+   mismo día. URGENTE lo pone una persona y no caduca.
+2. **La primera marca sella el COMIENZO** (columna R) y ya no se vuelve a tocar.
+3. **La última marca sella el FIN** (S) y deja la línea en TERMINADO (T), que es
+   lo que mira almacén. Solo si no estaba ya completa: desmarcar y volver a
+   marcar una línea vieja le reescribía la fecha de hoy, y el resumen contaba
+   como fabricado hoy algo hecho hace semanas.
+4. **Pasar a DESPACHADO sella la fecha de despacho** (U).
+
+## Lo que queda por comprobar
+
+**En la hoja real.** Hasta esta versión, la página de paneles ejecutaba las
+reparaciones de puertas contra la pestaña PANEL (decisión 22). Conviene mirar
+en la hoja, una sola vez:
+
+- **M1** y la columna M: no deben tener un desplegable de prioridades; son las
+  casillas de PERFIL.
+- **AL1** y **AM1**: pueden haberse quedado con los encabezados «SEPARADA PARA»
+  y «SELLO», que ahí no significan nada.
+
+Nada de eso vuelve a escribirse: las coordenadas ahora las declara `modelo.js`.
+
+**Sin hacer.** Paneles no tiene impresión de etiquetas ni hoja de ruta; puertas
+sí. Está por decidir si hace falta, y con qué formato.

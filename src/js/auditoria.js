@@ -105,7 +105,11 @@ function renderHist(op, fila){
     </div>`;
   }).join("");
 }
-$("#d-hist-r").onclick = async ()=>{
+/* Este archivo lo comparten las dos paginas, asi que no puede dar por hecho
+   que el boton existe: en paneles no estaba, y al cargarse reventaba entero
+   —con el historial dentro— sin decir por que. */
+const recargarHist = $("#d-hist-r");
+if(recargarHist) recargarHist.onclick = async ()=>{
   const row=ROWS.find(x=>x.r===detRow); if(!row) return;
   $("#d-hist").innerHTML = `<p class="mut">Cargando…</p>`;
   await loadLog(true); renderHist(row.c[C.OP], detRow);

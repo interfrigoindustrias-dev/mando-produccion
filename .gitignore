@@ -26,3 +26,4 @@ app.config.js
 
 # Credenciales del cliente OAuth
 auth.config.php
+node_modules/

@@ -37,9 +37,14 @@ function progreso(c){
    deja un #ERROR! en la celda, así que lo deducimos de las fórmulas existentes.
    Si no logramos deducirlo, escribimos el número calculado (siempre válido). */
 let SEP = null;
+/* La columna del avance y el rango de procesos los declara el producto: en
+   puertas son W y N..U, en paneles Q y M..O. Escribir las letras de puertas en
+   la hoja de paneles pisaba columnas que alli significan otra cosa. */
+const STATUS_COL = MODELO.statusCol;
+const PROC_INI = PROCS[0].c, PROC_FIN = PROCS[PROCS.length-1].c;
 async function detectSep(){
   try{
-    const j = await api(`/values/${encodeURIComponent(rng("W2:W1000"))}?valueRenderOption=FORMULA`);
+    const j = await api(`/values/${encodeURIComponent(rng(STATUS_COL+"2:"+STATUS_COL+"1000"))}?valueRenderOption=FORMULA`);
     let pc=0, ps=0;
     for(const row of (j.values||[])){
       const v=String(row[0]||"");
@@ -51,7 +56,7 @@ async function detectSep(){
 }
 /** Qué escribir en W: fórmula viva si sabemos el separador, si no el número. */
 const statusValue = (r,c) => SEP
-  ? `=COUNTIF(N${r}:U${r}${SEP} TRUE) / COUNTA(N${r}:U${r})`
+  ? `=COUNTIF(${PROC_INI}${r}:${PROC_FIN}${r}${SEP} TRUE) / COUNTA(${PROC_INI}${r}:${PROC_FIN}${r})`
   : progreso(c).pct;
 const rowActive = c => String(c[C.OP]??"").trim()!=="" || String(c[C.CLI]??"").trim()!=="";
 const num = v => { const n=parseFloat(String(v??"").replace(",",".")); return isNaN(n)?null:n; };

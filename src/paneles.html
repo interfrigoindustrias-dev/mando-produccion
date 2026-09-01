@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/dashboards.css">
 <link rel="stylesheet" href="css/planta.css">
 <link rel="stylesheet" href="css/impresion.css">
+<link rel="stylesheet" href="css/paneles.css">
 <link rel="stylesheet" href="css/movil.css">
 </head>
 <body>
@@ -57,7 +58,6 @@
     <button class="tab" role="tab" data-view="planta" aria-selected="false">Planta</button>
     <button class="tab" role="tab" data-view="resumen" aria-selected="false">Resumen</button>
     <button class="tab" role="tab" data-view="almacen" aria-selected="false">Almacén</button>
-    <button class="tab" role="tab" data-view="stock" aria-selected="false">Stock</button>
   </div>
   <button class="btn pri sm" id="btn-nueva">+ Nueva ficha</button>
   <div class="grow"></div>
@@ -75,268 +75,216 @@
 </header>
 
 <main>
-  <!-- ---------- VISTA CONTROL ---------- -->
+  <!-- ---------- CONTROL DE OPS ---------- -->
   <section id="v-control">
     <div class="kpis" id="kpis"></div>
 
     <div class="bar">
-      <label class="f wide"><span>Buscar</span><input class="inp" id="f-q" placeholder="OP, cliente, ensamble, obs…" autocomplete="off"></label>
+      <label class="f wide"><span>Buscar</span>
+        <input class="inp" id="f-q" placeholder="OP, cliente, producto…" autocomplete="off"></label>
       <label class="f"><span>Progreso</span><select class="inp" id="f-prog">
         <option value="">Todos</option><option value="pend">Sin iniciar (0%)</option>
-        <option value="wip">En proceso</option><option value="done">Completa (100%)</option>
+        <option value="wip">En proceso</option><option value="done">Fabricadas (100%)</option>
         <option value="open" selected>Abiertas (&lt;100%)</option></select></label>
-      <label class="f"><span>Despacho</span><select class="inp" id="f-desp">
-        <option value="">Todos</option><option>En Almacén</option><option>Despachado</option>
-        <option>Separado</option><option>Anulada</option>
+      <label class="f"><span>Estado</span><select class="inp" id="f-estado">
+        <option value="">Todos</option><option>EN PROCESO</option><option>TERMINADO</option>
+        <option>DESPACHADO</option><option>ANULADA</option>
         <option value="__none">Sin estado</option></select></label>
       <label class="f"><span>Prioridad</span><select class="inp" id="f-prio">
-        <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
-      <label class="f"><span>Material</span><select class="inp" id="f-mat"></select></label>
-      <label class="f"><span>Tipo</span><select class="inp" id="f-tipo"></select></label>
-      <label class="f"><span>Espesor</span><select class="inp" id="f-esp"></select></label>
-      <label class="f"><span>Apertura</span><select class="inp" id="f-ap"></select></label>
-      <label class="f"><span>Medidas</span><select class="inp" id="f-med"></select></label>
+        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option>
+        <option>MEDIA</option><option>BAJA</option>
+        <option value="__none">Sin prioridad</option></select></label>
+      <label class="f"><span>Producto</span><select class="inp" id="f-prod"></select></label>
+      <label class="f"><span>Ranurado</span><select class="inp" id="f-ranu"></select></label>
+      <label class="f"><span>Cara</span><select class="inp" id="f-cara"></select></label>
+      <label class="f"><span>Cliente</span><select class="inp" id="f-cli"></select></label>
       <button class="btn sm" id="f-clear">Limpiar</button>
       <div class="grow"></div>
-      <button class="btn sm" id="btn-print-stk" disabled>🏷 Sticker (<span id="nsel">0</span>)</button>
-      <button class="btn sm" id="btn-print-carta" disabled>🖨 Hoja carta</button>
-      <button class="btn sm" id="btn-csv">⇩ CSV</button>
+      <button class="btn sm" id="btn-csv" title="Exporta lo que se ve con los filtros puestos, o solo lo seleccionado">&#8681; CSV</button>
     </div>
 
     <div class="tw"><table>
       <thead><tr>
         <th class="stick"><input type="checkbox" id="ck-all" title="Seleccionar todo"></th>
         <th class="stick" style="left:34px">OP</th>
-        <th>Cliente</th><th>Tipo</th><th>Material</th><th>Medidas</th><th>Esp</th>
-        <th>Ap.</th><th>Pts</th><th>Prio</th>
-        <th title="Corte perfil">CP</th><th title="Inyección">IN</th><th title="Accesorios">AC</th>
-        <th title="Corte marco">CM</th><th title="Marco">MA</th><th title="Corte riel">CR</th>
-        <th title="Riel">RI</th><th title="Embocinar">EM</th>
-        <th>Avance</th><th>Despacho</th><th>Ensamble</th><th>Obs.</th><th></th>
+        <th>Cliente</th><th>Prio</th>
+        <th title="Paneles">Cant</th><th title="Largo en metros">Largo</th>
+        <th>Producto</th><th>Ranurado</th><th>Cara A</th><th>Cara B</th>
+        <th title="Metros cuadrados: cant x largo x 1,16">m&#178;</th>
+        <th title="Kilos de poliuretano de la l&#237;nea">kg PU</th>
+        <th title="Perfil">PE</th><th title="Inyecci&#243;n">IN</th><th title="Limpieza">LI</th>
+        <th>Avance</th><th>Estado</th><th>F. despacho</th><th></th>
       </tr></thead>
       <tbody id="tb"></tbody>
     </table>
     <div class="empty hide" id="tb-empty">Sin resultados con esos filtros.</div>
     </div>
     <div class="legend">
-      <span><b>Clic</b> en un proceso: pendiente ⇄ hecho</span>
-      <span><span class="p on" style="display:inline-grid;vertical-align:middle">✓</span> hecho</span>
+      <span><b>Clic</b> en un proceso: pendiente &#8646; hecho</span>
+      <span><span class="p on" style="display:inline-grid;vertical-align:middle">&#10003;</span> hecho</span>
       <span><span class="p off" style="display:inline-grid;vertical-align:middle"></span> pendiente</span>
-      <span>Celda vacía = ese proceso no aplica a esa puerta</span>
+      <span>Al marcar los tres, la l&#237;nea pasa sola a TERMINADO</span>
       <span id="cnt-rows"></span>
     </div>
   </section>
 
-  <!-- ---------- PLANTA (tablet del jefe de planta) ---------- -->
+  <!-- ---------- PLANTA ---------- -->
   <section id="v-planta" class="hide">
+    <div class="kpis" id="p-kpis"></div>
     <div class="bar">
-      <label class="f wide"><span>Buscar</span><input class="inp" id="p-q" placeholder="OP o proyecto…" autocomplete="off"></label>
+      <label class="f wide"><span>Buscar</span>
+        <input class="inp" id="p-q" placeholder="OP, cliente o producto…" autocomplete="off"></label>
       <label class="f"><span>Prioridad</span><select class="inp" id="p-prio">
-        <option value="">Todas</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option>
-        <option value="__none">Sin prioridad</option></select></label>
-      <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
-        <option value="open" selected>Pendientes (sin estado)</option>
-        <option value="">Todas</option>
-        <option value="wip">Iniciadas sin terminar</option></select></label>
-      <label class="f"><span>Ordenar</span><select class="inp" id="p-ord">
-        <option value="prioop" selected>Prioridad y OP</option>
-        <option value="prio">Prioridad y fecha</option>
-        <option value="op">OP</option>
-        <option value="pts">Más puntos primero</option>
-        <option value="avance">Menos avance primero</option></select></label>
-      <div class="grow"></div>
-      <span class="cnt" id="p-cnt"></span>
+        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option>
+        <option>MEDIA</option><option>BAJA</option></select></label>
+      <label class="f"><span>Espesor</span><select class="inp" id="p-esp"></select></label>
     </div>
-    <div id="p-prog-aviso" class="aviso prog hide"></div>
+    <p class="expl">El orden no es alfab&#233;tico ni por fecha: es el orden en el que
+      <b>conviene fabricar</b>. Manda la prioridad, y dentro de cada prioridad se agrupan
+      los pedidos del mismo espesor para no reajustar la m&#225;quina a cada pieza. El grupo
+      se corta a los <b>200 m&#178;</b> y cede el turno, para que un espesor con mucha carga
+      no deje esperando a los dem&#225;s indefinidamente.</p>
     <div id="p-lista" class="planta"></div>
-    <div class="empty hide" id="p-empty">No hay puertas pendientes con ese filtro.</div>
   </section>
 
-  <!-- ---------- DASHBOARDS ---------- -->
+  <!-- ---------- RESUMEN ---------- -->
   <section id="v-resumen" class="hide">
-    <div class="bar">
-      <label class="f"><span>Día de referencia</span><input class="inp" id="r-dia" type="date"></label>
-      <label class="f"><span>Semana</span><input class="inp" id="r-sem" readonly tabindex="-1"></label>
-      <label class="f"><span>Mes</span><input class="inp" id="r-mes" readonly tabindex="-1"></label>
-      <button class="btn sm" id="r-hoy">Hoy</button>
-    </div>
-    <h2 class="dash-h">Producción</h2>
-    <div class="kpis" id="r-prod"></div>
-    <h2 class="dash-h">Inventario</h2>
-    <div class="kpis" id="r-inv"></div>
-    <h2 class="dash-h">Ritmo y antigüedad</h2>
-    <p class="expl">A qué velocidad sale el trabajo y cuánto llevan esperando las puertas
-      abiertas. <b>Ritmo</b> mide producción real de los últimos 30 días;
-      <b>antigüedad</b> cuenta días desde que se creó la ficha, no desde que se empezó.
-      Sirven para responder dos preguntas: ¿cuándo termino lo que tengo?, y ¿qué se
-      está quedando atrás?</p>
-    <div class="kpis" id="r-ritmo"></div>
+    <div class="kpis" id="r-kpis"></div>
+
+    <div class="sec"><h2>Qu&#233; se le puede prometer a un cliente</h2>
+      <div id="r-entrega"></div></div>
+
     <div class="dash-2">
-      <div class="sec"><h2>Producción de los últimos 14 días</h2>
-        <p class="expl">Puertas terminadas cada día. Sirve para ver si el ritmo cae
-          o si hay días muertos.</p>
-        <div id="r-14d"></div></div>
-      <div class="sec"><h2>Clientes con más puertas en producción</h2><div id="r-clientes"></div></div>
-      <div class="sec"><h2>Pedidos listos en almacén
-        <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— clientes a los que ya se les puede despachar</span></h2>
-        <p class="expl">Clientes cuyas puertas están <b>todas terminadas y en almacén</b>,
-          sin ninguna pendiente. Son entregas que solo esperan que alguien las despache.</p>
-        <div id="r-listos"></div></div>
+      <div class="sec"><h2>Producci&#243;n por mes</h2>
+        <p class="expl">Cuenta el mes en que la l&#237;nea se <b>acab&#243;</b>, no aquel en que
+          entr&#243; el pedido: es la &#250;nica forma de que el mes refleje lo que sali&#243; de planta.</p>
+        <div class="tw"><table id="r-meses" class="mini"></table></div></div>
+      <div class="sec"><h2>Por producto</h2>
+        <p class="expl">Qu&#233; espesores mueven de verdad el trabajo, y cu&#225;nto tarda cada uno.</p>
+        <div class="tw"><table id="r-productos" class="mini"></table></div></div>
     </div>
-    <div class="dash-2">
-      <div class="sec"><h2>Cantidad por tipo de puerta</h2>
-        <p class="expl">Reparto histórico de todas las puertas registradas, terminadas
-          o no. Muestra qué se fabrica de verdad.</p>
-        <div id="r-tipos"></div></div>
-      <div class="sec"><h2>Carga por proceso</h2>
-        <p class="expl">Cuántas puertas abiertas tienen <b>ese proceso todavía sin marcar</b>.
-          La barra más larga es el cuello de botella: el puesto con más trabajo acumulado
-          por delante. Una puerta cuenta en varios procesos a la vez, así que la suma es
-          mayor que el número de puertas.</p>
-        <div id="r-carga"></div></div>
+
+    <h2 class="dash-h">Poliuretano</h2>
+    <p class="expl">Los kilos los calcula la hoja en las columnas <b>UNIDAD</b> y <b>TOTAL</b>:
+      <code>largo &#215; 1,16 &#215; espesor &#215; 38</code>, donde 38 es la densidad en kg/m&#179;.
+      Aqu&#237; se leen y se agrupan; no se recalculan por encima.</p>
+    <div class="kpis" id="r-poli-kpis"></div>
+    <div id="r-poli-aviso" class="nota"></div>
+    <div class="dash-3">
+      <div class="sec"><h2>Consumo por mes</h2>
+        <div class="tw"><table id="r-poli-mes" class="mini"></table></div></div>
+      <div class="sec"><h2>Consumo por semana</h2>
+        <p class="expl">Solo las l&#237;neas con fecha de verdad: las que traen un lote
+          escrito a mano (&#171;agosto - 1&#187;) cuentan en el mes, pero no se les puede
+          asignar semana.</p>
+        <div class="tw"><table id="r-poli-semana" class="mini"></table></div></div>
+      <div class="sec"><h2>Consumo por producto</h2>
+        <p class="expl">El gasto por metro cuadrado depende solo del espesor:
+          3&#8243; gasta 2,89 kg/m&#178; y 6&#8243; gasta 5,78.</p>
+        <div class="tw"><table id="r-poli-producto" class="mini"></table></div></div>
     </div>
-    <div class="sec"><h2>En producción <span class="mut" id="r-nprod" style="text-transform:none;letter-spacing:0;font-weight:400"></span></h2>
-      <div class="tw" style="max-height:420px"><table id="r-tabla"></table></div></div>
   </section>
 
+  <!-- ---------- ALMACEN ---------- -->
   <section id="v-almacen" class="hide">
     <div class="kpis" id="a-kpis"></div>
     <div class="bar">
-      <label class="f wide"><span>Buscar</span><input class="inp" id="a-q" placeholder="OP, cliente…" autocomplete="off"></label>
-      <label class="f"><span>Tipo</span><select class="inp" id="a-tipo"></select></label>
-      <label class="f"><span>Espesor</span><select class="inp" id="a-esp"></select></label>
-      <label class="f"><span>Apertura</span><select class="inp" id="a-ap"></select></label>
-      <label class="f"><span>Estado</span><select class="inp" id="a-est">
-        <option value="">Todos</option><option>En Almacén</option><option>Separado</option></select></label>
-      <button class="btn sm" id="a-clear">Limpiar</button>
-      <div class="grow"></div>
-      <span class="cnt" id="a-cnt"></span>
-      <button class="btn sm" id="a-csv">⇩ CSV</button>
+      <label class="f wide"><span>Buscar</span>
+        <input class="inp" id="a-q" placeholder="OP, cliente o producto…" autocomplete="off"></label>
+      <label class="f"><span>Cliente</span><select class="inp" id="a-cli"></select></label>
+      <label class="f"><span>Producto</span><select class="inp" id="a-prod"></select></label>
+      <label class="proc"><input type="checkbox" id="a-completos">
+        <span>Solo pedidos completos</span></label>
     </div>
-    <div class="tw"><table id="a-tabla"></table></div>
-  </section>
-
-  <section id="v-stock" class="hide">
-    <div class="sec">
-      <h2>Inventario por modelo
-        <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— solo puertas marcadas STOCK</span>
-      </h2>
-      <div class="tw" style="max-height:none"><table id="m-tabla"></table></div>
-    </div>
-    <div class="kpis" id="s-kpis"></div>
-    <div class="bar">
-      <label class="f wide"><span>Buscar</span><input class="inp" id="s-q" placeholder="OP, tipo, medidas…" autocomplete="off"></label>
-      <label class="f"><span>Material</span><select class="inp" id="s-mat"></select></label>
-      <label class="f"><span>Tipo</span><select class="inp" id="s-tipo"></select></label>
-      <label class="f"><span>Espesor</span><select class="inp" id="s-esp"></select></label>
-      <label class="f"><span>Apertura</span><select class="inp" id="s-ap"></select></label>
-      <label class="f"><span>Estado</span><select class="inp" id="s-est">
-        <option value="">Todos</option><option>En Almacén</option><option>Separado</option>
-        <option>Anulada</option><option value="__none">Sin estado</option></select></label>
-      <label class="f"><span>Avance</span><select class="inp" id="s-av">
-        <option value="">Todos</option><option value="done">Terminadas</option><option value="open">En proceso</option></select></label>
-      <button class="btn sm" id="s-clear">Limpiar</button>
-      <div class="grow"></div>
-      <span class="cnt" id="s-cnt"></span>
-      <button class="btn sm" id="s-csv">⇩ CSV</button>
-    </div>
-    <div class="tw"><table id="s-tabla"></table></div>
+    <p class="expl">Agrupado por OP, porque un pedido se despacha entero. Un pedido est&#225;
+      <b>COMPLETO</b> cuando ninguna de sus l&#237;neas sigue en fabricaci&#243;n; los incompletos
+      quedan abajo y avisan de cu&#225;ntas l&#237;neas faltan.</p>
+    <div id="a-lista" class="almacen"></div>
   </section>
 </main>
 </div>
 
 <!-- ============================== MODAL NUEVA FICHA ============================== -->
-<div class="ov hide" id="ov-nueva"><div class="mod" style="max-width:920px">
+<div class="ov hide" id="ov-nueva"><div class="mod" style="max-width:1080px">
   <header style="display:flex;align-items:center;gap:12px">
-    <h1 class="grow" style="margin:0;font-size:17px">Nueva ficha de puerta</h1>
-    <button class="x" data-close>×</button>
+    <h1 class="grow" style="margin:0;font-size:17px">Nueva ficha de paneles</h1>
+    <button class="x" data-close>&#215;</button>
   </header>
-    <form class="form" id="form-new" autocomplete="off">
-      <div class="sec">
-        <h2>Identificación</h2>
-        <div class="gid">
-          <label class="f auto"><span>OP</span>
-            <input class="inp ro" id="n-op" readonly tabindex="-1" title="Se asigna sola: siguiente número disponible"></label>
-          <label class="f auto"><span>Fecha de creación</span>
-            <input class="inp ro" id="n-fecha" readonly tabindex="-1" title="Se pone sola al crear la ficha"></label>
-          <label class="f"><span>Cantidad de puertas</span><input class="inp" id="n-qty" type="number" min="1" max="40" value="1"></label>
-          <label class="f"><span>Prioridad</span><select class="inp" id="n-prio"><option value="">—</option><option>ALTA</option><option>MEDIA</option><option value="BAJA" selected>BAJA</option></select></label>
-        </div>
-        <label class="f" style="margin-top:12px"><span class="req">Cliente / proyecto</span>
-          <input class="inp big" id="n-cli" required list="dl-cli" placeholder="FRIO PANEL"><datalist id="dl-cli"></datalist></label>
-        <div class="grid" style="margin-top:12px">
-          <label class="f"><span>N° de ensamble</span><input class="inp" id="n-ens"></label>
-          <label class="proc"><input type="checkbox" id="n-comp"><span>COMPLEMENTO</span></label>
-          <label class="proc"><input type="checkbox" id="n-stock"><span>STOCK</span></label>
-        </div>
-        <p class="mut" id="n-hint" style="margin-top:10px"></p>
+  <form class="form" id="form-new" autocomplete="off">
+    <div class="sec">
+      <h2>Identificaci&#243;n</h2>
+      <div class="gid">
+        <label class="f auto"><span>OP</span>
+          <input class="inp ro" id="n-op" readonly tabindex="-1"
+            title="Se asigna sola: siguiente n&#250;mero disponible"></label>
+        <label class="f auto"><span>Fecha</span>
+          <input class="inp ro" id="n-fecha" readonly tabindex="-1"
+            title="Se pone sola al crear la ficha"></label>
+        <label class="f grow"><span class="req">Cliente</span>
+          <input class="inp big" id="n-cli" required list="dl-cli" placeholder="AMERICAN BLUE">
+          <datalist id="dl-cli"></datalist></label>
       </div>
+      <p class="mut" id="n-hint" style="margin-top:10px"></p>
+    </div>
 
-      <div class="sec">
-        <h2>Especificación</h2>
-        <div class="grid">
-          <label class="f"><span class="req">Material</span><select class="inp" id="n-mat" required></select></label>
-          <label class="f"><span class="req">Tipo</span><select class="inp" id="n-tipo" required></select></label>
-          <label class="f"><span>Ancho vano (cm)</span><input class="inp" id="n-ancho" type="number" step="any" inputmode="decimal"></label>
-          <label class="f"><span>Alto vano (cm)</span><input class="inp" id="n-alto" type="number" step="any" inputmode="decimal"></label>
-          <label class="f"><span>Puntos</span><input class="inp" id="n-pts" type="number" step="any" value="1"></label>
-          <label class="f"><span>Espesor mm</span><select class="inp" id="n-esp"></select></label>
-          <label class="f"><span>Apertura</span><select class="inp" id="n-ap"></select></label>
-          <label class="f"><span>Marco</span><select class="inp" id="n-marco">
-            <option value="con" selected>Con marco</option><option value="sin">Sin marco</option></select></label>
-        </div>
-        <label class="f" style="margin-top:12px"><span>Observaciones</span><textarea class="inp" id="n-obs" rows="2"></textarea></label>
+    <div class="sec">
+      <h2>L&#237;neas del pedido
+        <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">
+          &#8212; cada l&#237;nea es una fila en la hoja, y todas comparten la misma OP</span></h2>
+      <div class="tw"><table class="lineas">
+        <thead><tr>
+          <th>#</th><th>Prioridad</th><th>Cant</th><th>Largo (m)</th><th>Producto</th>
+          <th>Ranurado</th><th>Cara A</th><th>Cara B</th><th>m&#178;</th><th>kg PU</th><th></th>
+        </tr></thead>
+        <tbody id="n-lineas"></tbody>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+        <button type="button" class="btn sm" id="n-add">+ A&#241;adir l&#237;nea</button>
+        <span class="grow"></span>
+        <span class="mut" id="n-totales"></span>
       </div>
+    </div>
 
-      <div class="sec">
-        <h2>Procesos que aplican <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— los desmarcados no existirán para esta puerta: no se muestran ni se pueden marcar después</span></h2>
-        <div class="procs" id="n-procs"></div>
-      </div>
-
-      <div class="sticky-actions">
-        <span class="mut grow" id="n-target"></span>
-        <button type="button" class="btn" id="n-reset">Limpiar</button>
-        <button type="button" class="btn" data-close>Cancelar</button>
-        <button type="submit" class="btn pri" id="n-save">Guardar ficha</button>
-      </div>
-    </form>
+    <div class="sticky-actions">
+      <span class="mut grow" id="n-target"></span>
+      <button type="button" class="btn" id="n-reset">Limpiar</button>
+      <button type="button" class="btn" data-close>Cancelar</button>
+      <button type="submit" class="btn pri" id="n-save">Guardar ficha</button>
+    </div>
+  </form>
 </div></div>
 
 <!-- ============================== MODAL DETALLE ============================== -->
-<div class="ov hide" id="ov-det"><div class="mod">
+<div class="ov hide" id="ov-det"><div class="mod" style="max-width:760px">
   <header style="display:flex;align-items:flex-start;gap:12px">
     <div class="grow">
       <div class="op" style="font-size:24px" id="d-op"></div>
-      <div class="mut" id="d-cli"></div>
+      <div class="mut"><span id="d-cli"></span> &#183; <span id="d-fila"></span></div>
     </div>
-    <button class="btn sm" id="d-print-stk">🏷 Sticker</button>
-    <button class="btn sm" id="d-print">🖨 Carta</button>
-    <button class="x" data-close>×</button>
+    <button class="x" data-close>&#215;</button>
   </header>
-  <div id="d-spec" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin-bottom:16px"></div>
-  <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2)">Procesos</h2>
-  <div id="d-procs"></div>
-  <div class="grid g2" style="margin-top:16px">
-    <label class="f"><span>Ancho vano (cm)</span><input class="inp" id="d-ancho" type="number" step="any" inputmode="decimal"></label>
-    <label class="f"><span>Alto vano (cm)</span><input class="inp" id="d-alto" type="number" step="any" inputmode="decimal"></label>
-    <label class="f"><span>Estado despacho</span><select class="inp" id="d-desp">
-      <option value="">—</option><option>En Almacén</option><option>Despachado</option><option>Separado</option></select></label>
-    <label class="f"><span>Fecha despacho</span><input class="inp" id="d-fdesp" placeholder="dd/mm/aaaa"></label>
-    <label class="f"><span>Fecha proceso</span><input class="inp" id="d-fproc" placeholder="dd/mm/aaaa"></label>
-    <label class="f"><span>Prioridad</span><select class="inp" id="d-prio">
-      <option value="">—</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option></select></label>
-    <label class="f"><span>N° ensamble</span><input class="inp" id="d-ens"></label>
-  </div>
-  <label class="f" style="margin-top:12px"><span>Observaciones</span><textarea class="inp" id="d-obs" rows="2"></textarea></label>
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
-    <span class="mut grow" id="d-row"></span>
-    <button class="btn" data-close>Cancelar</button>
-    <button class="btn pri" id="d-save">Guardar cambios</button>
-  </div>
+  <p class="expl">Se puede cambiar todo menos la <b>OP</b> y el <b>cliente</b>: son los dos
+    datos con los que el pedido se identifica fuera de la aplicaci&#243;n &#8212;en el correo, en la
+    remisi&#243;n, en la llamada&#8212; y si cambian aqu&#237; deja de poder cruzarse con nada.</p>
 
-  <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:14px">
+  <div id="d-calc" class="nota"></div>
+
+  <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2)">Procesos</h2>
+  <div id="d-procs" class="procs-btn"></div>
+
+  <form class="form" id="form-det" autocomplete="off">
+    <div class="grid" id="d-campos" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))"></div>
+    <div class="sticky-actions">
+      <div class="grow"></div>
+      <button type="button" class="btn" data-close>Cerrar</button>
+      <button type="submit" class="btn pri" id="d-save">Guardar cambios</button>
+    </div>
+  </form>
+
+  <div style="margin-top:18px">
     <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);display:flex;align-items:center;gap:8px">
-      Historial <button class="btn sm" id="d-hist-r" title="Recargar historial" style="margin-left:auto">⟳</button></h2>
+      Historial <button class="btn sm" id="d-hist-r" title="Recargar historial"
+        style="margin-left:auto">&#10227;</button></h2>
     <div id="d-hist" class="hist"></div>
   </div>
 </div></div>
@@ -473,16 +421,19 @@
 <script src="js/api.js"></script>
 <script src="js/auditoria.js"></script>
 <script src="js/datos.js"></script>
-<script src="js/automatizaciones.js"></script>
-<script src="js/control.js"></script>
-<script src="js/ficha.js"></script>
 <script src="js/comun.js"></script>
+<!-- Propios de paneleria. Los equivalentes de puertas (control.js, ficha.js,
+     planta.js, dashboards.js, automatizaciones.js) NO se cargan aqui: llevan
+     escritas las columnas de la hoja de puertas, y en la hoja de paneles esas
+     mismas letras apuntan a otra cosa. -->
 <script src="js/secuencia.js"></script>
 <script src="js/poliuretano.js"></script>
-<script src="js/planta.js"></script>
-<script src="js/dashboards.js"></script>
-<script src="js/formatos.js"></script>
-<script src="js/impresion.js"></script>
+<script src="js/paneles-auto.js"></script>
+<script src="js/paneles-control.js"></script>
+<script src="js/paneles-ficha.js"></script>
+<script src="js/paneles-planta.js"></script>
+<script src="js/paneles-resumen.js"></script>
+<script src="js/paneles-almacen.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>
 <script src="js/app.js"></script>

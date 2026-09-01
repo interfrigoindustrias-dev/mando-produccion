@@ -70,6 +70,26 @@ const MODELO_PUERTAS = {
   /** Tipos corredizos: los unicos que llevan riel. */
   conRiel: ["SE12","SM20","480"],
 
+  /* DONDE ESCRIBE LA APLICACION.
+     Estas coordenadas estaban escritas a mano en api.js y util.js, con letras
+     de columna de puertas. El nucleo es comun a los dos productos, asi que en
+     la hoja de paneles esas letras apuntaban a otra cosa: la columna M, que en
+     puertas es la prioridad, en paneles es la casilla de PERFIL. */
+  statusCol: "W",                 // donde vive el % de avance
+
+  /** Campos que son numeros de verdad; si Sheets convierte uno en fecha,
+   *  repairNumeros lo deshace. */
+  numericos: [{k:"ANCHO",n:"Ancho vano"}, {k:"ALTO",n:"Alto vano"},
+              {k:"PTS",n:"Puntos"}, {k:"ESP",n:"Espesor"}],
+
+  /** Desplegables que la hoja debe ofrecer igual que la aplicacion. */
+  validaciones: [{k:"PRIO", lista:"PRIORIDADES"},
+                 {k:"DESP", lista:"DESPACHOS"},
+                 {k:"SELLO", lista:"SELLOS"}],
+
+  /** Encabezados de columnas que la aplicacion añadio a la hoja. */
+  encabezados: {"AL1:AM1": ["SEPARADA PARA","SELLO"]},
+
   /** Bloques opcionales que esta pagina si tiene. */
   tiene: {
     especificacion: true,   // marco, visor, bumper, alfajores
@@ -191,6 +211,16 @@ const MODELO_PANELES = {
 
   /** Tope de metros por espesor antes de ceder el turno. */
   lotePorEspesor: 200,
+
+  /* DONDE ESCRIBE LA APLICACION — ver la nota equivalente en puertas. */
+  statusCol: "Q",
+  numericos: [{k:"CANT", n:"Cantidad"}, {k:"LARGO", n:"Largo"}],
+  validaciones: [{k:"PRIO", lista:"PRIORIDADES"},
+                 {k:"DESP", lista:"ESTADOS"}],
+  encabezados: {},
+
+  /** K y L son formula de la hoja: se leen, nunca se escriben. */
+  soloLectura: ["POLI_UNI","POLI_TOT"],
 
   empaqueVisor: {},
   conRiel: [],

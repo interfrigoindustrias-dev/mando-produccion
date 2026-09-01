@@ -330,3 +330,58 @@ si encuentra un acceso sin proteger, el despliegue se detiene.
 `repairFechasFalsas` hacía `e.fecha.slice(...)`. Si la celda de `LOG` contiene
 una fecha de verdad, llega como objeto y `.slice` no existe: el arranque
 reventaba. Ahora la fecha se fuerza a texto al leer el historial.
+
+## 22. El núcleo compartido llevaba escritas las columnas de puertas
+
+Esta es la peor de la lista, porque no daba ningún síntoma: funcionaba, y
+escribía en el sitio equivocado.
+
+`api.js` y `util.js` los cargan las dos páginas, pero tenían las letras de
+columna de puertas puestas a mano:
+
+```js
+statusValue = (r,c) => `=COUNTIF(N${r}:U${r}; TRUE) / COUNTA(N${r}:U${r})`
+writeCells([{a1:`W${r}`, ...}])                    // el avance
+sincronizarValidacion() -> columnas 12, 24 y 38    // prioridad, despacho, sello
+```
+
+En la hoja de puertas eso es correcto. En la de paneles, **esas mismas letras
+apuntan a otra cosa**: la columna 12 (M) no es la prioridad sino la casilla de
+PERFIL, y ponerle un desplegable le quita la casilla; el avance vive en Q, no en
+W; los procesos van de M a O, no de N a U. La página de paneles llevaba desde
+que existe ejecutando las reparaciones de puertas contra la hoja de paneles.
+
+**Regla:** el núcleo no sabe dónde está nada. Cada producto declara sus
+coordenadas en `modelo.js` —`statusCol`, `numericos`, `validaciones`,
+`encabezados`— y el código común las lee de ahí. Ninguna letra de columna
+escrita a mano fuera de `modelo.js`.
+
+Y lo mismo con las automatizaciones: las de puertas (`automatizaciones.js`,
+`control.js`, `ficha.js`, `planta.js`, `dashboards.js`) **ya no las carga la
+página de paneles**, que tiene las suyas. El núcleo llama a lo que exista:
+
+```js
+if(typeof autoPrioridades === "function") await autoPrioridades();
+```
+
+## 23. Una prueba que llama a `render()` a mano no prueba nada
+
+Ya había pasado: la tabla de Control salía en blanco en producción y la prueba
+pasaba, porque la prueba llamaba a `render()` ella misma y así nunca recorría el
+camino que de verdad falla — el arranque.
+
+`tools/humo.js` arranca las dos páginas enteras con jsdom y una hoja falsa, y
+**no llama a nada**: espera a que la aplicación se pinte sola y solo entonces
+mira. Comprueba, entre otras cosas, que paneles escribe en Q y no en W, que los
+desplegables van a D y T y no a M, y que una ficha de dos líneas sale con la OP
+sufijada sin pisar las fórmulas de K y L.
+
+Dos detalles que costaron encontrar y que conviene no repetir:
+
+- hay que ejecutar también los `<script>` **de dentro** de la página: paneles
+  declara ahí `window.MODULO`, y saltárselo hacía que la prueba cargara el
+  modelo de puertas creyendo que probaba paneles;
+- si los scripts no cargan, la prueba tiene que **cortar**. Sin ese corte, las
+  comprobaciones de las vistas salían «ok» sobre una página vacía.
+
+`deploy.sh` la ejecuta antes de publicar y se detiene si está en rojo.

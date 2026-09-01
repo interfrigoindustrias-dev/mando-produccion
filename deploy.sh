@@ -35,6 +35,16 @@ else
   echo "  · python no disponible, se omite"
 fi
 
+# Comprobar la sintaxis y los ids no basta: el fallo tipico es que la pagina
+# arranca y se queda a medias sin decir nada. La prueba de humo la arranca de
+# verdad —con una hoja falsa— y mira lo que se pinta.
+echo "→ Prueba de humo de las dos páginas…"
+if command -v node >/dev/null 2>&1 && node -e "require('jsdom')" >/dev/null 2>&1; then
+  node tools/humo.js || { echo "  ✗ no se publica con la prueba en rojo"; exit 1; }
+else
+  echo "  · jsdom no instalado (npm install --no-save jsdom), se omite"
+fi
+
 echo "→ Subiendo a ${DESTINO}…"
 "${SSH[@]}" "mkdir -p ~/${DESTINO}/css ~/${DESTINO}/js ~/${DESTINO}/img"
 "${SCP[@]}" "$SRC/index.html"           "${USUARIO}@${HOST}:${DESTINO}/"
