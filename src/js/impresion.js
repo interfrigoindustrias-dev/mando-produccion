@@ -71,83 +71,123 @@ function stickerHTML(row){
 
 /* ---------- Hoja carta: una sola pagina por puerta ---------- */
 
-/* Cabina de la hoja: lo que identifica la puerta. Es igual en los cuatro
-   formatos porque la pregunta «¿de que puerta hablamos?» no cambia. */
-function cabeceraCarta(c){
+const MESES_CARTA = ["enero","febrero","marzo","abril","mayo","junio","julio",
+                     "agosto","septiembre","octubre","noviembre","diciembre"];
+
+/** El MES de fin de proceso, que es lo que se sigue en planta; no el dia. */
+function mesFin(c){
+  const f = toDate(c[C.FPROC]);
+  return f ? `${MESES_CARTA[f.getMonth()]} ${f.getFullYear()}` : "—";
+}
+
+/* Cabecera: lo que identifica la puerta. Igual en los cuatro formatos porque
+   la pregunta «¿de que puerta hablamos?» no cambia entre familias. */
+function cabeceraCarta(c, F){
   const cel = (k, v, ancho) =>
     `<div${ancho ? ` style="grid-column:span ${ancho}"` : ""}>${k}<b>${esc(v ?? "") || "—"}</b></div>`;
   const si = v => tri(v) === true ? "SÍ" : "No";
-  const med = [num(c[C.ANCHO]), num(c[C.ALTO])].every(x => x !== null)
-    ? `${num(c[C.ANCHO])} × ${num(c[C.ALTO])}` : "—";
-  const alfajor = [tri(c[C.ALFF]) === true ? "frontal" : "",
-                   tri(c[C.ALFP]) === true ? "posterior" : ""].filter(Boolean).join(" + ") || "No";
   const bumper = llevaBumper(c[C.BUMP])
     ? `${c[C.BUMP]}${String(c[C.TBUMP] ?? "").trim() ? " · " + num(c[C.TBUMP]) : ""}`
     : (c[C.BUMP] || "—");
 
+  /* Los diagramas van en la cabecera y no al final: se miran ANTES de armar,
+     para confirmar la apertura y como se toma la medida. Si el archivo aun no
+     esta, el hueco no se dibuja en vez de dejar un icono roto. */
+  const diagramas = (F.imagenes || [])
+    .map(n => `<img src="img/${esc(n)}" alt="" onerror="this.remove()">`).join("");
+
   return `
     <div class="c-h">
       <span class="c-logo"></span>
-      <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>${esc(MOD.nombre)}</span></div>
+      <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>${esc(F.nombre)}</span></div>
       <div class="c-op"><b>OP ${esc(c[C.OP] ?? "")}</b><span>${esc(fmtDate(c[C.FECHA]))}</span></div>
     </div>
     <div class="c-cli">${esc(c[C.CLI] ?? "")}${
       tri(c[C.COMP]) === true ? '<span class="c-flags">COMPLEMENTO</span>' : ""}${
       tri(c[C.STOCK]) === true ? '<span class="c-flags">STOCK</span>' : ""}</div>
-    <div class="c-grid">
-      ${cel("Material", c[C.MAT])}${cel("Tipo", c[C.TIPO])}
-      ${cel("Vano A × H", med)}${cel("Espesor mm", num(c[C.ESP]))}
-      ${cel("Apertura", c[C.AP])}${cel("Puntos", num(c[C.PTS]))}
-      ${cel("Tipo de marco", c[C.MARCO], 2)}${cel("Visor", c[C.VISOR])}
-      ${cel("Bumper", bumper)}${cel("Alfajor", alfajor)}
-      ${cel("Sello", c[C.SELLO])}
+
+    <div class="c-top">
+      <div class="c-grid">
+        ${cel("Material", c[C.MAT])}${cel("Tipo", c[C.TIPO])}
+        ${cel("Ancho vano", num(c[C.ANCHO]))}${cel("Alto vano", num(c[C.ALTO]))}
+        ${cel("Espesor mm", num(c[C.ESP]))}${cel("Apertura", c[C.AP])}
+        ${cel("Sello", c[C.SELLO])}${cel("Mes fin proceso", mesFin(c))}
+        ${cel("Tipo de marco", c[C.MARCO], 2)}${cel("Visor", c[C.VISOR])}
+        ${cel("Bumper", bumper)}
+        ${cel("Alfajor frontal", si(c[C.ALFF]))}${cel("Alfajor posterior", si(c[C.ALFP]))}
+        ${cel("Puntos", num(c[C.PTS]))}
+      </div>
+      ${diagramas ? `<div class="c-dib">${diagramas}</div>` : ""}
     </div>
     <div class="c-obs"><em>Observaciones</em><span>${esc(c[C.OBS] ?? "")}</span></div>`;
 }
 
-/** Una pieza: casilla para marcar, o casilla y raya para anotar cantidad. */
-function piezaCarta(it, modoBloque){
-  const modo = it.modo || modoBloque;
-  // La referencia va separada del nombre con un punto: en papel, pegada al
-  // texto se lee como parte del nombre de la pieza.
-  const ref = it.r ? `<i>· ${esc(it.r)}</i>` : "";
-  return `<div class="c-it"><span class="bx"></span><span class="nm">${esc(it.n)}${ref}</span>${
-    modo === "cant" ? '<span class="qt"></span>' : ""}</div>`;
+/* Medidas de la hoja y remates: se toman en el taller, no salen de la hoja de
+   calculo, asi que van en blanco a proposito. */
+function medidasCarta(F){
+  const raya = (k, ancho) =>
+    `<div class="c-mm" style="flex:${ancho || 1}"><label>${esc(k)}</label><i></i></div>`;
+  return `<div class="c-med">
+    <div class="c-medt">Medidas de la hoja (mm)</div>
+    ${raya("H · altura")}${raya("A · ancho")}${raya("E · espesor")}
+    ${(F.notas || []).map(n => raya(n)).join("")}
+  </div>`;
+}
+
+/** Opciones propias del formato: se marcan a mano antes de empezar. */
+function opcionesCarta(F){
+  if(!(F.opciones || []).length) return "";
+  return `<div class="c-ops">${F.opciones.map(g => `
+    <div class="c-opg">
+      <h5>${esc(g.t)}</h5>
+      ${g.items.map(x => g.modo === "medida"
+        ? `<span class="c-op1"><span class="box"></span>${esc(x)} <i class="c-raya"></i></span>`
+        : `<span class="c-op1"><span class="box${g.modo === "radio" ? " rd" : ""}"></span>${esc(x)}</span>`
+      ).join("")}
+    </div>`).join("")}</div>`;
+}
+
+/** Una pieza del despiece: se marca cual se uso y se anota cuanta. */
+function piezaCarta(it){
+  return `<div class="c-it">
+    <span class="bx"></span>
+    <span class="nm">${esc(it.f)}${it.s && it.s !== "—" ? `<em>${esc(it.s)}</em>` : ""}</span>
+    <span class="rf">${esc(it.r || "")}</span>
+    <span class="qt">${it.u ? `<b>${esc(it.u)}</b>` : ""}</span>
+  </div>`;
 }
 
 /** Lista de materiales del formato que le toque a esta puerta. */
-function materialesCarta(c){
-  const n = formatoDe(c);
-  const F = FORMATOS[n];
-
-  if(!F || F.pendiente || !F.bloques.length){
-    // Sin lista definida todavia: se imprime igual, con espacio pautado para
-    // escribir a mano. Una hoja util a medias sirve; ninguna hoja, no.
-    return `<p class="c-sec">Materiales — ${F ? esc(F.nombre) : "formato sin definir"}</p>
+function materialesCarta(F, n){
+  if(!F || !(F.bloques || []).length){
+    return `<p class="c-sec">Materiales — formato sin definir</p>
       <div class="c-libre">${Array.from({length: 26}, ()=>"<i></i>").join("")}</div>`;
   }
-
-  return `<p class="c-sec">Materiales · formato ${n} — ${esc(F.nombre)}
-      <em>Marcar lo usado; donde diga cantidad, anotarla</em></p>
+  return `<p class="c-sec">Despiece · formato ${n}
+      <em>Marcar lo usado y anotar la cantidad</em></p>
     <div class="c-mat">${F.bloques.map(b => `
       <div class="c-blq">
-        <h4>${esc(b.t)}<em>${b.modo === "cant" ? "cantidad" : b.modo === "mixto" ? "marcar / cant." : "marcar"}</em></h4>
-        ${b.items.map(it => piezaCarta(it, b.modo)).join("")}
+        <h4>${esc(b.t)}</h4>
+        ${b.items.map(piezaCarta).join("")}
       </div>`).join("")}</div>`;
 }
 
 function cartaHTML(row){
   const c = row.c;
-  // Con muchas piezas la hoja se aprieta un punto mas para no pasar de pagina.
   const n = formatoDe(c);
+  const F = FORMATOS[n] || {nombre: "Formato sin definir", imagenes: []};
+  // Con muchas piezas la hoja se aprieta un punto mas para no pasar de pagina.
   const denso = piezasDe(n) > 70 ? " denso" : "";
   return `<div class="carta${denso}">
-    ${cabeceraCarta(c)}
-    ${materialesCarta(c)}
+    ${cabeceraCarta(c, F)}
+    ${opcionesCarta(F)}
+    ${medidasCarta(F)}
+    ${materialesCarta(F, n)}
     <div class="c-pie">
       <div class="c-proc">${PROCS.map(pr =>
         tri(c[pr.i]) === null ? "" : `<span><span class="box"></span>${pr.k}</span>`).join("")}</div>
-      <div class="c-firmas"><div>Producción</div><div>Calidad</div><div>Despacho</div></div>
+      <div class="c-firmas">${(F.firmas || ["Solicitado por"])
+        .concat(["Control de calidad"]).map(f => `<div>${esc(f)}</div>`).join("")}</div>
     </div>
   </div>`;
 }
