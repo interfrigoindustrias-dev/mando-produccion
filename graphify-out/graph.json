@@ -14,7 +14,7 @@
       },
       "_origin": "ast",
       "id": "deploy_config_example",
-      "community": 34,
+      "community": 35,
       "community_name": "deploy.config.example.sh",
       "norm_label": "deploy.config.example.sh"
     },
@@ -29,7 +29,7 @@
       },
       "_origin": "ast",
       "id": "deploy_config_example_sh__entry",
-      "community": 34,
+      "community": 35,
       "community_name": "deploy.config.example.sh",
       "norm_label": "deploy.config.example.sh script"
     },
@@ -44,7 +44,7 @@
       },
       "_origin": "ast",
       "id": "deploy",
-      "community": 33,
+      "community": 34,
       "community_name": "Despliegue",
       "norm_label": "deploy.sh"
     },
@@ -59,7 +59,7 @@
       },
       "_origin": "ast",
       "id": "deploy_sh__entry",
-      "community": 33,
+      "community": 34,
       "community_name": "Despliegue",
       "norm_label": "deploy.sh script"
     },
@@ -70,7 +70,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_auth_config_example",
-      "community": 37,
+      "community": 38,
       "community_name": "auth.config.example.php",
       "norm_label": "auth.config.example.php"
     },
@@ -202,7 +202,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config_app_example",
-      "community": 38,
+      "community": 39,
       "community_name": "config-app.example.js",
       "norm_label": "config-app.example.js"
     },
@@ -213,7 +213,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_api",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api.js"
     },
@@ -224,7 +224,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_api_api",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api()"
     },
@@ -235,7 +235,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_api_rng",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "rng()"
     },
@@ -246,7 +246,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_api_fetchrows",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "fetchrows()"
     },
@@ -257,7 +257,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_api_ensuregid",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensuregid()"
     },
@@ -268,7 +268,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_api_ensurerows",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensurerows()"
     },
@@ -279,7 +279,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_api_setcheckboxui",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "setcheckboxui()"
     },
@@ -290,7 +290,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_api_repairstatus",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairstatus()"
     },
@@ -301,7 +301,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_api_numericos",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "numericos"
     },
@@ -312,7 +312,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "src_js_api_repairnumeros",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairnumeros()"
     },
@@ -323,7 +323,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_js_api_writecells",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "writecells()"
     },
@@ -334,7 +334,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_js_api_sincronizarvalidacion",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "sincronizarvalidacion()"
     },
@@ -345,7 +345,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_app",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "app.js"
     },
@@ -356,7 +356,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_app_views",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "views"
     },
@@ -367,7 +367,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_app_goto",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "goto()"
     },
@@ -378,7 +378,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_app_pintarquiensoy",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "pintarquiensoy()"
     },
@@ -389,7 +389,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_js_app_enterapp",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "enterapp()"
     },
@@ -400,7 +400,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_js_app_explicarquefalta",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "explicarquefalta()"
     },
@@ -521,7 +521,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auth",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "auth.js"
     },
@@ -532,7 +532,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_auth_paginaactual",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "paginaactual()"
     },
@@ -543,7 +543,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_auth_pedirtoken",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "pedirtoken()"
     },
@@ -554,7 +554,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_auth_entrarcongoogle",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "entrarcongoogle()"
     },
@@ -565,7 +565,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_auth_ensuretoken",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "ensuretoken()"
     },
@@ -576,7 +576,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_auth_programarrenovacion",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "programarrenovacion()"
     },
@@ -587,7 +587,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_auth_avisarreconectar",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "avisarreconectar()"
     },
@@ -598,7 +598,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_auth_logout",
-      "community": 23,
+      "community": 24,
       "community_name": "Autenticacion con Google",
       "norm_label": "logout()"
     },
@@ -609,7 +609,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_automatizaciones",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "automatizaciones.js"
     },
@@ -620,7 +620,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_automatizaciones_offset",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "offset"
     },
@@ -631,7 +631,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_automatizaciones_escala",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "escala"
     },
@@ -642,7 +642,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_js_automatizaciones_marcarinicioproduccion",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "marcarinicioproduccion()"
     },
@@ -653,7 +653,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autoprioridades",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autoprioridades()"
     },
@@ -664,7 +664,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_automatizaciones_hoy0",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "hoy0()"
     },
@@ -675,7 +675,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "src_js_automatizaciones_fechaprogramada",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "fechaprogramada()"
     },
@@ -686,7 +686,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autofechas",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autofechas()"
     },
@@ -697,7 +697,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "src_js_automatizaciones_tocarfechaproceso",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "tocarfechaproceso()"
     },
@@ -708,7 +708,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "src_js_automatizaciones_campos_proceso",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "campos_proceso"
     },
@@ -719,7 +719,7 @@
       "source_location": "L172",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairfechasfalsas",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairfechasfalsas()"
     },
@@ -730,7 +730,7 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairseparadas",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairseparadas()"
     },
@@ -741,7 +741,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_avisos",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "avisos.js"
     },
@@ -752,7 +752,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_avisos_ultimovisto",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "ultimovisto()"
     },
@@ -763,7 +763,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_avisos_marcarvisto",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "marcarvisto()"
     },
@@ -774,7 +774,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_avisos_avisosnuevos",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "avisosnuevos()"
     },
@@ -785,7 +785,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_avisos_pintartimbre",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "pintartimbre()"
     },
@@ -796,7 +796,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_avisos_abriravisos",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "abriravisos()"
     },
@@ -807,7 +807,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_avisos_cerraravisos",
-      "community": 24,
+      "community": 25,
       "community_name": "avisos.js",
       "norm_label": "cerraravisos()"
     },
@@ -1071,7 +1071,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_comun",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "comun.js"
     },
@@ -1082,7 +1082,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_comun_activas",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "activas()"
     },
@@ -1093,7 +1093,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_comun_completa",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "completa()"
     },
@@ -1104,7 +1104,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_comun_desp",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "desp()"
     },
@@ -1115,7 +1115,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_comun_puntos",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "puntos()"
     },
@@ -1126,7 +1126,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_comun_enproduccion",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enproduccion()"
     },
@@ -1137,7 +1137,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_comun_enstock",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enstock()"
     },
@@ -1148,7 +1148,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_comun_contador",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "contador()"
     },
@@ -1159,7 +1159,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_comun_detalle_kpi",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "detalle_kpi"
     },
@@ -1170,7 +1170,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_comun_kpicards",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "kpicards()"
     },
@@ -1181,7 +1181,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_comun_verdetallekpi",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "verdetallekpi()"
     },
@@ -1192,7 +1192,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_comun_barras",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "barras()"
     },
@@ -1203,7 +1203,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_comun_tablamini",
-      "community": 13,
+      "community": 12,
       "community_name": "Ayudantes de tableros",
       "norm_label": "tablamini()"
     },
@@ -1324,7 +1324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_constantes",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "constantes.js"
     },
@@ -1335,7 +1335,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_constantes_log_head",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "log_head"
     },
@@ -1346,7 +1346,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_constantes_prioridades",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "prioridades"
     },
@@ -1368,7 +1368,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_constantes_llevabumper",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "llevabumper()"
     },
@@ -1379,7 +1379,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_constantes_separadapara",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "separadapara()"
     },
@@ -1390,7 +1390,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_constantes_clientebase",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "clientebase()"
     },
@@ -1401,7 +1401,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_js_constantes_separada",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "separada()"
     },
@@ -1412,7 +1412,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_js_constantes_urgentemanual",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "urgentemanual()"
     },
@@ -1423,7 +1423,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_constantes_urgenteauto",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "urgenteauto()"
     },
@@ -1434,7 +1434,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_js_constantes_urgente",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "urgente()"
     },
@@ -1445,7 +1445,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_constantes_terminada",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "terminada()"
     },
@@ -1456,7 +1456,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_constantes_anulada",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "anulada()"
     },
@@ -1467,7 +1467,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_constantes_con_riel",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "con_riel"
     },
@@ -1478,7 +1478,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_js_constantes_cfg",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "cfg"
     },
@@ -1489,7 +1489,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_constantes_rows",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "rows"
     },
@@ -1500,7 +1500,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "src_js_constantes_sel",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "sel"
     },
@@ -1841,7 +1841,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_dashboards_renderresumen",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "renderresumen()"
     },
@@ -2017,7 +2017,7 @@
       "source_location": "L354",
       "_origin": "ast",
       "id": "src_js_dashboards_confirmarseparar",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "confirmarseparar()"
     },
@@ -2039,7 +2039,7 @@
       "source_location": "L407",
       "_origin": "ast",
       "id": "src_js_dashboards_guardardespacho",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "guardardespacho()"
     },
@@ -2226,7 +2226,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_datos",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "datos.js"
     },
@@ -2237,7 +2237,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_datos_setsync",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "setsync()"
     },
@@ -2248,7 +2248,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_datos_refresh",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "refresh()"
     },
@@ -2259,7 +2259,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_js_datos_renderdashvisible",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "renderdashvisible()"
     },
@@ -2270,7 +2270,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_js_datos_restartpoll",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "restartpoll()"
     },
@@ -2281,7 +2281,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "src_js_datos_stoppoll",
-      "community": 27,
+      "community": 28,
       "community_name": "Carga y refresco",
       "norm_label": "stoppoll()"
     },
@@ -2292,7 +2292,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_ficha",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "ficha.js"
     },
@@ -2303,7 +2303,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_ficha_opendet",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "opendet()"
     },
@@ -2314,7 +2314,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_js_ficha_dstk",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "dstk"
     },
@@ -2325,7 +2325,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_js_ficha_initform",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "initform()"
     },
@@ -2336,7 +2336,7 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "src_js_ficha_nextop",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "nextop()"
     },
@@ -2347,7 +2347,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "src_js_ficha_targetrows",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "targetrows()"
     },
@@ -2358,7 +2358,7 @@
       "source_location": "L207",
       "_origin": "ast",
       "id": "src_js_ficha_hintop",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "hintop()"
     },
@@ -2369,7 +2369,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_formatos",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "formatos.js"
     },
@@ -2380,7 +2380,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_formatos_formato_de_tipo",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "formato_de_tipo"
     },
@@ -2391,7 +2391,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_formatos_formatode",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "formatode()"
     },
@@ -2402,7 +2402,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_js_formatos_it",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "it()"
     },
@@ -2413,7 +2413,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "src_js_formatos_formatos",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "formatos"
     },
@@ -2424,7 +2424,7 @@
       "source_location": "L374",
       "_origin": "ast",
       "id": "src_js_formatos_piezasde",
-      "community": 28,
+      "community": 29,
       "community_name": "formatos.js",
       "norm_label": "piezasde()"
     },
@@ -2564,10 +2564,10 @@
       "label": "printFichas()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L197",
+      "source_location": "L205",
       "_origin": "ast",
       "id": "src_js_impresion_printfichas",
-      "community": 1,
+      "community": 7,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "printfichas()"
     },
@@ -2575,7 +2575,7 @@
       "label": "pedirSticker()",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L211",
+      "source_location": "L219",
       "_origin": "ast",
       "id": "src_js_impresion_pedirsticker",
       "community": 10,
@@ -2586,7 +2586,7 @@
       "label": "stkBtn",
       "file_type": "code",
       "source_file": "src/js/impresion.js",
-      "source_location": "L227",
+      "source_location": "L235",
       "_origin": "ast",
       "id": "src_js_impresion_stkbtn",
       "community": 10,
@@ -2600,7 +2600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_informes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "informes.js"
     },
@@ -2611,7 +2611,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_js_informes_inf_head",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "inf_head"
     },
@@ -2622,7 +2622,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_informes_tipos_informe",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "tipos_informe"
     },
@@ -2633,7 +2633,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_js_informes_columnasde",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "columnasde()"
     },
@@ -2644,7 +2644,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_informes_frecuencias",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "frecuencias"
     },
@@ -2655,7 +2655,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_informes_dias_semana",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "dias_semana"
     },
@@ -2666,7 +2666,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_informes_enrango",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "enrango()"
     },
@@ -2677,7 +2677,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "src_js_informes_periodode",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "periodode()"
     },
@@ -2688,7 +2688,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_informes_informes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "informes"
     },
@@ -2699,7 +2699,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "src_js_informes_loadinformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "loadinformes()"
     },
@@ -2710,7 +2710,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "src_js_informes_csvinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "csvinforme()"
     },
@@ -2721,7 +2721,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "src_js_informes_descargarinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "descargarinforme()"
     },
@@ -2732,7 +2732,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "src_js_informes_abririnformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "abririnformes()"
     },
@@ -2743,7 +2743,7 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "src_js_informes_cuandosale",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "cuandosale()"
     },
@@ -2754,7 +2754,7 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "src_js_informes_pintarinformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "pintarinformes()"
     },
@@ -2765,7 +2765,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "src_js_informes_bloquecolumnas",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "bloquecolumnas()"
     },
@@ -2776,7 +2776,7 @@
       "source_location": "L267",
       "_origin": "ast",
       "id": "src_js_informes_bloquecondiciones",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "bloquecondiciones()"
     },
@@ -2787,7 +2787,7 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "src_js_informes_guardarinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "guardarinforme()"
     },
@@ -2798,7 +2798,7 @@
       "source_location": "L436",
       "_origin": "ast",
       "id": "src_js_informes_probarcorreo",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "probarcorreo()"
     },
@@ -2809,7 +2809,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_meta",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "meta.js"
     },
@@ -2820,7 +2820,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_meta_meta_head",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "meta_head"
     },
@@ -2831,7 +2831,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_meta_meta_def",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "meta_def"
     },
@@ -2842,7 +2842,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_meta_meta",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "meta"
     },
@@ -2853,7 +2853,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_meta_puntosdia",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "puntosdia()"
     },
@@ -2864,7 +2864,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_meta_loadmeta",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "loadmeta()"
     },
@@ -2875,7 +2875,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_meta_guardarmeta",
-      "community": 25,
+      "community": 26,
       "community_name": "meta.js",
       "norm_label": "guardarmeta()"
     },
@@ -2886,7 +2886,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_modelo",
-      "community": 30,
+      "community": 31,
       "community_name": "modelo.js",
       "norm_label": "modelo.js"
     },
@@ -2897,7 +2897,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_modelo_modelo_puertas",
-      "community": 30,
+      "community": 31,
       "community_name": "modelo.js",
       "norm_label": "modelo_puertas"
     },
@@ -2908,7 +2908,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "src_js_modelo_espesormetros",
-      "community": 30,
+      "community": 31,
       "community_name": "modelo.js",
       "norm_label": "espesormetros()"
     },
@@ -2919,7 +2919,7 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_js_modelo_modelo_paneles",
-      "community": 30,
+      "community": 31,
       "community_name": "modelo.js",
       "norm_label": "modelo_paneles"
     },
@@ -2930,7 +2930,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "src_js_modelo_modelos_datos",
-      "community": 30,
+      "community": 31,
       "community_name": "modelo.js",
       "norm_label": "modelos_datos"
     },
@@ -2941,7 +2941,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_modulo",
-      "community": 32,
+      "community": 33,
       "community_name": "modulo.js",
       "norm_label": "modulo.js"
     },
@@ -2952,7 +2952,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_modulo_modulos",
-      "community": 32,
+      "community": 33,
       "community_name": "modulo.js",
       "norm_label": "modulos"
     },
@@ -2963,7 +2963,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_modulo_configdelmodulo",
-      "community": 32,
+      "community": 33,
       "community_name": "modulo.js",
       "norm_label": "configdelmodulo()"
     },
@@ -2974,7 +2974,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_almacen",
-      "community": 31,
+      "community": 32,
       "community_name": "paneles-almacen.js",
       "norm_label": "paneles-almacen.js"
     },
@@ -2982,10 +2982,10 @@
       "label": "enAlmacen()",
       "file_type": "code",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L11",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_enalmacen",
-      "community": 31,
+      "community": 32,
       "community_name": "paneles-almacen.js",
       "norm_label": "enalmacen()"
     },
@@ -2993,10 +2993,10 @@
       "label": "porPedido()",
       "file_type": "code",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L15",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_porpedido",
-      "community": 31,
+      "community": 32,
       "community_name": "paneles-almacen.js",
       "norm_label": "porpedido()"
     },
@@ -3004,10 +3004,10 @@
       "label": "renderAlmacen()",
       "file_type": "code",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L24",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_renderalmacen",
-      "community": 31,
+      "community": 32,
       "community_name": "paneles-almacen.js",
       "norm_label": "renderalmacen()"
     },
@@ -3018,7 +3018,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_auto",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "paneles-auto.js"
     },
@@ -3029,7 +3029,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_auto_col",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "col()"
     },
@@ -3040,7 +3040,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_js_paneles_auto_estado",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "estado"
     },
@@ -3051,7 +3051,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_paneles_auto_estadode",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "estadode()"
     },
@@ -3062,7 +3062,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_paneles_auto_anuladap",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "anuladap()"
     },
@@ -3073,7 +3073,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_paneles_auto_despachadap",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "despachadap()"
     },
@@ -3084,7 +3084,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_paneles_auto_autoprioridades",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "autoprioridades()"
     },
@@ -3092,10 +3092,10 @@
       "label": "tocarFechaProceso()",
       "file_type": "code",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L60",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_paneles_auto_tocarfechaproceso",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "tocarfechaproceso()"
     },
@@ -3103,10 +3103,10 @@
       "label": "ponerEstado()",
       "file_type": "code",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L98",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_paneles_auto_ponerestado",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ponerestado()"
     },
@@ -3117,7 +3117,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_control",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "paneles-control.js"
     },
@@ -3128,7 +3128,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_paneles_control_fsel",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "fsel"
     },
@@ -3139,7 +3139,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_paneles_control_kgde",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "kgde()"
     },
@@ -3150,7 +3150,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_control_filtered",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "filtered()"
     },
@@ -3161,7 +3161,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_paneles_control_filtrosactivos",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "filtrosactivos()"
     },
@@ -3172,7 +3172,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_js_paneles_control_numord",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "numord()"
     },
@@ -3183,7 +3183,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_paneles_control_filllists",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "filllists()"
     },
@@ -3194,7 +3194,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_paneles_control_tagprio",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "tagprio()"
     },
@@ -3205,7 +3205,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "src_js_paneles_control_tagestado",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "tagestado()"
     },
@@ -3216,7 +3216,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_js_paneles_control_n2",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "n2()"
     },
@@ -3227,7 +3227,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_js_paneles_control_n0",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "n0()"
     },
@@ -3238,7 +3238,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "src_js_paneles_control_selprio",
-      "community": 3,
+      "community": 2,
       "community_name": "Constantes del modelo",
       "norm_label": "selprio()"
     },
@@ -3249,7 +3249,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_js_paneles_control_selestado",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "selestado()"
     },
@@ -3260,7 +3260,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "src_js_paneles_control_editcampo",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "editcampo()"
     },
@@ -3271,7 +3271,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "src_js_paneles_control_render",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "render()"
     },
@@ -3282,7 +3282,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "src_js_paneles_control_kpis",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "kpis()"
     },
@@ -3293,7 +3293,7 @@
       "source_location": "L234",
       "_origin": "ast",
       "id": "src_js_paneles_control_paintrow",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "paintrow()"
     },
@@ -3304,7 +3304,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "src_js_paneles_control_setproc",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "setproc()"
     },
@@ -3312,10 +3312,10 @@
       "label": "syncSel()",
       "file_type": "code",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L285",
+      "source_location": "L284",
       "_origin": "ast",
       "id": "src_js_paneles_control_syncsel",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "syncsel()"
     },
@@ -3323,10 +3323,10 @@
       "label": "csvPaneles()",
       "file_type": "code",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L301",
+      "source_location": "L300",
       "_origin": "ast",
       "id": "src_js_paneles_control_csvpaneles",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "csvpaneles()"
     },
@@ -3334,10 +3334,10 @@
       "label": "btnCsv",
       "file_type": "code",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L335",
+      "source_location": "L334",
       "_origin": "ast",
       "id": "src_js_paneles_control_btncsv",
-      "community": 5,
+      "community": 4,
       "community_name": "paneles-control.js",
       "norm_label": "btncsv"
     },
@@ -3348,7 +3348,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_ficha",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "paneles-ficha.js"
     },
@@ -3359,7 +3359,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_opcionesde",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "opcionesde()"
     },
@@ -3370,7 +3370,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_lineahtml",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "lineahtml()"
     },
@@ -3381,7 +3381,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_anadirlinea",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "anadirlinea()"
     },
@@ -3392,7 +3392,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_renumerar",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "renumerar()"
     },
@@ -3403,7 +3403,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_celdade",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "celdade()"
     },
@@ -3414,7 +3414,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_recalcular",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "recalcular()"
     },
@@ -3425,7 +3425,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_nextop",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "nextop()"
     },
@@ -3436,7 +3436,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_targetrows",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "targetrows()"
     },
@@ -3447,7 +3447,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_nombreop",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "nombreop()"
     },
@@ -3458,7 +3458,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_hintop",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "hintop()"
     },
@@ -3469,7 +3469,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_initform",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "initform()"
     },
@@ -3477,10 +3477,10 @@
       "label": "CAMPOS_EDITABLES",
       "file_type": "code",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L191",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_campos_editables",
-      "community": 11,
+      "community": 13,
       "community_name": "paneles-ficha.js",
       "norm_label": "campos_editables"
     },
@@ -3488,11 +3488,11 @@
       "label": "openDet()",
       "file_type": "code",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L204",
+      "source_location": "L212",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_opendet",
-      "community": 11,
-      "community_name": "paneles-ficha.js",
+      "community": 7,
+      "community_name": "Automatizaciones de fecha",
       "norm_label": "opendet()"
     },
     {
@@ -3502,8 +3502,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_planta",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "paneles-planta.js"
     },
     {
@@ -3513,85 +3513,85 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_paneles_planta_plantapendientes",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "plantapendientes()"
     },
     {
       "label": "plantaEnUso()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L46",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_paneles_planta_plantaenuso",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "plantaenuso()"
     },
     {
       "label": "etiquetaPrio()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L48",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_paneles_planta_etiquetaprio",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "etiquetaprio()"
     },
     {
       "label": "textoEspera()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L53",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_paneles_planta_textoespera",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "textoespera()"
     },
     {
       "label": "renderPlanta()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L59",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_paneles_planta_renderplanta",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "renderplanta()"
     },
     {
       "label": "pintarResumenPlanta()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L141",
+      "source_location": "L144",
       "_origin": "ast",
       "id": "src_js_paneles_planta_pintarresumenplanta",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "pintarresumenplanta()"
     },
     {
       "label": "pintarTarjeta()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L159",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "src_js_paneles_planta_pintartarjeta",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "pintartarjeta()"
     },
     {
       "label": "llenarEspesoresPlanta()",
       "file_type": "code",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L233",
+      "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_paneles_planta_llenarespesoresplanta",
-      "community": 1,
-      "community_name": "Automatizaciones de fecha",
+      "community": 20,
+      "community_name": "paneles-planta.js",
       "norm_label": "llenarespesoresplanta()"
     },
     {
@@ -3601,7 +3601,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_resumen",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "paneles-resumen.js"
     },
@@ -3612,7 +3612,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_fabricadas",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "fabricadas()"
     },
@@ -3623,7 +3623,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_fechafin",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "fechafin()"
     },
@@ -3634,7 +3634,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_diasdefabricacion",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "diasdefabricacion()"
     },
@@ -3645,7 +3645,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_mediana",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "mediana()"
     },
@@ -3656,7 +3656,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_percentil",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "percentil()"
     },
@@ -3667,7 +3667,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderresumen",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderresumen()"
     },
@@ -3678,7 +3678,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_pintarentrega",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "pintarentrega()"
     },
@@ -3689,7 +3689,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderpoliuretano",
-      "community": 20,
+      "community": 21,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderpoliuretano()"
     },
@@ -3700,7 +3700,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_planta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "planta.js"
     },
@@ -3711,7 +3711,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_planta_prio_ord",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "prio_ord"
     },
@@ -3722,7 +3722,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_planta_color_proc",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "color_proc"
     },
@@ -3733,7 +3733,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_planta_plantaprogramadas",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantaprogramadas"
     },
@@ -3744,7 +3744,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_planta_plantalist",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantalist()"
     },
@@ -3755,7 +3755,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_planta_metatarjeta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "metatarjeta()"
     },
@@ -3766,7 +3766,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaprio",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaprio()"
     },
@@ -3777,7 +3777,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaplanta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaplanta()"
     },
@@ -3788,7 +3788,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_js_planta_notatarjeta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "notatarjeta()"
     },
@@ -3799,7 +3799,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_js_planta_pintartarjeta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "pintartarjeta()"
     },
@@ -3810,7 +3810,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "src_js_planta_avisarprogramadas",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "avisarprogramadas()"
     },
@@ -3821,7 +3821,7 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "src_js_planta_pintarresumenplanta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "pintarresumenplanta()"
     },
@@ -3832,7 +3832,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "src_js_planta_renderplanta",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "renderplanta()"
     },
@@ -3843,7 +3843,7 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "src_js_planta_plantaenuso",
-      "community": 12,
+      "community": 11,
       "community_name": "Vista de planta",
       "norm_label": "plantaenuso()"
     },
@@ -3854,7 +3854,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_poliuretano",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "poliuretano.js"
     },
@@ -3865,7 +3865,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_poliuretano_kgpoliuretano",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "kgpoliuretano()"
     },
@@ -3876,7 +3876,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_poliuretano_revisarpoliuretano",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "revisarpoliuretano()"
     },
@@ -3887,7 +3887,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_js_poliuretano_meses_es",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "meses_es"
     },
@@ -3898,7 +3898,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_poliuretano_mesde",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "mesde()"
     },
@@ -3909,7 +3909,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_js_poliuretano_semanade",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "semanade()"
     },
@@ -3920,7 +3920,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_js_poliuretano_nombremes",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "nombremes()"
     },
@@ -3931,7 +3931,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_poliuretano_consumopor",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "consumopor()"
     },
@@ -3942,7 +3942,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_js_poliuretano_resumenpoliuretano",
-      "community": 21,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "resumenpoliuretano()"
     },
@@ -3953,7 +3953,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_pwa",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "pwa.js"
     },
@@ -3964,7 +3964,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_pwa_yainstalada",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "yainstalada()"
     },
@@ -3975,7 +3975,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_pwa_mostrarboton",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "mostrarboton()"
     },
@@ -3986,7 +3986,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_pwa_abririnstalar",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "abririnstalar()"
     },
@@ -3997,7 +3997,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_js_pwa_forzaractualizacion",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "forzaractualizacion()"
     },
@@ -4008,7 +4008,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_js_pwa_comprobarversion",
-      "community": 29,
+      "community": 30,
       "community_name": "Instalacion como app",
       "norm_label": "comprobarversion()"
     },
@@ -4019,7 +4019,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_secuencia",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "secuencia.js"
     },
@@ -4030,7 +4030,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_secuencia_orden_prio",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "orden_prio"
     },
@@ -4041,7 +4041,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_js_secuencia_m2de",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "m2de()"
     },
@@ -4052,7 +4052,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_secuencia_espesorde",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "espesorde()"
     },
@@ -4063,7 +4063,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_secuencia_diasencola",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "diasencola()"
     },
@@ -4074,7 +4074,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_js_secuencia_desdecuandoensunivel",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "desdecuandoensunivel()"
     },
@@ -4085,7 +4085,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_secuencia_prioridadquetocaria",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "prioridadquetocaria()"
     },
@@ -4096,7 +4096,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "src_js_secuencia_secuenciapaneles",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "secuenciapaneles()"
     },
@@ -4107,7 +4107,7 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "src_js_secuencia_marcar",
-      "community": 22,
+      "community": 23,
       "community_name": "secuencia.js",
       "norm_label": "marcar()"
     },
@@ -4118,7 +4118,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_usuarios",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usuarios.js"
     },
@@ -4129,7 +4129,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_usuarios_usu_head",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usu_head"
     },
@@ -4140,7 +4140,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_usuarios_roles",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "roles"
     },
@@ -4151,7 +4151,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_usuarios_usuarios",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usuarios"
     },
@@ -4162,7 +4162,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_usuarios_puede",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "puede()"
     },
@@ -4173,7 +4173,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_js_usuarios_vistaspermitidas",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "vistaspermitidas()"
     },
@@ -4184,7 +4184,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_usuarios_loadusuarios",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "loadusuarios()"
     },
@@ -4195,7 +4195,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_js_usuarios_aplicarrol",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "aplicarrol()"
     },
@@ -4206,7 +4206,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "src_js_usuarios_sinacceso",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "sinacceso()"
     },
@@ -4217,7 +4217,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "src_js_usuarios_abrirusuarios",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "abrirusuarios()"
     },
@@ -4228,7 +4228,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_js_usuarios_pintarusuarios",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "pintarusuarios()"
     },
@@ -4239,7 +4239,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_usuarios_guardarusuario",
-      "community": 7,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "guardarusuario()"
     },
@@ -4250,7 +4250,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_util",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "util.js"
     },
@@ -4261,7 +4261,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_util_esc",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "esc()"
     },
@@ -4272,7 +4272,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_util_a1",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "a1()"
     },
@@ -4283,7 +4283,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_util_toast",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "toast()"
     },
@@ -4294,7 +4294,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_util_tri",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "tri()"
     },
@@ -4305,7 +4305,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_util_progreso",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "progreso()"
     },
@@ -4316,7 +4316,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_js_util_detectsep",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "detectsep()"
     },
@@ -4327,7 +4327,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "src_js_util_statusvalue",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "statusvalue()"
     },
@@ -4338,7 +4338,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "src_js_util_rowactive",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "rowactive()"
     },
@@ -4349,7 +4349,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_util_num",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "num()"
     },
@@ -4360,7 +4360,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "src_js_util_numcell",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "numcell()"
     },
@@ -4371,7 +4371,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_util_p2",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "p2()"
     },
@@ -4382,7 +4382,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_util_fmt",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "fmt()"
     },
@@ -4393,7 +4393,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_util_hoy",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "hoy()"
     },
@@ -4404,7 +4404,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_util_sheet_epoch",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "sheet_epoch"
     },
@@ -4415,7 +4415,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_util_serialtodate",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "serialtodate()"
     },
@@ -4426,7 +4426,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_js_util_todate",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "todate()"
     },
@@ -4437,7 +4437,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_util_fmtdate",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "fmtdate()"
     },
@@ -4448,7 +4448,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "src_js_util_sameday",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "sameday()"
     },
@@ -4459,7 +4459,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "src_js_util_iso",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "iso()"
     },
@@ -4470,7 +4470,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_util_lunes",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "lunes()"
     },
@@ -4481,7 +4481,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_js_util_opbase",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "opbase()"
     },
@@ -4492,7 +4492,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_js_util_temas",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "temas"
     },
@@ -4503,7 +4503,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "src_js_util_aplicatema",
-      "community": 2,
+      "community": 1,
       "community_name": "Utilidades y fechas",
       "norm_label": "aplicatema()"
     },
@@ -4514,7 +4514,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_sw",
-      "community": 35,
+      "community": 36,
       "community_name": "Service worker",
       "norm_label": "sw.js"
     },
@@ -4525,7 +4525,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_sw_armazon",
-      "community": 35,
+      "community": 36,
       "community_name": "Service worker",
       "norm_label": "armazon"
     },
@@ -4536,7 +4536,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tools_comprobar_ids",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "comprobar_ids.py"
     },
@@ -4547,7 +4547,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "tools_comprobar_ids_leer",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "leer()"
     },
@@ -4558,7 +4558,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "tools_comprobar_ids_ids_de",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "ids_de()"
     },
@@ -4569,7 +4569,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "tools_comprobar_ids_scripts_de",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "scripts_de()"
     },
@@ -4580,7 +4580,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "tools_comprobar_ids_protegido_en_linea",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "protegido_en_linea()"
     },
@@ -4591,7 +4591,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "tools_comprobar_ids_main",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "main()"
     },
@@ -4602,7 +4602,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "tools_comprobar_ids_rationale_64",
-      "community": 26,
+      "community": 27,
       "community_name": "comprobar_ids.py",
       "norm_label": "el propio renglon comprueba antes de usar."
     },
@@ -4613,7 +4613,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tools_grafo",
-      "community": 36,
+      "community": 37,
       "community_name": "grafo.py",
       "norm_label": "grafo.py"
     },
@@ -4624,7 +4624,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "tools_grafo_main",
-      "community": 36,
+      "community": 37,
       "community_name": "grafo.py",
       "norm_label": "main()"
     },
@@ -7308,7 +7308,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/impresion.js",
-      "source_location": "L199",
+      "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_printfichas",
@@ -7320,7 +7320,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L99",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_ponerestado",
@@ -7332,7 +7332,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L61",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_tocarfechaproceso",
@@ -7380,7 +7380,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L205",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_ficha_opendet",
@@ -7392,7 +7392,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L160",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta_pintartarjeta",
@@ -7428,7 +7428,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L303",
+      "source_location": "L302",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control_csvpaneles",
@@ -9093,7 +9093,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L211",
+      "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -9115,7 +9115,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L197",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -9159,7 +9159,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L227",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion",
@@ -9195,7 +9195,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L182",
+      "source_location": "L190",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_cartahtml",
@@ -9207,7 +9207,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L184",
+      "source_location": "L192",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_cartahtml",
@@ -9219,7 +9219,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L183",
+      "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_cartahtml",
@@ -9243,7 +9243,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/impresion.js",
-      "source_location": "L185",
+      "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_impresion_cartahtml",
@@ -9704,7 +9704,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L11",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_almacen",
@@ -9715,7 +9715,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L15",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_almacen",
@@ -9726,7 +9726,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L24",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_almacen",
@@ -9738,7 +9738,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L31",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_almacen_renderalmacen",
@@ -9750,7 +9750,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-almacen.js",
-      "source_location": "L40",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_almacen_renderalmacen",
@@ -9827,7 +9827,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L98",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto",
@@ -9838,7 +9838,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L60",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto",
@@ -9862,7 +9862,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L104",
+      "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_ponerestado",
@@ -9874,7 +9874,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L69",
+      "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_tocarfechaproceso",
@@ -9910,18 +9910,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L84",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_js_paneles_auto_tocarfechaproceso",
-      "target": "src_js_paneles_auto_estadode",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/js/paneles-auto.js",
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
@@ -9945,7 +9933,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L335",
+      "source_location": "L334",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control",
@@ -9956,7 +9944,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L301",
+      "source_location": "L300",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control",
@@ -10132,7 +10120,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L285",
+      "source_location": "L284",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control",
@@ -10166,7 +10154,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L319",
+      "source_location": "L318",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control_csvpaneles",
@@ -10202,7 +10190,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L302",
+      "source_location": "L301",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control_csvpaneles",
@@ -10394,7 +10382,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-control.js",
-      "source_location": "L256",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_control_setproc",
@@ -10416,7 +10404,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L191",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_ficha",
@@ -10438,7 +10426,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L177",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -10505,7 +10493,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L204",
+      "source_location": "L212",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_ficha",
@@ -10516,7 +10504,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L175",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -10623,6 +10611,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-ficha.js",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_paneles_ficha_initform",
+      "target": "src_js_paneles_ficha_nextop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/paneles-ficha.js",
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
@@ -10647,7 +10647,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-ficha.js",
-      "source_location": "L109",
+      "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_ficha_initform",
@@ -10658,7 +10658,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L48",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10669,7 +10669,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L233",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10680,7 +10680,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L141",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10691,7 +10691,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L159",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10702,7 +10702,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L46",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10724,7 +10724,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L59",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10735,7 +10735,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L53",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta",
@@ -10747,7 +10747,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L60",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta_renderplanta",
@@ -10759,7 +10759,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L103",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta_renderplanta",
@@ -10771,7 +10771,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L117",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta_renderplanta",
@@ -10783,7 +10783,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-planta.js",
-      "source_location": "L65",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_planta_renderplanta",
@@ -12636,5 +12636,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "74c323fe8c41913c5f678c36ed55e8abf71ed63c"
+  "built_at_commit": "0b180727b7a6567f0697503d376cfb67e3175237"
 }

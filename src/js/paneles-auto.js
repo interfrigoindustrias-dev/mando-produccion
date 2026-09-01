@@ -49,52 +49,43 @@ async function autoPrioridades(){
   }catch(e){ console.warn("escalado:", e.message); return 0; }
 }
 
-/* ------------------------------ 2 y 3. fechas de proceso ------------------------------ */
-/** Sella COMIENZO la primera vez que se marca algo y FIN cuando ya no queda
- *  nada por marcar. Al terminar, la linea pasa a TERMINADO sola: es lo que
- *  mira almacen para saber que hay algo que recoger.
+/* ------------------------------ 2. comienzo del proceso ------------------------------ */
+/** Sella el COMIENZO la primera vez que se marca algo, y ya no se vuelve a
+ *  tocar: lo que interesa es cuando se empezo, no la ultima vez que alguien
+ *  toco una casilla.
  *
- *  `estabaCompleta` evita el fallo que ya se vio en puertas: desmarcar y
- *  volver a marcar una linea vieja le reescribia la fecha de hoy, y entonces
- *  el resumen contaba como fabricado hoy algo hecho hace semanas. */
-async function tocarFechaProceso(r, estabaCompleta){
+ *  Llegar al 100 % NO cierra la linea. Antes lo hacia, y estaba mal: la linea
+ *  desaparecia de planta en cuanto se marcaba el ultimo proceso, sin que nadie
+ *  lo hubiera decidido. Marcar los procesos dice lo que se ha hecho; darla por
+ *  terminada y mandarla a almacen es una decision, y la toma quien esta
+ *  delante de la maquina con el boton Terminar. */
+async function tocarFechaProceso(r){
   const row = ROWS.find(x => x.r === r);
   if(!row) return;
-  const c = row.c, ups = [], logs = [];
-  const p = progreso(c);
+  const c = row.c;
+  if(progreso(c).ok === 0) return;                  // aun no se ha empezado
+  if(String(c[C.FINI] ?? "").trim()) return;        // ya estaba sellado
 
-  // COMIENZO: al primer proceso marcado, y ya no se vuelve a tocar.
-  if(p.ok > 0 && !String(c[C.FINI] ?? "").trim()){
-    const h = hoy();
-    ups.push({a1: `${col("FINI")}${r}`, v: [[h]]});
-    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso",
-               antes:"", despues:h});
+  const h = hoy();
+  try{
+    await writeCells([{a1: `${col("FINI")}${r}`, v: [[h]]}]);
+    logBulk([{accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso",
+              antes:"", despues:h}]);
     c[C.FINI] = h;
-  }
-
-  // FIN + TERMINADO: solo al completarse, y solo si no lo estaba ya.
-  if(p.pct >= 1 && !estabaCompleta){
-    const h = hoy();
-    if(!String(c[C.FFIN] ?? "").trim()){
-      ups.push({a1: `${col("FFIN")}${r}`, v: [[h]]});
-      logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Fin proceso",
-                 antes:"", despues:h});
-      c[C.FFIN] = h;
-    }
-    if(!estadoDe(c) || estadoDe(c) === ESTADO.PROCESO){
-      ups.push({a1: `${col("DESP")}${r}`, v: [[ESTADO.TERMINADO]]});
-      logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Estado",
-                 antes:String(c[C.DESP] ?? ""), despues:ESTADO.TERMINADO});
-      c[C.DESP] = ESTADO.TERMINADO;
-    }
-  }
-
-  if(!ups.length) return;
-  try{ await writeCells(ups); logBulk(logs); lastHash = ""; }
-  catch(e){ console.warn("fechas proceso:", e.message); }
+    lastHash = "";
+  }catch(e){ console.warn("comienzo proceso:", e.message); }
 }
 
-/** Cambia el estado a mano y, si pasa a DESPACHADO, sella la fecha de despacho. */
+/* ------------------------------ 3. fin del proceso ------------------------------ */
+/** Cambia el estado y sella la fecha que corresponda.
+ *
+ *  Las dos fechas que quedan cuelgan de aqui a proposito, no del avance:
+ *    TERMINADO  -> FIN PROCESO. Es el boton Terminar el que cierra la linea.
+ *    DESPACHADO -> FECHA DE DESPACHO.
+ *
+ *  Poner la fecha de fin al llegar al 100 % parecia lo mismo y no lo es: se
+ *  puede marcar el ultimo proceso y que la linea siga en planta esperando una
+ *  revision, un retoque o simplemente que alguien la de por buena. */
 async function ponerEstado(r, valor){
   const row = ROWS.find(x => x.r === r);
   if(!row) return;
@@ -103,14 +94,27 @@ async function ponerEstado(r, valor){
   if(antes === valor) return;
   const ups = [{a1: `${col("DESP")}${r}`, v: [[valor]]}];
   const cambios = [{campo:"Estado", antes, despues:valor}];
-  const previaFecha = c[C.FDESP];
+  const previaFin = c[C.FFIN], previaDesp = c[C.FDESP];
+  const v = String(valor).trim().toUpperCase();
+  const h = hoy();
 
-  if(valor.toUpperCase() === ESTADO.DESPACHADO && !String(c[C.FDESP] ?? "").trim()){
-    const h = hoy();
+  if(v === ESTADO.TERMINADO && !String(c[C.FFIN] ?? "").trim()){
+    ups.push({a1: `${col("FFIN")}${r}`, v: [[h]]});
+    cambios.push({campo:"Fin proceso", antes:"", despues:h});
+    c[C.FFIN] = h;
+    // Si se termina sin haber marcado nada, al menos queda cuando se empezo.
+    if(!String(c[C.FINI] ?? "").trim()){
+      ups.push({a1: `${col("FINI")}${r}`, v: [[h]]});
+      cambios.push({campo:"Comienzo proceso", antes:"", despues:h});
+      c[C.FINI] = h;
+    }
+  }
+  if(v === ESTADO.DESPACHADO && !String(c[C.FDESP] ?? "").trim()){
     ups.push({a1: `${col("FDESP")}${r}`, v: [[h]]});
     cambios.push({campo:"Fecha de despacho", antes:"", despues:h});
     c[C.FDESP] = h;
   }
+
   writeSeq++;
   c[C.DESP] = valor;                                   // optimista
   try{
@@ -118,7 +122,7 @@ async function ponerEstado(r, valor){
     logChanges("EDITA", c[C.OP], r, cambios);
     setSync("", "Guardado"); lastHash = "";
   }catch(e){
-    c[C.DESP] = antes; c[C.FDESP] = previaFecha;
+    c[C.DESP] = antes; c[C.FFIN] = previaFin; c[C.FDESP] = previaDesp;
     toast(e.message, "err");
     throw e;
   }

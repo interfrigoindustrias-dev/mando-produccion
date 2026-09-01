@@ -19,7 +19,10 @@ function plantaPendientes(){
 
   return activas().filter(({c})=>{
     if(anuladaP(c) || despachadaP(c)) return false;
-    if(progreso(c).pct >= 1) return false;
+    /* Una linea al 100 % SIGUE aqui. Lo que la saca de planta es que alguien
+       pulse Terminar, no que se marque el ultimo proceso: entre lo uno y lo
+       otro caben una revision, un retoque, o simplemente esperar a que quien
+       manda la de por buena. */
     if(estadoDe(c) === ESTADO.TERMINADO) return false;
 
     /* Del dia de hoy hacia atras: lo que aun no toca no se enseña, porque
@@ -94,8 +97,8 @@ function renderPlanta(){
 
     /* La tarjeta se reparte a lo ancho en cuatro bloques: quien es, cuanto
        mide, que falta por hacer y como va. En vertical se apilan solos. */
-    trozos.push(`<article class="pcard ${prio?"prio-"+prio:""} ${prio==="URGENTE"?"urg":""}"
-        data-r="${x.r}">
+    trozos.push(`<article class="pcard ${prio?"prio-"+prio:""} ${prio==="URGENTE"?"urg":""}
+        ${pc>=100?"lista":""}" data-r="${x.r}">
       <div class="pc-id">
         <div class="pc-top">
           <span class="pc-n">${i+1}</span>
@@ -121,7 +124,7 @@ function renderPlanta(){
 
       <div class="pc-pie">
         <span class="pbar"><i class="${pc>=100?"full":""}" style="width:${pc}%"></i></span>
-        <span class="pct">${pc}%</span>
+        <span class="pct">${pc>=100 ? "lista para terminar" : pc+"%"}</span>
         <button class="btn pri pterm" data-term="${x.r}">Terminar</button>
       </div>
     </article>`);
@@ -169,7 +172,9 @@ function pintarTarjeta(r){
   const pc = Math.round(progreso(c).pct*100);
   const bar = card.querySelector(".pbar i");
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100 ? "full" : ""; }
-  const pct = card.querySelector(".pct"); if(pct) pct.textContent = pc+"%";
+  const pct = card.querySelector(".pct");
+  if(pct) pct.textContent = pc >= 100 ? "lista para terminar" : pc + "%";
+  card.classList.toggle("lista", pc >= 100);
 }
 
 /* ------------------------------ marcar desde planta ------------------------------ */
@@ -182,7 +187,6 @@ $("#p-lista").addEventListener("click", async ev=>{
     const cur = tri(row.c[i]);
     if(cur === null) return;
 
-    const estabaCompleta = completa(row.c);
     const prev = row.c[i];
     writeSeq++;
     row.c[i] = cur !== true;                       // optimista
@@ -198,7 +202,7 @@ $("#p-lista").addEventListener("click", async ev=>{
       const nom = v => v===true ? "hecho" : "pendiente";
       logChanges("EDITA", row.c[C.OP], r,
         [{campo:PROCS.find(p=>p.i===i).k, antes:nom(tri(prev)), despues:nom(cur!==true)}]);
-      await tocarFechaProceso(r, estabaCompleta);
+      await tocarFechaProceso(r);
       plantaOcupada = Date.now();
     }catch(e){ row.c[i] = prev; pintarTarjeta(r); toast(e.message, "err"); }
     return;

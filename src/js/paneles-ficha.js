@@ -17,17 +17,17 @@ const opcionesDe = (lista, sel) => (lista||[])
 function lineaHTML(n){
   const L = MODELO.listas;
   return `<tr data-linea>
-    <td class="ln">${n}</td>
-    <td><select class="inp sm" data-f="PRIO">${opcionesDe(PRIORIDADES, "MEDIA")}</select></td>
-    <td><input class="inp sm num" data-f="CANT" type="number" min="1" step="1" placeholder="0" required></td>
-    <td><input class="inp sm num" data-f="LARGO" type="number" min="0" step="0.01" placeholder="0,00" required></td>
-    <td><select class="inp sm" data-f="PROD" required>${opcionesDe(L.PRODUCTOS)}</select></td>
-    <td><select class="inp sm" data-f="RANU">${opcionesDe(L.RANURADOS)}</select></td>
-    <td><select class="inp sm" data-f="CARA_A">${opcionesDe(L.CARAS)}</select></td>
-    <td><select class="inp sm" data-f="CARA_B">${opcionesDe(L.CARAS)}</select></td>
-    <td class="num mut" data-calc="m2">—</td>
-    <td class="num mut" data-calc="kg">—</td>
-    <td><button type="button" class="btn sm" data-quitar title="Quitar esta línea">✕</button></td>
+    <td class="ln" data-et="Línea">${n}</td>
+    <td data-et="Prioridad"><select class="inp sm" data-f="PRIO">${opcionesDe(PRIORIDADES, "MEDIA")}</select></td>
+    <td data-et="Cant"><input class="inp sm num" data-f="CANT" type="number" min="1" step="1" placeholder="0" required></td>
+    <td data-et="Largo (m)"><input class="inp sm num" data-f="LARGO" type="number" min="0" step="0.01" placeholder="0,00" required></td>
+    <td data-et="Producto"><select class="inp sm" data-f="PROD" required>${opcionesDe(L.PRODUCTOS)}</select></td>
+    <td data-et="Ranurado"><select class="inp sm" data-f="RANU">${opcionesDe(L.RANURADOS)}</select></td>
+    <td data-et="Cara A"><select class="inp sm" data-f="CARA_A">${opcionesDe(L.CARAS)}</select></td>
+    <td data-et="Cara B"><select class="inp sm" data-f="CARA_B">${opcionesDe(L.CARAS)}</select></td>
+    <td class="num mut" data-et="m²" data-calc="m2">—</td>
+    <td class="num mut" data-et="kg PU" data-calc="kg">—</td>
+    <td class="quitar"><button type="button" class="btn sm" data-quitar title="Quitar esta línea">✕</button></td>
   </tr>`;
 }
 function anadirLinea(){
@@ -106,6 +106,11 @@ function hintOp(){
 function initForm(){
   const tb = $("#n-lineas");
   if(tb && !tb.children.length) anadirLinea();
+  // La fecha de creacion es SIEMPRE la de hoy, y se pone aqui y no solo al
+  // abrir la ventana: si la aplicacion se deja abierta de un dia para otro,
+  // la ventana ya estaba montada con la fecha de ayer.
+  if($("#n-fecha") && !$("#n-fecha").value) $("#n-fecha").value = hoy();
+  if($("#n-op") && !$("#n-op").value) $("#n-op").value = String(nextOp());
   hintOp();
 }
 
@@ -116,7 +121,10 @@ $("#form-new").addEventListener("submit", async ev=>{
   try{
     const op = $("#n-op").value.trim();
     const cli = $("#n-cli").value.trim().toUpperCase();
-    const fecha = $("#n-fecha").value.trim();
+    // De hoy, no de lo que quedara escrito en el campo: es la fecha en la que
+    // la ficha se crea, y es el dato del que cuelga toda la antiguedad.
+    const fecha = hoy();
+    $("#n-fecha").value = fecha;
     const trs = $$("#n-lineas tr");
     if(!trs.length) throw new Error("La ficha no tiene ninguna línea");
     if(!cli) throw new Error("Falta el cliente");

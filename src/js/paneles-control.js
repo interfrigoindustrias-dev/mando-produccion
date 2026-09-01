@@ -249,7 +249,6 @@ function paintRow(r){
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
-  const estabaCompleta = completa(row.c);
   const prev = row.c[i];
   writeSeq++;
   row.c[i] = next===null ? "" : next;                  // optimista
@@ -265,7 +264,7 @@ async function setProc(r, i, next){
     const nom = v => v===true ? "hecho" : v===false ? "pendiente" : "no aplica";
     logChanges("EDITA", row.c[C.OP], r,
       [{campo:PROCS.find(p=>p.i===i).k, antes:nom(tri(prev)), despues:nom(next)}]);
-    await tocarFechaProceso(r, estabaCompleta);
+    await tocarFechaProceso(r);
   }catch(e){ row.c[i] = prev; paintRow(r); toast(e.message, "err"); }
 }
 $("#tb").addEventListener("click", ev=>{

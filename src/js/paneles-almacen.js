@@ -7,9 +7,14 @@
    COMPLETA, que es lo unico que decide si se puede cargar el camion.        */
 "use strict";
 
-/** Terminado y sin despachar: lo que fisicamente esta en el almacen. */
+/** Lo que fisicamente esta en el almacen: alguien pulso Terminar y todavia no
+ *  se ha despachado.
+ *
+ *  Antes entraba tambien lo que estuviera al 100 % aunque nadie lo hubiera
+ *  dado por terminado, y eso hacia aparecer en almacen cosas que seguian en la
+ *  maquina. El 100 % dice lo que se ha hecho; el estado dice donde esta. */
 const enAlmacen = ({c}) => !anuladaP(c) && !despachadaP(c) &&
-  (estadoDe(c) === ESTADO.TERMINADO || progreso(c).pct >= 1);
+  estadoDe(c) === ESTADO.TERMINADO;
 
 /** Agrupa las lineas por numero de OP: es la unidad con la que se despacha. */
 function porPedido(filas){

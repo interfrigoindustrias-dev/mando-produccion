@@ -221,3 +221,83 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
 /* Una linea anulada sigue estando, pero ya no cuenta para nada. */
 #tb tr.anu{ opacity:.5 }
 #tb tr.anu .op{ text-decoration:line-through }
+
+/* ============================== TELÉFONO ==============================
+   Paneles tiene dos pantallas que en un movil no caben de ninguna manera si se
+   dejan como estan: la tabla de lineas de la ficha nueva —once columnas— y la
+   tabla de Control, con diecinueve. Se resuelven distinto a proposito.
+
+   La ficha se APILA: se esta escribiendo, y escribir en una tabla que se
+   desplaza de lado obliga a perder de vista lo que se escribe.
+   Control se DESPLAZA, con la OP anclada: se esta consultando, y ahi lo que
+   hace falta es no perder de vista de que linea es cada dato.               */
+@media (max-width: 820px){
+
+  /* ---------- ficha nueva: cada línea, una tarjeta ---------- */
+  table.lineas thead{ display:none }
+  table.lineas, table.lineas tbody, table.lineas tr, table.lineas td{ display:block }
+  table.lineas tr{
+    position:relative;
+    border:1px solid var(--line); border-radius:var(--r2);
+    padding:12px 12px 10px; margin-bottom:12px; background:var(--bg);
+  }
+  table.lineas td{ border:0; padding:0 0 9px }
+  table.lineas td:last-child{ padding-bottom:0 }
+  /* Sin la cabecera, cada campo tiene que decir lo que es. */
+  table.lineas td::before{
+    content:attr(data-et);
+    display:block; margin-bottom:4px;
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--tx2); font-weight:700;
+  }
+  /* El número de línea y el botón de quitar van en la esquina, no en su fila. */
+  table.lineas .ln{
+    position:absolute; top:10px; right:52px; padding:0;
+    font-size:13px; color:var(--tx2);
+  }
+  table.lineas .ln::before{ content:"Línea "; display:inline; margin:0; font-size:13px }
+  table.lineas td.quitar{
+    position:absolute; top:6px; right:8px; padding:0; width:auto;
+  }
+  table.lineas td.quitar::before{ content:none }
+  /* Cantidad, largo y las dos cifras caben de dos en dos. */
+  table.lineas td:nth-child(3), table.lineas td:nth-child(4),
+  table.lineas td:nth-child(9), table.lineas td:nth-child(10){
+    display:inline-block; width:48%; vertical-align:top;
+  }
+  table.lineas td:nth-child(4), table.lineas td:nth-child(10){ margin-left:4% }
+  table.lineas td.num{ text-align:left; width:48% }
+  table.lineas .inp.num{ text-align:left; max-width:none }
+  table.lineas th:nth-child(3), table.lineas td:nth-child(3),
+  table.lineas th:nth-child(4), table.lineas td:nth-child(4){ width:48% }
+
+  /* ---------- control: la OP siempre a la vista ---------- */
+  #tb .stick, #v-control thead .stick{ position:sticky; z-index:2; background:var(--bg2) }
+  #v-control table{ font-size:12.5px }
+
+  /* ---------- planta ---------- */
+  /* Tres cifras en una fila no caben en 375 px: que puedan partirse. */
+  .pc-cifras{ gap:14px 18px }
+  .pc-cifras span{ white-space:normal }
+  .pc-cifras b{ font-size:18px }
+  .pc-procs{ gap:8px }
+  .pc-procs .pb{ min-width:0; flex:1 1 30% }
+  .pc-pie{ flex-wrap:wrap }
+  .pc-pie .pterm{ width:100%; margin-top:4px }
+
+  /* ---------- almacén ---------- */
+  /* La tabla de un pedido tiene nueve columnas: se desplaza dentro de su caja
+     en vez de estirar la tarjeta y con ella la página entera. */
+  .pedido table.mini{ display:block; overflow-x:auto; white-space:nowrap }
+  .pedido-top{ gap:8px }
+  .pedido-top .grow{ display:none }
+  .pedido-top .btn{ width:100%; margin-top:4px }
+
+  /* ---------- resumen ---------- */
+  .entrega-num{ width:100%; min-width:0 }
+  .dash-3{ grid-template-columns:1fr }
+
+  /* ---------- fichas ---------- */
+  .mod.ancha{ width:100%; padding:14px }
+  .det-hist{ max-height:none }
+}
