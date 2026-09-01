@@ -1,11 +1,11 @@
 # Graph Report - mando-produccion  (2026-09-01)
 
 ## Corpus Check
-- 76 files · ~329,005 words
+- 76 files · ~330,286 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 440 nodes · 640 edges · 43 communities (38 shown, 5 thin omitted)
+- 443 nodes · 646 edges · 43 communities (38 shown, 5 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -15,10 +15,10 @@
 - paneles-control.js
 - informes.js
 - Control de OPs
-- Impresion
 - humo.js
-- Constantes del modelo
 - paneles-ficha.js
+- Constantes del modelo
+- Impresion
 - Vista de planta
 - Ayudantes de tableros
 - Cliente de Google Sheets
@@ -31,20 +31,20 @@
 - Historial de cambios
 - Configuracion del usuario
 - poliuretano.js
+- secuencia.js
 - paneles-auto.js
 - paneles-planta.js
 - paneles-resumen.js
-- secuencia.js
 - Autenticacion con Google
 - avisos.js
 - Ficha de la puerta
 - meta.js
+- modelo.js
 - comprobar_ids.py
 - Navegacion y arranque
 - Carga y refresco
 - formatos.js
 - Instalacion como app
-- modelo.js
 - paneles-almacen.js
 - modulo.js
 - Despliegue
@@ -98,21 +98,21 @@ Nodes (15): abrirInformes(), bloqueColumnas(), bloqueCondiciones(), columnasDe()
 Cohesion: 0.23
 Nodes (14): editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis(), medidaDe(), paintRow() (+6 more)
 
-### Community 5 - "Impresion"
-Cohesion: 0.18
-Nodes (14): cabeceraCarta(), cartaHTML(), firmaCarta(), materialesCarta(), medidasCarta(), MESES_CARTA, mesFin(), notasCarta() (+6 more)
-
-### Community 6 - "humo.js"
+### Community 5 - "humo.js"
 Cohesion: 0.16
 Nodes (14): arrancar(), CAB_PANEL, celdasDe(), colNum(), DATOS, escribir(), ESCRITURAS, fs (+6 more)
+
+### Community 6 - "paneles-ficha.js"
+Cohesion: 0.22
+Nodes (12): anadirLinea(), CAMPOS_EDITABLES, celdaDe(), hintOp(), initForm(), lineaHTML(), llenarProductos(), nextOp() (+4 more)
 
 ### Community 7 - "Constantes del modelo"
 Cohesion: 0.15
 Nodes (10): CFG, CON_RIEL, DESPACHOS, LOG_HEAD, PRIORIDADES, ROWS, SEL, urgente() (+2 more)
 
-### Community 8 - "paneles-ficha.js"
-Cohesion: 0.25
-Nodes (11): anadirLinea(), CAMPOS_EDITABLES, celdaDe(), hintOp(), initForm(), lineaHTML(), nextOp(), nombreOp() (+3 more)
+### Community 8 - "Impresion"
+Cohesion: 0.21
+Nodes (12): cabeceraCarta(), cartaHTML(), firmaCarta(), materialesCarta(), medidasCarta(), notasCarta(), opcionesCarta(), piezaCarta() (+4 more)
 
 ### Community 9 - "Vista de planta"
 Cohesion: 0.26
@@ -162,21 +162,21 @@ Nodes (5): aplicarCfgDeEnlace(), CAMPOS_EMPRESA, loadCfg(), parseSheetId(), save
 Cohesion: 0.31
 Nodes (7): consumoPor(), kgPoliuretano(), mesDe(), MESES_ES, nombreMes(), resumenPoliuretano(), semanaDe()
 
-### Community 21 - "paneles-auto.js"
+### Community 21 - "secuencia.js"
+Cohesion: 0.33
+Nodes (9): desdeCuandoEnSuNivel(), diasEnCola(), espesorDe(), espesorMmDe(), m2De(), marcar(), ORDEN_PRIO, prioridadQueTocaria() (+1 more)
+
+### Community 22 - "paneles-auto.js"
 Cohesion: 0.42
 Nodes (8): anuladaP(), autoPrioridades(), col(), despachadaP(), ESTADO, estadoDe(), ponerEstado(), tocarFechaProceso()
 
-### Community 22 - "paneles-planta.js"
+### Community 23 - "paneles-planta.js"
 Cohesion: 0.33
 Nodes (5): etiquetaPrio(), pintarResumenPlanta(), plantaPendientes(), renderPlanta(), textoEspera()
 
-### Community 23 - "paneles-resumen.js"
+### Community 24 - "paneles-resumen.js"
 Cohesion: 0.42
 Nodes (8): diasDeFabricacion(), fabricadas(), fechaFin(), mediana(), percentil(), pintarEntrega(), renderPoliuretano(), renderResumen()
-
-### Community 24 - "secuencia.js"
-Cohesion: 0.36
-Nodes (8): desdeCuandoEnSuNivel(), diasEnCola(), espesorDe(), m2De(), marcar(), ORDEN_PRIO, prioridadQueTocaria(), secuenciaPaneles()
 
 ### Community 25 - "Autenticacion con Google"
 Cohesion: 0.43
@@ -194,32 +194,32 @@ Nodes (4): dStk, hintOp(), initForm(), targetRows()
 Cohesion: 0.29
 Nodes (3): META, META_DEF, META_HEAD
 
-### Community 29 - "comprobar_ids.py"
+### Community 29 - "modelo.js"
+Cohesion: 0.38
+Nodes (6): espesorMetros(), espesorMm(), etiquetaEspesor(), MODELO_PANELES, MODELO_PUERTAS, MODELOS_DATOS
+
+### Community 30 - "comprobar_ids.py"
 Cohesion: 0.52
 Nodes (6): ids_de(), leer(), main(), protegido_en_linea(), El propio renglon comprueba antes de usar., scripts_de()
 
-### Community 30 - "Navegacion y arranque"
+### Community 31 - "Navegacion y arranque"
 Cohesion: 0.40
 Nodes (3): enterApp(), pintarQuienSoy(), VIEWS
 
-### Community 31 - "Carga y refresco"
+### Community 32 - "Carga y refresco"
 Cohesion: 0.60
 Nodes (5): refresh(), renderDashVisible(), restartPoll(), setSync(), stopPoll()
 
-### Community 33 - "Instalacion como app"
+### Community 34 - "Instalacion como app"
 Cohesion: 0.47
 Nodes (4): abrirInstalar(), comprobarVersion(), forzarActualizacion(), mostrarBoton()
-
-### Community 34 - "modelo.js"
-Cohesion: 0.40
-Nodes (3): MODELO_PANELES, MODELO_PUERTAS, MODELOS_DATOS
 
 ### Community 35 - "paneles-almacen.js"
 Cohesion: 0.83
 Nodes (3): enAlmacen(), porPedido(), renderAlmacen()
 
 ## Knowledge Gaps
-- **76 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+71 more)
+- **75 isolated node(s):** `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS`, `VIEWS`, `LOG` (+70 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -235,7 +235,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 2 inferred relationships involving `renderAlmacen()` (e.g. with `enProduccion()` and `separada()`) actually correct?**
   _`renderAlmacen()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `deploy.config.example.sh script`, `deploy.sh script`, `NUMERICOS` to the rest of the system?**
-  _76 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _75 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
   _Cohesion score 0.08961593172119488 - nodes in this community are weakly interconnected._
 - **Should `Utilidades y fechas` be split into smaller, more focused modules?**
