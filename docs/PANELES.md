@@ -153,6 +153,17 @@ Enseña la cola en el orden que calcula `secuencia.js` y **anuncia cada cambio d
 montaje** en el sitio exacto donde toca hacerlo, cerrando la tanda anterior con
 los metros que se hicieron sin tocar la máquina.
 
+Cada tarjeta pone en grande las cuatro cifras con las que se trabaja de verdad:
+**cuántos paneles**, **de qué largo**, **kg de poliuretano por panel** y **kg en
+total**. Con esas cuatro se prepara la máquina y se pide el material. Los metros
+cuadrados, los acumulados sin cambiar montaje y la espera bajan a una línea
+menuda: hacen falta para entender la cola, pero no son lo que se busca al mirar.
+
+El total del poliuretano va en un recuadro. Se parece demasiado al de un panel
+suelto como para dejarlos iguales, y el realce es un fondo y no un color: el
+azul del tema no significa nada en un módulo verde, y el verde ya está cogido
+—es «lista para terminar»—.
+
 `Terminar` es lo único que planta decide sobre el estado, y es lo que hace que
 la línea salga de la cola y aparezca en almacén. Un desplegable con todos los
 estados invitaría a despachar sin pasar por almacén.

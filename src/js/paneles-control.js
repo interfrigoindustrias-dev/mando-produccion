@@ -12,6 +12,8 @@ const FSEL = ["f-prog","f-estado","f-prio","f-prod","f-ranu","f-cara","f-cli"];
 
 /** Kilos de poliuretano de la linea; los pone la hoja en K y L. */
 const kgDe = c => (typeof kgPoliuretano === "function" ? kgPoliuretano(c) : 0);
+/** Kilos por panel suelto. */
+const kgUnidDe = c => (typeof kgUnidadPoliuretano === "function" ? kgUnidadPoliuretano(c) : 0);
 
 function filtered(){
   const g = id => { const e = $("#"+id); return e ? e.value : ""; };

@@ -108,16 +108,24 @@ function renderPlanta(){
         </div>
         <div class="pc-cli" data-f="cli">${esc(c[C.CLI]??"")}</div>
         <div class="pc-met" data-f="met">${esc(c[C.PROD]??"")} ·
-          ${n0(c[C.CANT])} panel(es) de ${n2(c[C.LARGO])} m ·
           ${esc(c[C.RANU]??"")} · ${esc(c[C.CARA_A]??"")}/${esc(c[C.CARA_B]??"")}</div>
       </div>
 
-      <div class="pc-cifras">
-        <span title="Metros cuadrados de esta línea"><b>${n2(x.m2)}</b><i>m² de la línea</i></span>
-        <span title="Metros acumulados sin cambiar el montaje de la máquina">
-          <b>${n2(x.acumulado)}</b><i>m² sin cambiar montaje</i></span>
-        <span title="Lo que lleva esperando en la cola">
-          <b>${textoEspera(x.dias)}</b><i>esperando</i></span>
+      <div class="pc-datos">
+        <div class="pc-nums">
+          <span title="Paneles de esta línea"><b>${n0(c[C.CANT])}</b><i>paneles</i></span>
+          <span title="Largo de cada panel"><b>${n2(c[C.LARGO])}</b><i>m de largo</i></span>
+          <span title="Poliuretano de un panel">
+            <b>${n2(kgUnidDe(c))}</b><i>kg PU · panel</i></span>
+          <span class="total" title="Poliuretano de toda la línea">
+            <b>${n2(kgDe(c))}</b><i>kg PU en total</i></span>
+        </div>
+        <div class="pc-extra">
+          <span title="Metros cuadrados de esta línea">${n2(x.m2)} m²</span>
+          <span title="Metros acumulados sin cambiar el montaje de la máquina">
+            ${n2(x.acumulado)} m² sin cambiar montaje</span>
+          <span title="Lo que lleva esperando en la cola">esperando ${textoEspera(x.dias)}</span>
+        </div>
       </div>
 
       <div class="pc-procs">${botones}</div>

@@ -84,37 +84,59 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
    repartidas por el centro y no pegadas a los botones. */
 .pcard{
   display:grid; gap:14px 24px; align-items:center;
-  grid-template-columns:minmax(260px,1.1fr) minmax(300px,1fr) auto auto;
+  grid-template-columns:minmax(240px,.9fr) minmax(430px,1.15fr) auto auto;
 }
 .pcard > *{ min-width:0 }
 
 .pc-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
 .pc-n{
-  display:grid; place-items:center; min-width:28px; height:28px; padding:0 7px;
-  border-radius:999px; background:color-mix(in srgb,var(--tone) 22%,var(--bg2));
-  color:var(--tx); font-size:13px; font-weight:800; font-variant-numeric:tabular-nums;
+  display:grid; place-items:center; min-width:30px; height:30px; padding:0 8px;
+  border-radius:999px; background:color-mix(in srgb,var(--tone) 30%,var(--bg2));
+  color:var(--tx); font-size:14px; font-weight:800; font-variant-numeric:tabular-nums;
 }
-.pcard .op{ font-size:20px; font-weight:800 }
+.pcard .op{ font-size:26px; font-weight:800; letter-spacing:-.01em }
 .pc-esp{
   padding:3px 10px; border-radius:999px;
   background:color-mix(in srgb,var(--tone) 18%,var(--bg2));
   border:1px solid color-mix(in srgb,var(--tone) 40%,transparent);
   color:var(--tx); font-weight:800; font-size:13px;
 }
-.pc-cli{ font-weight:700; font-size:16px; margin-top:7px }
-.pc-met{ color:var(--tx2); font-size:13.5px; margin-top:3px }
+/* El cliente es con lo que se reconoce el trabajo en el taller: se dice, no se
+   susurra. Debajo, la especificacion, que se consulta pero no se busca. */
+.pc-cli{ font-weight:800; font-size:19px; margin-top:9px; line-height:1.15 }
+.pc-met{ color:var(--tx2); font-size:13.5px; margin-top:5px }
 
-/* Las cifras son con lo que se decide: se leen de un vistazo, no en una linea
-   de texto corrido. */
-.pc-cifras{ display:flex; gap:26px; flex-wrap:wrap; justify-content:space-between }
-.pc-cifras span{ display:flex; flex-direction:column; gap:2px; white-space:nowrap }
-.pc-cifras b{
-  font-size:21px; font-weight:800; line-height:1.1;
+/* LO QUE DE VERDAD SE MIRA AQUI: cuantos paneles, de que largo, y cuanto
+   poliuretano se va en uno y en toda la linea. Con eso se prepara la maquina y
+   se pide el material, asi que va en grande y en primera fila.
+
+   Los metros cuadrados y la espera bajan a una linea menuda: hacen falta para
+   entender la cola, pero no son lo que se busca al mirar la tarjeta. */
+.pc-datos{ display:flex; flex-direction:column; gap:9px }
+.pc-nums{ display:flex; gap:28px; flex-wrap:wrap }
+.pc-nums span{ display:flex; flex-direction:column; gap:3px; white-space:nowrap }
+.pc-nums b{
+  font-size:26px; font-weight:800; line-height:1;
   color:var(--tx); font-variant-numeric:tabular-nums;
 }
-.pc-cifras i{
+.pc-nums i{
   font-style:normal; font-size:10.5px; text-transform:uppercase;
   letter-spacing:.06em; color:var(--tx3);
+}
+/* El total del poliuretano es la cifra con la que se pide material, y se
+   parece demasiado a la de un panel suelto como para dejarlas iguales. Se
+   realza con un fondo, no con un color: el azul del tema no significa nada en
+   un modulo verde, y el verde ya esta cogido —es «lista para terminar»—. */
+.pc-nums .total{
+  padding:5px 12px; margin:-5px 0; border-radius:var(--r);
+  background:var(--bg3); border:1px solid var(--line);
+}
+.pc-nums .total i{ color:var(--tx2) }
+
+.pc-extra{
+  display:flex; gap:16px; flex-wrap:wrap;
+  font-size:11.5px; color:var(--tx3);
+  border-top:1px dashed var(--line); padding-top:8px;
 }
 
 .pc-procs{ display:flex; gap:10px; flex-wrap:wrap }
@@ -130,17 +152,17 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
    una columna con media pantalla vacia al lado. */
 @media (max-width:1400px){
   .pcard{ grid-template-columns:minmax(220px,1fr) auto }
-  .pc-cifras{ justify-content:flex-start }
+  .pc-nums{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 22px }
   .pc-procs{ justify-self:start }
   .pc-pie{ justify-self:end }
 }
 @media (max-width:1100px){
   .pcard{ grid-template-columns:1fr; gap:12px }
-  .pc-cifras{ gap:20px }
+  .pc-nums{ gap:20px }
   /* Se deshace el justify-self del corte anterior: con una sola columna, lo
      que hacia era encoger cada bloque a su contenido y dejar la tarjeta medio
      vacia, justo lo contrario de lo que se busca al apilar. */
-  .pc-procs, .pc-pie{ justify-self:stretch }
+  .pc-datos, .pc-procs, .pc-pie{ justify-self:stretch }
   .pc-procs .pb{ flex:1 1 0 }
   .pc-pie{ flex-direction:row; align-items:center; min-width:0 }
   .pc-pie .pbar{ flex:1; width:auto }
@@ -285,10 +307,13 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
   #v-control table{ font-size:12.5px }
 
   /* ---------- planta ---------- */
-  /* Tres cifras en una fila no caben en 375 px: que puedan partirse. */
-  .pc-cifras{ gap:14px 18px }
-  .pc-cifras span{ white-space:normal }
-  .pc-cifras b{ font-size:18px }
+  /* Cuatro cifras en una fila no caben en 375 px: dos y dos. */
+  .pc-nums{ display:grid; grid-template-columns:1fr 1fr; gap:12px 14px }
+  .pc-nums span{ white-space:normal }
+  .pc-nums b{ font-size:21px }
+  .pc-extra{ gap:10px; font-size:11px }
+  .pcard .op{ font-size:23px }
+  .pc-cli{ font-size:17px }
   .pc-procs{ gap:8px }
   .pc-procs .pb{ min-width:0; flex:1 1 0; padding-inline:4px; font-size:12px }
   .pc-pie{ flex-wrap:wrap }

@@ -21,6 +21,15 @@ function kgPoliuretano(c){
   return calc ? calc.total : 0;
 }
 
+/** Kilos por panel. Igual que el total: manda lo que dice la hoja en K, y solo
+ *  se calcula cuando esa celda esta vacia. */
+function kgUnidadPoliuretano(c){
+  const enLaHoja = num(c[C.POLI_UNI]);
+  if(enLaHoja !== null && enLaHoja > 0) return enLaHoja;
+  const calc = MODELO.poliuretano ? MODELO.poliuretano(c) : null;
+  return calc ? calc.unidad : 0;
+}
+
 /** Diferencias entre lo que trae la hoja y lo que da la formula.
  *  Sirve para detectar que una de las dos se quedo atras. */
 function revisarPoliuretano(filas, toleranciaPct = 1){

@@ -362,6 +362,19 @@ function comprueba(nombre, cond, detalle){
   const cola = $$("#p-lista .pcard").length;
   comprueba("planta ordena la cola", cola > 0, "tarjetas: " + cola);
   comprueba("planta avisa de los cambios de montaje", $$("#p-lista .setup").length > 0);
+  /* Lo que se mira en la cola: cuantos paneles, de que largo, y el poliuretano
+     de uno y de la linea entera. Con eso se prepara la maquina y se pide el
+     material, asi que si algun dia desaparece de la tarjeta hay que enterarse. */
+  const etiquetas = $$("#p-lista .pc-nums i").map(e=>e.textContent.trim().toLowerCase());
+  comprueba("la tarjeta enseña paneles, largo y los dos poliuretanos",
+    ["paneles","m de largo","kg pu · panel","kg pu en total"]
+      .every(t=>etiquetas.includes(t)),
+    "etiquetas: " + [...new Set(etiquetas)].join(" | "));
+  const primera = $("#p-lista .pc-nums");
+  comprueba("y los cuatro traen un número",
+    primera && [...primera.querySelectorAll("b")].length === 4 &&
+    [...primera.querySelectorAll("b")].every(b=>/\d/.test(b.textContent)),
+    primera ? [...primera.querySelectorAll("b")].map(b=>b.textContent.trim()).join(" · ") : "");
   comprueba("resumen calcula el poliuretano", $$("#r-poli-mes tr").length > 1);
   comprueba("resumen propone un plazo de entrega",
     $("#r-entrega") && /\d/.test($("#r-entrega").textContent));
