@@ -14,7 +14,6 @@
  *  es trabajo de planta y tenerlo a la vista solo estorba. */
 function plantaPendientes(){
   const q = $("#p-q").value.trim().toLowerCase();
-  const fp = $("#p-prio").value, fe = $("#p-esp").value;
 
   /* TODO lo que no esta terminado. Antes se escondia lo que tuviera fecha
      posterior a hoy; se quita, porque escondia trabajo real y nadie sabia que
@@ -28,8 +27,8 @@ function plantaPendientes(){
        manda la de por buena. */
     if(estadoDe(c) === ESTADO.TERMINADO) return false;
 
-    if(fp && String(c[C.PRIO]??"").trim().toUpperCase() !== fp) return false;
-    if(fe && espesorDe(c) !== fe) return false;
+    if(!filtroPasa("p-prio", String(c[C.PRIO]??"").trim().toUpperCase())) return false;
+    if(!filtroPasa("p-esp", espesorDe(c))) return false;
     if(q){
       const hay = [c[C.OP], c[C.CLI], c[C.PROD]].join(" ").toLowerCase();
       if(!q.split(/\s+/).every(t=>hay.includes(t))) return false;
@@ -241,19 +240,4 @@ $("#p-lista").addEventListener("click", async ev=>{
   }catch(e){ /* ponerEstado ya lo dijo y deshizo */ }
 });
 
-["p-q","p-prio","p-esp"].forEach(id=>{
-  const e = $("#"+id); if(!e) return;
-  e.addEventListener("input", ()=>{ plantaDibujada=""; renderPlanta(); });
-  e.addEventListener("change", ()=>{ plantaDibujada=""; renderPlanta(); });
-});
 
-/** El filtro de espesor se llena con los que de verdad hay en cola. */
-function llenarEspesoresPlanta(){
-  const sel = $("#p-esp"); if(!sel) return;
-  const vals = [...new Set(activas().map(({c})=>espesorDe(c)).filter(Boolean))]
-    .sort((a,b)=>String(a).localeCompare(String(b),"es",{numeric:true}));
-  const cur = sel.value;
-  sel.innerHTML = `<option value="">Todos</option>` +
-    vals.map(v=>`<option>${esc(v)}</option>`).join("");
-  sel.value = [...sel.options].some(o=>o.value===cur) ? cur : "";
-}

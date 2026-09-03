@@ -127,6 +127,8 @@ function renderResumen(){
     ]));
 
   renderPoliuretano(todas);
+  renderLamina(todas);
+  renderPoliPendiente(todas);
 }
 
 /** Lo que se le puede prometer hoy a un cliente que llame preguntando. */
@@ -222,3 +224,89 @@ function renderPoliuretano(todas){
   const e = $("#"+id); if(!e) return;
   e.addEventListener("change", renderResumen);
 });
+
+/* ============================== LÁMINA ==============================
+   Las columnas V y W traen los metros lineales de lamina de cada cara, y cada
+   cara tiene su acabado: la V se consume en el acabado de la cara A y la W en
+   el de la cara B. Agrupando por acabado sale lo que de verdad se pregunta al
+   comprar: de cada lamina, cuanta se ha gastado ya y cuanta hace falta para lo
+   que esta en produccion o pendiente.                                        */
+
+/** Metros lineales de una cara. Manda la hoja; si esa celda esta vacia —una
+ *  fila cuya formula no se extendio— se calcula, que es cantidad por largo. */
+function metrosLamina(c, campoMetros){
+  const enLaHoja = num(c[C[campoMetros]]);
+  if(enLaHoja !== null && enLaHoja > 0) return enLaHoja;
+  return (num(c[C.CANT]) || 0) * (num(c[C.LARGO]) || 0);
+}
+
+/** Por acabado: lo ya fabricado y lo que queda por fabricar. */
+function consumoLamina(filas){
+  const acc = new Map();
+  for(const {c} of filas){
+    if(anuladaP(c)) continue;
+    const hecha = progreso(c).pct >= 1;
+    for(const {cara, metros} of (MODELO.laminas || [])){
+      const tipo = String(c[C[cara]] ?? "").trim();
+      if(!tipo) continue;
+      const m = metrosLamina(c, metros);
+      if(!m) continue;
+      const e = acc.get(tipo) || {consumida:0, pendiente:0, lineas:0};
+      if(hecha) e.consumida += m; else e.pendiente += m;
+      e.lineas++;
+      acc.set(tipo, e);
+    }
+  }
+  return [...acc.entries()]
+    .map(([tipo, e])=>({tipo, ...e, total: e.consumida + e.pendiente}))
+    .sort((a,b)=>b.total - a.total);
+}
+
+function renderLamina(todas){
+  const lam = consumoLamina(todas);
+  const suma = f => lam.reduce((s,x)=>s+f(x), 0);
+
+  kpiCards("#r-lam-kpis", [
+    ["Tipos de lámina", lam.length, "Acabados distintos con consumo registrado"],
+    ["m lineales consumidos", n2(suma(x=>x.consumida)), "De lo ya fabricado"],
+    ["m lineales por consumir", n2(suma(x=>x.pendiente)),
+     "Lo que hace falta para lo que está en producción o pendiente", suma(x=>x.pendiente) > 0],
+    ["m lineales en total", n2(suma(x=>x.total)), ""]
+  ]);
+
+  tablaMini("#r-lam-tabla",
+    ["Lámina","Consumida (m)","Por consumir (m)","Total (m)","Líneas"],
+    lam.map(x=>[esc(x.tipo), n2(x.consumida), n2(x.pendiente), n2(x.total), x.lineas]),
+    // La que aún hay que comprar se marca: es la que interesa al pedir.
+    lam.map(x=>x.pendiente > 0 ? "pend" : ""));
+}
+
+/** Poliuretano de lo que sigue abierto: es lo que hay que tener para poder
+ *  fabricar lo comprometido, y no se deduce del total ya gastado. */
+function renderPoliPendiente(todas){
+  const abiertas = todas.filter(({c})=>progreso(c).pct < 1 && !despachadaP(c));
+  const porProducto = new Map();
+  abiertas.forEach(({c})=>{
+    const k = String(c[C.PROD] ?? "").trim() || "sin producto";
+    const e = porProducto.get(k) || {kg:0, m2:0, paneles:0, lineas:0};
+    e.kg += kgDe(c);
+    e.m2 += MODELO.metros(c) || 0;
+    e.paneles += num(c[C.CANT]) || 0;
+    e.lineas++;
+    porProducto.set(k, e);
+  });
+  const total = [...porProducto.values()].reduce((s,e)=>s+e.kg, 0);
+
+  kpiCards("#r-pu-pend-kpis", [
+    ["kg de poliuretano por consumir", n2(total),
+     "Lo que hace falta para fabricar todo lo que está en producción o pendiente", total > 0],
+    ["Líneas abiertas", abiertas.length, ""],
+    ["m² por fabricar", n2([...porProducto.values()].reduce((s,e)=>s+e.m2, 0)), ""],
+    ["Paneles por fabricar", n0([...porProducto.values()].reduce((s,e)=>s+e.paneles, 0)), ""]
+  ]);
+
+  tablaMini("#r-pu-pend-tabla",
+    ["Producto","Líneas","Paneles","m²","kg de poliuretano"],
+    [...porProducto.entries()].sort((a,b)=>b[1].kg - a[1].kg)
+      .map(([k,e])=>[esc(k), e.lineas, n0(e.paneles), n2(e.m2), n2(e.kg)]));
+}

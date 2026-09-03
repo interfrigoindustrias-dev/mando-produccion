@@ -7,90 +7,105 @@
    y kilos de poliuretano, no puntos.                                        */
 "use strict";
 
-/* ------------------------------ filtros ------------------------------ */
-const FSEL = ["f-prog","f-estado","f-prio","f-prod","f-ranu","f-cara","f-cli"];
+/* ------------------------------ filtros ------------------------------
+   Todos admiten varios valores a la vez: «PANEL 2"» y «PISO 2"» son el mismo
+   espesor y se preparan juntos, asi que poder verlos juntos no es un capricho.
+   El componente esta en paneles-filtros.js. */
 
 /** Kilos de poliuretano de la linea; los pone la hoja en K y L. */
 const kgDe = c => (typeof kgPoliuretano === "function" ? kgPoliuretano(c) : 0);
 /** Kilos por panel suelto. */
 const kgUnidDe = c => (typeof kgUnidadPoliuretano === "function" ? kgUnidadPoliuretano(c) : 0);
 
+const PROGRESOS = [["Sin iniciar (0%)","pend"], ["En proceso","wip"],
+                   ["Fabricadas (100%)","done"], ["Abiertas (<100%)","open"]];
+
 function filtered(){
-  const g = id => { const e = $("#"+id); return e ? e.value : ""; };
   const q = $("#f-q").value.trim().toLowerCase();
-  const eq = (v,f) => !f || String(v??"").trim() === f;
   return ROWS.filter(({c})=>{
     if(!rowActive(c)) return false;
-    if(!eq(c[C.PROD], g("f-prod"))) return false;
-    if(!eq(c[C.RANU], g("f-ranu"))) return false;
-    if(!eq(c[C.CLI],  g("f-cli")))  return false;
-
+    if(!filtroPasa("f-prod", c[C.PROD])) return false;
+    if(!filtroPasa("f-ranu", c[C.RANU])) return false;
+    if(!filtroPasa("f-cli",  c[C.CLI]))  return false;
+    if(!filtroPasa("f-prio", String(c[C.PRIO]??"").trim().toUpperCase() || "SIN PRIORIDAD")) return false;
+    if(!filtroPasa("f-estado", estadoDe(c) || "SIN ESTADO")) return false;
     // Una cara u otra: se busca el acabado, sin importar de que lado va.
-    const fcara = g("f-cara");
-    if(fcara && ![c[C.CARA_A], c[C.CARA_B]].some(v=>String(v??"").trim()===fcara)) return false;
+    if(!filtroPasaAlguno("f-cara", [c[C.CARA_A], c[C.CARA_B]])) return false;
 
-    const fprio = g("f-prio");
-    if(fprio === "__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
-    else if(fprio && String(c[C.PRIO]??"").trim().toUpperCase() !== fprio) return false;
-
-    const fest = g("f-estado");
-    if(fest === "__none"){ if(estadoDe(c)) return false; }
-    else if(fest && estadoDe(c) !== fest) return false;
-
-    const fprog = g("f-prog");
-    if(fprog){
+    const prog = FILTROS.get("f-prog");
+    if(prog && prog.size){
       const p = progreso(c).pct;
-      if(fprog==="pend" && p!==0) return false;
-      if(fprog==="wip"  && !(p>0 && p<1)) return false;
-      if(fprog==="done" && p<1) return false;
-      if(fprog==="open" && p>=1) return false;
+      const cae = [p===0 && "pend", p>0 && p<1 && "wip", p>=1 && "done", p<1 && "open"]
+        .filter(Boolean);
+      const nombres = PROGRESOS.filter(([,k])=>cae.includes(k)).map(([n])=>n);
+      if(!nombres.some(n=>prog.has(n))) return false;
     }
     if(q){
       const hay = [c[C.OP],c[C.CLI],c[C.PROD],c[C.RANU],c[C.CARA_A],c[C.CARA_B],
-                   fmtDate(c[C.FECHA])].join(" ").toLowerCase();
+                   c[C.COTIZ],c[C.OC],fmtDate(c[C.FECHA])].join(" ").toLowerCase();
       if(!q.split(/\s+/).every(t=>hay.includes(t))) return false;
     }
     return true;
   });
 }
 function filtrosActivos(){
-  const et = {"f-prog":"progreso","f-estado":"estado","f-prio":"prioridad",
-              "f-prod":"producto","f-ranu":"ranurado","f-cara":"cara","f-cli":"cliente"};
   const out = [];
   const q = $("#f-q").value.trim();
   if(q) out.push("busca: " + q);
-  for(const id of FSEL){
-    const el = $("#"+id);
-    if(!el || !el.value) continue;
-    out.push(et[id] + ": " + el.options[el.selectedIndex].text);
+  for(const [id, def] of DEF_FILTROS){
+    if(def.contenedor !== "#f-filtros") continue;
+    const sel = filtroSel(id);
+    if(sel.length) out.push(`${def.etiqueta}: ${sel.join(", ")}`);
   }
   return out;
 }
 const NUMORD = (a,b)=>{ const x=parseFloat(a), y=parseFloat(b);
   return (!isNaN(x)&&!isNaN(y)) ? x-y : String(a).localeCompare(String(b),"es",{numeric:true}); };
 
+/** Valores que de verdad hay en la hoja para una columna. */
+const valoresDe = f => () => [...new Set(ROWS.filter(r=>rowActive(r.c))
+  .map(r=>String(f(r.c)??"").trim()).filter(Boolean))].sort(NUMORD);
+
+grupoFiltros({filtros:"#f-filtros", fichas:"#f-fichas", boton:"#f-abrir", busca:"#f-q"});
+grupoFiltros({filtros:"#p-filtros", fichas:"#p-fichas", boton:"#p-abrir", busca:"#p-q"});
+grupoFiltros({filtros:"#a-filtros", fichas:"#a-fichas", boton:"#a-abrir", busca:"#a-q"});
+
+/** Los desplegables se declaran una vez; sus valores se piden al abrirlos, asi
+ *  que siguen a la hoja sin tener que redeclararlos. */
 function fillLists(){
-  const A = ROWS.filter(r=>rowActive(r.c));
-  const uniq = f => [...new Set(A.map(r=>String(f(r.c)??"").trim()).filter(Boolean))].sort(NUMORD);
-  const fill = (sel, vals, todos) => {
-    if(!sel) return;                      // el filtro puede no estar en esta pagina
-    const cur = sel.value;
-    sel.innerHTML = `<option value="">${todos}</option>` +
-      vals.map(v=>`<option>${esc(v)}</option>`).join("");
-    sel.value = [...sel.options].some(o=>o.value===cur) ? cur : "";
-  };
-  // Los productos salen del modelo y no solo de los datos: asi aparecen todos
-  // los que se pueden pedir, no unicamente los que ya se pidieron alguna vez.
-  const productos = [...new Set([...(MODELO.listas.PRODUCTOS||[]), ...uniq(c=>c[C.PROD])])].sort(NUMORD);
-  const caras = [...new Set([...uniq(c=>c[C.CARA_A]), ...uniq(c=>c[C.CARA_B])])].sort(NUMORD);
-  fill($("#f-prod"), productos,          "Todos");
-  fill($("#f-ranu"), uniq(c=>c[C.RANU]), "Todos");
-  fill($("#f-cara"), caras,              "Todas");
-  fill($("#f-cli"),  uniq(c=>c[C.CLI]),  "Todos");
-  fill($("#a-cli"),  uniq(c=>c[C.CLI]),  "Todos");
-  fill($("#a-prod"), productos,          "Todos");
+  const productos = () => [...new Set([...(MODELO.listas.PRODUCTOS || []),
+    ...valoresDe(c=>c[C.PROD])()])].sort(NUMORD);
+  const caras = () => [...new Set([...(MODELO.listas.CARAS || []),
+    ...valoresDe(c=>c[C.CARA_A])(), ...valoresDe(c=>c[C.CARA_B])()])].sort(NUMORD);
+
+  definirFiltro("#f-filtros", "f-prog",   "Progreso",  PROGRESOS.map(([n])=>n));
+  definirFiltro("#f-filtros", "f-estado", "Estado",
+    () => [...(MODELO.listas.ESTADOS || []), "SIN ESTADO"]);
+  definirFiltro("#f-filtros", "f-prio",   "Prioridad",
+    () => [...PRIORIDADES, "SIN PRIORIDAD"]);
+  definirFiltro("#f-filtros", "f-prod",   "Producto",  productos);
+  definirFiltro("#f-filtros", "f-ranu",   "Ranurado",
+    () => [...new Set([...(MODELO.listas.RANURADOS || []), ...valoresDe(c=>c[C.RANU])()])]);
+  definirFiltro("#f-filtros", "f-cara",   "Acabado",   caras);
+  definirFiltro("#f-filtros", "f-cli",    "Cliente",   valoresDe(c=>c[C.CLI]));
+
+  definirFiltro("#p-filtros", "p-prio", "Prioridad", () => [...PRIORIDADES]);
+  definirFiltro("#p-filtros", "p-esp",  "Espesor",
+    () => [...new Set(activas().map(({c})=>espesorDe(c)).filter(Boolean))]
+      .sort((a,b)=>NUMORD(parseFloat(a), parseFloat(b))));
+
+  definirFiltro("#a-filtros", "a-cli",  "Cliente",  valoresDe(c=>c[C.CLI]));
+  definirFiltro("#a-filtros", "a-prod", "Producto", productos);
+
+  pintarFiltros();
   const dl = $("#dl-cli");
-  if(dl) dl.innerHTML = uniq(c=>c[C.CLI]).map(v=>`<option value="${esc(v)}">`).join("");
+  if(dl) dl.innerHTML = valoresDe(c=>c[C.CLI])().map(v=>`<option value="${esc(v)}">`).join("");
+}
+
+/** Lo llama el componente cada vez que cambia algo. */
+function aplicarFiltros(){
+  if(!$("#v-control").classList.contains("hide")) render();
+  else if(typeof renderDashVisible === "function") renderDashVisible();
 }
 
 /* ------------------------------ etiquetas ------------------------------ */
@@ -289,6 +304,18 @@ function syncSel(){
     const b = $(s); if(b) b.disabled = SEL.size===0;
   });
 }
+["#f-q","#p-q","#a-q"].forEach(sel=>{
+  const e = $(sel); if(!e) return;
+  e.addEventListener("input", ()=>{ pintarFiltros(); aplicarFiltros(); });
+});
+["#f-clear","#p-clear","#a-clear"].forEach(sel=>{
+  const b = $(sel); if(!b) return;
+  b.onclick = ()=>{
+    limpiarFiltros({"#f-clear":"#f-filtros","#p-clear":"#p-filtros","#a-clear":"#a-filtros"}[sel]);
+    if(sel === "#f-clear"){ SEL.clear(); render(); }
+  };
+});
+
 $("#ck-all").onchange = ev=>{
   SEL.clear();
   if(ev.target.checked) filtered().forEach(({r})=>SEL.add(r));

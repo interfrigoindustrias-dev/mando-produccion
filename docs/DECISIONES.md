@@ -490,3 +490,37 @@ escribir lo mismo, son dos espesores distintos (76 y 60 mm).
 
 Cuando un valor de una lista describe como se fabrica algo, hay que traerlo
 entero. Resumirlo es inventarselo.
+
+## 29. La hoja tenia mas columnas de las que yo modelaba
+
+El modelo de paneles llegaba a la U. La hoja tiene tambien **V y W**: los metros
+lineales de lamina de cada cara. Existian, se usaban, y la aplicacion ni los
+leia ni sabia que estaban ahi.
+
+Es el mismo error que las listas cortas (decision 27), y da la misma clase de
+señal: ninguna. Nada falla — simplemente hay un dato que no se tiene en cuenta.
+
+Por eso la cotizacion y la orden de compra NO se añadieron contando posiciones.
+`resolverColumnasPropias()` lee los encabezados de verdad y decide:
+
+  · si la columna ya existe, se usa donde este
+  · si no existe y el sitio esta libre, se crea ahi
+  · si el sitio esta ocupado —o es un hueco en medio de la hoja, que puede ser
+    una columna en uso sin encabezado— no se toca nada, los dos campos no se
+    ofrecen, y se dice por que
+
+Añadir columnas a ciegas a una hoja de produccion en marcha es la manera de
+romperla sin enterarse.
+
+## 30. Dos sesiones en el mismo repositorio
+
+Dos sesiones trabajaban a la vez —una en puertas, otra en paneles— y un
+`git add -A` de la primera arrastro el trabajo a medias de la segunda a su
+commit, junto con un `reset` y un `stash` que dejaron el arbol inconsistente:
+`paneles.html` apuntaba a un modulo que ya no existia en el disco.
+
+Lo que lo hizo recuperable no fue el historial, sino que la prueba de humo
+arranca las dos paginas de verdad: el fallo salio como «reventó al cargar:
+grupoFiltros is not defined» en vez de como una pagina en blanco en produccion.
+
+Regla, cuando se comparte repositorio: `git add` de lo propio, nunca `-A`.

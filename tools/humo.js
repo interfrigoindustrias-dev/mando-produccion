@@ -265,9 +265,10 @@ function comprueba(nombre, cond, detalle){
   comprueba("la tabla se pinta sola", $$("#tb tr").length > 0,
     "filas pintadas: " + $$("#tb tr").length);
   comprueba("los KPI se pintan solos", $$("#kpis .kpi").length > 0);
-  comprueba("los filtros se llenan solos",
-    $("#f-prod") && $("#f-prod").options.length > 1,
-    "opciones: " + ($("#f-prod") ? $("#f-prod").options.length : "sin filtro"));
+  comprueba("los filtros se pintan solos",
+    $$("#f-filtros .filtro").length >= 5,
+    $$("#f-filtros .filtro").length + " filtros: " +
+      $$("#f-filtros .filtro-btn span").map(e=>e.textContent).join(" · "));
 
   console.log("\n=== las columnas que se escriben son las de PANELES ===");
   const fuera = ESCRITURAS.filter(e => e.tab === "PANEL")
@@ -448,6 +449,69 @@ function comprueba(nombre, cond, detalle){
     /espesor/i.test($("#toast").textContent),
     "aviso: " + $("#toast").textContent.trim().slice(0, 110));
   $("#ov-nueva").classList.add("hide");
+
+  console.log("\n=== los filtros admiten varios valores a la vez ===");
+  const filtrar = (id, valores) => {
+    leer("FILTROS").set(id, new Set(valores));
+    leer("pintarFiltros()"); leer("aplicarFiltros()");
+  };
+  const opsVisibles = () => $$("#tb tr").map(tr =>
+    tr.children[6] ? tr.children[6].textContent.trim() : "");
+
+  filtrar("f-prod", ['PANEL 3"']);
+  const soloUno = new Set(opsVisibles());
+  filtrar("f-prod", ['PANEL 3"', 'PANEL 6"']);
+  const dos = new Set(opsVisibles());
+  comprueba("con un producto se ve solo ese",
+    soloUno.size === 1 && soloUno.has('PANEL 3"'), [...soloUno].join(" · "));
+  comprueba("con dos se ven los dos —que es lo que se pidió—",
+    dos.size === 2 && dos.has('PANEL 3"') && dos.has('PANEL 6"'), [...dos].join(" · "));
+  comprueba("y lo elegido se ve como fichas quitables",
+    $$("#f-fichas .ffic").length === 2,
+    $$("#f-fichas .ffic").map(e=>e.textContent.trim()).join(" · "));
+  const btnF = $("#f-abrir");
+  comprueba("el botón de plegar dice cuántos filtros hay puestos",
+    btnF && btnF.querySelector("b").textContent === "1",
+    btnF ? `«${btnF.querySelector("b").textContent}»` : "no está");
+
+  leer("limpiarFiltros()");
+  await new Promise(r => setTimeout(r, 120));
+  comprueba("al limpiar vuelven todas", new Set(opsVisibles()).size > 2,
+    new Set(opsVisibles()).size + " productos a la vista");
+
+  console.log("\n=== el orden de la cola de planta ===");
+  $$(".tab").find(t=>t.dataset.view==="planta")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 300));
+  const enCola = leer("secuenciaPaneles(plantaPendientes())");
+  const rango = {URGENTE:0, "ALTA·adelantada":1, ALTA:2, MEDIA:3, BAJA:4};
+  const niveles = enCola.map(x => rango[x.prioridad] ?? 9);
+  comprueba("las urgentes van primero y las bajas al final",
+    niveles.every((v,i)=> i===0 || niveles[i-1] <= v),
+    enCola.map(x=>`${x.c[2]}:${x.prioridad}`).join(" · "));
+  comprueba("el lote se corta a los 100 m², no a los 200",
+    leer("MODELO.lotePorEspesor") === 100, "tope: " + leer("MODELO.lotePorEspesor"));
+  comprueba("una línea despachada no está en la cola",
+    !enCola.some(x => String(x.c[19]).toUpperCase() === "DESPACHADO"));
+
+  console.log("\n=== consumo de lámina, por acabado ===");
+  $$(".tab").find(t=>t.dataset.view==="resumen")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 300));
+  const filasLam = $$("#r-lam-tabla tbody tr");
+  comprueba("se agrupa por tipo de lámina", filasLam.length > 0,
+    filasLam.map(tr=>tr.children[0].textContent.trim()).join(" · "));
+  comprueba("distingue la consumida de la que hace falta",
+    $$("#r-lam-kpis .kpi").some(k=>/por consumir/i.test(k.textContent)),
+    $$("#r-lam-kpis .kpi b").map(e=>e.textContent).join(" · "));
+  comprueba("y dice el poliuretano que falta por fabricar",
+    $$("#r-pu-pend-kpis .kpi").length > 0 &&
+    $$("#r-pu-pend-tabla tbody tr").length > 0,
+    $$("#r-pu-pend-kpis .kpi b").map(e=>e.textContent).join(" · "));
+
+  $$(".tab").find(t=>t.dataset.view==="control")
+    .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
+  await new Promise(r => setTimeout(r, 200));
 
   console.log("\n=== la forma de la hoja: V y W ya estaban, X e Y se crean ===");
   comprueba("la columna de la lámina de cara A es la V",

@@ -50,19 +50,23 @@ $("#btn-nueva").onclick = ()=>{
   $("#ov-nueva").classList.remove("hide");
   setTimeout(()=>$("#n-cli").focus(), 60);
 };
-/* Puertas y paneles no tienen los mismos filtros — el de ensamble, por ejemplo,
-   solo existe en puertas. Se recorre lo que de verdad hay en la pagina: dar por
-   hecho que estan todos rompia la carga aqui y dejaba sin enganchar el resto. */
-["f-q", ...FSEL].forEach(id=>{
-  const e = $("#"+id); if(!e) return;
-  e.addEventListener("input", render);
-  e.addEventListener("change", render);
-});
-$("#f-clear").onclick = ()=>{
-  $("#f-q").value="";
-  FSEL.forEach(id=>{ const e = $("#"+id); if(e) e.value=""; });
-  SEL.clear(); render();
-};
+/* Puertas y paneles no llevan los filtros igual. En puertas es un desplegable
+   por columna y viven en FSEL; en paneles los lleva su propio modulo, que se
+   engancha solo. Se recorre lo que de verdad declare esta pagina. */
+if(typeof FSEL !== "undefined"){
+  ["f-q", ...FSEL].forEach(id=>{
+    const e = $("#"+id); if(!e) return;
+    e.addEventListener("input", render);
+    e.addEventListener("change", render);
+  });
+  const limpiar = $("#f-clear");
+  if(limpiar) limpiar.onclick = ()=>{
+    $("#f-q").value="";
+    FSEL.forEach(id=>{ const e = $("#"+id); if(e) e.value=""; });
+    SEL.clear(); render();
+  };
+}
+
 $("#reconectar").onclick = async ()=>{
   // Nace de un clic, así que el navegador no bloquea la ventana de Google.
   const b=$("#reconectar"); b.disabled=true;

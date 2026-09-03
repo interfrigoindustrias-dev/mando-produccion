@@ -28,8 +28,6 @@ function porPedido(filas){
 
 function renderAlmacen(){
   const q = $("#a-q").value.trim().toLowerCase();
-  const fcli = $("#a-cli") ? $("#a-cli").value : "";
-  const fprod = $("#a-prod") ? $("#a-prod").value : "";
   const soloCompletos = $("#a-completos") && $("#a-completos").checked;
 
   const vivas = activas().filter(({c})=>!anuladaP(c));
@@ -57,8 +55,8 @@ function renderAlmacen(){
     })
     .filter(g=>{
       if(soloCompletos && g.falta > 0) return false;
-      if(fcli && g.cliente.trim() !== fcli) return false;
-      if(fprod && !g.xs.some(x=>String(x.c[C.PROD]??"").trim() === fprod)) return false;
+      if(!filtroPasa("a-cli", g.cliente)) return false;
+      if(!filtroPasaAlguno("a-prod", g.xs.map(x=>x.c[C.PROD]))) return false;
       if(q){
         const hay = [g.op, g.cliente, ...g.xs.map(x=>x.c[C.PROD])].join(" ").toLowerCase();
         if(!q.split(/\s+/).every(t=>hay.includes(t))) return false;
@@ -160,8 +158,5 @@ $("#a-lista").addEventListener("click", async ev=>{
   finally{ todo.disabled = false; }
 });
 
-["a-q","a-cli","a-prod","a-completos"].forEach(id=>{
-  const e = $("#"+id); if(!e) return;
-  e.addEventListener("input", renderAlmacen);
-  e.addEventListener("change", renderAlmacen);
-});
+const aComp = $("#a-completos");
+if(aComp) aComp.addEventListener("change", renderAlmacen);

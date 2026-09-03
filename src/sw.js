@@ -49,6 +49,7 @@ const ARMAZON = [
   "js/app.js",
   "js/pwa.js",
   "js/paneles-listas.js",
+  "js/paneles-filtros.js",
   "js/paneles-auto.js",
   "js/paneles-control.js",
   "js/paneles-ficha.js",

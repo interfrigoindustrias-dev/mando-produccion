@@ -168,6 +168,26 @@ OP       prioridad   días  espesor    m2    acum   setup
 160-1    BAJA          2   3"       139.2   185.6
 ```
 
+## Los filtros
+
+Todos admiten **varios valores a la vez**. No es un adorno: «PANEL 2"» y
+«PISO 2"» son el mismo espesor y se preparan en la misma tanda, así que poder
+verlos juntos es como se trabaja de verdad.
+
+Cada filtro es un botón que abre una lista de casillas —con su propio buscador
+cuando hay muchas— y lo elegido queda debajo como fichas quitables de un toque.
+Con eso no hace falta abrir nada para saber por qué se está viendo lo que se ve,
+que es el malentendido de siempre: confundir «no hay nada» con «no hay nada
+**con este filtro**».
+
+Por debajo de 1100 px la barra entera se pliega detrás de un solo botón
+«Filtros», con el número de los que hay puestos. Antes eran nueve desplegables
+en fila: media pantalla de tablet, y en el móvil nueve renglones antes de llegar
+a los datos. Plegada, la barra ocupa una línea; las fichas siguen viéndose
+siempre, porque eso sí hace falta.
+
+El componente está en `paneles-filtros.js` y lo usan Control, Planta y Almacén.
+
 ## Las vistas
 
 Paneles no comparte ni una vista con puertas. Su página carga `paneles-*.js` y

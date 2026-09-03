@@ -345,3 +345,94 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
 }
 .pcard.pc-lista .pc-pie .pct{ color:var(--ok); font-weight:700 }
 .pcard.pc-lista .pterm{ background:var(--ok); border-color:var(--ok); color:#fff }
+
+/* ============================== FILTROS ==============================
+   Un boton por filtro, y lo elegido como fichas debajo. La barra ocupa una
+   linea este vacia o llena, en vez de una fila de desplegables que en tablet
+   se comia media pantalla y en el movil eran nueve renglones antes de los
+   datos. Ver paneles-filtros.js. */
+.bar.barfil{ align-items:center; gap:10px; flex-wrap:wrap }
+.filtros-caja{ display:contents }
+.filtros{ display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+
+.filtro{ position:relative }
+.filtro-btn{
+  display:inline-flex; align-items:center; gap:7px;
+  height:36px; padding:0 12px; border-radius:999px;
+  background:var(--bg2); border:1px solid var(--line); color:var(--tx2);
+  font-size:13px; font-weight:600; cursor:pointer; max-width:220px;
+}
+.filtro-btn span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.filtro-btn i{ font-style:normal; font-size:10px; opacity:.7 }
+.filtro-btn:hover{ border-color:var(--line2) }
+/* Un filtro puesto se ve de lejos: es la diferencia entre «no hay nada» y
+   «no hay nada CON ESTE FILTRO», que es el malentendido de siempre. */
+.filtro.on .filtro-btn{
+  background:var(--soft); border-color:var(--acc); color:var(--acc); font-weight:700;
+}
+
+.filtro-menu{
+  position:absolute; z-index:70; top:calc(100% + 6px); left:0;
+  min-width:230px; max-width:320px;
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:var(--r2); box-shadow:var(--sh); padding:8px;
+}
+.filtro-busca{ width:100%; margin-bottom:6px }
+.filtro-ops{ max-height:270px; overflow:auto; display:flex; flex-direction:column }
+.filtro-op{
+  display:flex; align-items:center; gap:9px;
+  padding:8px 9px; border-radius:8px; cursor:pointer; font-size:13.5px;
+}
+.filtro-op:hover{ background:var(--bg3) }
+.filtro-op input{ accent-color:var(--acc); width:16px; height:16px; flex:none; cursor:pointer }
+.filtro-op span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.filtro-pie{
+  display:flex; gap:6px; margin-top:6px; padding-top:7px;
+  border-top:1px solid var(--line);
+}
+.filtro-pie .btn{ flex:1 }
+
+/* Fichas de lo elegido: quitar un filtro es un toque, no abrir y desmarcar. */
+.fichas{ display:flex; gap:7px; flex-wrap:wrap; margin:-2px 0 12px }
+.ffic{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:5px 10px; border-radius:999px;
+  background:var(--soft); border:1px solid color-mix(in srgb,var(--acc) 35%,transparent);
+  color:var(--tx); font-size:12.5px; font-weight:600; cursor:pointer;
+}
+.ffic em{ font-style:normal; color:var(--tx3); font-weight:600 }
+.ffic i{ font-style:normal; font-size:14px; color:var(--tx2); line-height:1 }
+.ffic:hover{ border-color:var(--bad) }
+.ffic:hover i{ color:var(--bad) }
+
+/* El boton que lo pliega todo. En pantalla ancha no hace falta. */
+.filtros-btn{ display:none }
+.filtros-btn.on{ background:var(--soft); border-color:var(--acc); color:var(--acc) }
+.filtros-btn b{ font-variant-numeric:tabular-nums }
+
+/* ---- tablet y movil: los filtros dejan de estorbar ---- */
+@media (max-width:1100px){
+  /* Se pliegan detras de un boton, y solo aparecen cuando se piden. Lo puesto
+     sigue viendose siempre en las fichas, que es lo que hay que saber sin
+     abrir nada. */
+  .filtros-btn{ display:inline-flex; align-items:center; gap:6px }
+  .filtros-caja{ display:none; width:100% }
+  .filtros-caja.abierta{ display:block }
+  .filtros{ padding:10px; border:1px solid var(--line); border-radius:var(--r2);
+            background:var(--bg2) }
+  .filtro-btn{ max-width:none }
+  .bar.barfil .f.wide{ flex:1 1 180px; min-width:0 }
+}
+@media (max-width:640px){
+  .filtros{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+  .filtro-btn{ width:100%; justify-content:space-between }
+  /* Pegado al borde no cabe: se centra bajo su boton y ocupa lo que necesite. */
+  .filtro-menu{ position:fixed; left:12px; right:12px; top:auto; max-width:none;
+                min-width:0; margin-top:6px }
+  .filtro-ops{ max-height:44dvh }
+  .bar.barfil{ gap:8px }
+  .bar.barfil .f.wide{ flex:1 1 100%; }
+}
+
+/* La lamina que aun hay que comprar, marcada: es la fila que interesa al pedir. */
+#r-lam-tabla tr.pend td:nth-child(3){ color:var(--warn); font-weight:700 }
