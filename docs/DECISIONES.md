@@ -512,6 +512,13 @@ Por eso la cotizacion y la orden de compra NO se añadieron contando posiciones.
 Añadir columnas a ciegas a una hoja de produccion en marcha es la manera de
 romperla sin enterarse.
 
+**Y una hoja tiene un ancho, igual que un alto.** La de paneles llegaba a la W:
+23 columnas. Escribir el encabezado en X respondia «exceeds grid limits. Max
+columns: 23», y los dos campos se quedaban sin sitio — la comprobacion se
+protegia bien, pero se rendia en vez de resolverlo. `ensureCols()` ensancha la
+cuadricula antes de escribir, igual que `ensureRows()` hace con las filas.
+Añadir columnas vacias al final no toca ningun dato.
+
 ## 30. Dos sesiones en el mismo repositorio
 
 Dos sesiones trabajaban a la vez —una en puertas, otra en paneles— y un

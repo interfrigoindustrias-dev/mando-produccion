@@ -64,6 +64,26 @@ async function ensureRows(maxRow, margen=100){
   return faltan;
 }
 
+/** Lo mismo con las columnas. Una hoja tiene un ancho fijo igual que un alto,
+ *  y escribir mas alla responde «exceeds grid limits. Max columns: 23» — que es
+ *  lo que pasaba al intentar crear la cotizacion y la orden de compra en X e Y
+ *  de una hoja que llegaba a la W.
+ *
+ *  Añadir columnas VACIAS al final no destruye nada: es agrandar la cuadricula,
+ *  no tocar datos. */
+async function ensureCols(maxCol, margen=0){
+  const gid = await ensureGid();
+  if(gid===null) return 0;
+  const meta = await api("?fields=sheets.properties(title,sheetId,gridProperties.columnCount)");
+  const sh = (meta.sheets||[]).find(x=>x.properties.title===CFG.tab);
+  const actuales = sh && sh.properties.gridProperties ? sh.properties.gridProperties.columnCount : 0;
+  if(!actuales || maxCol <= actuales) return 0;
+  const faltan = (maxCol - actuales) + margen;
+  await api(":batchUpdate", {method:"POST", body: JSON.stringify({
+    requests:[{appendDimension:{sheetId:gid, dimension:"COLUMNS", length:faltan}}]})});
+  return faltan;
+}
+
 /** cambios: [{fila, col:<índice 0-based>, aplica:boolean}] */
 async function setCheckboxUI(cambios){
   const gid = await ensureGid();

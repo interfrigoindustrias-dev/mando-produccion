@@ -167,6 +167,14 @@ async function resolverColumnasPropias(){
 
   if(porCrear.length){
     try{
+      /* La hoja puede ser mas estrecha que el modelo: la de paneles llegaba a
+         la W y estas van en X e Y. Se ensancha antes de escribir, o la API
+         responde «exceeds grid limits» y los dos campos se quedan sin sitio. */
+      if(typeof ensureCols === "function"){
+        const ancho = Math.max(...porCrear.map(p => p.i)) + 1;
+        const nuevas = await ensureCols(ancho);
+        if(nuevas) console.info(`hoja ensanchada en ${nuevas} columna(s)`);
+      }
       for(const {encabezado, i} of porCrear){
         await api(`/values/${encodeURIComponent(rng(`${A1(i)}1`))}?valueInputOption=USER_ENTERED`,
           {method:"PUT", body: JSON.stringify({values: [[encabezado]]})});

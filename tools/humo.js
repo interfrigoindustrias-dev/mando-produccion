@@ -78,6 +78,12 @@ const DATOS = {
   "MODELOS PANELES": [["NOMBRE"]]
 };
 
+/* La hoja de paneles de verdad llegaba a la W: 23 columnas. Escribir en X
+   respondia «exceeds grid limits», y la cotizacion y la orden de compra se
+   quedaban sin sitio. La hoja falsa hace lo mismo para que se pueda comprobar
+   que la aplicacion la ensancha antes de escribir. */
+let ANCHO_PANEL_HOJA = 23;
+
 /** Lo que la aplicacion escribio, para poder comprobarlo despues. */
 let ESCRITURAS = [];
 let VALIDACIONES = [];
@@ -160,11 +166,20 @@ function hacerFetch(){
     if(/\/values\/[^?]+\?.*valueInputOption/.test(u) && opts.method === "PUT"){
       const rango = decodeURIComponent(u.split("/values/")[1].split("?")[0]);
       const {tab, a1} = celdasDe(rango);
+      const mc = a1.match(/^([A-Z]+)/);
+      if(tab === "PANEL" && mc && colNum(mc[1]) >= ANCHO_PANEL_HOJA){
+        return {ok:false, status:400,
+          json: async()=>({error:{message:`Range (PANEL!${a1}) exceeds grid limits. `+
+            `Max rows: 1000, max columns: ${ANCHO_PANEL_HOJA}.`}}),
+          text: async()=>""};
+      }
       escribir(tab, a1, cuerpo.values);
       return ok({});
     }
     if(u.includes(":batchUpdate")){
       (cuerpo.requests||[]).forEach(r=>{
+        const ad = r.appendDimension;
+        if(ad && ad.dimension === "COLUMNS") ANCHO_PANEL_HOJA += ad.length;
         if(r.setDataValidation){
           const sv = r.setDataValidation;
           VALIDACIONES.push(Object.assign({}, sv.range, {
@@ -231,7 +246,9 @@ function hacerFetch(){
     }
     if(u.includes("?fields=")){
       return ok({sheets: Object.keys(DATOS).map((t,i)=>({properties:{
-        title:t, sheetId:i, gridProperties:{rowCount:2000}}}))});
+        title:t, sheetId:i,
+        gridProperties:{rowCount:2000,
+          columnCount: t === "PANEL" ? ANCHO_PANEL_HOJA : 40}}}))});
     }
     return ok({});
   };
@@ -479,6 +496,18 @@ function comprueba(nombre, cond, detalle){
       filasTocadas.every(f => fila(f)[23] === "COT-9001" && fila(f)[24] === "OC-4471"),
       filasTocadas.map(f=>`X=${fila(f)[23]} Y=${fila(f)[24]}`).join(" · "));
   }
+
+  console.log("\n=== la hoja era más estrecha que las columnas nuevas ===");
+  /* La de paneles llegaba a la W: 23 columnas. Escribir en X respondia
+     «exceeds grid limits» y los dos campos se quedaban sin sitio. */
+  comprueba("la hoja se ensanchó para que cupieran X e Y",
+    ANCHO_PANEL_HOJA >= 25, "ahora tiene " + ANCHO_PANEL_HOJA + " columnas");
+  comprueba("y los encabezados se escribieron",
+    DATOS.PANEL[0][23] === "COTIZACION" && DATOS.PANEL[0][24] === "ORDEN DE COMPRA",
+    `X1=${DATOS.PANEL[0][23]} · Y1=${DATOS.PANEL[0][24]}`);
+  comprueba("los dos campos quedan disponibles en la ficha",
+    leer("ESTADO_COLUMNAS").ok && !$("#n-cotiz").disabled,
+    JSON.stringify(leer("ESTADO_COLUMNAS")));
 
   console.log("\n=== las dos clases de fórmula, distinguidas mirando la hoja ===");
   /* Cual es de matriz y cual por fila estaba escrito a mano, copiado de un
