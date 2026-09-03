@@ -11,8 +11,22 @@
    automatizaciones.js. */
 "use strict";
 
-/* Orden de la cola. URGENTE se antepone a todo y no espera turno. */
-const ORDEN_PRIO = {URGENTE: 0, ALTA: 1, MEDIA: 2, BAJA: 3, "": 4};
+/* ORDEN DE LA COLA, de arriba abajo:
+     0  URGENTE                       lo pone una persona; no espera turno
+     1  ALTA que lleva 5 dias parada  se adelanta al resto de las ALTA
+     2  ALTA
+     3  MEDIA
+     4  BAJA
+     5  sin prioridad
+   Dentro de cada nivel manda el numero de OP, de menor a mayor. */
+const ORDEN_PRIO = {URGENTE: 0, "ALTA·adelantada": 1, ALTA: 2, MEDIA: 3, BAJA: 4, "": 5};
+
+/** En que escalon de la cola va esta linea. */
+function nivelDe(fila, c){
+  const p = String(c[C.PRIO] ?? "").trim().toUpperCase();
+  if(p === "ALTA" && altaAdelantada(fila, c)) return "ALTA·adelantada";
+  return p in ORDEN_PRIO ? p : "";
+}
 
 /** Metros cuadrados de una linea. */
 const m2De = c => (num(c[C.CANT]) || 0) * (num(c[C.LARGO]) || 0) * (MODELO.ancho || 1);
@@ -38,19 +52,29 @@ function diasEnCola(c){
   return Math.max(0, Math.round((h - f) / 86400000));
 }
 
-/** Cuando subio por ultima vez de nivel, segun el historial.
- *  Sin esa fecha, una BAJA recien ascendida a MEDIA saltaria a ALTA el mismo
- *  dia: los 4 dias de MEDIA se cuentan desde que ES media, no desde que nacio. */
-function desdeCuandoEnSuNivel(fila, c){
-  const prio = String(c[C.PRIO] ?? "").trim().toUpperCase();
+/** Cuando fue la ultima vez que a esta linea le paso ALGO.
+ *
+ *  «Sin tocarse» es literal: vale cualquier cambio —una edicion, un proceso
+ *  marcado, un cambio de prioridad—, no solo los de prioridad. Una linea en la
+ *  que se esta trabajando no lleva esperando, aunque su prioridad no cambie.
+ *
+ *  Si no hay historial, se cae a la fecha de creacion: es lo unico que se sabe. */
+function ultimoToque(fila, c){
   let ultima = null;
   for(const e of (typeof LOG !== "undefined" ? LOG : [])){
-    if(String(e.fila) !== String(fila) || e.campo !== "Prioridad") continue;
-    if(String(e.despues).trim().toUpperCase() !== prio) continue;
-    const f = toDate(e.fecha.split(" ")[0]);
+    if(String(e.fila) !== String(fila)) continue;
+    const f = toDate(String(e.fecha ?? "").split(" ")[0]);
     if(f && (!ultima || f > ultima)) ultima = f;
   }
   return ultima || toDate(c[C.FECHA]);
+}
+
+/** Dias enteros que lleva sin que nadie la toque. */
+function diasSinTocar(fila, c){
+  const desde = ultimoToque(fila, c);
+  if(!desde) return 0;
+  const h = new Date(); h.setHours(0,0,0,0);
+  return Math.max(0, Math.round((h - desde) / 86400000));
 }
 
 /** A que prioridad deberia haber subido ya, o null si sigue en plazo. */
@@ -58,13 +82,18 @@ function prioridadQueTocaria(fila, c){
   const esc = MODELO.escalado || {};
   const prio = String(c[C.PRIO] ?? "").trim().toUpperCase();
   const regla = esc[prio];
-  if(!regla) return null;                       // URGENTE y ALTA no escalan
-  const desde = desdeCuandoEnSuNivel(fila, c);
-  if(!desde) return null;
-  const limite = new Date(desde);
-  limite.setDate(limite.getDate() + regla.dias);
-  const h = new Date(); h.setHours(0,0,0,0);
-  return limite.getTime() <= h.getTime() ? regla.a : null;
+  if(!regla) return null;                       // URGENTE no caduca; ALTA es el techo
+  return diasSinTocar(fila, c) >= regla.dias ? regla.a : null;
+}
+
+/** Una ALTA que lleva demasiado sin tocarse no puede subir mas —es el techo—,
+ *  asi que en vez de cambiarle la prioridad se la adelanta: pasa por delante
+ *  del resto de las ALTA y se coloca justo detras de las urgentes. */
+function altaAdelantada(fila, c){
+  const dias = MODELO.diasAdelantoAlta;
+  if(!dias) return false;
+  if(String(c[C.PRIO] ?? "").trim().toUpperCase() !== "ALTA") return false;
+  return diasSinTocar(fila, c) >= dias;
 }
 
 /** Lineas pendientes de fabricar, en el orden en que deberian hacerse.
@@ -80,8 +109,7 @@ function secuenciaPaneles(lineas){
   // Pendientes agrupadas por prioridad
   const porPrio = new Map();
   lineas.forEach(x=>{
-    const p = String(x.c[C.PRIO] ?? "").trim().toUpperCase();
-    const k = p in ORDEN_PRIO ? p : "";
+    const k = nivelDe(x.r, x.c);
     (porPrio.get(k) || porPrio.set(k, []).get(k)).push(x);
   });
 
@@ -106,8 +134,9 @@ function secuenciaPaneles(lineas){
           ((espesorMmDe(a.xs[0].c) ?? 1e9) - (espesorMmDe(b.xs[0].c) ?? 1e9)) ||
           a.esp.localeCompare(b.esp, "es", {numeric:true}));
 
-      // URGENTE no espera a nadie: pasa entera, sin agrupar ni cortar.
-      if(prio === "URGENTE"){
+      /* URGENTE y las ALTA adelantadas no esperan a nadie: pasan enteras, sin
+         agrupar ni cortar por metros. Son pocas y son las que corren. */
+      if(prio === "URGENTE" || prio === "ALTA·adelantada"){
         pendientes.forEach(g=>g.xs.forEach(x=>{
           const esp = espesorDe(x.c);
           salida.push(marcar(x, prio, esp, esp !== espesorAnterior, m2De(x.c)));
@@ -148,7 +177,9 @@ function marcar(x, prio, esp, cambioSetup, m2, acumulado){
   return {
     r: x.r, c: x.c,
     prioridad: prio || "sin prioridad",
+    adelantada: prio === "ALTA·adelantada",
     dias: diasEnCola(x.c),
+    sinTocar: diasSinTocar(x.r, x.c),
     producto: String(x.c[C.PROD] ?? "").trim(),
     espesor: esp,
     m2,

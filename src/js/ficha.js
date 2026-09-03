@@ -17,6 +17,7 @@ function openDet(r){
               // Especificacion nueva de la hoja (AC..AJ)
               ["Marco",c[C.MARCO]],["Visor",c[C.VISOR]],["Empaque visor",c[C.EMPV]],
               ["Bumper",c[C.BUMP]],["Sello",c[C.SELLO]],
+              ["Cotización",c[C.COT]],["Orden de compra",c[C.OC]],
               // El tamaño solo se enseña si lleva bumper: si no, confunde.
               ...(llevaBumper(c[C.BUMP]) ? [["Tamaño bumper",c[C.TBUMP]]] : []),
               ["Alfajor frontal",si(c[C.ALFF])],["Alfajor posterior",si(c[C.ALFP])],
@@ -50,6 +51,8 @@ function openDet(r){
   $("#d-fdesp").value = fmtDate(c[C.FDESP]); $("#d-fproc").value = fmtDate(c[C.FPROC]);
   $("#d-prio").value = PRIORIDADES.includes(String(c[C.PRIO]).toUpperCase())?String(c[C.PRIO]).toUpperCase():"";
   $("#d-ens").value = c[C.ENS]??""; $("#d-obs").value = c[C.OBS]??"";
+  // Solo existen en puertas: paneles comparte este archivo y no los tiene.
+  if($("#d-cot")){ $("#d-cot").value = c[C.COT]??""; $("#d-oc").value = c[C.OC]??""; }
   $("#d-row").textContent = "Fila "+r;
   $("#ov-det").classList.remove("hide");
   renderHist(c[C.OP], r);                       // pinta lo que ya haya en memoria…
@@ -92,7 +95,10 @@ $("#d-save").onclick = async ()=>{
                  [C.SELLO,"AM","Sello",$("#d-sello").value,false]] : []),
                [C.ANCHO,"H","Ancho vano",numCell($("#d-ancho").value),false],
                [C.ALTO,"I","Alto vano",numCell($("#d-alto").value),false],
-               [C.OBS,"V","Observaciones",$("#d-obs").value.trim(),false]];
+               [C.OBS,"V","Observaciones",$("#d-obs").value.trim(),false],
+               ...($("#d-cot") ? [
+                 [C.COT,"AN","Cotización",$("#d-cot").value.trim(),false],
+                 [C.OC,"AO","Orden de compra",$("#d-oc").value.trim(),false]] : [])];
   for(const [idx,col,campo,val,esFecha] of pairs){
     const antes = esFecha ? fmtDate(row.c[idx]) : String(row.c[idx]??"");
     if(antes !== String(val)){
@@ -243,6 +249,7 @@ $("#form-new").addEventListener("submit", async ev=>{
         c[C.EMPVREF]=$("#n-empvref").value.trim();
         c[C.BUMP]=$("#n-bump").value;
         c[C.SELLO]=$("#n-sello").value;
+        c[C.COT]=$("#n-cot").value.trim(); c[C.OC]=$("#n-oc").value.trim();
         c[C.TBUMP]= llevaBumper($("#n-bump").value) ? numCell($("#n-tbump").value) : "";
       }
       PROCS.forEach(p=>{ c[p.i] = aplica.get(p.i) ? false : ""; });

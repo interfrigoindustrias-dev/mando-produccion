@@ -107,6 +107,7 @@ function cabeceraCarta(c, F){
         ${cel("Bumper", bumper)}
         ${cel("Alfajor frontal", si(c[C.ALFF]))}${cel("Alfajor posterior", si(c[C.ALFP]))}
         ${cel("Puntos", num(c[C.PTS]))}
+        ${cel("Cotización", c[C.COT], 2)}${cel("Orden de compra", c[C.OC], 2)}
       </div>
       ${diagramas ? `<div class="c-dib">${diagramas}</div>` : ""}
     </div>

@@ -7,6 +7,17 @@
 
 /* ---------- Planta: tablet del jefe de planta ---------- */
 const PRIO_ORD = {URGENTE:-1, ALTA:0, MEDIA:1, BAJA:2, "":3};
+
+/* Una ALTA que lleva cinco dias sin que nadie la toque se coloca delante de
+   las demas ALTA, justo detras de las urgentes. No cambia de prioridad —sigue
+   siendo ALTA, que es la verdad—, cambia de sitio en la cola. */
+const ALTA_ESPERA = 5;
+const altaOlvidada = (r, c) => {
+  if(String(c[C.PRIO]??"").trim().toUpperCase() !== "ALTA") return false;
+  if(typeof diasSinTocar !== "function") return false;
+  const d = diasSinTocar(r, c);
+  return d !== null && d >= ALTA_ESPERA;
+};
 /* Tonos de la paleta de marca (#0A4283) para que cada tarjeta se distinga sin
    perder la identidad visual. La prioridad ALTA y MEDIA mandan sobre el tono. */
 /* Un color por proceso: gama que parte del azul de marca y recorre
@@ -37,10 +48,12 @@ function plantaList(){
     // siendo trabajo de planta aunque figuren en almacen. El resto ya es
     // trabajo de otro y mantenerlo a la vista solo estorba.
     const urge = urgente(c);
-    // Primero lo despachado, siempre: la excepcion de las separadas urgentes
-    // devolvia a planta puertas que ya habian salido.
-    if(despachada(c)) return false;
-    if(desp(c) && !urgenteAuto(c)) return false;
+    /* Planta ve TODO lo que no esta acabado ni fuera. Antes solo mostraba lo
+       que no tenia estado ninguno, y eso escondia trabajo real: una puerta
+       marcada «En Almacen» por adelantado desaparecia de la cola aunque le
+       faltaran procesos. Lo unico que sale de planta es terminarla, o que se
+       despache o se anule. */
+    if(despachada(c) || anulada(c) || terminada(c)) return false;
 
     if(fe==="urge" && !urge) return false;
     if(fe==="pend" && p>=1) return false;
@@ -63,8 +76,9 @@ function plantaList(){
   const porOp = (a,b)=>String(a.c[C.OP]).localeCompare(String(b.c[C.OP]),"es",{numeric:true});
   /* Orden de ataque. La urgente marcada a mano va antes que la automatica:
      alguien la puso ahi mirando algo que el sistema no sabe. */
-  const prioDe = x => urgenteManual(x.c) ? -2
-    : urgenteAuto(x.c) ? -1
+  const prioDe = x => urgenteManual(x.c) ? -3
+    : urgenteAuto(x.c) ? -2
+    : altaOlvidada(x.r, x.c) ? -1
     : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
   L.sort((a,b)=>{
     if(ord==="op") return porOp(a,b);
@@ -72,9 +86,10 @@ function plantaList(){
     if(ord==="pts") return (num(b.c[C.PTS])||0) - (num(a.c[C.PTS])||0);
     const pa=prioDe(a), pb=prioDe(b);
     if(pa!==pb) return pa-pb;
-    if(ord==="prioop") return porOp(a,b);
-    const da=toDate(a.c[C.FPROC]), db=toDate(b.c[C.FPROC]);
-    return (da?da.getTime():8e15) - (db?db.getTime():8e15);
+    /* Dentro de cada prioridad manda el numero de OP, de menor a mayor: lo que
+       se pidio antes se hace antes. La fecha de proceso decidia esto, y dejaba
+       dos OP consecutivas separadas por media lista sin motivo visible. */
+    return porOp(a,b);
   });
   return L;
 }

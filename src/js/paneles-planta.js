@@ -15,8 +15,11 @@
 function plantaPendientes(){
   const q = $("#p-q").value.trim().toLowerCase();
   const fp = $("#p-prio").value, fe = $("#p-esp").value;
-  const hoyFin = new Date(); hoyFin.setHours(23,59,59,999);
 
+  /* TODO lo que no esta terminado. Antes se escondia lo que tuviera fecha
+     posterior a hoy; se quita, porque escondia trabajo real y nadie sabia que
+     estaba escondido. Lo despachado y lo anulado si se quedan fuera: eso ya no
+     es trabajo de planta. */
   return activas().filter(({c})=>{
     if(anuladaP(c) || despachadaP(c)) return false;
     /* Una linea al 100 % SIGUE aqui. Lo que la saca de planta es que alguien
@@ -24,12 +27,6 @@ function plantaPendientes(){
        otro caben una revision, un retoque, o simplemente esperar a que quien
        manda la de por buena. */
     if(estadoDe(c) === ESTADO.TERMINADO) return false;
-
-    /* Del dia de hoy hacia atras: lo que aun no toca no se enseña, porque
-       adelantarlo desordena la cola. Si la fecha es un texto de lote y no se
-       puede leer, se enseña igual: es peor esconder trabajo que enseñarlo. */
-    const f = toDate(c[C.FECHA]);
-    if(f && f > hoyFin) return false;
 
     if(fp && String(c[C.PRIO]??"").trim().toUpperCase() !== fp) return false;
     if(fe && espesorDe(c) !== fe) return false;
@@ -48,9 +45,13 @@ let plantaOcupada = 0;
    marca de una tarjeta a otra. */
 const plantaEnUso = () => Date.now() - plantaOcupada < 1500;
 
-const etiquetaPrio = p => p && p !== "sin prioridad"
-  ? `<span class="tag t-${p.toLowerCase()}">${esc(p)}</span>`
-  : `<span class="tag t-non">SIN PRIORIDAD</span>`;
+const etiquetaPrio = p => {
+  // «ALTA·adelantada» es un escalon de la cola, no una prioridad: se pinta ALTA.
+  const base = String(p || "").split("·")[0];
+  return base && base !== "sin prioridad"
+    ? `<span class="tag t-${base.toLowerCase()}">${esc(base)}</span>`
+    : `<span class="tag t-non">SIN PRIORIDAD</span>`;
+};
 
 /** Cuanto lleva esperando, dicho como se dice en planta. */
 function textoEspera(dias){
@@ -104,6 +105,7 @@ function renderPlanta(){
           <span class="pc-n">${i+1}</span>
           <span class="op" data-f="op">${esc(c[C.OP]??"")}</span>
           <span data-f="prio">${etiquetaPrio(x.prioridad)}</span>
+          ${x.adelantada ? `<span class="pc-adel" title="Lleva ${x.sinTocar} días sin tocarse: se adelanta al resto de las ALTA">adelantada</span>` : ""}
           <span class="pc-esp" title="Espesor por el que se agrupa">${esc(x.espesor)}</span>
         </div>
         <div class="pc-cli" data-f="cli">${esc(c[C.CLI]??"")}</div>
@@ -125,6 +127,7 @@ function renderPlanta(){
           <span title="Metros acumulados sin cambiar el montaje de la máquina">
             ${n2(x.acumulado)} m² sin cambiar montaje</span>
           <span title="Lo que lleva esperando en la cola">esperando ${textoEspera(x.dias)}</span>
+          <span title="Desde el último cambio: es lo que cuenta para adelantarla o subirla de prioridad">sin tocarse ${textoEspera(x.sinTocar)}</span>
         </div>
       </div>
 
@@ -160,7 +163,10 @@ function pintarResumenPlanta(orden){
     ["Paneles", n0(paneles), ""],
     ["m² pendientes", n2(m2), ""],
     ["kg de poliuretano", n2(kg), "Lo que hará falta para toda la cola"],
-    ["Cambios de montaje", cambios, "Cada uno es una parada para reajustar la máquina"],
+    ["Cambios de montaje", cambios,
+     `Cada uno es una parada para reajustar la máquina. Se agrupa por espesor hasta ${MODELO.lotePorEspesor} m²`],
+    ["Adelantadas", orden.filter(x=>x.adelantada).length,
+     `ALTA que llevan ${MODELO.diasAdelantoAlta} días sin tocarse: pasan justo detrás de las urgentes`],
     ["URGENTE", urgentes, "Pasan por delante de todo y no esperan turno", urgentes>0]
   ]);
 }

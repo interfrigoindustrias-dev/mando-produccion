@@ -17,8 +17,8 @@
    las listas, aqui tambien: un valor que la hoja no acepte se guarda igual pero
    queda marcado y descuadra los informes. */
 const MODELO_PUERTAS = {
-  ncol: 39,
-  lastCol: "AM",
+  ncol: 41,
+  lastCol: "AO",
 
   // Indices de columna, empezando en 0 = A
   col: {
@@ -36,7 +36,9 @@ const MODELO_PUERTAS = {
     TBUMP:35,     // AJ  TAMANO BUMPER
     CAL:36,       // AK  NOTAS DE CALIDAD
     SEPA:37,      // AL  SEPARADA PARA
-    SELLO:38      // AM  SELLO
+    SELLO:38,     // AM  SELLO
+    COT:39,       // AN  COTIZACION       (numero o referencia)
+    OC:40         // AO  ORDEN DE COMPRA
   },
 
   procs: [
@@ -172,8 +174,12 @@ function etiquetaEspesor(producto){
 }
 
 const MODELO_PANELES = {
-  ncol: 21,
-  lastCol: "U",
+  /* Hasta la Y. V y W las trae la hoja —los metros lineales de lamina de cada
+     cara— y yo modelaba solo hasta la U: existian y no se leian. X e Y las
+     añade la aplicacion para la cotizacion y la orden de compra, y solo si de
+     verdad estan libres: paneles-listas.js mira los encabezados antes. */
+  ncol: 25,
+  lastCol: "Y",
 
   col: {
     FECHA:0,      // A
@@ -194,8 +200,22 @@ const MODELO_PANELES = {
     FINI:17,      // R   comienzo de proceso
     FFIN:18,      // S   fin de proceso
     DESP:19,      // T   estado
-    FDESP:20      // U
+    FDESP:20,     // U
+    LAM_A:21,     // V   metro lineal de lamina de la cara A
+    LAM_B:22,     // W   metro lineal de lamina de la cara B
+    COTIZ:23,     // X   cotizacion            (la coloca la aplicacion)
+    OC:24         // Y   orden de compra       (la coloca la aplicacion)
   },
+
+  /** Las dos caras y su metraje de lamina, emparejados: el tipo de lamina de
+   *  la cara A se consume en los metros de V, y el de la B en los de W. */
+  laminas: [{cara:"CARA_A", metros:"LAM_A", et:"Cara A"},
+            {cara:"CARA_B", metros:"LAM_B", et:"Cara B"}],
+
+  /** Campos que la aplicacion añade a la hoja si no estan ya. Se resuelven al
+   *  arrancar contra los encabezados de verdad, nunca a ciegas. */
+  columnasPropias: [{k:"COTIZ", encabezado:"COTIZACION"},
+                    {k:"OC",    encabezado:"ORDEN DE COMPRA"}],
 
   procs: [
     {i:12, c:"M", k:"PERFIL",    s:"PE"},
@@ -247,13 +267,20 @@ const MODELO_PANELES = {
      ALTA     entra a la cola inmediata.
      MEDIA    espera 4 dias y sube a ALTA.
      BAJA     espera 8 dias, sube a MEDIA, y desde ahi otros 4 hasta ALTA. */
+  /* ESCALADO POR ANTIGUEDAD SIN TOCARSE.
+     Los dias se cuentan desde la ultima vez que a la linea le paso ALGO —se
+     edito, se marco un proceso, se le cambio la prioridad—, no desde que
+     nacio: una linea en la que se esta trabajando no lleva esperando. */
   escalado: {
     BAJA:  {dias: 8, a: "MEDIA"},
-    MEDIA: {dias: 4, a: "ALTA"}
+    MEDIA: {dias: 5, a: "ALTA"}
   },
+  /** ALTA no sube mas —es el techo—, pero a los 5 dias sin tocarse se adelanta
+   *  al resto de las ALTA y se coloca justo detras de las urgentes. */
+  diasAdelantoAlta: 5,
 
-  /** Tope de metros por espesor antes de ceder el turno. */
-  lotePorEspesor: 200,
+  /** Tope de metros del mismo espesor antes de ceder el turno. */
+  lotePorEspesor: 100,
 
   /* DONDE ESCRIBE LA APLICACION — ver la nota equivalente en puertas. */
   statusCol: "Q",

@@ -37,7 +37,7 @@ function lineaHTML(n){
     <td class="ln" data-et="Línea">${n}</td>
     <td data-et="Prioridad"><select class="inp sm" data-f="PRIO">${opcionesDe(PRIORIDADES, "MEDIA")}</select></td>
     <td data-et="Cant"><input class="inp sm num" data-f="CANT" type="number" min="1" step="1" placeholder="0" required></td>
-    <td data-et="Largo (m)"><input class="inp sm num" data-f="LARGO" type="number" min="0" step="0.01" placeholder="0,00" required></td>
+    <td data-et="Largo (m)"><input class="inp sm num" data-f="LARGO" type="number" min="0" step="0.001" placeholder="0,000" required></td>
     <td data-et="Producto"><input class="inp sm" data-f="PROD" list="dl-productos"
       placeholder="Buscar producto…" autocomplete="off" required></td>
     <td data-et="Ranurado"><select class="inp sm" data-f="RANU">${opcionesDe(L.RANURADOS)}</select></td>
@@ -121,6 +121,11 @@ function hintOp(){
   }
 }
 
+/** El largo se dice con tres decimales: un panel de 2,455 m no es uno de
+ *  2,46 m cuando hay que cortarlo. El resto de cifras siguen con dos. */
+const n3 = v => { const n = num(v); return n===null ? "—" : n.toLocaleString("es-CO",
+  {minimumFractionDigits:3, maximumFractionDigits:3}); };
+
 function initForm(){
   llenarProductos();
   const tb = $("#n-lineas");
@@ -140,6 +145,12 @@ $("#form-new").addEventListener("submit", async ev=>{
   try{
     const op = $("#n-op").value.trim();
     const cli = $("#n-cli").value.trim().toUpperCase();
+    /* La cotizacion y la OC son del PEDIDO, no de una linea: se repiten en
+       todas las lineas de la ficha, que es como se busca luego «las lineas de
+       la OC 4471» sin tener que saber a que numero de OP corresponde. */
+    const cotiz = $("#n-cotiz") ? $("#n-cotiz").value.trim() : "";
+    const oc    = $("#n-oc")    ? $("#n-oc").value.trim()    : "";
+    const hayColumnas = typeof ESTADO_COLUMNAS === "undefined" || ESTADO_COLUMNAS.ok;
     // De hoy, no de lo que quedara escrito en el campo: es la fecha en la que
     // la ficha se crea, y es el dato del que cuelga toda la antiguedad.
     const fecha = hoy();
@@ -177,6 +188,10 @@ $("#form-new").addEventListener("submit", async ev=>{
          formula esta extendida, la hoja las rellena sola; escribir un numero
          encima la borraria y el consumo dejaria de cuadrar con la hoja. */
       c[C.POLI_UNI] = ""; c[C.POLI_TOT] = "";
+      /* V y W —los metros de lamina— los calcula la hoja igual que K y L: se
+         dejan vacias para no borrarle la formula. */
+      c[C.LAM_A] = ""; c[C.LAM_B] = "";
+      if(hayColumnas){ c[C.COTIZ] = cotiz; c[C.OC] = oc; }
       data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});
       PROCS.forEach(p=>casillas.push({fila:r, col:p.i, aplica:true}));
     });
@@ -192,6 +207,8 @@ $("#form-new").addEventListener("submit", async ev=>{
     // Listo para la siguiente ficha, sin arrastrar la anterior.
     $("#n-lineas").innerHTML = ""; anadirLinea();
     $("#n-cli").value = "";
+    if($("#n-cotiz")) $("#n-cotiz").value = "";
+    if($("#n-oc"))    $("#n-oc").value = "";
     $("#n-op").value = String(nextOp());
     $("#n-fecha").value = hoy();
     hintOp();
@@ -214,6 +231,8 @@ $("#n-cli").addEventListener("input", hintOp);
 $("#n-reset").onclick = ()=>{
   $("#n-lineas").innerHTML = ""; anadirLinea();
   $("#n-cli").value = "";
+  if($("#n-cotiz")) $("#n-cotiz").value = "";
+  if($("#n-oc"))    $("#n-oc").value = "";
   $("#n-fecha").value = hoy();
   $("#n-op").value = String(nextOp());
   hintOp();
@@ -234,8 +253,15 @@ const CAMPOS_EDITABLES = [
   {k:"CARA_A", et:"Cara A",    tipo:"lista", lista:()=>MODELO.listas.CARAS},
   {k:"CARA_B", et:"Cara B",    tipo:"lista", lista:()=>MODELO.listas.CARAS},
   {k:"DESP",   et:"Estado",    tipo:"lista", lista:()=>MODELO.listas.ESTADOS},
-  {k:"FDESP",  et:"Fecha de despacho", tipo:"texto"}
+  {k:"FDESP",  et:"Fecha de despacho", tipo:"texto"},
+  // Solo si la hoja tiene de verdad esas columnas; ver paneles-listas.js.
+  {k:"COTIZ",  et:"Cotización", tipo:"texto", propia:true},
+  {k:"OC",     et:"Orden de compra", tipo:"texto", propia:true}
 ];
+
+/** Los campos que se pueden editar hoy: los propios solo si hay columna. */
+const camposEditables = () => CAMPOS_EDITABLES.filter(f => !f.propia ||
+  (typeof ESTADO_COLUMNAS !== "undefined" && ESTADO_COLUMNAS.ok && C[f.k] !== undefined));
 
 function openDet(r){
   const row = ROWS.find(x=>x.r===r);
@@ -247,7 +273,7 @@ function openDet(r){
   $("#d-cli").textContent = c[C.CLI] ?? "";
   $("#d-fila").textContent = "fila " + r;
 
-  $("#d-campos").innerHTML = CAMPOS_EDITABLES.map(f=>{
+  $("#d-campos").innerHTML = camposEditables().map(f=>{
     const v = c[C[f.k]] ?? "";
     // Un campo con muchas opciones se busca escribiendo, igual que en la hoja.
     if(f.tipo === "busca"){
@@ -267,8 +293,10 @@ function openDet(r){
         `</select></label>`;
     }
     const val = f.tipo === "numero" ? (num(v) ?? "") : (f.k==="FECHA"||f.k==="FDESP" ? fmtDate(v) : v);
+    // El largo se corta al milimetro: tres decimales, no dos.
+    const paso = f.k === "LARGO" ? "0.001" : "0.01";
     return `<label class="f"><span>${esc(f.et)}</span>
-      <input class="inp" data-d="${f.k}" ${f.tipo==="numero"?'type="number" step="0.01"':""}
+      <input class="inp" data-d="${f.k}" ${f.tipo==="numero"?`type="number" step="${paso}"`:""}
         value="${esc(val)}"></label>`;
   }).join("");
 

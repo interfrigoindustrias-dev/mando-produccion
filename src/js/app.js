@@ -90,6 +90,13 @@ async function enterApp(){
     await leerListasDeLaHoja();
     if(typeof pintarOrigenListas === "function") pintarOrigenListas();
   }
+  /* Las columnas que la aplicacion añade se resuelven contra los encabezados
+     de verdad, nunca contando posiciones. Si no hay sitio limpio, esos campos
+     no se ofrecen y se dice por que. */
+  if(typeof resolverColumnasPropias === "function"){
+    await resolverColumnasPropias();
+    if(typeof aplicarColumnasPropias === "function") aplicarColumnasPropias();
+  }
   initForm();
   // El dia de referencia es del resumen de puertas; paneles no lo tiene.
   const dia = $("#r-dia"); if(dia) dia.value = iso(new Date());
@@ -111,6 +118,9 @@ async function enterApp(){
     if(nf) toast(`Hoja ampliada: ${nf} fila(s) añadida(s)`,"ok");
   }catch(e){ console.warn("filas:", e.message); }
   await loadLog();                // el historial hace falta para poder reparar
+  // La rejilla PRIMERO: si la hoja no tiene las columnas que la app usa,
+  // cualquier escritura posterior se cae con el rango fuera de limites.
+  await si("migrarColumnas",     n=>`${n} columna(s) nueva(s) creada(s) en la hoja`);
   await sincronizarValidacion();        // la hoja ofrece las mismas opciones
   await si("repairSeparadas",    n=>`${n} separada(s) pasadas a su propia columna`);
   await si("repairFechasFalsas", n=>`${n} fecha(s) de proceso restaurada(s)`);

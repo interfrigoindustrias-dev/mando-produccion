@@ -100,3 +100,100 @@ function pintarOrigenListas(){
     : `${n} productos y ${c} acabados. No se pudo leer la hoja: se usan los que trae la aplicación.`;
   el.classList.toggle("warn", LISTAS_ORIGEN !== "hoja");
 }
+
+/* ============================== LA FORMA DE LA HOJA ==============================
+   La cotizacion y la orden de compra son campos nuevos: no habia columna para
+   ellos. Añadir dos columnas a una hoja de produccion en marcha, a ciegas y
+   contando posiciones, es exactamente como se rompio esto la primera vez —yo
+   creia que la hoja acababa en la U y resulta que V y W ya tenian los metros
+   de lamina—.
+
+   Asi que no se cuenta: se leen los encabezados y se decide con lo que hay.
+     · si las columnas ya existen, se usan donde esten
+     · si no existen y el sitio esta libre, se crean ahi
+     · si el sitio esta ocupado por otra cosa, NO se toca nada y se avisa    */
+
+/** Encabezados de la hoja, tal cual. Indice 0 = A. */
+let ENCABEZADOS = [];
+/** Que paso con las columnas propias: "listas", "creadas" o el motivo del no. */
+let ESTADO_COLUMNAS = {ok:false, motivo:"sin comprobar"};
+
+const normaliza = t => String(t ?? "").trim().toUpperCase()
+  .normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+async function resolverColumnasPropias(){
+  const propias = MODELO.columnasPropias || [];
+  if(!propias.length) return (ESTADO_COLUMNAS = {ok:true, motivo:"no hay"});
+
+  try{
+    const j = await api(`/values/${encodeURIComponent(rng("A1:AZ1"))}`);
+    ENCABEZADOS = ((j.values || [])[0] || []).map(v => String(v ?? ""));
+  }catch(e){
+    return (ESTADO_COLUMNAS = {ok:false, motivo:"no se pudieron leer los encabezados"});
+  }
+
+  // Hasta donde llega de verdad lo escrito en la fila 1.
+  let ultima = -1;
+  ENCABEZADOS.forEach((t, i)=>{ if(normaliza(t)) ultima = i; });
+
+  const porCrear = [];
+  for(const {k, encabezado} of propias){
+    const yaEsta = ENCABEZADOS.findIndex(t => normaliza(t) === normaliza(encabezado));
+    if(yaEsta >= 0){
+      if(yaEsta >= NCOL){
+        return (ESTADO_COLUMNAS = {ok:false,
+          motivo:`«${encabezado}» está en la columna ${A1(yaEsta)}, más allá de donde llega la aplicación`});
+      }
+      C[k] = yaEsta;                       // esta donde esta: se usa ahi
+      continue;
+    }
+    const destino = C[k];
+    if(destino === undefined || destino >= NCOL){
+      return (ESTADO_COLUMNAS = {ok:false, motivo:`no hay sitio para «${encabezado}»`});
+    }
+    // El sitio previsto tiene que estar VACIO. Si hay algo, no se toca.
+    if(normaliza(ENCABEZADOS[destino] || "")){
+      return (ESTADO_COLUMNAS = {ok:false,
+        motivo:`la columna ${A1(destino)} ya se llama «${ENCABEZADOS[destino]}»`});
+    }
+    if(destino <= ultima){
+      /* Hueco en medio: puede ser una columna en uso sin encabezado. Con eso
+         no se juega — se avisa y se deja como esta. */
+      return (ESTADO_COLUMNAS = {ok:false,
+        motivo:`la columna ${A1(destino)} está en medio de la hoja y no tiene encabezado`});
+    }
+    porCrear.push({k, encabezado, i: destino});
+  }
+
+  if(porCrear.length){
+    try{
+      for(const {encabezado, i} of porCrear){
+        await api(`/values/${encodeURIComponent(rng(`${A1(i)}1`))}?valueInputOption=USER_ENTERED`,
+          {method:"PUT", body: JSON.stringify({values: [[encabezado]]})});
+        ENCABEZADOS[i] = encabezado;
+      }
+      toast(`Columna(s) añadida(s) a la hoja: ${porCrear.map(p=>p.encabezado).join(", ")}`, "ok");
+    }catch(e){
+      return (ESTADO_COLUMNAS = {ok:false, motivo:"no se pudieron crear: " + e.message});
+    }
+  }
+  return (ESTADO_COLUMNAS = {ok:true, motivo: porCrear.length ? "creadas" : "ya estaban"});
+}
+
+/** Los dos campos nuevos solo se ofrecen si tienen columna de verdad. */
+function aplicarColumnasPropias(){
+  const hay = ESTADO_COLUMNAS.ok;
+  $$("[data-necesita-columna]").forEach(el=>{
+    const campo = el.closest("label") || el;
+    campo.classList.toggle("hide", !hay);
+    el.disabled = !hay;
+  });
+  const av = $("#n-aviso-columnas");
+  if(av){
+    av.classList.toggle("hide", hay);
+    if(!hay){
+      av.textContent = `La cotización y la orden de compra no se pueden guardar: ` +
+        `${ESTADO_COLUMNAS.motivo}. El resto de la ficha funciona igual.`;
+    }
+  }
+}
