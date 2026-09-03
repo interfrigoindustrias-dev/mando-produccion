@@ -306,18 +306,12 @@ Ahora una linea al 100 % **se queda en la cola**, resaltada en verde y con
 donde queda algo que decidir, asi que se ve. Pulsar Terminar es lo que la
 cierra.
 
-## Lo que queda por comprobar
+## El ancho
 
-**En la hoja real.** Hasta esta versión, la página de paneles ejecutaba las
-reparaciones de puertas contra la pestaña PANEL (decisión 22). Conviene mirar
-en la hoja, una sola vez:
+**1,16 m, para todo**: panel y piso, en cualquier espesor. Confirmado por el
+usuario. Lo único que cambia de una línea a otra es el largo, y por eso es lo
+único que se pide al crear la ficha.
 
-- **M1** y la columna M: no deben tener un desplegable de prioridades; son las
-  casillas de PERFIL.
-- **AL1** y **AM1**: pueden haberse quedado con los encabezados «SEPARADA PARA»
-  y «SELLO», que ahí no significan nada.
+De ahí salen los metros cuadrados —`cantidad × largo × 1,16`— y de ellos el
+poliuretano y los metros lineales de lámina.
 
-Nada de eso vuelve a escribirse: las coordenadas ahora las declara `modelo.js`.
-
-**Sin hacer.** Paneles no tiene impresión de etiquetas ni hoja de ruta; puertas
-sí. Está por decidir si hace falta, y con qué formato.

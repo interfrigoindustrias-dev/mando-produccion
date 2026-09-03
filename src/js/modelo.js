@@ -136,7 +136,7 @@ const MODELO_PUERTAS = {
      S  FIN PROCESO
      T  ESTADO
      U  FECHA DE DESPACHO                                                    */
-const ANCHO_PANEL = 1.16;          // metros; el largo es lo unico que varia
+const ANCHO_PANEL = 1.16;   // metros. Igual para panel y para piso, todos los espesores
 
 /* POLIURETANO — deducido de los datos de la hoja y verificado exacto:
      UNIDAD = largo x 1,16 x espesor(m) x 38
@@ -268,10 +268,9 @@ const MODELO_PANELES = {
 
   /** Kilos de poliuretano de la linea, calculados. Se usan para rellenar las
    *  filas nuevas y para comprobar que lo que trae la hoja cuadra. */
-  /* NOTA sobre PISO: se le aplica el mismo ancho de 1,16 m que al panel, que
-     es lo unico que se sabe. Si el piso se fabrica en otro ancho, hay que
-     declararlo aparte: cambiaria los metros cuadrados y con ellos el
-     poliuretano calculado. */
+  /* El ancho es 1,16 m para TODO: panel y piso, en cualquier espesor.
+     Confirmado por el usuario. Lo unico que varia de una linea a otra es el
+     largo, y por eso es lo unico que se pide al crear la ficha. */
   poliuretano(c){
     const esp = espesorMetros(c[6]);
     if(esp === null) return null;
