@@ -341,8 +341,11 @@ const MODELOS_DATOS = {puertas: MODELO_PUERTAS, paneles: MODELO_PANELES};
  *  Escribir A1:Y1 de una vez es comodo y equivocado: borra las formulas por el
  *  camino. Se escribe en tramos que las saltan. */
 function tramosFila(modelo, fila, celdas){
-  const saltar = new Set((modelo.formulas || []).map(k => modelo.col[k])
-    .filter(i => i !== undefined));
+  /* Cuales saltar lo dice la hoja cuando se ha podido mirar; la lista del
+     modelo es el respaldo. Ver paneles-listas.js. */
+  const deLaHoja = typeof columnasDeMatriz === "function" ? columnasDeMatriz() : null;
+  const saltar = new Set(deLaHoja && deLaHoja.length ? deLaHoja
+    : (modelo.formulas || []).map(k => modelo.col[k]).filter(i => i !== undefined));
   const tramos = [];
   let ini = null;
   for(let i = 0; i <= modelo.ncol; i++){

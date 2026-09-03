@@ -214,16 +214,11 @@ function aplicarColumnasPropias(){
 let FORMULA_M2 = null;
 
 async function detectarFormulaM2(){
-  const col = C.M2 === undefined ? null : A1(C.M2);
-  if(!col) return null;
-  try{
-    const j = await api(`/values/${encodeURIComponent(rng(`${col}2:${col}200`))}` +
-                        `?valueRenderOption=FORMULA`);
-    for(const fila of (j.values || [])){
-      const v = String((fila || [])[0] ?? "");
-      if(v.startsWith("=")){ FORMULA_M2 = v; break; }
-    }
-  }catch(e){ FORMULA_M2 = null; }
+  if(!COLUMNAS_CALCULADAS) await detectarColumnasCalculadas();
+  const info = COLUMNAS_CALCULADAS && COLUMNAS_CALCULADAS.get(C.M2);
+  /* Solo si es POR FILA. Si fuera de matriz no habria que reescribirla sino
+     saltarla, y meterle una formula la romperia. */
+  FORMULA_M2 = (info && info.clase === "porFila") ? info.plantilla : null;
   return FORMULA_M2;
 }
 
@@ -235,4 +230,83 @@ async function detectarFormulaM2(){
 function m2Value(r, c){
   if(FORMULA_M2) return FORMULA_M2.replace(/([A-Z]+\$?)(\d+)/g, (_, col) => col + r);
   return MODELO.metros(c) || "";
+}
+
+/* ============================== COLUMNAS CALCULADAS ==============================
+   Hay dos clases de formula en la hoja y NO se arreglan igual:
+
+     de matriz   una sola celda arriba llena la columna entera. Escribir en
+                 cualquier fila la rompe del todo, asi que se SALTA.
+     por fila    una formula en cada linea. Ahi no se rompe nada visible, pero
+                 la fila escrita deja de recalcularse y nace congelada mientras
+                 las de arriba siguen vivas. Esas se REESCRIBEN.
+
+   Cual es cual estaba escrito a mano en modelo.js, copiado de un conteo. Un
+   conteo es una copia, y las copias se quedan viejas —ya paso con los productos
+   y con los acabados—. Asi que se mira la hoja:
+
+     una sola formula, en la primera fila con datos  ->  de matriz
+     formula en la mayoria de las filas              ->  por fila
+
+   Lo de modelo.js queda de respaldo, para cuando no se pueda leer.           */
+
+/** i -> {clase, plantilla, desde}. null si no se pudo leer. */
+let COLUMNAS_CALCULADAS = null;
+
+async function detectarColumnasCalculadas(){
+  try{
+    const j = await api(`/values/${encodeURIComponent(rng(`A2:${LAST_COL}31`))}` +
+                        `?valueRenderOption=FORMULA`);
+    /* Solo filas con OP: una fila vacia no dice nada sobre si su columna lleva
+       formula, y contarla haria pasar por «de matriz» a una que es por fila. */
+    const conDatos = (j.values || [])
+      .map((f, k) => ({f: f || [], r: k + 2}))
+      .filter(x => String(x.f[C.OP] ?? "").trim());
+    if(conDatos.length < 2) return null;
+
+    const mapa = new Map();
+    for(let i = 0; i < NCOL; i++){
+      const conFormula = conDatos.filter(x => String(x.f[i] ?? "").startsWith("="));
+      if(!conFormula.length) continue;
+      const soloArriba = conFormula.length === 1 && conFormula[0].r === conDatos[0].r;
+      const casiTodas = conFormula.length >= conDatos.length * 0.6;
+      if(soloArriba)      mapa.set(i, {clase:"matriz",  plantilla: conFormula[0].f[i]});
+      else if(casiTodas)  mapa.set(i, {clase:"porFila", plantilla: conFormula[0].f[i],
+                                       desde: conFormula[0].r});
+      /* Ni una cosa ni la otra —cuatro celdas sueltas en una columna de texto—
+         no es una columna calculada: es alguien que puso una formula a mano en
+         unas filas. Se deja como esta. */
+    }
+    COLUMNAS_CALCULADAS = mapa;
+
+    const nombre = i => Object.keys(C).find(k => C[k] === i) || A1(i);
+    const dice = c => [...mapa].filter(([, v]) => v.clase === c)
+      .map(([i]) => `${A1(i)} (${nombre(i)})`).join(", ") || "ninguna";
+    console.info("columnas calculadas — de matriz:", dice("matriz"),
+                 "· por fila:", dice("porFila"));
+
+    /* Si la hoja tiene una columna por fila que la aplicacion no sabe
+       reescribir, se avisa: escribirle un valor encima la dejaria congelada y
+       nadie lo notaria. */
+    const sabemos = new Set([C.M2, C.STATUS]);
+    const huerfanas = [...mapa].filter(([i, v]) => v.clase === "porFila" && !sabemos.has(i));
+    if(huerfanas.length){
+      console.warn("columna(s) con fórmula por fila que la aplicación sobrescribe:",
+        huerfanas.map(([i]) => `${A1(i)} (${nombre(i)})`).join(", "));
+    }
+    return mapa;
+  }catch(e){
+    console.warn("columnas calculadas:", e.message);
+    COLUMNAS_CALCULADAS = null;
+    return null;
+  }
+}
+
+/** Las que hay que saltar al escribir una fila. De la hoja si se pudo leer;
+ *  si no, las que declara el modelo. */
+function columnasDeMatriz(){
+  if(COLUMNAS_CALCULADAS){
+    return [...COLUMNAS_CALCULADAS].filter(([, v]) => v.clase === "matriz").map(([i]) => i);
+  }
+  return (MODELO.formulas || []).map(k => C[k]).filter(i => i !== undefined);
 }

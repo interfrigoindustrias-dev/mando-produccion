@@ -180,15 +180,37 @@ function hacerFetch(){
       /* Con valueRenderOption=FORMULA la hoja devuelve la formula, no su
          resultado. La columna P —los metros— la tiene POR FILA, que es lo que
          hace que escribirle un numero encima la deje muerta. */
+      /* Con valueRenderOption=FORMULA la hoja devuelve la formula, no su
+         resultado, y hay DOS clases que no se arreglan igual:
+
+           K L V W   de matriz: UNA celda arriba llena la columna entera
+           P Q       por fila:  una formula en cada linea
+
+         La prueba las distingue porque la aplicacion tiene que distinguirlas:
+         a las primeras hay que saltarlas y a las segundas reescribirlas. */
       if(/valueRenderOption=FORMULA/.test(u) && tab === "PANEL"){
-        const m = a1.match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/);
-        if(m && m[1] === "P"){
-          const filas = [];
-          for(let f = +m[2]; f <= Math.min(+m[4], DATOS.PANEL.length); f++){
-            filas.push([`=1,16*E${f}*F${f}`]);
+        const MATRIZ = {10:"=ARRAYFORMULA(F2:F*1,16*0,076*38)",
+                        11:"=ARRAYFORMULA(K2:K*E2:E)",
+                        21:"=ARRAYFORMULA(E2:E*F2:F)",
+                        22:"=ARRAYFORMULA(E2:E*F2:F)"};
+        const POR_FILA = {15: f => `=1,16*E${f}*F${f}`,
+                          16: f => `=COUNTIF(M${f}:O${f}; TRUE) / COUNTA(M${f}:O${f})`};
+        const m = a1.match(/^([A-Z]+)(\d*):([A-Z]+)(\d*)$/);
+        const c1 = m ? colNum(m[1]) : 0;
+        const c2 = m ? colNum(m[3]) : 24;
+        const f1 = m && m[2] ? +m[2] : 1;
+        const f2 = m && m[4] ? +m[4] : DATOS.PANEL.length;
+        const filas = [];
+        for(let f = f1; f <= Math.min(f2, DATOS.PANEL.length); f++){
+          const fila = [];
+          for(let c = c1; c <= c2; c++){
+            if(POR_FILA[c])                fila.push(POR_FILA[c](f));
+            else if(MATRIZ[c] && f === 2)  fila.push(MATRIZ[c]);   // solo la de arriba
+            else                           fila.push((DATOS.PANEL[f-1] || [])[c] ?? "");
           }
-          return ok({values: filas});
+          filas.push(fila);
         }
+        return ok({values: filas});
       }
       return ok({values: leer(tab, a1)});
     }
@@ -457,6 +479,29 @@ function comprueba(nombre, cond, detalle){
       filasTocadas.every(f => fila(f)[23] === "COT-9001" && fila(f)[24] === "OC-4471"),
       filasTocadas.map(f=>`X=${fila(f)[23]} Y=${fila(f)[24]}`).join(" · "));
   }
+
+  console.log("\n=== las dos clases de fórmula, distinguidas mirando la hoja ===");
+  /* Cual es de matriz y cual por fila estaba escrito a mano, copiado de un
+     conteo. Ahora se mira la hoja, porque una lista copiada se queda vieja
+     —ya paso con los productos y con los acabados—. */
+  const clases = leer("COLUMNAS_CALCULADAS");
+  comprueba("se leyeron las columnas calculadas", !!clases && clases.size > 0,
+    clases ? [...clases].map(([i,v]) => A1TEST(i)+":"+v.clase).join(" · ") : "no se leyeron");
+  if(clases){
+    const clase = i => (clases.get(i) || {}).clase;
+    comprueba("K, L, V y W salen como de matriz",
+      [10,11,21,22].every(i => clase(i) === "matriz"),
+      [10,11,21,22].map(i => A1TEST(i)+":"+(clase(i)||"—")).join(" · "));
+    comprueba("P y Q salen como por fila",
+      clase(15) === "porFila" && clase(16) === "porFila",
+      "P:"+(clase(15)||"—")+" · Q:"+(clase(16)||"—"));
+    comprueba("y las columnas normales no se toman por calculadas",
+      ![0,1,2,4,5,6].some(i => clases.has(i)),
+      [0,1,2,4,5,6].filter(i=>clases.has(i)).map(A1TEST).join(", ") || "ninguna");
+  }
+  comprueba("lo que se salta al escribir sale de la hoja, no de la lista",
+    JSON.stringify(leer("columnasDeMatriz()").sort((a,b)=>a-b)) === "[10,11,21,22]",
+    "se saltan: " + leer("columnasDeMatriz()").sort((a,b)=>a-b).map(A1TEST).join(", "));
 
   console.log("\n=== los metros: la fórmula de la hoja, no un número ===");
   /* P tiene formula por fila. Escribirle el resultado no rompe nada visible,

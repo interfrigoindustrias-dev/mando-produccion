@@ -556,6 +556,25 @@ P lo hace ahora con `m2Value`, que **lee la formula que la hoja ya usa** y le
 mueve las referencias a la fila nueva, en vez de inventarse una: asi no hay que
 adivinar si en este documento el decimal es coma o punto.
 
+**Y cual es de cada clase tampoco se copia.** Estaba escrito a mano en el
+modelo, sacado de un conteo del xlsx — y un conteo es una copia, con la misma
+fecha de caducidad que tuvieron las listas de productos y de acabados. Peor aun:
+el conteo se hizo con una expresion regular que confundia celdas autocerradas y
+llego a atribuirle a una columna el rango de otra.
+
+`detectarColumnasCalculadas()` lo mira en la hoja al arrancar, sobre las
+primeras filas CON DATOS —una fila vacia no dice nada de su columna—:
+
+  una sola formula, en la primera fila con datos  ->  de matriz
+  formula en la mayoria de las filas              ->  por fila
+  cuatro celdas sueltas en una columna de texto   ->  ninguna de las dos,
+                                                      es alguien que puso una
+                                                      formula a mano; se deja
+
+Y si aparece una columna por fila que la aplicacion sobrescribe sin saber
+reescribirla, se avisa por consola en vez de dejarla congelada en silencio. La
+lista del modelo queda de respaldo para cuando no se pueda leer.
+
 ## 32. Un automatismo que corre solo necesita prueba antes que nadie
 
 El escalado de prioridad —lo unico que cambia datos sin que nadie lo pida— no
