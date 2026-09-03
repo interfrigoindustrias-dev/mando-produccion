@@ -66,11 +66,11 @@ const DATOS = {
            c[5]="PP 9002"; c[6]="SE12"; c[7]=100; c[8]=200; c[9]=1; c[12]="ALTA";
            for(let i=13;i<=20;i++) c[i]=false; c[22]=0; return c; })()
   ],
-  /* La fila 12 es «BAJA TOCADA»: nacio hace 20 dias pero se le marco un proceso
-     ayer. Con la regla nueva —los dias cuentan desde el ultimo toque— NO debe
+  /* La fila 13 es «BAJA TOCADA»: nacio hace 20 dias pero se le marco un proceso
+     ayer. Con la regla nueva —los dias cuentan desde el ultimo cambio— NO debe
      escalar, aunque por fecha de creacion le tocaria de sobra. */
   "LOG PANELES": [["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"],
-                  [hace(1)+" 08:30","yo@interfrigo.com.co","EDITA","16","12","PERFIL","pendiente","hecho"]],
+                  [hace(1)+" 08:30","yo@interfrigo.com.co","EDITA","16","13","PERFIL","pendiente","hecho"]],
   "LOG APP":     [["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"]],
   "USUARIOS":    [["CORREO","NOMBRE","ROL","ACTIVO","NOTA"],
                   ["yo@interfrigo.com.co","Yo","admin",true,""]],
@@ -140,6 +140,14 @@ function hacerFetch(){
 
     if(u.includes("auth.php")){
       return ok({access_token:"t0k3n", expires_in:3600, email:"yo@interfrigo.com.co"});
+    }
+    // Añadir al final: es como se escribe el historial.
+    if(u.includes(":append")){
+      const rango = decodeURIComponent(u.split("/values/")[1].split(":append")[0]);
+      const {tab} = celdasDe(rango);
+      const grid = DATOS[tab] || (DATOS[tab] = []);
+      (cuerpo.values || []).forEach(f => grid.push(f.slice()));
+      return ok({updates:{updatedRows:(cuerpo.values||[]).length}});
     }
     if(u.includes("/values:batchUpdate")){
       (cuerpo.data||[]).forEach(d=>{
