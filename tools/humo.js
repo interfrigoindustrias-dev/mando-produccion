@@ -86,6 +86,7 @@ function celdasDe(rango){                 // "'PANEL'!A1:U"  ->  {tab, a1}
   const m = String(rango).match(/^'?([^'!]+)'?!(.+)$/);
   return m ? {tab:m[1], a1:m[2]} : {tab:"", a1:rango};
 }
+const A1TEST = n => { let t=''; n++; while(n>0){ const m=(n-1)%26; t=String.fromCharCode(65+m)+t; n=(n-m-1)/26; } return t; };
 const colNum = L => [...L].reduce((n,ch)=>n*26 + (ch.charCodeAt(0)-64), 0) - 1;
 
 function leer(tab, a1){
@@ -407,27 +408,41 @@ function comprueba(nombre, cond, detalle){
   const opNueva = $("#n-op").value;
   $("#form-new").dispatchEvent(new w.Event("submit", {bubbles:true, cancelable:true}));
   await new Promise(r => setTimeout(r, 500));
-  const nuevas = ESCRITURAS.filter(e => /^A\d+:Y\d+$/.test(e.a1));
-  comprueba("escribe dos filas completas A..Y", nuevas.length === 2,
-    "filas escritas: " + nuevas.length);
-  if(nuevas.length === 2){
-    const dosDigitos = n => String(n).padStart(2, "0");
+  /* La fila NO se escribe de A a Y de un tiron: eso borraria las formulas de la
+     hoja por el camino. Se escribe en tramos que las saltan. */
+  const tramos = ESCRITURAS.filter(e => e.tab === "PANEL" &&
+    /^[A-Z]+[0-9]+:[A-Z]+[0-9]+$/.test(e.a1));
+  const filasTocadas = [...new Set(tramos.map(e => +e.a1.match(/[0-9]+/)[0]))];
+  comprueba("crea las dos líneas", filasTocadas.length === 2,
+    "filas: " + filasTocadas.join(", "));
+
+  const escritas = new Set();
+  tramos.forEach(e=>{
+    const [a, b] = e.a1.split(":").map(x => colNum(x.match(/^[A-Z]+/)[0]));
+    for(let i = a; i <= b; i++) escritas.add(i);
+  });
+  const letras = [...escritas].sort((x,y)=>x-y).map(A1TEST).join(" ");
+  comprueba("no toca K ni L, que son la fórmula del poliuretano",
+    !escritas.has(10) && !escritas.has(11), "columnas escritas: " + letras);
+  comprueba("ni V ni W, que son la de la lámina",
+    !escritas.has(21) && !escritas.has(22), "columnas escritas: " + letras);
+  comprueba("pero sí todo lo demás, de la A a la Y",
+    [0,2,6,12,15,19,23,24].every(i => escritas.has(i)), "columnas escritas: " + letras);
+
+  if(filasTocadas.length === 2){
+    const fila = f => DATOS.PANEL[f-1];
+    const dd = n => String(n).padStart(2, "0");
     const ahora = new Date();
-    const hoyTxt = `${dosDigitos(ahora.getDate())}/${dosDigitos(ahora.getMonth()+1)}/${ahora.getFullYear()}`;
+    const hoyTxt = `${dd(ahora.getDate())}/${dd(ahora.getMonth()+1)}/${ahora.getFullYear()}`;
     comprueba("la fecha de creación es la de hoy",
-      nuevas.every(e => e.valores[0][0] === hoyTxt),
-      "escrito: " + nuevas.map(e=>e.valores[0][0]).join(" y ") + " · hoy: " + hoyTxt);
-    const ops = nuevas.map(e => e.valores[0][2]);
+      filasTocadas.every(f => fila(f)[0] === hoyTxt),
+      "escrito: " + filasTocadas.map(f=>fila(f)[0]).join(" y ") + " · hoy: " + hoyTxt);
+    const ops = filasTocadas.map(f => fila(f)[2]);
     comprueba("las dos líneas comparten OP con sufijo",
       ops[0] === opNueva + "-1" && ops[1] === opNueva + "-2", "OP: " + ops.join(" y "));
-    const kl = nuevas.every(e => e.valores[0][10] === "" && e.valores[0][11] === "");
-    comprueba("no pisa K ni L, que son fórmula de la hoja", kl);
-    comprueba("ni V ni W, que también lo son",
-      nuevas.every(e => e.valores[0][21] === "" && e.valores[0][22] === ""),
-      nuevas.map(e=>`V=${JSON.stringify(e.valores[0][21])} W=${JSON.stringify(e.valores[0][22])}`).join(" · "));
     comprueba("guarda la cotización y la orden de compra",
-      nuevas.every(e => e.valores[0][23] === "COT-9001" && e.valores[0][24] === "OC-4471"),
-      nuevas.map(e=>`X=${JSON.stringify(e.valores[0][23])} Y=${JSON.stringify(e.valores[0][24])}`).join(" · "));
+      filasTocadas.every(f => fila(f)[23] === "COT-9001" && fila(f)[24] === "OC-4471"),
+      filasTocadas.map(f=>`X=${fila(f)[23]} Y=${fila(f)[24]}`).join(" · "));
   }
 
   console.log("\n=== el producto: catorce opciones, y se busca escribiendo ===");

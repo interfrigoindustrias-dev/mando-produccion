@@ -524,3 +524,38 @@ arranca las dos paginas de verdad: el fallo salio como «reventó al cargar:
 grupoFiltros is not defined» en vez de como una pagina en blanco en produccion.
 
 Regla, cuando se comparte repositorio: `git add` de lo propio, nunca `-A`.
+
+## 31. Escribir "" en una celda no la deja en paz: la borra
+
+Las filas nuevas se escribian de A a Y de un tiron, poniendo cadena vacia en las
+columnas de formula —K y L, el poliuretano; V y W, la lamina— con la idea de
+«no tocarlas». Pero una escritura de "" con USER_ENTERED vacia la celda, y si la
+hoja tenia la formula extendida hacia abajo, cada linea nueva se la cargaba.
+
+El sintoma habria sido el peor posible: las lineas viejas con su poliuretano
+calculado y las nuevas en blanco, sin ningun error por ningun lado, y el consumo
+de material cuadrando cada vez peor sin motivo aparente.
+
+Las columnas de formula se declaran en el modelo (`formulas`) y `tramosFila()`
+parte la escritura en trozos que las saltan. Una fila de paneles se escribe en
+tres: `A..J`, `M..U` y `X..Y`.
+
+Vale para cualquier sitio que cree lineas de panel, incluida la casilla «esta
+puerta lleva panel» de la ficha de puerta, que escribe en la misma pestaña.
+
+## 32. Un automatismo que corre solo necesita prueba antes que nadie
+
+El escalado de prioridad —lo unico que cambia datos sin que nadie lo pida— no
+tenia ni una comprobacion. Al escribir la primera aparecio que una BAJA de nueve
+dias acababa en ALTA en el mismo arranque, saltandose MEDIA.
+
+La causa era de orden: el escalado se dispara desde `refresh()`, que en el
+arranque va ANTES de `loadLog()`. Sin historial, «dias sin tocarse» se cuenta
+desde que la linea nacio.
+
+Si el fallo hubiera llegado a produccion, el sintoma habria sido «esta OP subio
+sola a ALTA y no se por que», semanas despues y sin forma de reconstruirlo.
+
+Regla: lo que corre sin que nadie lo mire se prueba primero, no ultimo. Y las
+fechas de esas pruebas se calculan relativas a hoy, o la prueba caduca sola y un
+dia empieza a fallar sin que nadie haya tocado nada.

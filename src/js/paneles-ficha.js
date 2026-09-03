@@ -184,23 +184,19 @@ $("#form-new").addEventListener("submit", async ev=>{
       c[C.M2] = MODELO.metros(c) || "";
       c[C.STATUS] = statusValue(r, c);
       c[C.DESP] = ESTADO.PROCESO;
-      /* K y L son formula de la hoja. Se dejan VACIAS a proposito: si la
-         formula esta extendida, la hoja las rellena sola; escribir un numero
-         encima la borraria y el consumo dejaria de cuadrar con la hoja. */
-      c[C.POLI_UNI] = ""; c[C.POLI_TOT] = "";
-      /* V y W —los metros de lamina— los calcula la hoja igual que K y L: se
-         dejan vacias para no borrarle la formula. */
-      c[C.LAM_A] = ""; c[C.LAM_B] = "";
       if(hayColumnas){ c[C.COTIZ] = cotiz; c[C.OC] = oc; }
-      data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});
+      /* K, L, V y W son formula de la hoja y NO se escriben. Dejarlas vacias no
+         bastaba: escribir "" en una celda no la deja en paz, la borra, y con
+         ella la formula. Se escribe en tramos que las saltan. */
+      data.push(...tramosFila(MODELO, r, c));
       PROCS.forEach(p=>casillas.push({fila:r, col:p.i, aplica:true}));
     });
 
     await writeCells(data);
     setCheckboxUI(casillas);            // una fila nueva no hereda el formato
-    logBulk(data.map((d,k)=>({accion:"CREA", op:d.v[0][C.OP], fila:filas[k],
-                              campo:"línea", antes:"", despues:"creada"})));
-    toast(`${data.length} línea(s) creada(s) en la OP ${op}`, "ok");
+    logBulk(filas.map((r,k)=>({accion:"CREA", op:nombreOp(op, k, trs.length), fila:r,
+                               campo:"línea", antes:"", despues:"creada"})));
+    toast(`${filas.length} línea(s) creada(s) en la OP ${op}`, "ok");
     $("#ov-nueva").classList.add("hide");
     lastHash = ""; await refresh(false);
 

@@ -207,6 +207,13 @@ const MODELO_PANELES = {
     OC:24         // Y   orden de compra       (la coloca la aplicacion)
   },
 
+  /* COLUMNAS QUE SON FORMULA DE LA HOJA. No se escriben NUNCA, ni con un
+     numero ni con una cadena vacia: escribir "" en una celda no la «deja en
+     paz», la borra, y con ella la formula. Una fila nueva escrita de A a Y de
+     un tirón se cargaba el calculo del poliuretano y el de la lamina si la
+     hoja los tenia extendidos hacia abajo. */
+  formulas: ["POLI_UNI", "POLI_TOT", "LAM_A", "LAM_B"],
+
   /** Las dos caras y su metraje de lamina, emparejados: el tipo de lamina de
    *  la cara A se consume en los metros de V, y el de la B en los de W. */
   laminas: [{cara:"CARA_A", metros:"LAM_A", et:"Cara A"},
@@ -317,6 +324,29 @@ const MODELO_PANELES = {
 };
 
 const MODELOS_DATOS = {puertas: MODELO_PUERTAS, paneles: MODELO_PANELES};
+
+/** Los trozos en los que hay que escribir una fila para no tocar las columnas
+ *  de formula. Devuelve [{a1, v}] listo para writeCells.
+ *
+ *  Escribir A1:Y1 de una vez es comodo y equivocado: borra las formulas por el
+ *  camino. Se escribe en tramos que las saltan. */
+function tramosFila(modelo, fila, celdas){
+  const saltar = new Set((modelo.formulas || []).map(k => modelo.col[k])
+    .filter(i => i !== undefined));
+  const tramos = [];
+  let ini = null;
+  for(let i = 0; i <= modelo.ncol; i++){
+    const corta = i === modelo.ncol || saltar.has(i);
+    if(corta){
+      if(ini !== null){
+        tramos.push({a1: `${A1(ini)}${fila}:${A1(i-1)}${fila}`,
+                     v: [celdas.slice(ini, i)]});
+        ini = null;
+      }
+    } else if(ini === null) ini = i;
+  }
+  return tramos;
+}
 
 /** El modelo de ESTA pagina. Todo lo demas lee de aqui. */
 const MODELO = MODELOS_DATOS[MOD.id] || MODELO_PUERTAS;
