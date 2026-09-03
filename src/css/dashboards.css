@@ -126,3 +126,18 @@
 .para{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
 .sep-x{margin-left:6px;font-size:14px;line-height:1;opacity:.55}
 .sep-x:hover{opacity:1;color:var(--bad)}
+
+/* ---------- plazo de entrega ----------
+   Es UN numero y lo demas es su explicacion: si se enseña todo igual, quien
+   atiende al telefono no sabe cual decir. Mismo trato que en paneles. */
+.entrega{ display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap }
+.entrega-num{
+  display:grid; place-items:center; min-width:120px; padding:14px 18px;
+  border-radius:var(--r2); background:var(--soft); color:var(--acc);
+}
+.entrega-num b{ font-size:40px; line-height:1; font-variant-numeric:tabular-nums }
+.entrega-num span{ font-size:12px; text-transform:uppercase; letter-spacing:.08em }
+.entrega-txt{ flex:1; min-width:260px; font-size:13px; color:var(--tx2) }
+.entrega-txt b{ color:var(--tx) }
+.entrega-txt ul{ margin:8px 0; padding-left:18px }
+.entrega-txt li{ margin:3px 0 }

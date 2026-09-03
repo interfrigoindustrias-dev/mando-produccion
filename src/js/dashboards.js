@@ -6,6 +6,93 @@
 "use strict";
 
 /* ---------- Resumen (hoja STATUS) ---------- */
+/* ---------- plazo de entrega ----------
+   Gemelas de las de paneles-resumen.js. No se comparten todavia porque las dos
+   paginas no cargan los mismos archivos y unificarlas toca codigo de paneles;
+   si alguna vez se mueven a util.js, hay que quitarlas de los dos sitios a la
+   vez o una redeclara a la otra. */
+
+/** Dias naturales entre que la puerta empezo y que se acabo. */
+function diasFabricacionPuerta(c){
+  const ini = toDate(c[C.FINI]) || toDate(c[C.FECHA]);
+  const fin = toDate(c[C.FPROC]);
+  if(!ini || !fin) return null;
+  const d = Math.round((fin - ini) / 86400000);
+  return d >= 0 ? d : null;                    // fechas al reves: dato malo
+}
+function medianaPuertas(xs){
+  if(!xs.length) return null;
+  const o=[...xs].sort((a,b)=>a-b), m=o.length>>1;
+  return o.length % 2 ? o[m] : Math.round((o[m-1]+o[m])/2);
+}
+function percentilPuertas(xs, p){
+  if(!xs.length) return null;
+  const o=[...xs].sort((a,b)=>a-b);
+  return o[Math.min(o.length-1, Math.ceil(p*o.length)-1)];
+}
+
+/** Lo que se le puede prometer hoy a un cliente que llame preguntando.
+ *
+ *  Se mide en PUNTOS, que es como esta casa cuenta la capacidad: una puerta
+ *  grande no cuesta lo mismo que una pequeña, y contar puertas sueltas daria
+ *  un plazo que no se cumple en cuanto entra un pedido de las caras. */
+function pintarEntrega(F){
+  const el = $("#r-entrega"); if(!el) return;
+
+  const hechas = F.filter(({c})=>completa(c));
+  const tiempos = hechas.map(({c})=>diasFabricacionPuerta(c)).filter(v=>v!==null);
+  const medio = medianaPuertas(tiempos);
+  const p90 = percentilPuertas(tiempos, 0.9);
+
+  /* Ritmo real de los ultimos 60 dias naturales. Naturales y no habiles: al
+     cliente se le promete en el calendario de la pared, no en el de la nomina. */
+  const desde = new Date(); desde.setDate(desde.getDate() - 60);
+  const recientes = hechas.filter(({c})=>{ const f = toDate(c[C.FPROC]); return f && f >= desde; });
+  const ptsRecientes = recientes.reduce((a,x)=>a+puntos(x.c), 0);
+  const ritmo = ptsRecientes / 60;                       // puntos por dia natural
+
+  // La cola: lo que hay pedido y sin terminar. Es lo que va DELANTE del pedido
+  // nuevo, y por eso cuenta tanto como lo que se tarda en hacerlo.
+  const pend = F.filter(({c})=>!completa(c) && !despachada(c) && !anulada(c));
+  const ptsPend = pend.reduce((a,x)=>a+puntos(x.c), 0);
+  const diasCola = ritmo > 0 ? Math.ceil(ptsPend / ritmo) : null;
+
+  if(medio === null && diasCola === null){
+    el.innerHTML = `<p class="mut">Todavía no hay puertas terminadas con fecha de
+      inicio y de fin, así que no se puede estimar un plazo con datos propios.
+      En cuanto se cierren unas cuantas, aparece aquí.</p>`;
+    return;
+  }
+
+  /* Dos numeros distintos y conviene no confundirlos: lo que se ha tardado
+     historicamente, y lo que se tardaria ahora contando la cola que ya hay
+     delante. Se ofrece el mayor de los dos, que es el honesto. */
+  const historico = p90 ?? medio;
+  const propuesta = Math.max(historico ?? 0, diasCola ?? 0);
+  const holgura = Math.ceil(propuesta * 1.15);           // 15 % de margen
+
+  el.innerHTML = `
+    <div class="entrega">
+      <div class="entrega-num"><b>${holgura}</b><span>días</span></div>
+      <div class="entrega-txt">
+        <p>Es el plazo que se puede comprometer hoy para un pedido nuevo, con un
+        15 % de margen sobre el peor de estos dos datos:</p>
+        <ul>
+          <li>Lo que se ha tardado: <b>${historico ?? "—"} días</b> en nueve de cada
+            diez puertas (${tiempos.length} con fecha de inicio y de fin;
+            la mitad se hizo en ${medio ?? "—"} o menos).</li>
+          <li>La cola que ya hay delante: <b>${diasCola ?? "—"} días</b>
+            (${Math.round(ptsPend).toLocaleString("es-CO")} puntos pendientes
+            a ${ritmo ? ritmo.toFixed(1) : "—"} puntos/día).</li>
+        </ul>
+        <p class="mut">Días naturales, no hábiles: al cliente se le promete en el
+        calendario de la pared. Sube en cuanto entra trabajo y baja cuando la cola
+        se vacía, así que conviene mirarlo el día que se promete y no repetir el de
+        la semana pasada.</p>
+      </div>
+    </div>`;
+}
+
 function renderResumen(){
   const dia = toDate($("#r-dia").value) || new Date();
   const l = lunes(dia), d7 = new Date(l); d7.setDate(d7.getDate()+6);
@@ -31,6 +118,8 @@ function renderResumen(){
     ["Puntos mes",      sum(fabMes),   "Suma de PUNTOS del mes", 0, fabMes],
     ["Despachadas día", despDia.length,"Estado Despachado con fecha de despacho = día", 0, despDia]
   ]);
+
+  pintarEntrega(F);
 
   const alm = F.filter(({c})=>completa(c) && desp(c)==="En Almacén");
   const prod= F.filter(({c})=>enProduccion(c));
