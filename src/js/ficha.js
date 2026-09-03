@@ -257,6 +257,24 @@ $("#form-new").addEventListener("submit", async ev=>{
       data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});
     });
     await writeCells(data);
+
+    /* El panel va DESPUES y aparte: si fallara, la puerta ya esta guardada. El
+       panel es un extra, y perder la puerta por no poder escribir su panel
+       seria mucho peor que quedarse sin el panel. */
+    if(typeof llevaPanelLaPuerta === "function" && llevaPanelLaPuerta()){
+      const opPanel = q > 1 ? `${op}-1` : op;
+      try{
+        const fila = await crearPanelDeLaPuerta(
+          opPanel, $("#n-cli").value.trim().toUpperCase(),
+          $("#n-prio").value, $("#n-fecha").value.trim());
+        toast(`Panel creado en la hoja de Paneles, fila ${fila}`, "ok");
+        logBulk([{accion:"CREAR", op:opPanel, fila:"—", campo:"Panel de la puerta",
+                  antes:"", despues:`fila ${fila} de la hoja de paneles`}]);
+      }catch(e){
+        // Con el numero de OP delante: sin el, no se sabe cual crear a mano.
+        toast(`La puerta se guardó, pero el panel de la OP ${opPanel} no: ${e.message}`, "err");
+      }
+    }
     // Quitar la casilla de verificación en la hoja a los procesos que no aplican,
     // para que allí tampoco aparezca ningún cuadrito.
     // Casilla de verificación en los procesos que aplican y ninguna en los que no.

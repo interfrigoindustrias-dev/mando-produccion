@@ -344,6 +344,26 @@
         </div>
 
         <label class="f" style="margin-top:12px"><span>Observaciones</span><textarea class="inp" id="n-obs" rows="2"></textarea></label>
+
+        <div class="bar" style="margin:14px 0 0">
+          <label class="proc"><input type="checkbox" id="n-panel"><span>Esta puerta lleva panel</span></label>
+        </div>
+        <div id="n-panel-campos" class="hide">
+          <p class="expl">Se creará <b>una línea</b> en la hoja de Paneles con el mismo
+            número de OP, cliente, fecha y prioridad que esta puerta — es el número de OP
+            lo que después las empareja. Para un cerramiento con varias referencias,
+            créalo desde el módulo Paneles.</p>
+          <div class="grid">
+            <label class="f"><span class="req">Cantidad</span>
+              <input class="inp" id="np-cant" type="number" step="1" min="1" inputmode="numeric"></label>
+            <label class="f"><span class="req">Largo (m)</span>
+              <input class="inp" id="np-largo" type="number" step="any" inputmode="decimal"></label>
+            <label class="f"><span class="req">Producto</span><select class="inp" id="np-prod"></select></label>
+            <label class="f"><span>Ranurado</span><select class="inp" id="np-ranu"></select></label>
+            <label class="f"><span>Cara A</span><select class="inp" id="np-cara-a"></select></label>
+            <label class="f"><span>Cara B</span><select class="inp" id="np-cara-b"></select></label>
+          </div>
+        </div>
       </div>
 
       <div class="sec">
@@ -655,6 +675,7 @@
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>
+<script src="js/panel-de-puerta.js"></script>
 <script src="js/filtros-movil.js"></script>
 <script src="js/app.js"></script>
 <script src="js/pwa.js"></script>
