@@ -113,9 +113,18 @@ async function crearPanelDeLaPuerta(op, cliente, prio, fecha){
   }
   const fila = await primeraFilaLibrePanel(destino.tab);
   const c = filaPanel(op, cliente, prio, fecha);
-  await api(`/values/${encodeURIComponent(destino.tab)}!A${fila}:${MP.lastCol}${fila}`
-            + `?valueInputOption=USER_ENTERED`,
-            {method:"PUT", body: JSON.stringify({values:[c]})});
+
+  /* Por tramos, saltando las columnas de formula. Escribir A..Y de un tirón es
+     comodo y equivocado: el "" de las celdas que no se rellenan no las deja en
+     paz, las BORRA, y K, L, V y W son formula de la hoja —poliuretano y
+     lamina—. El sintoma seria de los peores: lineas viejas con poliuretano,
+     lineas nuevas en blanco, ningun error por ningun lado, y el consumo de
+     material cuadrando cada vez peor sin motivo aparente. */
+  for(const t of tramosFila(MP, fila, c)){
+    await api(`/values/${encodeURIComponent(destino.tab)}!${t.a1}`
+              + `?valueInputOption=USER_ENTERED`,
+              {method:"PUT", body: JSON.stringify({values: t.v})});
+  }
   return fila;
 }
 

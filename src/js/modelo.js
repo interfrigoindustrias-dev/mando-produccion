@@ -41,6 +41,17 @@ const MODELO_PUERTAS = {
     OC:40         // AO  ORDEN DE COMPRA
   },
 
+  /* Columnas que calcula LA HOJA y que la aplicacion no debe tocar.
+     AG lleva una formula de matriz en AG2 que se derrama por toda la columna.
+     Escribir cualquier cosa dentro de ese rango —aunque sea ""— la corta: al
+     mirar el archivo, la formula pedia hasta la fila 1470 y solo alcanzaba la
+     528, justo porque la ficha nueva escribia debajo.
+
+     W NO esta aqui, y es a proposito: ahi la aplicacion escribe la formula
+     viva, no un numero (statusValue), asi que la mantiene en pie en vez de
+     pisarla. */
+  formulas: ["EMPV"],
+
   procs: [
     {i:13,c:"N",k:"CORTE PERFIL",s:"CP"}, {i:14,c:"O",k:"INYECCION",s:"IN"},
     {i:15,c:"P",k:"ACCESORIOS",s:"AC"},   {i:16,c:"Q",k:"CORTE MARCO",s:"CM"},

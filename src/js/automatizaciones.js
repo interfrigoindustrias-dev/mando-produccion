@@ -138,6 +138,12 @@ async function marcarInicioProduccion(r){
  *  Idempotente: solo escribe lo que de verdad cambia. */
 async function autoPrioridades(){
   if(CFG.auto===false || busyWrites>0) return 0;
+  /* Sin historial no se escala. «Sin tocarse» se lee del historial, y si no
+     ha cargado —o su pestaña ha fallado— toda fila pareceria intacta desde
+     que nacio y saltaria un escalon que no le toca. Mejor no escalar hoy que
+     escalar mal: mañana se vuelve a intentar, y una prioridad subida sola no
+     se baja sola. */
+  if(typeof LOG_LISTO !== "undefined" && !LOG_LISTO) return 0;
 
   const ups=[], logs=[];
   for(const {r,c} of ROWS){

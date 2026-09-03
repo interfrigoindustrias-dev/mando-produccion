@@ -245,7 +245,10 @@ $("#form-new").addEventListener("submit", async ev=>{
       if($("#n-visor")){
         c[C.ALFF]=$("#n-alff").checked; c[C.ALFP]=$("#n-alfp").checked;
         c[C.MARCO]=$("#n-marco").value; c[C.VISOR]=$("#n-visor").value;
-        c[C.EMPV]=EMPAQUE_VISOR[$("#n-visor").value] ?? "";
+        /* AG no se escribe: la calcula la hoja con su formula de matriz, y
+           esta linea la pisaba. El campo del formulario sigue enseñando el
+           valor como anticipo, pero quien manda es la hoja — un solo dueño
+           por celda, o acaban discrepando. */
         c[C.EMPVREF]=$("#n-empvref").value.trim();
         c[C.BUMP]=$("#n-bump").value;
         c[C.SELLO]=$("#n-sello").value;
@@ -254,7 +257,11 @@ $("#form-new").addEventListener("submit", async ev=>{
       }
       PROCS.forEach(p=>{ c[p.i] = aplica.get(p.i) ? false : ""; });
       c[C.STATUS] = statusValue(r, c);
-      data.push({a1:`A${r}:${LAST_COL}${r}`, v:[c]});
+      /* Por tramos, saltando lo que calcula la hoja. Escribir A..AO de un
+         tiron es comodo y equivocado: el "" de las celdas que no se rellenan
+         no las deja en paz, las corta, y AG es una formula de matriz que se
+         derrama por toda la columna. Se rompe entera de una sola escritura. */
+      tramosFila(MODELO, r, c).forEach(t => data.push(t));
     });
     await writeCells(data);
 
