@@ -297,3 +297,10 @@
 .stk-qcg .llv{border-top:.4mm solid #000;padding-top:1.3mm;margin-top:1mm;
   display:flex;align-items:center;gap:2mm;font-size:7.6pt;font-weight:800}
 .stk-qcg .llv em{font-style:normal;margin-left:auto;display:flex;align-items:center;gap:1.6mm}
+
+/* Diagrama que no cargo. Se ve el hueco con su nombre dentro: una hoja sin
+   dibujos tiene que distinguirse de una hoja a la que le falta el dibujo. */
+.c-dib img.c-nodib{
+  min-width:32mm; border:.4mm dashed #000; background:#f4f4f4;
+  font-size:5.5pt; font-weight:700; padding:2mm; box-sizing:border-box;
+}

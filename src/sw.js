@@ -59,6 +59,13 @@ const ARMAZON = [
   "js/paneles-resumen.js",
   "js/paneles-almacen.js",
   "img/logo.png",
+  /* Los diagramas de las hojas carta. Sin esto dependen de la red justo en el
+     momento de imprimir, que es cuando peor viene. */
+  "img/corredera.jpg",
+  "img/batiente.jpg",
+  "img/vaiven.jpg",
+  "img/oficina.jpg",
+  "img/marco.jpg",
   "img/icono-192.png",
   "img/icono-512.png",
   "img/favicon.ico",

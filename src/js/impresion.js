@@ -84,8 +84,14 @@ function cabeceraCarta(c, F){
   /* Los diagramas van en la cabecera y no al final: se miran ANTES de armar,
      para confirmar la apertura y como se toma la medida. Si el archivo aun no
      esta, el hueco no se dibuja en vez de dejar un icono roto. */
+  /* Si un diagrama falta, se ENSEÑA que falta. Antes se quitaba solo con un
+     onerror, y por eso una hoja sin dibujos parecia una hoja bien hecha: nadie
+     podia saber si esa puerta no llevaba diagrama o si el archivo no habia
+     cargado. En una orden de produccion el dibujo no es adorno; es donde se
+     confirma la apertura antes de armar. */
   const diagramas = (F.imagenes || [])
-    .map(n => `<img src="img/${esc(n)}" alt="" onerror="this.remove()">`).join("");
+    .map(n => `<img src="img/${esc(n)}" alt="${esc(n)}" loading="eager"
+                 onerror="this.classList.add('c-nodib')">`).join("");
 
   return `
     <div class="c-h">
@@ -264,7 +270,30 @@ function printFichas(rowNums, modo, logo){
   if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
   rule.textContent = stk ? "@page{size:100mm 150mm;margin:0}" : "@page{size:letter portrait;margin:0}";
   $("#print").innerHTML = rows.map(stk?stickerHTML:cartaHTML).join("");
-  setTimeout(()=>window.print(), 80);
+  esperarImagenes($("#print")).then(()=> window.print());
+}
+
+/* Los diagramas tienen que estar DIBUJADOS antes de abrir el dialogo.
+   Antes se esperaban 80 ms y se imprimia: los cuatro diagramas pesan entre 43
+   y 68 kB, asi que la primera impresion —con la cache fria— salia con los
+   huecos en blanco, y la segunda bien. De ahi que unas veces se vieran y otras
+   no, sin patron aparente.
+
+   Con tope de tiempo: una imagen rota no puede dejar a nadie sin poder
+   imprimir. Si no llega, sale la hoja igual y el hueco marcado se ve. */
+function esperarImagenes(caja, tope = 5000){
+  const imgs = [...caja.querySelectorAll("img")];
+  if(!imgs.length) return Promise.resolve();
+  const cargada = img => img.complete && img.naturalWidth > 0
+    ? Promise.resolve()
+    : new Promise(ok => {
+        img.addEventListener("load",  ok, {once:true});
+        img.addEventListener("error", ok, {once:true});   // rota tambien termina
+      });
+  return Promise.race([
+    Promise.all(imgs.map(cargada)),
+    new Promise(ok => setTimeout(ok, tope))
+  ]);
 }
 /* Preguntar con logo o sin logo, en vez de fijarlo: en etiqueta blanca el logo
    ayuda a identificar la puerta; sobre etiqueta preimpresa sobra. */
