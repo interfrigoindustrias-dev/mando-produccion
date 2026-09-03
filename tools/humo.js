@@ -30,6 +30,14 @@ const filaPanel = (f,cli,op,prio,cant,largo,prod,uni,tot,procs,m2,est,fini,ffin,
    // metros lineales de lamina: el largo por la cantidad, que es lo que se corta
    (cant*largo), (cant*largo)];
 
+/* Fechas relativas a hoy: con fechas fijas la prueba caducaria sola, y un dia
+   empezaria a fallar sin que nadie hubiera tocado nada. */
+const hace = d => {
+  const f = new Date(); f.setDate(f.getDate() - d);
+  const p = n => String(n).padStart(2, "0");
+  return `${p(f.getDate())}/${p(f.getMonth()+1)}/${f.getFullYear()}`;
+};
+
 const DATOS = {
   "PANEL": [CAB_PANEL,
     filaPanel("agosto - 1","AMERICAN BLUE","1","BAJA",22,2.45,'PANEL 3"',8.208,180.569,
@@ -42,13 +50,27 @@ const DATOS = {
               [false,false,false],104.4,"EN PROCESO","","","INOX 304 CAL 28","9002"),
     filaPanel("01/08/2026","NOVAFRIOS","4","MEDIA",50,2.45,'PANEL 4"',10.8,540.0,
               [true,true,true],142.1,"DESPACHADO","01/08/2026","10/08/2026"),
+
+    /* Filas 7 a 12: el escalado de prioridad. La fecha es la de creacion, y
+       ninguna tiene historial salvo la ultima, que se toco ayer. */
+    filaPanel(hace(9),  "BAJA VIEJA",   "10","BAJA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(3),  "BAJA NUEVA",   "11","BAJA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(6),  "MEDIA VIEJA",  "12","MEDIA",  10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(2),  "MEDIA NUEVA",  "13","MEDIA",  10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(30), "URGENTE VIEJA","14","URGENTE",10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(6),  "ALTA PARADA",  "15","ALTA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+    filaPanel(hace(20), "BAJA TOCADA",  "16","BAJA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
   ],
   "OP PUERTA": [new Array(39).fill("H"),
     (()=>{ const c=new Array(39).fill(""); c[0]="01/08/2026"; c[1]="900"; c[2]="FRIO";
            c[5]="PP 9002"; c[6]="SE12"; c[7]=100; c[8]=200; c[9]=1; c[12]="ALTA";
            for(let i=13;i<=20;i++) c[i]=false; c[22]=0; return c; })()
   ],
-  "LOG PANELES": [["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"]],
+  /* La fila 12 es «BAJA TOCADA»: nacio hace 20 dias pero se le marco un proceso
+     ayer. Con la regla nueva —los dias cuentan desde el ultimo toque— NO debe
+     escalar, aunque por fecha de creacion le tocaria de sobra. */
+  "LOG PANELES": [["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"],
+                  [hace(1)+" 08:30","yo@interfrigo.com.co","EDITA","16","12","PERFIL","pendiente","hecho"]],
   "LOG APP":     [["FECHA","USUARIO","ACCION","OP","FILA","CAMPO","ANTES","DESPUES"]],
   "USUARIOS":    [["CORREO","NOMBRE","ROL","ACTIVO","NOTA"],
                   ["yo@interfrigo.com.co","Yo","admin",true,""]],
@@ -449,6 +471,45 @@ function comprueba(nombre, cond, detalle){
     /espesor/i.test($("#toast").textContent),
     "aviso: " + $("#toast").textContent.trim().slice(0, 110));
   $("#ov-nueva").classList.add("hide");
+
+  console.log("\n=== el escalado de prioridad, que corre solo ===");
+  /* Es lo que mas falta puede hacer y lo que menos se mira: si un dia deja de
+     funcionar, nadie lo nota hasta que un pedido lleva semanas parado. */
+  const prioDe = fila => String(DATOS.PANEL[fila-1][3]).toUpperCase();
+  comprueba("una BAJA de 9 días sube a MEDIA", prioDe(7) === "MEDIA",
+    "OP 10 quedó en " + prioDe(7));
+  comprueba("una BAJA de 3 días se queda donde está", prioDe(8) === "BAJA",
+    "OP 11 quedó en " + prioDe(8));
+  comprueba("una MEDIA de 6 días sube a ALTA", prioDe(9) === "ALTA",
+    "OP 12 quedó en " + prioDe(9));
+  comprueba("una MEDIA de 2 días se queda", prioDe(10) === "MEDIA",
+    "OP 13 quedó en " + prioDe(10));
+  comprueba("una URGENTE no caduca nunca, ni a los 30 días", prioDe(11) === "URGENTE",
+    "OP 14 quedó en " + prioDe(11));
+  comprueba("una ALTA no sube más: ALTA es el techo", prioDe(12) === "ALTA",
+    "OP 15 quedó en " + prioDe(12));
+  /* La regla que pidió el usuario, y la más fácil de romper sin enterarse. */
+  comprueba("una línea tocada ayer NO escala, aunque naciera hace 20 días",
+    prioDe(13) === "BAJA",
+    "OP 16 quedó en " + prioDe(13) + " (se le marcó un proceso ayer)");
+
+  comprueba("y cada subida queda en el historial",
+    DATOS["LOG PANELES"].some(f => f[2] === "AUTO" && f[5] === "Prioridad"),
+    DATOS["LOG PANELES"].filter(f=>f[2]==="AUTO").map(f=>`${f[3]}: ${f[6]}→${f[7]}`).join(" · "));
+
+  console.log("\n=== la ALTA parada se adelanta, sin cambiar de prioridad ===");
+  const colaAdel = leer("secuenciaPaneles(plantaPendientes())");
+  const adelantadas = colaAdel.filter(x => x.adelantada);
+  comprueba("hay alguna adelantada", adelantadas.length > 0,
+    adelantadas.map(x=>x.c[2]).join(", ") || "ninguna");
+  const iUrg = colaAdel.findIndex(x => x.prioridad === "URGENTE");
+  const iAdel = colaAdel.findIndex(x => x.adelantada);
+  const iAlta = colaAdel.findIndex(x => x.prioridad === "ALTA");
+  comprueba("va detrás de las urgentes y delante de las demás ALTA",
+    iUrg >= 0 && iAdel > iUrg && (iAlta < 0 || iAdel < iAlta),
+    `urgente en ${iUrg} · adelantada en ${iAdel} · alta normal en ${iAlta}`);
+  comprueba("pero su prioridad en la hoja sigue siendo ALTA",
+    prioDe(12) === "ALTA");
 
   console.log("\n=== los filtros admiten varios valores a la vez ===");
   const filtrar = (id, valores) => {

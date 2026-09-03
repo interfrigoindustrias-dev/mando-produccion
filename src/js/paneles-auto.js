@@ -24,16 +24,27 @@ const anuladaP = c => estadoDe(c) === ESTADO.ANULADA;
 const despachadaP = c => estadoDe(c) === ESTADO.DESPACHADO;
 
 /* ------------------------------ 1. escalado de prioridad ------------------------------
-   Por escalones y no de un salto: BAJA espera 8 dias y se vuelve MEDIA, y solo
-   despues de otros 4 llega a ALTA. URGENTE lo pone una persona y no caduca.
+   POR ESCALONES, NO DE UN SALTO. BAJA espera 8 dias sin tocarse y se vuelve
+   MEDIA; MEDIA espera 5 y se vuelve ALTA; ALTA es el techo y no sube mas.
+   URGENTE lo pone una persona y no caduca.
 
-   Los dias se cuentan desde que la linea ESTA en su nivel, no desde que nacio;
-   eso lo resuelve prioridadQueTocaria() leyendo el historial. */
+   Los dias los cuenta prioridadQueTocaria() desde el ULTIMO CAMBIO de la linea,
+   leyendo el historial: una linea en la que se esta trabajando no lleva
+   esperando, aunque su prioridad no haya cambiado. */
+
+/* Subir de nivel ES un cambio, asi que la linea deja de estar «sin tocarse» en
+   cuanto se la sube. Se anota aparte porque el historial no siempre confirma el
+   cambio a tiempo —se escribe en la hoja y se relee con retardo—, y sin esta
+   nota una BAJA podia pasar a MEDIA en una pasada y a ALTA en la siguiente, que
+   es justo el salto que la regla quiere evitar. */
+const SUBIDAS_DE_ESTA_SESION = new Set();
+
 async function autoPrioridades(){
   const ups = [], logs = [];
   for(const {r, c} of ROWS){
     if(!rowActive(c) || anuladaP(c) || despachadaP(c)) continue;
     if(completa(c)) continue;                      // ya fabricada: no adelanta nada
+    if(SUBIDAS_DE_ESTA_SESION.has(r)) continue;    // un escalon por sesion, no dos
     const sube = prioridadQueTocaria(r, c);
     if(!sube) continue;
     const antes = String(c[C.PRIO] ?? "").trim();
@@ -41,6 +52,7 @@ async function autoPrioridades(){
     logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Prioridad",
                antes, despues:sube});
     c[C.PRIO] = sube;
+    SUBIDAS_DE_ESTA_SESION.add(r);
   }
   if(!ups.length) return 0;
   try{

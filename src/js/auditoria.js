@@ -60,6 +60,11 @@ async function logBulk(entries){
       {method:"POST", body: JSON.stringify({values:filas})});
   }catch(e){ console.warn("LOG:", e.message); }
 }
+/* Los automatismos que cuentan «dias sin tocarse» no pueden correr antes de
+   que el historial este cargado: sin el, una linea tocada ayer parece llevar
+   parada desde que nacio. */
+let LOG_LISTO = false;
+
 async function loadLog(force){
   if(!force && Date.now()-logAt < 60000) return;
   try{
@@ -71,6 +76,7 @@ async function loadLog(force){
     LOG = (j.values||[]).map(r=>({fecha:String(r[0]??""), usuario:r[1]||"", accion:r[2]||"", op:r[3]||"",
                                   fila:r[4]||"", campo:r[5]||"", antes:r[6]||"", despues:r[7]||""})).reverse();
     logAt = Date.now();
+    LOG_LISTO = true;
     if(typeof pintarTimbre === "function") pintarTimbre();
   }catch(e){ console.warn("LOG:", e.message); }
 }

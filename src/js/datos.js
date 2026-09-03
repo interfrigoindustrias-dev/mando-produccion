@@ -29,8 +29,11 @@ async function refresh(silent){
         catch(e){ console.error("render/"+nombre, e); toast("Fallo al pintar "+nombre+": "+e.message,"err"); }
       }
     }
-    // Propios de cada producto: solo si esta pagina los trae.
-    if(typeof autoPrioridades === "function"){
+    /* Propios de cada producto, y solo con el historial ya cargado: el
+       escalado cuenta los dias desde el ultimo cambio, y sin historial creeria
+       que nadie ha tocado nada nunca. */
+    if(typeof autoPrioridades === "function" &&
+       (typeof LOG_LISTO === "undefined" || LOG_LISTO)){
       autoPrioridades().then(()=> typeof autoFechas === "function" && autoFechas());
     }
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));

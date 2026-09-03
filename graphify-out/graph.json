@@ -14,7 +14,7 @@
       },
       "_origin": "ast",
       "id": "deploy_config_example",
-      "community": 38,
+      "community": 39,
       "community_name": "deploy.config.example.sh",
       "norm_label": "deploy.config.example.sh"
     },
@@ -29,7 +29,7 @@
       },
       "_origin": "ast",
       "id": "deploy_config_example_sh__entry",
-      "community": 38,
+      "community": 39,
       "community_name": "deploy.config.example.sh",
       "norm_label": "deploy.config.example.sh script"
     },
@@ -44,7 +44,7 @@
       },
       "_origin": "ast",
       "id": "deploy",
-      "community": 37,
+      "community": 38,
       "community_name": "Despliegue",
       "norm_label": "deploy.sh"
     },
@@ -59,7 +59,7 @@
       },
       "_origin": "ast",
       "id": "deploy_sh__entry",
-      "community": 37,
+      "community": 38,
       "community_name": "Despliegue",
       "norm_label": "deploy.sh script"
     },
@@ -70,7 +70,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_auth_config_example",
-      "community": 41,
+      "community": 42,
       "community_name": "auth.config.example.php",
       "norm_label": "auth.config.example.php"
     },
@@ -81,7 +81,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_auth",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "auth.php"
     },
@@ -92,7 +92,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_auth_login",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "login()"
     },
@@ -103,7 +103,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "src_auth_callback",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "callback()"
     },
@@ -114,7 +114,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_auth_token",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "token()"
     },
@@ -125,7 +125,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "src_auth_logout",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "logout()"
     },
@@ -136,7 +136,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_auth_guardar",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "guardar()"
     },
@@ -147,7 +147,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "src_auth_pediragoogle",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "pediragoogle()"
     },
@@ -158,7 +158,7 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "src_auth_paginadestino",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "paginadestino()"
     },
@@ -169,7 +169,7 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "src_auth_volver",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "volver()"
     },
@@ -180,7 +180,7 @@
       "source_location": "L215",
       "_origin": "ast",
       "id": "src_auth_responder",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "responder()"
     },
@@ -191,7 +191,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_auth_base64url",
-      "community": 19,
+      "community": 18,
       "community_name": "auth.php",
       "norm_label": "base64url()"
     },
@@ -202,7 +202,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config_app_example",
-      "community": 42,
+      "community": 43,
       "community_name": "config-app.example.js",
       "norm_label": "config-app.example.js"
     },
@@ -213,7 +213,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_api",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api.js"
     },
@@ -224,7 +224,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_api_api",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "api()"
     },
@@ -235,7 +235,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_api_rng",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "rng()"
     },
@@ -246,7 +246,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_api_fetchrows",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "fetchrows()"
     },
@@ -257,7 +257,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_api_ensuregid",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensuregid()"
     },
@@ -268,7 +268,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_api_ensurerows",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ensurerows()"
     },
@@ -279,7 +279,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_api_setcheckboxui",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "setcheckboxui()"
     },
@@ -290,7 +290,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_api_repairstatus",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairstatus()"
     },
@@ -301,7 +301,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_api_numericos",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "numericos"
     },
@@ -312,7 +312,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "src_js_api_repairnumeros",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "repairnumeros()"
     },
@@ -323,7 +323,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_js_api_writecells",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "writecells()"
     },
@@ -334,7 +334,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_js_api_sincronizarvalidacion",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "sincronizarvalidacion()"
     },
@@ -345,7 +345,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_app",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "app.js"
     },
@@ -356,7 +356,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_app_views",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "views"
     },
@@ -367,7 +367,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_app_goto",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "goto()"
     },
@@ -378,7 +378,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_app_pintarquiensoy",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "pintarquiensoy()"
     },
@@ -389,7 +389,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_app_enterapp",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "enterapp()"
     },
@@ -400,7 +400,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "src_js_app_explicarquefalta",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "explicarquefalta()"
     },
@@ -411,7 +411,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auditoria",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "auditoria.js"
     },
@@ -422,7 +422,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_auditoria_log",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "log"
     },
@@ -433,7 +433,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_auditoria_ensurelog",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "ensurelog()"
     },
@@ -444,7 +444,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_auditoria_logchanges",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "logchanges()"
     },
@@ -455,7 +455,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_auditoria_logbulk",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "logbulk()"
     },
@@ -463,10 +463,10 @@
       "label": "loadLog()",
       "file_type": "code",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L63",
+      "source_location": "L68",
       "_origin": "ast",
       "id": "src_js_auditoria_loadlog",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "loadlog()"
     },
@@ -474,10 +474,10 @@
       "label": "shortUser()",
       "file_type": "code",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L77",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "src_js_auditoria_shortuser",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "shortuser()"
     },
@@ -485,10 +485,10 @@
       "label": "histOf()",
       "file_type": "code",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L79",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_auditoria_histof",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "histof()"
     },
@@ -496,10 +496,10 @@
       "label": "renderHist()",
       "file_type": "code",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L83",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_auditoria_renderhist",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "renderhist()"
     },
@@ -507,10 +507,10 @@
       "label": "recargarHist",
       "file_type": "code",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L111",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "src_js_auditoria_recargarhist",
-      "community": 20,
+      "community": 19,
       "community_name": "Historial de cambios",
       "norm_label": "recargarhist"
     },
@@ -521,7 +521,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_auth",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "auth.js"
     },
@@ -532,7 +532,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_auth_paginaactual",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "paginaactual()"
     },
@@ -543,7 +543,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_auth_pedirtoken",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "pedirtoken()"
     },
@@ -554,7 +554,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_auth_entrarcongoogle",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "entrarcongoogle()"
     },
@@ -565,7 +565,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_auth_ensuretoken",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "ensuretoken()"
     },
@@ -576,7 +576,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_auth_programarrenovacion",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "programarrenovacion()"
     },
@@ -587,7 +587,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_auth_avisarreconectar",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "avisarreconectar()"
     },
@@ -598,7 +598,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_auth_logout",
-      "community": 24,
+      "community": 23,
       "community_name": "Autenticacion con Google",
       "norm_label": "logout()"
     },
@@ -609,7 +609,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_automatizaciones",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "automatizaciones.js"
     },
@@ -620,7 +620,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_automatizaciones_offset",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "offset"
     },
@@ -631,7 +631,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_automatizaciones_escala",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "escala"
     },
@@ -642,7 +642,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_automatizaciones_espera",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "espera"
     },
@@ -653,7 +653,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_automatizaciones_ultimotoque",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "ultimotoque()"
     },
@@ -664,7 +664,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_automatizaciones_diassintocar",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "diassintocar()"
     },
@@ -675,7 +675,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_js_automatizaciones_columnas_nuevas",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "columnas_nuevas"
     },
@@ -686,7 +686,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_js_automatizaciones_migrarcolumnas",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "migrarcolumnas()"
     },
@@ -697,7 +697,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_js_automatizaciones_marcarinicioproduccion",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "marcarinicioproduccion()"
     },
@@ -708,7 +708,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autoprioridades",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autoprioridades()"
     },
@@ -719,7 +719,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_automatizaciones_hoy0",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "hoy0()"
     },
@@ -730,7 +730,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_js_automatizaciones_fechaprogramada",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "fechaprogramada()"
     },
@@ -741,7 +741,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "src_js_automatizaciones_autofechas",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "autofechas()"
     },
@@ -752,7 +752,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "src_js_automatizaciones_tocarfechaproceso",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "tocarfechaproceso()"
     },
@@ -763,7 +763,7 @@
       "source_location": "L235",
       "_origin": "ast",
       "id": "src_js_automatizaciones_campos_proceso",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "campos_proceso"
     },
@@ -774,7 +774,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairfechasfalsas",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairfechasfalsas()"
     },
@@ -785,7 +785,7 @@
       "source_location": "L299",
       "_origin": "ast",
       "id": "src_js_automatizaciones_repairseparadas",
-      "community": 3,
+      "community": 9,
       "community_name": "Automatizaciones de fecha",
       "norm_label": "repairseparadas()"
     },
@@ -796,7 +796,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_avisos",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "avisos.js"
     },
@@ -807,7 +807,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_avisos_ultimovisto",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "ultimovisto()"
     },
@@ -818,7 +818,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_avisos_marcarvisto",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "marcarvisto()"
     },
@@ -829,7 +829,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_avisos_avisosnuevos",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "avisosnuevos()"
     },
@@ -840,7 +840,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_avisos_pintartimbre",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "pintartimbre()"
     },
@@ -851,7 +851,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_avisos_abriravisos",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "abriravisos()"
     },
@@ -862,7 +862,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_avisos_cerraravisos",
-      "community": 27,
+      "community": 26,
       "community_name": "avisos.js",
       "norm_label": "cerraravisos()"
     },
@@ -873,7 +873,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_calidad",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "calidad.js"
     },
@@ -884,7 +884,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_calidad_esnoapta",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "esnoapta()"
     },
@@ -895,7 +895,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_calidad_notalimpia",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "notalimpia()"
     },
@@ -906,7 +906,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_calidad_sel_cal",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "sel_cal"
     },
@@ -917,7 +917,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_calidad_calidadbase",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "calidadbase()"
     },
@@ -928,7 +928,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_js_calidad_calidadlist",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "calidadlist()"
     },
@@ -939,7 +939,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_js_calidad_rendercalidad",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "rendercalidad()"
     },
@@ -950,7 +950,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_calidad_pintarselcalidad",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "pintarselcalidad()"
     },
@@ -961,8 +961,8 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "src_js_calidad_guardarcalidad",
-      "community": 3,
-      "community_name": "Automatizaciones de fecha",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "guardarcalidad()"
     },
     {
@@ -972,7 +972,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_js_calidad_notade",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "notade()"
     },
@@ -983,7 +983,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "src_js_calidad_malde",
-      "community": 21,
+      "community": 20,
       "community_name": "calidad.js",
       "norm_label": "malde()"
     },
@@ -994,7 +994,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_campos",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "campos.js"
     },
@@ -1005,7 +1005,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_js_campos_campos",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "campos"
     },
@@ -1016,7 +1016,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_campos_campo_por_id",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "campo_por_id"
     },
@@ -1027,7 +1027,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_campos_grupos_campo",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "grupos_campo"
     },
@@ -1038,7 +1038,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_js_campos_operadores",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "operadores"
     },
@@ -1049,7 +1049,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "src_js_campos_operadoresde",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "operadoresde()"
     },
@@ -1060,7 +1060,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_js_campos_leercondiciones",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "leercondiciones()"
     },
@@ -1071,7 +1071,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_js_campos_escribircondiciones",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "escribircondiciones()"
     },
@@ -1082,7 +1082,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_campos_anumero",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "anumero()"
     },
@@ -1093,7 +1093,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "src_js_campos_atiempo",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "atiempo()"
     },
@@ -1104,7 +1104,7 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_js_campos_cumple",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "cumple()"
     },
@@ -1115,7 +1115,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "src_js_campos_cumpletodas",
-      "community": 17,
+      "community": 16,
       "community_name": "campos.js",
       "norm_label": "cumpletodas()"
     },
@@ -1126,7 +1126,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_comun",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "comun.js"
     },
@@ -1137,7 +1137,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_comun_activas",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "activas()"
     },
@@ -1148,7 +1148,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_js_comun_completa",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "completa()"
     },
@@ -1159,7 +1159,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_comun_desp",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "desp()"
     },
@@ -1170,7 +1170,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_comun_puntos",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "puntos()"
     },
@@ -1181,7 +1181,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_comun_enproduccion",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enproduccion()"
     },
@@ -1192,7 +1192,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_comun_enstock",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "enstock()"
     },
@@ -1203,7 +1203,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_comun_contador",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "contador()"
     },
@@ -1214,7 +1214,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_comun_detalle_kpi",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "detalle_kpi"
     },
@@ -1225,7 +1225,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_comun_kpicards",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "kpicards()"
     },
@@ -1236,7 +1236,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_comun_verdetallekpi",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "verdetallekpi()"
     },
@@ -1247,7 +1247,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_js_comun_barras",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "barras()"
     },
@@ -1258,7 +1258,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_comun_tablamini",
-      "community": 14,
+      "community": 13,
       "community_name": "Ayudantes de tableros",
       "norm_label": "tablamini()"
     },
@@ -1269,7 +1269,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_config",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "config.js"
     },
@@ -1280,7 +1280,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_config_parsesheetid",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "parsesheetid()"
     },
@@ -1291,7 +1291,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_config_lookslikeid",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "lookslikeid()"
     },
@@ -1302,7 +1302,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_config_campos_empresa",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "campos_empresa"
     },
@@ -1313,7 +1313,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_config_loadcfg",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "loadcfg()"
     },
@@ -1324,7 +1324,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_js_config_savecfg",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "savecfg()"
     },
@@ -1335,7 +1335,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_config_cfgok",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "cfgok()"
     },
@@ -1346,7 +1346,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_js_config_aplicarcfgdeenlace",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "aplicarcfgdeenlace()"
     },
@@ -1357,7 +1357,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_config_enlacedeconfiguracion",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "enlacedeconfiguracion()"
     },
@@ -1368,7 +1368,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_js_config_opencfg",
-      "community": 22,
+      "community": 21,
       "community_name": "Configuracion del usuario",
       "norm_label": "opencfg()"
     },
@@ -1379,8 +1379,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_constantes",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "constantes.js"
     },
     {
@@ -1390,8 +1390,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_constantes_log_head",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "log_head"
     },
     {
@@ -1401,8 +1401,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_constantes_prioridades",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "prioridades"
     },
     {
@@ -1423,8 +1423,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_constantes_llevabumper",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "llevabumper()"
     },
     {
@@ -1445,8 +1445,8 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_constantes_clientebase",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "clientebase()"
     },
     {
@@ -1467,8 +1467,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_js_constantes_urgentemanual",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "urgentemanual()"
     },
     {
@@ -1478,8 +1478,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_constantes_urgenteauto",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "urgenteauto()"
     },
     {
@@ -1489,8 +1489,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_js_constantes_urgente",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "urgente()"
     },
     {
@@ -1500,8 +1500,8 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_js_constantes_terminada",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "terminada()"
     },
     {
@@ -1511,8 +1511,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "src_js_constantes_anulada",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "anulada()"
     },
     {
@@ -1522,8 +1522,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_js_constantes_despachada",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "despachada()"
     },
     {
@@ -1533,8 +1533,8 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "src_js_constantes_con_riel",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "con_riel"
     },
     {
@@ -1544,8 +1544,8 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "src_js_constantes_cfg",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
       "norm_label": "cfg"
     },
     {
@@ -1555,8 +1555,8 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "src_js_constantes_rows",
-      "community": 3,
-      "community_name": "Automatizaciones de fecha",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "rows"
     },
     {
@@ -1577,7 +1577,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_control",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "control.js"
     },
@@ -1588,7 +1588,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_js_control_fsel",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "fsel"
     },
@@ -1599,7 +1599,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_js_control_medidade",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "medidade()"
     },
@@ -1610,7 +1610,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_js_control_filtered",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "filtered()"
     },
@@ -1621,7 +1621,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_js_control_filtrosactivos",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "filtrosactivos()"
     },
@@ -1632,7 +1632,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_control_numord",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "numord()"
     },
@@ -1643,7 +1643,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_js_control_filllists",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "filllists()"
     },
@@ -1654,7 +1654,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_control_tagprio",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "tagprio()"
     },
@@ -1665,7 +1665,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "src_js_control_tagdesp",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "tagdesp()"
     },
@@ -1676,7 +1676,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_control_selap",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "selap()"
     },
@@ -1687,7 +1687,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_control_selprio",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "selprio()"
     },
@@ -1698,7 +1698,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "src_js_control_editcampo",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "editcampo()"
     },
@@ -1709,7 +1709,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "src_js_control_render",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "render()"
     },
@@ -1720,7 +1720,7 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "src_js_control_kpis",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "kpis()"
     },
@@ -1731,7 +1731,7 @@
       "source_location": "L227",
       "_origin": "ast",
       "id": "src_js_control_paintrow",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "paintrow()"
     },
@@ -1742,7 +1742,7 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "src_js_control_setproc",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "setproc()"
     },
@@ -1753,7 +1753,7 @@
       "source_location": "L278",
       "_origin": "ast",
       "id": "src_js_control_syncsel",
-      "community": 11,
+      "community": 10,
       "community_name": "Control de OPs",
       "norm_label": "syncsel()"
     },
@@ -1764,7 +1764,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_cronograma",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "cronograma.js"
     },
@@ -1775,7 +1775,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_cronograma_diashabiles",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "diashabiles()"
     },
@@ -1786,7 +1786,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_cronograma_pendientecronograma",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "pendientecronograma()"
     },
@@ -1797,7 +1797,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_js_cronograma_entradaenplanta",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "entradaenplanta()"
     },
@@ -1808,7 +1808,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_cronograma_rank_prio",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "rank_prio"
     },
@@ -1819,7 +1819,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_cronograma_calcularcronograma",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "calcularcronograma()"
     },
@@ -1830,7 +1830,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_js_cronograma_dia_sem",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "dia_sem"
     },
@@ -1841,7 +1841,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_cronograma_mes_cor",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "mes_cor"
     },
@@ -1852,7 +1852,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_js_cronograma_fechacorta",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "fechacorta()"
     },
@@ -1863,7 +1863,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_cronograma_rendercronograma",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "rendercronograma()"
     },
@@ -1874,7 +1874,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_js_cronograma_ritmoreal",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "ritmoreal()"
     },
@@ -1885,7 +1885,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_cronograma_redondo",
-      "community": 18,
+      "community": 17,
       "community_name": "cronograma.js",
       "norm_label": "redondo()"
     },
@@ -2127,8 +2127,8 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "src_js_dashboards_confirmarseparar",
-      "community": 3,
-      "community_name": "Automatizaciones de fecha",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "confirmarseparar()"
     },
     {
@@ -2149,8 +2149,8 @@
       "source_location": "L499",
       "_origin": "ast",
       "id": "src_js_dashboards_guardardespacho",
-      "community": 3,
-      "community_name": "Automatizaciones de fecha",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "guardardespacho()"
     },
     {
@@ -2336,7 +2336,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_datos",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "datos.js"
     },
@@ -2347,7 +2347,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_datos_setsync",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "setsync()"
     },
@@ -2358,7 +2358,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_datos_refresh",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "refresh()"
     },
@@ -2366,10 +2366,10 @@
       "label": "renderDashVisible()",
       "file_type": "code",
       "source_file": "src/js/datos.js",
-      "source_location": "L44",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_datos_renderdashvisible",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "renderdashvisible()"
     },
@@ -2377,10 +2377,10 @@
       "label": "restartPoll()",
       "file_type": "code",
       "source_file": "src/js/datos.js",
-      "source_location": "L60",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "src_js_datos_restartpoll",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "restartpoll()"
     },
@@ -2388,10 +2388,10 @@
       "label": "stopPoll()",
       "file_type": "code",
       "source_file": "src/js/datos.js",
-      "source_location": "L64",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "src_js_datos_stoppoll",
-      "community": 31,
+      "community": 32,
       "community_name": "Carga y refresco",
       "norm_label": "stoppoll()"
     },
@@ -2402,8 +2402,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_ficha",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "ficha.js"
     },
     {
@@ -2413,8 +2413,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_ficha_opendet",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "opendet()"
     },
     {
@@ -2424,8 +2424,8 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_ficha_dstk",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "dstk"
     },
     {
@@ -2435,8 +2435,8 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "src_js_ficha_initform",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "initform()"
     },
     {
@@ -2446,8 +2446,8 @@
       "source_location": "L201",
       "_origin": "ast",
       "id": "src_js_ficha_nextop",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "nextop()"
     },
     {
@@ -2457,8 +2457,8 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "src_js_ficha_targetrows",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "targetrows()"
     },
     {
@@ -2468,8 +2468,8 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "src_js_ficha_hintop",
-      "community": 5,
-      "community_name": "Constantes del modelo",
+      "community": 27,
+      "community_name": "Ficha de la puerta",
       "norm_label": "hintop()"
     },
     {
@@ -2479,7 +2479,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_filtros_movil",
-      "community": 34,
+      "community": 35,
       "community_name": "filtros-movil.js",
       "norm_label": "filtros-movil.js"
     },
@@ -2490,7 +2490,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_filtros_movil_filtropuesto",
-      "community": 34,
+      "community": 35,
       "community_name": "filtros-movil.js",
       "norm_label": "filtropuesto()"
     },
@@ -2501,7 +2501,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_filtros_movil_pintarcontador",
-      "community": 34,
+      "community": 35,
       "community_name": "filtros-movil.js",
       "norm_label": "pintarcontador()"
     },
@@ -2512,7 +2512,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_js_filtros_movil_plegarbarra",
-      "community": 34,
+      "community": 35,
       "community_name": "filtros-movil.js",
       "norm_label": "plegarbarra()"
     },
@@ -2523,7 +2523,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_js_filtros_movil_plegarfiltros",
-      "community": 34,
+      "community": 35,
       "community_name": "filtros-movil.js",
       "norm_label": "plegarfiltros()"
     },
@@ -2534,7 +2534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_formatos",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "formatos.js"
     },
@@ -2545,7 +2545,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_formatos_formato_de_tipo",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "formato_de_tipo"
     },
@@ -2556,7 +2556,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_formatos_formatode",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "formatode()"
     },
@@ -2567,7 +2567,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_js_formatos_it",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "it()"
     },
@@ -2578,7 +2578,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "src_js_formatos_formatos",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "formatos"
     },
@@ -2589,7 +2589,7 @@
       "source_location": "L374",
       "_origin": "ast",
       "id": "src_js_formatos_piezasde",
-      "community": 32,
+      "community": 33,
       "community_name": "formatos.js",
       "norm_label": "piezasde()"
     },
@@ -2600,7 +2600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_impresion",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "impresion.js"
     },
@@ -2611,7 +2611,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_js_impresion_qc",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "qc"
     },
@@ -2622,7 +2622,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_impresion_rotuloop",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "rotuloop()"
     },
@@ -2633,7 +2633,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_impresion_stickerhtml",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "stickerhtml()"
     },
@@ -2644,7 +2644,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_js_impresion_cabeceracarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "cabeceracarta()"
     },
@@ -2655,7 +2655,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_impresion_medidascarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "medidascarta()"
     },
@@ -2666,7 +2666,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "src_js_impresion_opcionescarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "opcionescarta()"
     },
@@ -2677,7 +2677,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_js_impresion_piezacarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "piezacarta()"
     },
@@ -2688,7 +2688,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_js_impresion_familiasde",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "familiasde()"
     },
@@ -2699,7 +2699,7 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "src_js_impresion_piezasbloque",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "piezasbloque()"
     },
@@ -2710,7 +2710,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_js_impresion_materialescarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "materialescarta()"
     },
@@ -2721,7 +2721,7 @@
       "source_location": "L207",
       "_origin": "ast",
       "id": "src_js_impresion_firmacarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "firmacarta()"
     },
@@ -2732,7 +2732,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "src_js_impresion_notascarta",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "notascarta()"
     },
@@ -2743,7 +2743,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "src_js_impresion_cartahtml",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "cartahtml()"
     },
@@ -2754,8 +2754,8 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "src_js_impresion_printfichas",
-      "community": 3,
-      "community_name": "Automatizaciones de fecha",
+      "community": 1,
+      "community_name": "paneles-control.js",
       "norm_label": "printfichas()"
     },
     {
@@ -2765,7 +2765,7 @@
       "source_location": "L271",
       "_origin": "ast",
       "id": "src_js_impresion_pedirsticker",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "pedirsticker()"
     },
@@ -2776,7 +2776,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "src_js_impresion_stkbtn",
-      "community": 12,
+      "community": 11,
       "community_name": "Impresion",
       "norm_label": "stkbtn"
     },
@@ -2787,7 +2787,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_informes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "informes.js"
     },
@@ -2798,7 +2798,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_js_informes_inf_head",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "inf_head"
     },
@@ -2809,7 +2809,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_informes_tipos_informe",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "tipos_informe"
     },
@@ -2820,7 +2820,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_js_informes_columnasde",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "columnasde()"
     },
@@ -2831,7 +2831,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_js_informes_frecuencias",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "frecuencias"
     },
@@ -2842,7 +2842,7 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_js_informes_dias_semana",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "dias_semana"
     },
@@ -2853,7 +2853,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_informes_enrango",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "enrango()"
     },
@@ -2864,7 +2864,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "src_js_informes_periodode",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "periodode()"
     },
@@ -2875,7 +2875,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_informes_informes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "informes"
     },
@@ -2886,7 +2886,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "src_js_informes_loadinformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "loadinformes()"
     },
@@ -2897,7 +2897,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "src_js_informes_csvinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "csvinforme()"
     },
@@ -2908,7 +2908,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "src_js_informes_descargarinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "descargarinforme()"
     },
@@ -2919,7 +2919,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "src_js_informes_abririnformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "abririnformes()"
     },
@@ -2930,7 +2930,7 @@
       "source_location": "L198",
       "_origin": "ast",
       "id": "src_js_informes_cuandosale",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "cuandosale()"
     },
@@ -2941,7 +2941,7 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "src_js_informes_pintarinformes",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "pintarinformes()"
     },
@@ -2952,7 +2952,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "src_js_informes_bloquecolumnas",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "bloquecolumnas()"
     },
@@ -2963,7 +2963,7 @@
       "source_location": "L267",
       "_origin": "ast",
       "id": "src_js_informes_bloquecondiciones",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "bloquecondiciones()"
     },
@@ -2974,7 +2974,7 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "src_js_informes_guardarinforme",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "guardarinforme()"
     },
@@ -2985,7 +2985,7 @@
       "source_location": "L436",
       "_origin": "ast",
       "id": "src_js_informes_probarcorreo",
-      "community": 6,
+      "community": 5,
       "community_name": "informes.js",
       "norm_label": "probarcorreo()"
     },
@@ -3150,7 +3150,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_modulo",
-      "community": 36,
+      "community": 37,
       "community_name": "modulo.js",
       "norm_label": "modulo.js"
     },
@@ -3161,7 +3161,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_modulo_modulos",
-      "community": 36,
+      "community": 37,
       "community_name": "modulo.js",
       "norm_label": "modulos"
     },
@@ -3172,9 +3172,86 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_modulo_configdelmodulo",
-      "community": 36,
+      "community": 37,
       "community_name": "modulo.js",
       "norm_label": "configdelmodulo()"
+    },
+    {
+      "label": "panel-de-puerta.js",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "panel-de-puerta.js"
+    },
+    {
+      "label": "destinoPanel()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_destinopanel",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "destinopanel()"
+    },
+    {
+      "label": "prepararPanelDePuerta()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_prepararpaneldepuerta",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "prepararpaneldepuerta()"
+    },
+    {
+      "label": "llevaPanelLaPuerta()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_llevapanellapuerta",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "llevapanellapuerta()"
+    },
+    {
+      "label": "filaPanel()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_filapanel",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "filapanel()"
+    },
+    {
+      "label": "primeraFilaLibrePanel()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_primerafilalibrepanel",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "primerafilalibrepanel()"
+    },
+    {
+      "label": "crearPanelDeLaPuerta()",
+      "file_type": "code",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L105",
+      "_origin": "ast",
+      "id": "src_js_panel_de_puerta_crearpaneldelapuerta",
+      "community": 30,
+      "community_name": "panel-de-puerta.js",
+      "norm_label": "crearpaneldelapuerta()"
     },
     {
       "label": "paneles-almacen.js",
@@ -3183,7 +3260,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_almacen",
-      "community": 35,
+      "community": 36,
       "community_name": "paneles-almacen.js",
       "norm_label": "paneles-almacen.js"
     },
@@ -3194,7 +3271,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_enalmacen",
-      "community": 35,
+      "community": 36,
       "community_name": "paneles-almacen.js",
       "norm_label": "enalmacen()"
     },
@@ -3205,7 +3282,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_porpedido",
-      "community": 35,
+      "community": 36,
       "community_name": "paneles-almacen.js",
       "norm_label": "porpedido()"
     },
@@ -3216,7 +3293,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_renderalmacen",
-      "community": 35,
+      "community": 36,
       "community_name": "paneles-almacen.js",
       "norm_label": "renderalmacen()"
     },
@@ -3227,7 +3304,7 @@
       "source_location": "L161",
       "_origin": "ast",
       "id": "src_js_paneles_almacen_acomp",
-      "community": 35,
+      "community": 36,
       "community_name": "paneles-almacen.js",
       "norm_label": "acomp"
     },
@@ -3238,7 +3315,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_auto",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "paneles-auto.js"
     },
@@ -3249,7 +3326,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_auto_col",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "col()"
     },
@@ -3260,7 +3337,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_js_paneles_auto_estado",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "estado"
     },
@@ -3271,7 +3348,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_paneles_auto_estadode",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "estadode()"
     },
@@ -3282,7 +3359,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_paneles_auto_anuladap",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "anuladap()"
     },
@@ -3293,18 +3370,29 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_paneles_auto_despachadap",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "despachadap()"
+    },
+    {
+      "label": "SUBIDAS_DE_ESTA_SESION",
+      "file_type": "code",
+      "source_file": "src/js/paneles-auto.js",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "src_js_paneles_auto_subidas_de_esta_sesion",
+      "community": 3,
+      "community_name": "Cliente de Google Sheets",
+      "norm_label": "subidas_de_esta_sesion"
     },
     {
       "label": "autoPrioridades()",
       "file_type": "code",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L32",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_paneles_auto_autoprioridades",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "autoprioridades()"
     },
@@ -3312,10 +3400,10 @@
       "label": "tocarFechaProceso()",
       "file_type": "code",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L62",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "src_js_paneles_auto_tocarfechaproceso",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "tocarfechaproceso()"
     },
@@ -3323,10 +3411,10 @@
       "label": "ponerEstado()",
       "file_type": "code",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L89",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "src_js_paneles_auto_ponerestado",
-      "community": 4,
+      "community": 3,
       "community_name": "Cliente de Google Sheets",
       "norm_label": "ponerestado()"
     },
@@ -3601,7 +3689,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_ficha",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "paneles-ficha.js"
     },
@@ -3612,7 +3700,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_opcionesde",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "opcionesde()"
     },
@@ -3623,7 +3711,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_llenarproductos",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "llenarproductos()"
     },
@@ -3634,7 +3722,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_productovalido",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "productovalido()"
     },
@@ -3645,7 +3733,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_lineahtml",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "lineahtml()"
     },
@@ -3656,7 +3744,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_anadirlinea",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "anadirlinea()"
     },
@@ -3667,7 +3755,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_renumerar",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "renumerar()"
     },
@@ -3678,7 +3766,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_celdade",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "celdade()"
     },
@@ -3689,7 +3777,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_recalcular",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "recalcular()"
     },
@@ -3700,7 +3788,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_nextop",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "nextop()"
     },
@@ -3711,7 +3799,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_targetrows",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "targetrows()"
     },
@@ -3722,7 +3810,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_nombreop",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "nombreop()"
     },
@@ -3733,7 +3821,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_hintop",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "hintop()"
     },
@@ -3744,7 +3832,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_n3",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "n3()"
     },
@@ -3755,7 +3843,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_initform",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "initform()"
     },
@@ -3766,7 +3854,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_campos_editables",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "campos_editables"
     },
@@ -3777,7 +3865,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_camposeditables",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "camposeditables()"
     },
@@ -3788,7 +3876,7 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "src_js_paneles_ficha_opendet",
-      "community": 9,
+      "community": 7,
       "community_name": "paneles-ficha.js",
       "norm_label": "opendet()"
     },
@@ -3799,7 +3887,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_filtros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "paneles-filtros.js"
     },
@@ -3810,7 +3898,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_grupos",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "grupos"
     },
@@ -3821,7 +3909,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_grupofiltros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "grupofiltros()"
     },
@@ -3832,7 +3920,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtros"
     },
@@ -3843,7 +3931,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_def_filtros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "def_filtros"
     },
@@ -3854,7 +3942,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtrosel",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtrosel()"
     },
@@ -3865,7 +3953,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtrovacio",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtrovacio()"
     },
@@ -3876,7 +3964,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtropasa",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtropasa()"
     },
@@ -3887,7 +3975,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtropasaalguno",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtropasaalguno()"
     },
@@ -3898,7 +3986,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_definirfiltro",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "definirfiltro()"
     },
@@ -3909,7 +3997,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_valoresdefiltro",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "valoresdefiltro()"
     },
@@ -3920,7 +4008,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_filtrospuestos",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "filtrospuestos()"
     },
@@ -3931,7 +4019,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_pintarfiltros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "pintarfiltros()"
     },
@@ -3942,7 +4030,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_pintarfichasfiltro",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "pintarfichasfiltro()"
     },
@@ -3953,7 +4041,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_pintarmenu",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "pintarmenu()"
     },
@@ -3964,7 +4052,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_cerrarmenus",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "cerrarmenus()"
     },
@@ -3975,7 +4063,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_avisarcambio",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "avisarcambio()"
     },
@@ -3986,7 +4074,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_paneles_filtros_limpiarfiltros",
-      "community": 10,
+      "community": 8,
       "community_name": "paneles-filtros.js",
       "norm_label": "limpiarfiltros()"
     },
@@ -3997,7 +4085,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_listas",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "paneles-listas.js"
     },
@@ -4008,7 +4096,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_paneles_listas_leerlistasdelahoja",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "leerlistasdelahoja()"
     },
@@ -4019,7 +4107,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_js_paneles_listas_pintarorigenlistas",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "pintarorigenlistas()"
     },
@@ -4030,7 +4118,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "src_js_paneles_listas_encabezados",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "encabezados"
     },
@@ -4041,7 +4129,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "src_js_paneles_listas_estado_columnas",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "estado_columnas"
     },
@@ -4052,7 +4140,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_js_paneles_listas_normaliza",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "normaliza()"
     },
@@ -4063,7 +4151,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "src_js_paneles_listas_resolvercolumnaspropias",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "resolvercolumnaspropias()"
     },
@@ -4074,7 +4162,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "src_js_paneles_listas_aplicarcolumnaspropias",
-      "community": 25,
+      "community": 24,
       "community_name": "paneles-listas.js",
       "norm_label": "aplicarcolumnaspropias()"
     },
@@ -4085,7 +4173,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_planta",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "paneles-planta.js"
     },
@@ -4096,7 +4184,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_paneles_planta_plantapendientes",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "plantapendientes()"
     },
@@ -4107,7 +4195,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_js_paneles_planta_plantaenuso",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "plantaenuso()"
     },
@@ -4118,7 +4206,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_paneles_planta_etiquetaprio",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "etiquetaprio()"
     },
@@ -4129,7 +4217,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_js_paneles_planta_textoespera",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "textoespera()"
     },
@@ -4140,7 +4228,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_paneles_planta_renderplanta",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "renderplanta()"
     },
@@ -4151,7 +4239,7 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "src_js_paneles_planta_pintarresumenplanta",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "pintarresumenplanta()"
     },
@@ -4162,7 +4250,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "src_js_paneles_planta_pintartarjeta",
-      "community": 26,
+      "community": 25,
       "community_name": "paneles-planta.js",
       "norm_label": "pintartarjeta()"
     },
@@ -4173,7 +4261,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_paneles_resumen",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "paneles-resumen.js"
     },
@@ -4184,7 +4272,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_fabricadas",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "fabricadas()"
     },
@@ -4195,7 +4283,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_fechafin",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "fechafin()"
     },
@@ -4206,7 +4294,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_diasdefabricacion",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "diasdefabricacion()"
     },
@@ -4217,7 +4305,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_mediana",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "mediana()"
     },
@@ -4228,7 +4316,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_percentil",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "percentil()"
     },
@@ -4239,7 +4327,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderresumen",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderresumen()"
     },
@@ -4250,7 +4338,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_pintarentrega",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "pintarentrega()"
     },
@@ -4261,7 +4349,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderpoliuretano",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderpoliuretano()"
     },
@@ -4272,7 +4360,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_metroslamina",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "metroslamina()"
     },
@@ -4283,7 +4371,7 @@
       "source_location": "L244",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_consumolamina",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "consumolamina()"
     },
@@ -4294,7 +4382,7 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderlamina",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderlamina()"
     },
@@ -4305,7 +4393,7 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "src_js_paneles_resumen_renderpolipendiente",
-      "community": 15,
+      "community": 14,
       "community_name": "paneles-resumen.js",
       "norm_label": "renderpolipendiente()"
     },
@@ -4316,7 +4404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_planta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "planta.js"
     },
@@ -4327,7 +4415,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_js_planta_prio_ord",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "prio_ord"
     },
@@ -4338,7 +4426,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_js_planta_altaolvidada",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "altaolvidada()"
     },
@@ -4349,7 +4437,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_planta_color_proc",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "color_proc"
     },
@@ -4360,7 +4448,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_js_planta_plantaprogramadas",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "plantaprogramadas"
     },
@@ -4371,7 +4459,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_js_planta_plantalist",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "plantalist()"
     },
@@ -4382,7 +4470,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "src_js_planta_metatarjeta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "metatarjeta()"
     },
@@ -4393,7 +4481,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaprio",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaprio()"
     },
@@ -4404,7 +4492,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_js_planta_etiquetaplanta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "etiquetaplanta()"
     },
@@ -4415,7 +4503,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_js_planta_notatarjeta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "notatarjeta()"
     },
@@ -4426,7 +4514,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "src_js_planta_pintartarjeta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "pintartarjeta()"
     },
@@ -4437,7 +4525,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "src_js_planta_avisarprogramadas",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "avisarprogramadas()"
     },
@@ -4448,7 +4536,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "src_js_planta_pintarresumenplanta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "pintarresumenplanta()"
     },
@@ -4459,7 +4547,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "src_js_planta_renderplanta",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "renderplanta()"
     },
@@ -4470,7 +4558,7 @@
       "source_location": "L283",
       "_origin": "ast",
       "id": "src_js_planta_plantaenuso",
-      "community": 13,
+      "community": 12,
       "community_name": "Vista de planta",
       "norm_label": "plantaenuso()"
     },
@@ -4481,7 +4569,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_poliuretano",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "poliuretano.js"
     },
@@ -4492,7 +4580,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_js_poliuretano_kgpoliuretano",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "kgpoliuretano()"
     },
@@ -4503,7 +4591,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_js_poliuretano_kgunidadpoliuretano",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "kgunidadpoliuretano()"
     },
@@ -4514,7 +4602,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_js_poliuretano_revisarpoliuretano",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "revisarpoliuretano()"
     },
@@ -4525,7 +4613,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_js_poliuretano_meses_es",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "meses_es"
     },
@@ -4536,7 +4624,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "src_js_poliuretano_mesde",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "mesde()"
     },
@@ -4547,7 +4635,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_js_poliuretano_semanade",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "semanade()"
     },
@@ -4558,7 +4646,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_js_poliuretano_nombremes",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "nombremes()"
     },
@@ -4569,7 +4657,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "src_js_poliuretano_consumopor",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "consumopor()"
     },
@@ -4580,7 +4668,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_js_poliuretano_resumenpoliuretano",
-      "community": 23,
+      "community": 22,
       "community_name": "poliuretano.js",
       "norm_label": "resumenpoliuretano()"
     },
@@ -4591,7 +4679,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_pwa",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "pwa.js"
     },
@@ -4602,7 +4690,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_js_pwa_yainstalada",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "yainstalada()"
     },
@@ -4613,7 +4701,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_js_pwa_mostrarboton",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "mostrarboton()"
     },
@@ -4624,7 +4712,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_pwa_abririnstalar",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "abririnstalar()"
     },
@@ -4635,7 +4723,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_js_pwa_forzaractualizacion",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "forzaractualizacion()"
     },
@@ -4646,7 +4734,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_js_pwa_comprobarversion",
-      "community": 33,
+      "community": 34,
       "community_name": "Instalacion como app",
       "norm_label": "comprobarversion()"
     },
@@ -4657,7 +4745,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_secuencia",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "secuencia.js"
     },
@@ -4668,7 +4756,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_js_secuencia_orden_prio",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "orden_prio"
     },
@@ -4679,7 +4767,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_js_secuencia_nivelde",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "nivelde()"
     },
@@ -4690,7 +4778,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_js_secuencia_m2de",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "m2de()"
     },
@@ -4701,7 +4789,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_js_secuencia_espesorde",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "espesorde()"
     },
@@ -4712,7 +4800,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_js_secuencia_espesormmde",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "espesormmde()"
     },
@@ -4723,7 +4811,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_js_secuencia_diasencola",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "diasencola()"
     },
@@ -4734,7 +4822,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_js_secuencia_ultimotoque",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "ultimotoque()"
     },
@@ -4745,7 +4833,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "src_js_secuencia_diassintocar",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "diassintocar()"
     },
@@ -4756,7 +4844,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_js_secuencia_prioridadquetocaria",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "prioridadquetocaria()"
     },
@@ -4767,7 +4855,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_js_secuencia_altaadelantada",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "altaadelantada()"
     },
@@ -4778,7 +4866,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "src_js_secuencia_secuenciapaneles",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "secuenciapaneles()"
     },
@@ -4789,7 +4877,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "src_js_secuencia_marcar",
-      "community": 16,
+      "community": 15,
       "community_name": "secuencia.js",
       "norm_label": "marcar()"
     },
@@ -4800,7 +4888,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_js_usuarios",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usuarios.js"
     },
@@ -4811,7 +4899,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_js_usuarios_usu_head",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usu_head"
     },
@@ -4822,7 +4910,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_js_usuarios_roles",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "roles"
     },
@@ -4833,7 +4921,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_js_usuarios_usuarios",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "usuarios"
     },
@@ -4844,7 +4932,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_js_usuarios_puede",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "puede()"
     },
@@ -4855,7 +4943,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_js_usuarios_vistaspermitidas",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "vistaspermitidas()"
     },
@@ -4866,7 +4954,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_js_usuarios_loadusuarios",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "loadusuarios()"
     },
@@ -4877,7 +4965,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_js_usuarios_aplicarrol",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "aplicarrol()"
     },
@@ -4888,7 +4976,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "src_js_usuarios_sinacceso",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "sinacceso()"
     },
@@ -4899,7 +4987,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "src_js_usuarios_abrirusuarios",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "abrirusuarios()"
     },
@@ -4910,7 +4998,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_js_usuarios_pintarusuarios",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "pintarusuarios()"
     },
@@ -4921,7 +5009,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_js_usuarios_guardarusuario",
-      "community": 8,
+      "community": 6,
       "community_name": "usuarios.js",
       "norm_label": "guardarusuario()"
     },
@@ -5196,7 +5284,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_sw",
-      "community": 39,
+      "community": 40,
       "community_name": "Service worker",
       "norm_label": "sw.js"
     },
@@ -5207,7 +5295,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_sw_armazon",
-      "community": 39,
+      "community": 40,
       "community_name": "Service worker",
       "norm_label": "armazon"
     },
@@ -5218,7 +5306,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tools_comprobar_ids",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "comprobar_ids.py"
     },
@@ -5229,7 +5317,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "tools_comprobar_ids_leer",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "leer()"
     },
@@ -5240,7 +5328,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "tools_comprobar_ids_ids_de",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "ids_de()"
     },
@@ -5251,7 +5339,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "tools_comprobar_ids_scripts_de",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "scripts_de()"
     },
@@ -5262,7 +5350,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "tools_comprobar_ids_protegido_en_linea",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "protegido_en_linea()"
     },
@@ -5273,7 +5361,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "tools_comprobar_ids_main",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "main()"
     },
@@ -5284,7 +5372,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "tools_comprobar_ids_rationale_64",
-      "community": 30,
+      "community": 31,
       "community_name": "comprobar_ids.py",
       "norm_label": "el propio renglon comprueba antes de usar."
     },
@@ -5295,7 +5383,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tools_grafo",
-      "community": 40,
+      "community": 41,
       "community_name": "grafo.py",
       "norm_label": "grafo.py"
     },
@@ -5306,7 +5394,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "tools_grafo_main",
-      "community": 40,
+      "community": 41,
       "community_name": "grafo.py",
       "norm_label": "main()"
     },
@@ -5317,7 +5405,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tools_humo",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "humo.js"
     },
@@ -5328,7 +5416,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "tools_humo_fs",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "fs"
     },
@@ -5339,7 +5427,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "tools_humo_path",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "path"
     },
@@ -5350,7 +5438,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tools_humo_vm",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "vm"
     },
@@ -5361,7 +5449,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tools_humo_jsdom",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "{ jsdom }"
     },
@@ -5372,7 +5460,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tools_humo_cab_panel",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "cab_panel"
     },
@@ -5383,18 +5471,29 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "tools_humo_filapanel",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "filapanel()"
+    },
+    {
+      "label": "hace()",
+      "file_type": "code",
+      "source_file": "tools/humo.js",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "tools_humo_hace",
+      "community": 4,
+      "community_name": "humo.js",
+      "norm_label": "hace()"
     },
     {
       "label": "DATOS",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L33",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "tools_humo_datos",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "datos"
     },
@@ -5402,10 +5501,10 @@
       "label": "ESCRITURAS",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L60",
+      "source_location": "L82",
       "_origin": "ast",
       "id": "tools_humo_escrituras",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "escrituras"
     },
@@ -5413,10 +5512,10 @@
       "label": "VALIDACIONES",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L61",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "tools_humo_validaciones",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "validaciones"
     },
@@ -5424,10 +5523,10 @@
       "label": "celdasDe()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L63",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "tools_humo_celdasde",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "celdasde()"
     },
@@ -5435,10 +5534,10 @@
       "label": "colNum()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L67",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "tools_humo_colnum",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "colnum()"
     },
@@ -5446,10 +5545,10 @@
       "label": "leer()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L69",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "tools_humo_leer",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "leer()"
     },
@@ -5457,10 +5556,10 @@
       "label": "escribir()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L83",
+      "source_location": "L105",
       "_origin": "ast",
       "id": "tools_humo_escribir",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "escribir()"
     },
@@ -5468,10 +5567,10 @@
       "label": "VALIDACION_HOJA",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L101",
+      "source_location": "L123",
       "_origin": "ast",
       "id": "tools_humo_validacion_hoja",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "validacion_hoja"
     },
@@ -5479,10 +5578,10 @@
       "label": "hacerFetch()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L113",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "tools_humo_hacerfetch",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "hacerfetch()"
     },
@@ -5490,10 +5589,10 @@
       "label": "arrancar()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L175",
+      "source_location": "L197",
       "_origin": "ast",
       "id": "tools_humo_arrancar",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "arrancar()"
     },
@@ -5501,10 +5600,10 @@
       "label": "ROWS_LAMINA()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L236",
+      "source_location": "L258",
       "_origin": "ast",
       "id": "tools_humo_rows_lamina",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "rows_lamina()"
     },
@@ -5512,10 +5611,10 @@
       "label": "comprueba()",
       "file_type": "code",
       "source_file": "tools/humo.js",
-      "source_location": "L240",
+      "source_location": "L262",
       "_origin": "ast",
       "id": "tools_humo_comprueba",
-      "community": 7,
+      "community": 4,
       "community_name": "humo.js",
       "norm_label": "comprueba()"
     }
@@ -6180,7 +6279,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L79",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria",
@@ -6191,7 +6290,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L63",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria",
@@ -6235,7 +6334,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L111",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria",
@@ -6246,7 +6345,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L83",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria",
@@ -6257,7 +6356,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L77",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria",
@@ -6293,7 +6392,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L66",
+      "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria_loadlog",
@@ -6329,7 +6428,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L104",
+      "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria_renderhist",
@@ -6341,7 +6440,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/auditoria.js",
-      "source_location": "L84",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_auditoria_renderhist",
@@ -8114,7 +8213,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L90",
+      "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_ponerestado",
@@ -8126,7 +8225,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L63",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_tocarfechaproceso",
@@ -9665,7 +9764,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/datos.js",
-      "source_location": "L44",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_datos",
@@ -9676,7 +9775,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/datos.js",
-      "source_location": "L60",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_datos",
@@ -9698,7 +9797,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/datos.js",
-      "source_location": "L64",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_datos",
@@ -9734,7 +9833,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/datos.js",
-      "source_location": "L62",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_datos_restartpoll",
@@ -9746,7 +9845,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/datos.js",
-      "source_location": "L61",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_datos_restartpoll",
@@ -10774,6 +10873,109 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_crearpaneldelapuerta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_destinopanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_filapanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_llevapanellapuerta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "argument",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_prepararpaneldepuerta",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta",
+      "target": "src_js_panel_de_puerta_primerafilalibrepanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta_crearpaneldelapuerta",
+      "target": "src_js_panel_de_puerta_destinopanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta_crearpaneldelapuerta",
+      "target": "src_js_panel_de_puerta_filapanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/panel-de-puerta.js",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_panel_de_puerta_crearpaneldelapuerta",
+      "target": "src_js_panel_de_puerta_primerafilalibrepanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-almacen.js",
       "source_location": "L161",
       "weight": 1.0,
@@ -10855,7 +11057,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L32",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto",
@@ -10910,7 +11112,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L89",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto",
@@ -10921,7 +11123,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L62",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_paneles_auto",
+      "target": "src_js_paneles_auto_subidas_de_esta_sesion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/js/paneles-auto.js",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto",
@@ -10933,7 +11146,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L40",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_autoprioridades",
@@ -10945,7 +11158,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L95",
+      "source_location": "L107",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_ponerestado",
@@ -10957,7 +11170,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L71",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_tocarfechaproceso",
@@ -10993,7 +11206,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L35",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_autoprioridades",
@@ -11005,12 +11218,24 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/js/paneles-auto.js",
-      "source_location": "L35",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_js_paneles_auto_autoprioridades",
       "target": "src_js_paneles_auto_despachadap",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/paneles-auto.js",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_js_paneles_auto_autoprioridades",
+      "target": "src_js_paneles_auto_subidas_de_esta_sesion"
     },
     {
       "relation": "contains",
@@ -14321,7 +14546,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L175",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14343,7 +14568,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L63",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14354,7 +14579,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L67",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14365,7 +14590,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L240",
+      "source_location": "L262",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14376,7 +14601,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L33",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14387,7 +14612,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L83",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14398,7 +14623,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L60",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14431,7 +14656,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L113",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tools_humo",
+      "target": "tools_humo_hace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/humo.js",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14453,7 +14689,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L69",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14475,7 +14711,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L236",
+      "source_location": "L258",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14486,7 +14722,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L101",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14497,7 +14733,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L61",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo",
@@ -14521,7 +14757,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tools/humo.js",
-      "source_location": "L217",
+      "source_location": "L239",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_arrancar",
@@ -14533,7 +14769,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tools/humo.js",
-      "source_location": "L84",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_escribir",
@@ -14545,7 +14781,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tools/humo.js",
-      "source_location": "L139",
+      "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_hacerfetch",
@@ -14556,7 +14792,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L124",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_hacerfetch",
@@ -14568,7 +14804,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L88",
+      "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_escribir",
@@ -14580,7 +14816,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L74",
+      "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_leer",
@@ -14592,7 +14828,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L149",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_hacerfetch",
@@ -14604,7 +14840,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L125",
+      "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_hacerfetch",
@@ -14616,7 +14852,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tools/humo.js",
-      "source_location": "L184",
+      "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast",
       "source": "tools_humo_arrancar",
@@ -14625,5 +14861,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a22047ea247bc789aa3e3079db6cd00f2adc0e7a"
+  "built_at_commit": "d7e00f01c0ba5355c1d95553e628f8dbc4cb6a43"
 }
