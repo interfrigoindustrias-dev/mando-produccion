@@ -16,13 +16,19 @@ const SHEET = "HOJA_DE_PRUEBA";
 /* ------------------------------ hoja falsa ------------------------------ */
 /* Datos de paneles con la forma real: 21 columnas, lote en texto en unas filas
    y fecha de verdad en otras, y K/L ya calculadas por la hoja. */
+/* Hasta la W: V y W son los metros lineales de lamina de cada cara, y ya
+   estaban en la hoja aunque el modelo solo llegara a la U. X e Y se dejan sin
+   encabezado a proposito, para que la aplicacion tenga que crearlas. */
 const CAB_PANEL = ["FECHA","CLIENTE","OP","PRIORIDAD","CANT","LARGO","PRODUCTO","RANURADO",
   "CARA A","CARA B","UNIDAD","TOTAL","PERFIL","INYECCION","LIMPIEZA","M2","STATUS",
-  "COMIENZO PROCESO","FIN PROCESO","ESTADO","FECHA DE DESPACHO"];
+  "COMIENZO PROCESO","FIN PROCESO","ESTADO","FECHA DE DESPACHO",
+  "LAMINA CARA A","LAMINA CARA B"];
 
-const filaPanel = (f,cli,op,prio,cant,largo,prod,uni,tot,procs,m2,est,fini,ffin) =>
-  [f,cli,op,prio,cant,largo,prod,"RANURADO","9002","9002",uni,tot,
-   procs[0],procs[1],procs[2],m2,0,fini||"",ffin||"",est||"",""];
+const filaPanel = (f,cli,op,prio,cant,largo,prod,uni,tot,procs,m2,est,fini,ffin,caraA,caraB) =>
+  [f,cli,op,prio,cant,largo,prod,"RANURADO",caraA||"9002",caraB||"9002",uni,tot,
+   procs[0],procs[1],procs[2],m2,0,fini||"",ffin||"",est||"","",
+   // metros lineales de lamina: el largo por la cantidad, que es lo que se corta
+   (cant*largo), (cant*largo)];
 
 const DATOS = {
   "PANEL": [CAB_PANEL,
@@ -33,7 +39,7 @@ const DATOS = {
     filaPanel("15/08/2026","SEFRIO","2-2","ALTA",10,3,'PANEL 6"',20.1,201.0,
               [true,false,false],34.8,"EN PROCESO","18/08/2026"),
     filaPanel("22/08/2026","GRIVAN","3","URGENTE",15,6,'PANEL 6"',40.2,603.0,
-              [false,false,false],104.4,"EN PROCESO"),
+              [false,false,false],104.4,"EN PROCESO","","","INOX 304 CAL 28","9002"),
     filaPanel("01/08/2026","NOVAFRIOS","4","MEDIA",50,2.45,'PANEL 4"',10.8,540.0,
               [true,true,true],142.1,"DESPACHADO","01/08/2026","10/08/2026"),
   ],
@@ -226,6 +232,9 @@ async function arrancar(pagina, tab){
   return {w, dom, fallos, errConsola, leer};
 }
 
+/** Cuantas filas de la hoja falsa traen metros de lamina en V. */
+let ROWS_LAMINA = () => 0;
+
 /* ------------------------------ comprobaciones ------------------------------ */
 let malas = 0;
 function comprueba(nombre, cond, detalle){
@@ -240,6 +249,7 @@ function comprueba(nombre, cond, detalle){
   const {w, fallos, errConsola, leer} = await arrancar("paneles.html", "PANEL");
   const $ = s => w.document.querySelector(s);
   const $$ = s => [...w.document.querySelectorAll(s)];
+  ROWS_LAMINA = () => leer("ROWS").filter(x => Number(x.c[21]) > 0).length;
 
   comprueba("carga sin errores", !fallos.length, fallos.join("\n        "));
   /* Si los scripts no cargaron, lo que venga despues no prueba nada: sin este
@@ -261,8 +271,8 @@ function comprueba(nombre, cond, detalle){
 
   console.log("\n=== las columnas que se escriben son las de PANELES ===");
   const fuera = ESCRITURAS.filter(e => e.tab === "PANEL")
-    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 20; });
-  comprueba("nada se escribe más allá de la columna U", !fuera.length,
+    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 24; });
+  comprueba("nada se escribe más allá de la columna Y", !fuera.length,
     fuera.map(e=>e.a1).join(", "));
   const valPanel = VALIDACIONES.filter(v => v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
   const cols = [...new Set(valPanel.map(v=>v.startColumnIndex))].sort((a,b)=>a-b);
@@ -353,6 +363,8 @@ function comprueba(nombre, cond, detalle){
   await new Promise(r => setTimeout(r, 60));
   $("#n-add").dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
   $("#n-cli").value = "CLIENTE DE PRUEBA";
+  $("#n-cotiz").value = "COT-9001";
+  $("#n-oc").value = "OC-4471";
   const filas = $$("#n-lineas tr");
   comprueba("el creador tiene dos líneas", filas.length === 2, "líneas: " + filas.length);
   filas.forEach((tr,i)=>{
@@ -364,8 +376,8 @@ function comprueba(nombre, cond, detalle){
   const opNueva = $("#n-op").value;
   $("#form-new").dispatchEvent(new w.Event("submit", {bubbles:true, cancelable:true}));
   await new Promise(r => setTimeout(r, 500));
-  const nuevas = ESCRITURAS.filter(e => /^A\d+:U\d+$/.test(e.a1));
-  comprueba("escribe dos filas completas A..U", nuevas.length === 2,
+  const nuevas = ESCRITURAS.filter(e => /^A\d+:Y\d+$/.test(e.a1));
+  comprueba("escribe dos filas completas A..Y", nuevas.length === 2,
     "filas escritas: " + nuevas.length);
   if(nuevas.length === 2){
     const dosDigitos = n => String(n).padStart(2, "0");
@@ -379,6 +391,12 @@ function comprueba(nombre, cond, detalle){
       ops[0] === opNueva + "-1" && ops[1] === opNueva + "-2", "OP: " + ops.join(" y "));
     const kl = nuevas.every(e => e.valores[0][10] === "" && e.valores[0][11] === "");
     comprueba("no pisa K ni L, que son fórmula de la hoja", kl);
+    comprueba("ni V ni W, que también lo son",
+      nuevas.every(e => e.valores[0][21] === "" && e.valores[0][22] === ""),
+      nuevas.map(e=>`V=${JSON.stringify(e.valores[0][21])} W=${JSON.stringify(e.valores[0][22])}`).join(" · "));
+    comprueba("guarda la cotización y la orden de compra",
+      nuevas.every(e => e.valores[0][23] === "COT-9001" && e.valores[0][24] === "OC-4471"),
+      nuevas.map(e=>`X=${JSON.stringify(e.valores[0][23])} Y=${JSON.stringify(e.valores[0][24])}`).join(" · "));
   }
 
   console.log("\n=== el producto: catorce opciones, y se busca escribiendo ===");
@@ -430,6 +448,20 @@ function comprueba(nombre, cond, detalle){
     /espesor/i.test($("#toast").textContent),
     "aviso: " + $("#toast").textContent.trim().slice(0, 110));
   $("#ov-nueva").classList.add("hide");
+
+  console.log("\n=== la forma de la hoja: V y W ya estaban, X e Y se crean ===");
+  comprueba("la columna de la lámina de cara A es la V",
+    leer("C.LAM_A") === 21, "índice: " + leer("C.LAM_A"));
+  comprueba("se leen los metros de lámina de las filas",
+    ROWS_LAMINA() > 0, ROWS_LAMINA() + " líneas con metros de lámina");
+  comprueba("la cotización y la OC quedaron resueltas",
+    leer("ESTADO_COLUMNAS").ok, JSON.stringify(leer("ESTADO_COLUMNAS")));
+  comprueba("se crearon los encabezados que faltaban",
+    DATOS.PANEL[0][23] === "COTIZACION" && DATOS.PANEL[0][24] === "ORDEN DE COMPRA",
+    `X1=${DATOS.PANEL[0][23]} · Y1=${DATOS.PANEL[0][24]}`);
+  comprueba("y los campos se ofrecen en la ficha",
+    $("#n-cotiz") && !$("#n-cotiz").disabled &&
+    $("#n-aviso-columnas").classList.contains("hide"));
 
   console.log("\n=== las listas las manda la hoja, no la copia del código ===");
   const desdeHoja = (nombre, col) => {

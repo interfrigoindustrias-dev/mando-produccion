@@ -79,30 +79,19 @@
   <section id="v-control">
     <div class="kpis" id="kpis"></div>
 
-    <div class="bar">
+    <div class="bar barfil">
       <label class="f wide"><span>Buscar</span>
-        <input class="inp" id="f-q" placeholder="OP, cliente, producto…" autocomplete="off"></label>
-      <label class="f"><span>Progreso</span><select class="inp" id="f-prog">
-        <option value="">Todos</option><option value="pend">Sin iniciar (0%)</option>
-        <option value="wip">En proceso</option><option value="done">Fabricadas (100%)</option>
-        <option value="open" selected>Abiertas (&lt;100%)</option></select></label>
-      <label class="f"><span>Estado</span><select class="inp" id="f-estado">
-        <option value="">Todos</option><option>EN PROCESO</option><option>TERMINADO</option>
-        <option>DESPACHADO</option><option>ANULADA</option>
-        <option value="__none">Sin estado</option></select></label>
-      <label class="f"><span>Prioridad</span><select class="inp" id="f-prio">
-        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option>
-        <option>MEDIA</option><option>BAJA</option>
-        <option value="__none">Sin prioridad</option></select></label>
-      <label class="f"><span>Producto</span><select class="inp" id="f-prod"></select></label>
-      <label class="f"><span>Ranurado</span><select class="inp" id="f-ranu"></select></label>
-      <label class="f"><span>Cara</span><select class="inp" id="f-cara"></select></label>
-      <label class="f"><span>Cliente</span><select class="inp" id="f-cli"></select></label>
-      <button class="btn sm" id="f-clear">Limpiar</button>
+        <input class="inp" id="f-q" placeholder="OP, cliente, producto&#8230;" autocomplete="off"></label>
+      <button type="button" class="btn sm filtros-btn" id="f-abrir"
+        data-plegar="#f-caja">Filtros <b></b></button>
+      <div class="filtros-caja" id="f-caja">
+        <div class="filtros" id="f-filtros"></div>
+      </div>
       <div class="grow"></div>
-      <button class="btn sm" id="btn-csv" title="Exporta lo que se ve con los filtros puestos, o solo lo seleccionado">&#8681; CSV</button>
+      <button type="button" class="btn sm" id="btn-csv" title="Exporta lo que se ve con los filtros puestos, o solo lo seleccionado">&#8681; CSV</button>
+      <button type="button" class="btn sm" id="f-clear">Limpiar</button>
     </div>
-
+    <div class="fichas hide" id="f-fichas"></div>
     <div class="tw"><table>
       <thead><tr>
         <th class="stick"><input type="checkbox" id="ck-all" title="Seleccionar todo"></th>
@@ -131,18 +120,24 @@
   <!-- ---------- PLANTA ---------- -->
   <section id="v-planta" class="hide">
     <div class="kpis" id="p-kpis"></div>
-    <div class="bar">
+    <div class="bar barfil">
       <label class="f wide"><span>Buscar</span>
-        <input class="inp" id="p-q" placeholder="OP, cliente o producto…" autocomplete="off"></label>
-      <label class="f"><span>Prioridad</span><select class="inp" id="p-prio">
-        <option value="">Todas</option><option>URGENTE</option><option>ALTA</option>
-        <option>MEDIA</option><option>BAJA</option></select></label>
-      <label class="f"><span>Espesor</span><select class="inp" id="p-esp"></select></label>
+        <input class="inp" id="p-q" placeholder="OP, cliente, producto&#8230;" autocomplete="off"></label>
+      <button type="button" class="btn sm filtros-btn" id="p-abrir"
+        data-plegar="#p-caja">Filtros <b></b></button>
+      <div class="filtros-caja" id="p-caja">
+        <div class="filtros" id="p-filtros"></div>
+      </div>
+      <div class="grow"></div>
+      <button type="button" class="btn sm" id="p-clear">Limpiar</button>
     </div>
+    <div class="fichas hide" id="p-fichas"></div>
     <p class="expl">El orden no es alfab&#233;tico ni por fecha: es el orden en el que
-      <b>conviene fabricar</b>. Manda la prioridad, y dentro de cada prioridad se agrupan
+      <b>conviene fabricar</b>. Primero las urgentes, luego las ALTA que llevan d&#237;as
+      paradas, y despu&#233;s ALTA, MEDIA y BAJA; dentro de cada escal&#243;n, por n&#250;mero de OP
+      de menor a mayor. Manda la prioridad, y dentro de cada prioridad se agrupan
       los pedidos del mismo espesor para no reajustar la m&#225;quina a cada pieza. El grupo
-      se corta a los <b>200 m&#178;</b> y cede el turno, para que un espesor con mucha carga
+      se corta a los <b>100 m&#178;</b> y cede el turno, para que un espesor con mucha carga
       no deje esperando a los dem&#225;s indefinidamente.</p>
     <div id="p-lista" class="planta"></div>
   </section>
@@ -188,14 +183,19 @@
   <!-- ---------- ALMACEN ---------- -->
   <section id="v-almacen" class="hide">
     <div class="kpis" id="a-kpis"></div>
-    <div class="bar">
+    <div class="bar barfil">
       <label class="f wide"><span>Buscar</span>
-        <input class="inp" id="a-q" placeholder="OP, cliente o producto…" autocomplete="off"></label>
-      <label class="f"><span>Cliente</span><select class="inp" id="a-cli"></select></label>
-      <label class="f"><span>Producto</span><select class="inp" id="a-prod"></select></label>
-      <label class="proc"><input type="checkbox" id="a-completos">
-        <span>Solo pedidos completos</span></label>
+        <input class="inp" id="a-q" placeholder="OP, cliente, producto&#8230;" autocomplete="off"></label>
+      <button type="button" class="btn sm filtros-btn" id="a-abrir"
+        data-plegar="#a-caja">Filtros <b></b></button>
+      <div class="filtros-caja" id="a-caja">
+        <div class="filtros" id="a-filtros"></div>
+      </div>
+      <label class="proc"><input type="checkbox" id="a-completos"><span>Solo pedidos completos</span></label>
+      <div class="grow"></div>
+      <button type="button" class="btn sm" id="a-clear">Limpiar</button>
     </div>
+    <div class="fichas hide" id="a-fichas"></div>
     <p class="expl">Agrupado por OP, porque un pedido se despacha entero. Un pedido est&#225;
       <b>COMPLETO</b> cuando ninguna de sus l&#237;neas sigue en fabricaci&#243;n; los incompletos
       quedan abajo y avisan de cu&#225;ntas l&#237;neas faltan.</p>
@@ -444,6 +444,7 @@
 <script src="js/secuencia.js"></script>
 <script src="js/poliuretano.js"></script>
 <script src="js/paneles-listas.js"></script>
+<script src="js/paneles-filtros.js"></script>
 <script src="js/paneles-auto.js"></script>
 <script src="js/paneles-control.js"></script>
 <script src="js/paneles-ficha.js"></script>

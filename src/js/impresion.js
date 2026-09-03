@@ -93,9 +93,15 @@ function cabeceraCarta(c, F){
       <div class="c-t"><b>ORDEN DE PRODUCCIÓN</b><span>${esc(F.nombre)}</span></div>
       <div class="c-op"><b>OP ${esc(c[C.OP] ?? "")}</b><span>${esc(fmtDate(c[C.FECHA]))}</span></div>
     </div>
-    <div class="c-cli">${esc(c[C.CLI] ?? "")}${
+    <div class="c-cli">
+      <span class="c-nom">${esc(c[C.CLI] ?? "")}</span>${
       tri(c[C.COMP]) === true ? '<span class="c-flags">COMPLEMENTO</span>' : ""}${
-      tri(c[C.STOCK]) === true ? '<span class="c-flags">STOCK</span>' : ""}</div>
+      tri(c[C.STOCK]) === true ? '<span class="c-flags">STOCK</span>' : ""}
+      <span class="c-doc">
+        <b>Cotización</b><i>${esc(c[C.COT] ?? "") || "—"}</i>
+        <b>O. compra</b><i>${esc(c[C.OC] ?? "") || "—"}</i>
+      </span>
+    </div>
 
     <div class="c-top">
       <div class="c-grid">
@@ -107,7 +113,6 @@ function cabeceraCarta(c, F){
         ${cel("Bumper", bumper)}
         ${cel("Alfajor frontal", si(c[C.ALFF]))}${cel("Alfajor posterior", si(c[C.ALFP]))}
         ${cel("Puntos", num(c[C.PTS]))}
-        ${cel("Cotización", c[C.COT], 2)}${cel("Orden de compra", c[C.OC], 2)}
       </div>
       ${diagramas ? `<div class="c-dib">${diagramas}</div>` : ""}
     </div>
@@ -140,13 +145,45 @@ function opcionesCarta(F){
 }
 
 /** Una pieza del despiece: se marca cual se uso y se anota cuanta. */
-function piezaCarta(it){
+function piezaCarta(it, soloVariante){
+  const nombre = soloVariante
+    ? `<em class="sola">${esc(it.s)}</em>`
+    : `${esc(it.f)}${it.s && it.s !== "—" ? `<em>${esc(it.s)}</em>` : ""}`;
   return `<div class="c-it">
     <span class="bx"></span>
-    <span class="nm">${esc(it.f)}${it.s && it.s !== "—" ? `<em>${esc(it.s)}</em>` : ""}</span>
+    <span class="nm">${nombre}</span>
     <span class="rf">${esc(it.r || "")}</span>
     <span class="qt">${it.u ? `<b>${esc(it.u)}</b>` : ""}</span>
   </div>`;
+}
+
+/* Piezas seguidas que repiten el mismo nombre se juntan bajo el nombre escrito
+   UNA vez. En rieles habia cinco renglones empezando por «Fin de carrera»: para
+   llegar a lo que de verdad cambia —SE12, SM20, 480 DX— habia que saltarse el
+   prefijo cinco veces, y el nombre repetido comia el ancho que necesitaba la
+   variante, que es justo lo que se busca.
+
+   Solo se agrupa si TODAS las de la tanda traen variante: si alguna es solo el
+   nombre, agruparlas la dejaria sin texto. */
+function familiasDe(items){
+  const out = [];
+  for(const x of items){
+    const u = out[out.length - 1];
+    if(u && u.f === x.f) u.v.push(x); else out.push({f: x.f, v: [x]});
+  }
+  return out.map(g => ({
+    ...g,
+    junta: g.v.length > 1 && g.v.every(x => x.s && x.s !== "—")
+  }));
+}
+
+/** El cuerpo de un bloque, ya agrupado por familias. */
+function piezasBloque(items){
+  return familiasDe(items).map(g => g.junta
+    ? `<div class="c-fam"><span class="fam-t">${esc(g.f)}</span>
+         ${g.v.map(x => piezaCarta(x, true)).join("")}</div>`
+    : g.v.map(x => piezaCarta(x, false)).join("")
+  ).join("");
 }
 
 /** Lista de materiales del formato que le toque a esta puerta. */
@@ -160,7 +197,7 @@ function materialesCarta(F, n){
     <div class="c-mat">${F.bloques.map(b => `
       <div class="c-blq">
         <h4>${esc(b.t)}</h4>
-        ${b.items.map(piezaCarta).join("")}
+        ${piezasBloque(b.items)}
       </div>`).join("")}</div>`;
 }
 
