@@ -164,3 +164,61 @@ img, svg, video, canvas{max-width:100%; height:auto}
   .pterm:hover{ background: transparent; color: var(--acc) }
   .pcard.lista .pterm:hover{ background: var(--acc); color: #fff }
 }
+
+/* ---------- filtros plegados (movil y tablet) ----------
+   Diez filtros, uno por renglon, son una pantalla entera antes de ver la
+   primera fila de la tabla. Se deja la busqueda —el unico que se usa siempre—
+   y el resto se pliega tras un boton que dice cuantos hay puestos. */
+.filtro-tog{display:none}
+.filtro-tog .filtro-n{font-variant-numeric:tabular-nums}
+
+@media (max-width: 1180px){
+  .filtro-tog{ display:inline-flex; align-items:center; gap:4px; flex:none }
+  /* Encendido cuando hay algo filtrando: si no, se mira una tabla medio vacia
+     sin entender por que. */
+  .filtro-tog.hay{ background:var(--ac); color:#fff; border-color:var(--ac) }
+
+  .bar[data-plegable] > .f{ display:none }
+  .bar[data-plegable] > .f.wide{ display:flex }
+  .bar[data-plegable].abierto > .f{ display:flex }
+
+  /* La busqueda y el boton, en la misma linea. */
+  .bar[data-plegable] > .f.wide{ width:auto; flex:1 1 60% ; min-width:0 }
+  /* Sin el rotulo «Buscar»: al ponerse en fila se quedaba en 40 px, partido en
+     dos renglones y torcido. El propio campo ya dice que se busca —«OP,
+     cliente, ensamble, obs…»— asi que el rotulo solo quitaba sitio. */
+  .bar[data-plegable] > .f.wide > span{ display:none }
+}
+
+/* Abierta, los campos siguen siendo uno por linea: es lo legible en un movil.
+   En tablet caben dos y aprovechan la pantalla. */
+@media (min-width: 620px) and (max-width: 1180px){
+  .bar[data-plegable].abierto > .f{ width:calc(50% - 6px) }
+}
+
+/* ---------- los KPI, en una tira que se desliza ----------
+   En un movil de 812 px los indicadores ocupaban 447: mas de media pantalla
+   antes de llegar a la primera fila de la tabla, que es a lo que se entra. En
+   una sola fila con desplazamiento lateral siguen estando todos —no se
+   esconde ninguno— y bajan a poco mas de cien pixeles.
+
+   Es la excepcion a «nada se desplaza de lado»: aqui el gesto es intencionado
+   y la tira lo pide sola. La pagina sigue sin moverse. */
+@media (max-width: 1180px){
+  .kpis{
+    display:flex; grid-template-columns:none;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:6px; margin-bottom:10px;
+    scrollbar-width:thin;
+  }
+  .kpis > .kpi{
+    flex:0 0 auto; min-width:118px; max-width:52vw;
+    scroll-snap-align:start;
+  }
+  /* La descripcion larga no cabe en una tarjeta estrecha y la estiraba hasta
+     ocupar la tira entera. En el movil se queda el numero y su nombre, que es
+     lo que se mira de un vistazo; el detalle esta en la vista de dentro. */
+  .kpis > .kpi .fdesc{ display:none }
+}
