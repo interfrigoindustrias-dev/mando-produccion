@@ -181,7 +181,7 @@ $("#form-new").addEventListener("submit", async ev=>{
       // Los tres procesos nacen pendientes: FALSE de verdad, no texto, o la
       // hoja no dibuja la casilla.
       PROCS.forEach(p=>{ c[p.i] = false; });
-      c[C.M2] = MODELO.metros(c) || "";
+      c[C.M2] = m2Value(r, c);            // la formula de la hoja, no un numero
       c[C.STATUS] = statusValue(r, c);
       c[C.DESP] = ESTADO.PROCESO;
       if(hayColumnas){ c[C.COTIZ] = cotiz; c[C.OC] = oc; }
@@ -366,8 +366,9 @@ $("#form-det").addEventListener("submit", async ev=>{
     // Cambiar cantidad o largo cambia los metros: se reescriben en la misma
     // tanda, porque es un dato derivado y no puede quedarse desfasado.
     if(ups.some(u=>u.a1.startsWith(col("CANT")) || u.a1.startsWith(col("LARGO")))){
-      const m2 = MODELO.metros(row.c) || "";
-      row.c[C.M2] = m2;
+      // Se repone la formula, no el resultado: asi la fila sigue viva.
+      const m2 = m2Value(r, row.c);
+      row.c[C.M2] = MODELO.metros(row.c) || "";
       ups.push({a1:`${col("M2")}${r}`, v:[[m2]]});
     }
     writeSeq++;

@@ -197,3 +197,42 @@ function aplicarColumnasPropias(){
     }
   }
 }
+
+/* ============================== LA FORMULA DE LOS METROS ==============================
+   La columna M2 tiene formula POR FILA en la hoja —una por linea, no de
+   matriz—. Escribirle un numero encima no rompe nada visible, pero la fila
+   deja de recalcularse: si luego alguien corrige la cantidad o el largo en la
+   hoja, los metros se quedan como estaban. Y es el mismo sintoma callado de
+   siempre: nada falla, el dato simplemente deja de seguir a sus origenes.
+
+   STATUS ya se trataba bien —se le escribe la formula viva— y M2 no. Ahora
+   igual, pero sin inventarse la formula: se lee la que la hoja ya usa y se
+   adapta a la fila nueva. Si no se puede leer ninguna, se cae al numero
+   calculado, que es lo que se hacia antes.                                   */
+
+/** Plantilla leida de la hoja, o null si no hay ninguna que leer. */
+let FORMULA_M2 = null;
+
+async function detectarFormulaM2(){
+  const col = C.M2 === undefined ? null : A1(C.M2);
+  if(!col) return null;
+  try{
+    const j = await api(`/values/${encodeURIComponent(rng(`${col}2:${col}200`))}` +
+                        `?valueRenderOption=FORMULA`);
+    for(const fila of (j.values || [])){
+      const v = String((fila || [])[0] ?? "");
+      if(v.startsWith("=")){ FORMULA_M2 = v; break; }
+    }
+  }catch(e){ FORMULA_M2 = null; }
+  return FORMULA_M2;
+}
+
+/** Que escribir en M2 para una fila. La formula de la hoja si la hay, con sus
+ *  referencias movidas a esta fila; si no, el numero, como antes.
+ *
+ *  Solo se cambian los numeros que van pegados a una letra de columna —«E2» a
+ *  «E47»—, nunca los sueltos: el 1,16 de «=1,16*E2*F2» tiene que quedarse. */
+function m2Value(r, c){
+  if(FORMULA_M2) return FORMULA_M2.replace(/([A-Z]+\$?)(\d+)/g, (_, col) => col + r);
+  return MODELO.metros(c) || "";
+}

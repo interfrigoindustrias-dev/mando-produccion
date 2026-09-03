@@ -40,6 +40,11 @@ const despachadaP = c => estadoDe(c) === ESTADO.DESPACHADO;
 const SUBIDAS_DE_ESTA_SESION = new Set();
 
 async function autoPrioridades(){
+  /* Sin historial no se puede saber cuando se toco una linea por ultima vez, y
+     contar desde que nacio la subiria de nivel sin motivo. La guarda va AQUI y
+     no solo en quien llama: si la pestaña del historial falla al cargar, el
+     arranque llamaria igual. */
+  if(typeof LOG_LISTO !== "undefined" && !LOG_LISTO) return 0;
   const ups = [], logs = [];
   for(const {r, c} of ROWS){
     if(!rowActive(c) || anuladaP(c) || despachadaP(c)) continue;

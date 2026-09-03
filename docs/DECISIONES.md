@@ -543,6 +543,19 @@ tres: `A..J`, `M..U` y `X..Y`.
 Vale para cualquier sitio que cree lineas de panel, incluida la casilla «esta
 puerta lleva panel» de la ficha de puerta, que escribe en la misma pestaña.
 
+**Y hay dos clases de formula, que no se arreglan igual.** Contando el xlsx de
+la hoja: K, L, V y W son UNA celda cada una —formulas de matriz que llenan la
+columna entera desde arriba—, y por eso una sola escritura las rompe del todo:
+esas se SALTAN. P y Q, en cambio, son formula por fila, casi mil celdas cada
+una: ahi no se rompe nada visible, pero la fila escrita deja de recalcularse y
+nace en blanco o congelada mientras las de arriba siguen vivas.
+
+A esas no se las salta —una fila nueva mas alla del rango se quedaria sin
+formula— sino que se les escribe la formula. Q ya lo hacia con `statusValue`;
+P lo hace ahora con `m2Value`, que **lee la formula que la hoja ya usa** y le
+mueve las referencias a la fila nueva, en vez de inventarse una: asi no hay que
+adivinar si en este documento el decimal es coma o punto.
+
 ## 32. Un automatismo que corre solo necesita prueba antes que nadie
 
 El escalado de prioridad —lo unico que cambia datos sin que nadie lo pida— no

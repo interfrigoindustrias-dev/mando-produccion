@@ -105,6 +105,8 @@ async function enterApp(){
   // El dia de referencia es del resumen de puertas; paneles no lo tiene.
   const dia = $("#r-dia"); if(dia) dia.value = iso(new Date());
   await detectSep();          // separador de fórmulas según la región del documento
+  // La fórmula de los metros se lee de la hoja, no se inventa. Ver paneles-listas.js.
+  if(typeof detectarFormulaM2 === "function") await detectarFormulaM2();
   await refresh(false);
   await repairStatus();       // sana los #ERROR! que pudieran quedar de versiones previas
   const nn = await repairNumeros();   // deshace los números que se guardaron como fecha

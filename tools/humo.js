@@ -177,6 +177,19 @@ function hacerFetch(){
     if(u.includes("/values/")){
       const rango = decodeURIComponent(u.split("/values/")[1].split("?")[0]);
       const {tab, a1} = celdasDe(rango);
+      /* Con valueRenderOption=FORMULA la hoja devuelve la formula, no su
+         resultado. La columna P —los metros— la tiene POR FILA, que es lo que
+         hace que escribirle un numero encima la deje muerta. */
+      if(/valueRenderOption=FORMULA/.test(u) && tab === "PANEL"){
+        const m = a1.match(/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/);
+        if(m && m[1] === "P"){
+          const filas = [];
+          for(let f = +m[2]; f <= Math.min(+m[4], DATOS.PANEL.length); f++){
+            filas.push([`=1,16*E${f}*F${f}`]);
+          }
+          return ok({values: filas});
+        }
+      }
       return ok({values: leer(tab, a1)});
     }
     // La cuadricula con la validacion: es de donde la aplicacion saca las listas.
@@ -444,6 +457,29 @@ function comprueba(nombre, cond, detalle){
       filasTocadas.every(f => fila(f)[23] === "COT-9001" && fila(f)[24] === "OC-4471"),
       filasTocadas.map(f=>`X=${fila(f)[23]} Y=${fila(f)[24]}`).join(" · "));
   }
+
+  console.log("\n=== los metros: la fórmula de la hoja, no un número ===");
+  /* P tiene formula por fila. Escribirle el resultado no rompe nada visible,
+     pero la fila deja de recalcularse: si luego se corrige la cantidad en la
+     hoja, los metros se quedan como estaban. */
+  comprueba("se lee la fórmula que la hoja ya usa",
+    /^=/.test(String(leer("FORMULA_M2") || "")),
+    "plantilla: " + JSON.stringify(leer("FORMULA_M2")));
+  if(filasTocadas.length === 2){
+    const m2Escrito = filasTocadas.map(f => DATOS.PANEL[f-1][15]);
+    comprueba("y se escribe adaptada a la fila nueva, no el resultado",
+      m2Escrito.every((v,k) => v === `=1,16*E${filasTocadas[k]}*F${filasTocadas[k]}`),
+      "en P: " + m2Escrito.map(v=>JSON.stringify(v)).join(" · "));
+    comprueba("el 1,16 no se toca al mover las referencias",
+      m2Escrito.every(v => String(v).includes("1,16")),
+      "en P: " + m2Escrito.map(v=>JSON.stringify(v)).join(" · "));
+  }
+  comprueba("si la hoja no tuviera fórmula, se caería al número",
+    leer(`(function(){ const g=FORMULA_M2; FORMULA_M2=null;
+      const c=[]; c[C.CANT]=10; c[C.LARGO]=2;
+      const v=m2Value(5,c); FORMULA_M2=g; return v; })()`) === 23.2,
+    "sin plantilla da: " + leer(`(function(){ const g=FORMULA_M2; FORMULA_M2=null;
+      const c=[]; c[C.CANT]=10; c[C.LARGO]=2; const v=m2Value(5,c); FORMULA_M2=g; return v; })()`));
 
   console.log("\n=== el producto: catorce opciones, y se busca escribiendo ===");
   const dl = $("#dl-productos");
