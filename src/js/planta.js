@@ -41,12 +41,15 @@ function plantaList(){
     // siendo trabajo de planta aunque figuren en almacen. El resto ya es
     // trabajo de otro y mantenerlo a la vista solo estorba.
     const urge = urgente(c);
-    /* Planta ve TODO lo que no esta acabado ni fuera. Antes solo mostraba lo
-       que no tenia estado ninguno, y eso escondia trabajo real: una puerta
-       marcada «En Almacen» por adelantado desaparecia de la cola aunque le
-       faltaran procesos. Lo unico que sale de planta es terminarla, o que se
-       despache o se anule. */
-    if(despachada(c) || anulada(c) || terminada(c)) return false;
+    /* Planta es el paso ANTERIOR a tener estado: aqui esta lo que todavia no
+       lo tiene, y de aqui sale con uno. En cuanto se le pone —Terminado, En
+       Almacen, Despachado o Anulada— ya es cosa de otra vista, y dejarlo aqui
+       solo estorba a quien busca lo que le falta por hacer.
+
+       La unica excepcion son las separadas sin terminar: tienen comprador
+       esperando algo que no esta hecho, asi que siguen siendo trabajo de
+       planta aunque figuren en almacen. Sale como URGENTE · VENDIDA. */
+    if(desp(c) && !urgenteAuto(c)) return false;
 
     if(fe==="urge" && !urge) return false;
     if(fe==="pend"  && p>=1) return false;
