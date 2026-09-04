@@ -30,6 +30,9 @@ const NO_APTA = "NO APTA";
 const esNoApta = c => String(c[C.CAL] ?? "").trim().toUpperCase().startsWith(NO_APTA);
 /** La nota sin el prefijo: lo que la persona escribio de verdad. */
 const notaLimpia = c => String(c[C.CAL] ?? "").replace(/^\s*NO APTA\s*[:·-]?\s*/i, "").trim();
+/* Por que volvio. Planta lo enseña en la etiqueta: quien la repara necesita
+   saber que le pasa sin tener que abrir la ficha ni preguntar. */
+const motivoDevolucion = c => notaLimpia(c);
 
 /* Puertas marcadas para imprimir etiqueta. Se guarda aparte del HTML porque la
    lista se repinta cada vez que se guarda una nota: si la seleccion viviera solo
@@ -44,7 +47,10 @@ function calidadBase(){
     // que la excepcion de «no apta», o una rechazada que se acabo despachando
     // se quedaria aqui para siempre.
     if(despachada(c)) return false;
-    if(esNoApta(c)) return true;               // rechazada: sigue aqui hasta arreglarse
+    /* Devuelta ya no es de calidad: esta en planta reparandose. Va ANTES que
+       la excepcion de «no apta», que es justo la marca que lleva puesta. */
+    if(devuelta(c)) return false;
+    if(esNoApta(c)) return true;               // rechazada y aun sin devolver
     // «Terminado» es una declaracion humana: la puerta esta hecha. Vale por si
     // sola, aunque falte marcar algun proceso — si se exigiera el 100% una
     // puerta terminada con un check sin marcar saldria de planta y no llegaria
@@ -106,7 +112,8 @@ function renderCalidad(){
         <label class="proc"><input type="checkbox" data-mal="${r}"${mal ? " checked" : ""}>
           <span>No apta — necesita corrección</span></label>
         <div class="grow"></div>
-        <button class="btn" data-guardar="${r}">Guardar nota</button>
+        <button class="btn${mal ? " mal" : ""}" data-guardar="${r}">${
+          mal ? "Devolver a planta" : "Guardar nota"}</button>
         <button class="btn pri" data-almacen="${r}"${bloqueo}>Aprobar → En Almacén</button>
       </div>
     </div>`;
@@ -153,6 +160,14 @@ async function guardarCalidad(r, {nota, mal, aAlmacen}){
     cambios.push({campo:"Estado despacho", antes:antesDesp, despues:"En Almacén"});
     c[C.DESP] = "En Almacén";
   }
+  /* No apta = devuelta a planta. Antes se quedaba en calidad marcada en rojo,
+     esperando a que alguien de fuera se enterara; ahora sale de aqui y aparece
+     la primera en planta, que es donde se repara. */
+  if(mal && antesDesp !== "Devuelta"){
+    ups.push({a1:`Y${r}`, v:[["Devuelta"]]});
+    cambios.push({campo:"Estado despacho", antes:antesDesp, despues:"Devuelta"});
+    c[C.DESP] = "Devuelta";
+  }
   if(!ups.length) return true;
 
   try{
@@ -170,6 +185,16 @@ async function guardarCalidad(r, {nota, mal, aAlmacen}){
 const notaDe = r => { const t = $(`[data-nota="${r}"]`); return t ? t.value : ""; };
 const malDe  = r => { const k = $(`[data-mal="${r}"]`);  return k ? k.checked : false; };
 
+$("#q-lista").addEventListener("change", ev=>{
+  const k = ev.target.closest("[data-mal]");
+  if(!k) return;
+  const b = $(`[data-guardar="${k.dataset.mal}"]`);
+  if(b){ b.textContent = k.checked ? "Devolver a planta" : "Guardar nota";
+         b.classList.toggle("mal", k.checked); }
+  const ap = $(`[data-almacen="${k.dataset.mal}"]`);
+  if(ap) ap.disabled = k.checked;
+});
+
 $("#q-lista").addEventListener("click", async ev=>{
   const ver = ev.target.closest("[data-ver]");
   if(ver){ openDet(+ver.dataset.ver); return; }
@@ -179,7 +204,11 @@ $("#q-lista").addEventListener("click", async ev=>{
     const r = +g.dataset.guardar; g.disabled = true;
     const ok = await guardarCalidad(r, {nota:notaDe(r), mal:malDe(r), aAlmacen:false});
     g.disabled = false;
-    if(ok){ toast("Nota guardada","ok"); renderCalidad(); render(); renderDashVisible(); }
+    if(ok){
+      toast(malDe(r) ? "Devuelta a planta para reparar" : "Nota guardada", "ok");
+      renderCalidad(); render(); renderDashVisible();
+      if(typeof renderPlanta === "function"){ plantaDibujada = ""; renderPlanta(); }
+    }
     return;
   }
 

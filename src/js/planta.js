@@ -49,7 +49,7 @@ function plantaList(){
        La unica excepcion son las separadas sin terminar: tienen comprador
        esperando algo que no esta hecho, asi que siguen siendo trabajo de
        planta aunque figuren en almacen. Sale como URGENTE · VENDIDA. */
-    if(desp(c) && !urgenteAuto(c)) return false;
+    if(desp(c) && !urgenteAuto(c) && !devuelta(c)) return false;
 
     if(fe==="urge" && !urge) return false;
     if(fe==="pend"  && p>=1) return false;
@@ -70,7 +70,10 @@ function plantaList(){
   const porOp = (a,b)=>String(a.c[C.OP]).localeCompare(String(b.c[C.OP]),"es",{numeric:true});
   /* Orden de ataque. La urgente marcada a mano va antes que la automatica:
      alguien la puso ahi mirando algo que el sistema no sabe. */
-  const prioDe = x => urgenteManual(x.c) ? -3
+  /* La devuelta va delante de todo, urgentes incluidas: ya se fabrico una vez,
+     ya ocupo su turno, y hay alguien esperandola desde antes que las demas. */
+  const prioDe = x => devuelta(x.c) ? -4
+    : urgenteManual(x.c) ? -3
     : urgenteAuto(x.c) ? -2
     : altaOlvidada(x.r, x.c) ? -1
     : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
@@ -107,6 +110,9 @@ const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDA
    arreglan igual: la manual se quita cambiando la prioridad, la automatica se
    quita terminando la puerta o soltando la reserva. */
 const etiquetaPlanta = c => {
+  if(devuelta(c))
+    return `<span class="tag t-dev" title="Calidad la devolvió: ${
+      esc(motivoDevolucion(c)) || "sin motivo anotado"}">DEVUELTA</span>`;
   if(urgenteManual(c))
     return `<span class="tag t-urg" title="Marcada urgente a mano">URGENTE</span>`;
   if(urgenteAuto(c))
@@ -185,6 +191,7 @@ function pintarTarjeta(r){
    por la mañana, y hasta ahora habia que contarlo a ojo tarjeta por tarjeta. */
 function pintarResumenPlanta(L){
   const caja = $("#p-resumen"); if(!caja) return;
+  const dev = L.filter(({c})=>devuelta(c)).length;
   const urgM = L.filter(({c})=>urgenteManual(c)).length;
   const urgA = L.filter(({c})=>urgenteAuto(c) && !urgenteManual(c)).length;
   const urg = urgM + urgA;
@@ -194,6 +201,7 @@ function pintarResumenPlanta(L){
     `<div class="pr${cls?" "+cls:""}"><b>${v}</b><span>${k}</span></div>`;
   caja.innerHTML =
     dato(L.length, "En producción") +
+    (dev ? dato(dev, "Devueltas por calidad", "urg") : "") +
     (urgM ? dato(urgM, "Urgentes", "urg") : "") +
     (urgA ? dato(urgA, "Vendidas a medias", "urg") : "") +
     dato(emp, "Empezadas") +

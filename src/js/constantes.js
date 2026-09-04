@@ -25,7 +25,9 @@ const MATERIALES = MODELO.listas.MATERIALES;
 const TIPOS      = MODELO.listas.TIPOS;
 const ESPESORES  = MODELO.listas.ESPESORES;
 const APERTURAS  = MODELO.listas.APERTURAS;
-const DESPACHOS = ["Terminado","En Almacén","Despachado","Anulada"];
+/* «Devuelta» va primera porque es la unica que significa trabajo por hacer:
+   las otras cuatro son sitios donde la puerta ya reposa. */
+const DESPACHOS = ["Devuelta","Terminado","En Almacén","Despachado","Anulada"];
 
 /* --- Especificacion (columnas AC..AK) --- */
 const TIPOS_MARCO   = MODELO.listas.TIPOS_MARCO;
@@ -80,6 +82,10 @@ const urgente = c => urgenteManual(c) || urgenteAuto(c);
 
 /** Una puerta terminada espera revision de calidad; aun no esta en almacen. */
 const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
+/** Devuelta: calidad la rechazo y vuelve a planta a repararse. Tiene estado,
+ *  pero no es un sitio donde reposa: es trabajo, y del mas urgente que hay —ya
+ *  se hizo una vez y hay alguien esperandola. */
+const devuelta = c => String(c[C.DESP]??"").trim() === "Devuelta";
 /** Una puerta anulada queda fuera de producción, almacén y stock. */
 const anulada = c => String(c[C.DESP]??"").trim()==="Anulada";
 /* Despachada = salio por la puerta. No es trabajo de nadie ya, asi que no

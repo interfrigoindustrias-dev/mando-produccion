@@ -165,3 +165,11 @@
    terminando la puerta o soltando la reserva, no cambiando la prioridad. */
 .tag.t-urg-auto{background:transparent;color:var(--bad);border:1.5px solid var(--bad);font-weight:800}
 .pcard.urg-auto{border-color:var(--bad);box-shadow:inset 4px 0 0 color-mix(in srgb,var(--bad) 55%,transparent)}
+
+/* Devuelta por calidad. Va la primera de la cola y se ve distinta de una
+   urgente: no es que corra prisa, es que ya se hizo mal una vez. */
+.tag.t-dev{
+  background:var(--bad); color:#fff; border-color:var(--bad);
+  letter-spacing:.08em;
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--bad) 30%, transparent);
+}

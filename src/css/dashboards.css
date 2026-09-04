@@ -141,3 +141,7 @@
 .entrega-txt b{ color:var(--tx) }
 .entrega-txt ul{ margin:8px 0; padding-left:18px }
 .entrega-txt li{ margin:3px 0 }
+
+/* El boton que devuelve a planta no puede parecer el de guardar: mueve la
+   puerta de vista, y eso no se descubre despues de pulsarlo. */
+.btn.mal{ background:var(--bad); border-color:var(--bad); color:#fff }
