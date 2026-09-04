@@ -163,10 +163,11 @@
         <option value="">Todas</option><option>URGENTE</option><option>ALTA</option><option>MEDIA</option><option>BAJA</option>
         <option value="__none">Sin prioridad</option></select></label>
       <label class="f"><span>Mostrar</span><select class="inp" id="p-est">
-        <option value="pend" selected>Por fabricar (menos del 100%)</option>
+        <option value="" selected>Todas</option>
+        <option value="pend">Por fabricar (menos del 100%)</option>
         <option value="urge">Solo urgentes (separadas sin terminar)</option>
-        <option value="">Todas las pendientes</option>
-        <option value="wip">Iniciadas sin terminar</option></select></label>
+        <option value="wip">Iniciadas sin terminar</option>
+        <option value="listas">Al 100%, esperando Terminada</option></select></label>
       <label class="f"><span>Ordenar</span><select class="inp" id="p-ord">
         <option value="prioop" selected>Prioridad y OP</option>
         <option value="prio">Prioridad y fecha</option>
@@ -178,7 +179,6 @@
       <span class="cnt" id="p-cnt"></span>
     </div>
     <div id="p-resumen" class="presumen"></div>
-    <div id="p-prog-aviso" class="aviso prog hide"></div>
     <div id="p-lista" class="planta"></div>
     <div class="empty hide" id="p-empty">No hay puertas pendientes con ese filtro.</div>
   </section>

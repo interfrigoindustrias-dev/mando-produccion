@@ -34,7 +34,7 @@ async function refresh(silent){
        que nadie ha tocado nada nunca. */
     if(typeof autoPrioridades === "function" &&
        (typeof LOG_LISTO === "undefined" || LOG_LISTO)){
-      autoPrioridades().then(()=> typeof autoFechas === "function" && autoFechas());
+      autoPrioridades();
     }
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){

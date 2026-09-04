@@ -21,7 +21,6 @@
    Además, al marcar Despachado se rellena la fecha de despacho si está vacía.
 
    Todo corre en el navegador: se dispara cuando alguien abre o usa la app.    */
-const OFFSET = {URGENTE:0, ALTA:0, MEDIA:3, BAJA:8};
 
 /* ESCALADO DE PRIORIDAD — nada se queda atrás para siempre.
    Una puerta espera su turno para entrar a planta y, pasado un margen, sube a
@@ -171,57 +170,20 @@ async function autoPrioridades(){
 
 const hoy0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
 
-/** Fecha que DEBE tener FECHA PROCESO una puerta abierta.
- *  null = la automatización no la toca. */
-function fechaProgramada(c){
-  // Ya empezada: la fecha sigue al trabajo, no al calendario.
-  if(progreso(c).ok > 0) return hoy0();
+/* Aqui vivia la programacion de fechas por prioridad: MEDIA entraba a planta a
+   los 3 dias de creada, BAJA a los 8, y se escribia esa fecha futura en la
+   columna X. Se ha quitado entera.
 
-  // Sin empezar: la programación depende de la prioridad.
-  const prio = String(c[C.PRIO]??"").trim().toUpperCase();
-  if(!(prio in OFFSET)) return null;
-  const creada = toDate(c[C.FECHA]);
-  if(!creada && OFFSET[prio] > 0) return null;   // sin fecha de creación no hay de dónde contar
-  const hoy = hoy0();
-  const objetivo = creada ? new Date(creada) : new Date(hoy);
-  objetivo.setDate(objetivo.getDate() + OFFSET[prio]);
-  return objetivo > hoy ? objetivo : hoy;        // el día programado, o hoy si ya pasó
-}
+   Dos motivos. El primero, que escondia trabajo: planta no enseñaba lo que
+   «todavia no tocaba», y eran 23 puertas de 51. El segundo, que esa columna
+   significa OTRA cosa en todos los demas sitios —calidad la enseña como
+   «Fabricada», los informes como «Fecha fin»—, asi que meterle una fecha
+   futura de una puerta sin empezar era escribir un dato falso.
 
-/** Recalcula las fechas de proceso de todas las puertas abiertas.
- *  Idempotente: solo escribe las celdas cuyo valor difiere, así que puede
- *  ejecutarse tras cada refresco y tras cada edición sin efectos secundarios.
- *  Las puertas al 100% no se tocan nunca: su fecha quedó congelada. */
-async function autoFechas(){
-  if(CFG.auto===false || busyWrites>0) return 0;
-  const ups=[], logs=[];
-  for(const {r,c} of ROWS){
-    if(!rowActive(c) || completa(c) || anulada(c)) continue;   // 100% o anulada ⇒ no se toca
-    const d = fechaProgramada(c);
-    if(!d) continue;
-    const nueva = fmt(d), antes = fmtDate(c[C.FPROC]);
-    if(antes === nueva) continue;
-    ups.push({a1:`X${r}`, v:[[nueva]]});
-    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Fecha proceso", antes, despues:nueva});
-    c[C.FPROC] = nueva;
-  }
-  if(!ups.length) return 0;
-  try{
-    await writeCells(ups);
-    logBulk(logs);
-    render(); renderDashVisible();
-    return ups.length;
-  }catch(e){ console.warn("auto fechas:", e.message); return 0; }
-}
+   La prioridad ya no decide CUANDO aparece una puerta, decide en que orden se
+   hace. Quien sella la fecha sigue siendo tocarFechaProceso, con el dia en que
+   de verdad se toco. */
 
-/** Al tocar un proceso, la fecha de proceso pasa al día actual.
- *
- *  Excepción que manda sobre todo lo demás: una puerta que YA estaba al 100%
- *  tiene la fecha congelada — es su fecha real de fabricación. Retocar un
- *  proceso suyo (una corrección, un dato que faltaba) no puede reescribirla,
- *  o la puerta aparecería como fabricada hoy y falsearía la producción del día.
- *
- *  @param estabaCompleta  si la puerta estaba al 100% ANTES de este cambio. */
 async function tocarFechaProceso(r, estabaCompleta){
   if(CFG.auto===false) return;
   const row = ROWS.find(x=>x.r===r);

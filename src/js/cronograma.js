@@ -62,18 +62,11 @@ function pendienteCronograma(){
   }));
 }
 
-/** Dia a partir del cual la puerta puede trabajarse, segun su prioridad. */
-function entradaEnPlanta(c){
-  const h = hoy0();
-  const prio = String(c[C.PRIO] ?? "").trim().toUpperCase();
-  const dias = OFFSET[prio] ?? 0;
-  const creada = toDate(c[C.FECHA]);
-  if(!creada || !dias) return h;
-  const e = new Date(creada);
-  e.setDate(e.getDate() + dias);
-  e.setHours(0,0,0,0);
-  return e > h ? e : h;
-}
+/* Toda puerta pedida puede trabajarse hoy. Antes esta funcion retrasaba la
+   entrada segun la prioridad —MEDIA tres dias, BAJA ocho— y el cronograma
+   dejaba huecos al principio esperando a que «llegara el turno» de puertas que
+   ya estaban pedidas. La prioridad decide el orden, no la fecha. */
+const entradaEnPlanta = () => hoy0();
 
 const RANK_PRIO = {URGENTE:-1, ALTA:0, MEDIA:1, SIN:2, BAJA:3};
 

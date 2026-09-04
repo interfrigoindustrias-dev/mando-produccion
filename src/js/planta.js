@@ -32,15 +32,8 @@ const COLOR_PROC = {
   19:"#5A4EA0",  // RIEL
   20:"#7A4B8C"   // EMBOCINAR
 };
-/* Puertas que cumplen todo menos la fecha: su dia todavia no ha llegado.
-   Se guardan aparte para poder anunciarlas; esconderlas sin decir nada hacia
-   pensar que faltaban puertas. */
-let plantaProgramadas = [];
-
 function plantaList(){
   const q=$("#p-q").value.trim().toLowerCase(), fp=$("#p-prio").value, fe=$("#p-est").value;
-  const verProgramadas = $("#p-prog") && $("#p-prog").checked;
-  plantaProgramadas = [];
   const L = activas().filter(({c})=>{
     const p=progreso(c).pct;
     // Planta ve lo que no tiene etapa asignada, MAS las separadas sin terminar:
@@ -56,20 +49,18 @@ function plantaList(){
     if(despachada(c) || anulada(c) || terminada(c)) return false;
 
     if(fe==="urge" && !urge) return false;
-    if(fe==="pend" && p>=1) return false;
+    if(fe==="pend"  && p>=1) return false;
+    if(fe==="listas" && p<1)  return false;   // hechas del todo, sin cerrar
     if(fe==="wip"  && !(p>0 && p<1)) return false;
     if(fp==="__none"){ if(String(c[C.PRIO]??"").trim()) return false; }
     else if(fp && String(c[C.PRIO]??"").trim().toUpperCase()!==fp) return false;
     if(q && ![c[C.OP],c[C.CLI]].join(" ").toLowerCase().includes(q)) return false;
-    // Solo lo que ya toca: si la fecha de proceso es futura, la puerta todavía
-    // no entra a planta. Sin fecha se muestra, porque no hay nada que esperar.
-    if(fe!=="wip" && !verProgramadas){
-      const f = toDate(c[C.FPROC]);
-      if(f){
-        const h=new Date(); h.setHours(0,0,0,0);
-        if(f > h){ plantaProgramadas.push({c, f}); return false; }
-      }
-    }
+    /* Ya no se esconde nada por fecha. Planta escalonaba la entrada segun la
+       prioridad —MEDIA a los 3 dias, BAJA a los 8— y guardaba fuera de la vista
+       lo que «todavia no tocaba»: 23 puertas de 51 en el momento de quitarlo.
+       Eso era el modelo viejo. En el nuevo la prioridad decide el ORDEN de la
+       cola, no el dia en que aparece: si esta pedida y no esta terminada, es
+       trabajo, y el trabajo se ve. */
     return true;
   });
   const ord=$("#p-ord").value;
@@ -187,32 +178,6 @@ function pintarTarjeta(r){
   if(cambioLaFila) plantaDibujada = "";
 }
 
-/** Aviso de las puertas cuyo día todavía no ha llegado. */
-function avisarProgramadas(){
-  const box = $("#p-prog-aviso");
-  if(!box) return;
-  const n = plantaProgramadas.length;
-  if(!n){ box.classList.add("hide"); return; }
-
-  // Reparto por prioridad y la fecha más próxima, para que se entienda por qué.
-  const porPrio = {};
-  plantaProgramadas.forEach(({c})=>{
-    const p = String(c[C.PRIO]??"").trim().toUpperCase() || "SIN PRIORIDAD";
-    porPrio[p] = (porPrio[p]||0)+1;
-  });
-  const proxima = plantaProgramadas.reduce((a,b)=> b.f < a.f ? b : a).f;
-  const detalle = Object.entries(porPrio).map(([p,k])=>`${k} ${p}`).join(" · ");
-
-  box.classList.remove("hide");
-  box.innerHTML = `<b>${n} puerta${n===1?"":"s"} programada${n===1?"":"s"} para más adelante</b>
-    — ${esc(detalle)}. La más próxima entra el <b>${esc(fmt(proxima))}</b>.
-    <label class="swi" style="margin-left:auto">
-      <input type="checkbox" id="p-prog" ${$("#p-prog")&&$("#p-prog").checked?"checked":""}>
-      <span>Mostrarlas</span></label>`;
-  const ck = $("#p-prog");
-  if(ck) ck.onchange = ()=>{ plantaDibujada=""; renderPlanta(); };
-}
-
 /* Cuanto trabajo hay en planta, en grande. Es lo primero que se mira al llegar
    por la mañana, y hasta ahora habia que contarlo a ojo tarjeta por tarjeta. */
 function pintarResumenPlanta(L){
@@ -235,7 +200,6 @@ function pintarResumenPlanta(L){
 
 function renderPlanta(){
   const L=plantaList();
-  avisarProgramadas();
   pintarResumenPlanta(L);
   const cnt=$("#p-cnt");
   cnt.innerHTML = `<b>${L.length}</b> de ${activas().length} OP`;

@@ -137,7 +137,6 @@ async function editCampo(r, idx, col, campo, val){
     await writeCells([{a1:`${col}${r}`, v:[[val]]}]);
     logChanges("EDITA", row.c[C.OP], r, [{campo, antes, despues:val}]);
     setSync("","Guardado"); lastHash="";
-    if(idx===C.PRIO) await autoFechas();         // la prioridad reprograma la fecha
     kpis(filtered());
   }catch(e){ row.c[idx]=antes; render(); toast(e.message,"err"); }
 }

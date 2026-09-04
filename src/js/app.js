@@ -135,7 +135,6 @@ async function enterApp(){
   // El escalado va ANTES: subir una OP de prioridad cambia su fecha programada,
   // y si se hiciera después quedaría con la fecha de la prioridad vieja.
   await si("autoPrioridades", n=>`${n} OP subieron de prioridad por antigüedad`);
-  await si("autoFechas",      n=>`${n} fecha(s) de proceso programada(s)`);
   restartPoll();
   if(typeof loadModelos === "function") await loadModelos();   // catálogo de stock
   // La meta solo existe en puertas: paneles no tiene cronograma.

@@ -112,10 +112,8 @@ $("#d-save").onclick = async ()=>{
   try{
     await writeCells(ups); $("#ov-det").classList.add("hide"); lastHash=""; render();
     logChanges("EDITA", op, r, cambios);
-    // Si se tocó algún proceso, la fecha pasa a hoy; si no, se reprograma
-    // por si cambió la prioridad.
+    // Si se tocó algún proceso, la fecha de proceso pasa a hoy.
     if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await tocarFechaProceso(r, estabaCompleta);
-    await autoFechas();
     toast("Cambios guardados","ok"); setSync("","Guardado");
   }catch(e){ toast(e.message,"err"); refresh(false); }
 };
@@ -158,23 +156,28 @@ function initForm(){
     };
     $("#n-bump").onchange = verBumper; verBumper();
   }
-  /* Que implica cada prioridad, dicho donde se elige. Se arma desde OFFSET y
-     ESCALA en vez de escribirlo a mano: si mañana cambian los dias, el texto
-     cambia con ellos y no queda un manual mintiendo al lado del control. */
+  /* Que implica cada prioridad, dicho donde se elige. Los dias se leen de
+     ESPERA y ESCALA en vez de escribirlos a mano: si mañana cambian, el texto
+     cambia con ellos y no queda un manual mintiendo al lado del control.
+
+     TODAS entran a planta el mismo dia: la prioridad decide el ORDEN de la
+     cola, no cuando aparece. */
   const caja = $("#n-prio-ayuda");
   if(caja){
-    const dias = d => d === 0 ? "hoy mismo" : `a los ${d} días`;
     const linea = (p, txt, cls) =>
       `<div class="ayp"><b${cls?` class="${cls}"`:""}>${p}</b><span>${txt}</span></div>`;
     caja.innerHTML = [
       linea("URGENTE",
-        `Entra a planta ${dias(OFFSET.URGENTE)} y va la primera de todas. Solo se pone ` +
-        `a mano: ninguna puerta llega a urgente por llevar tiempo esperando.`),
-      linea("ALTA", `Entra a planta ${dias(OFFSET.ALTA)}.`),
+        `Va la primera de la cola. Solo se pone a mano: ninguna puerta llega a ` +
+        `urgente por llevar tiempo esperando.`),
+      linea("ALTA",
+        `Detrás de las urgentes. No sube más, pero si pasa ${ESPERA.ALTA} días sin que ` +
+        `nadie la toque se coloca delante de las demás ALTA.`),
       linea("MEDIA",
-        `Entra a planta ${dias(OFFSET.MEDIA)}. Si al día ${ESCALA.MEDIA} sigue sin hacerse, sube sola a ALTA.`),
+        `Detrás de las ALTA. Si pasa ${ESPERA.MEDIA} días sin que nadie la toque, sube sola a ALTA.`),
       linea("BAJA",
-        `Entra a planta ${dias(OFFSET.BAJA)}. Si al día ${ESCALA.BAJA} sigue sin hacerse, sube sola a ALTA.`),
+        `La última de la cola. Si pasa ${ESPERA.BAJA} días sin que nadie la toque, sube sola a MEDIA ` +
+        `—un escalón cada vez, no de golpe hasta arriba—.`),
       linea("URGENTE · VENDIDA",
         `No se elige: lo es sola cualquier puerta separada para un cliente que ` +
         `todavía no esté al 100%.`, "ayp-auto")
@@ -294,7 +297,6 @@ $("#form-new").addEventListener("submit", async ev=>{
     toast(`${q} ficha(s) creada(s)`,"ok");
     $("#ov-nueva").classList.add("hide");
     lastHash=""; await refresh(false);
-    await autoFechas();                          // programa su fecha según prioridad
     $("#n-op").value = String(nextOp()); $("#n-fecha").value = hoy();
     $("#n-qty").value="1"; $("#n-obs").value=""; hintOp();
   }catch(e){ toast(e.message,"err"); }

@@ -140,7 +140,6 @@ $("#c-save").onclick = ()=>{
   $("#g-cfgwarn").classList.toggle("hide", cfgOk());
   $("#g-sheet").textContent = CFG.tab;
   restartPoll();
-  if(CFG.auto && ROWS.length) autoFechas();
   toast("Configuración guardada","ok");
 };
 
