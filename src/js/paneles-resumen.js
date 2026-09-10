@@ -11,9 +11,22 @@
    del sistema, es lo que ha venido pasando.                                 */
 "use strict";
 
-/* ------------------------------ produccion ------------------------------ */
-/** Lineas fabricadas: las que tienen los tres procesos hechos. */
-const fabricadas = () => activas().filter(({c})=>!anuladaP(c) && progreso(c).pct >= 1);
+/* ------------------------------ produccion ------------------------------
+   QUE CUENTA COMO FABRICADA: que alguien haya pulsado TERMINAR.
+
+   Antes eran «los tres procesos marcados», y eso medía otra cosa. La hoja
+   lleva años funcionando y sus lineas tienen su ESTADO puesto, pero las
+   casillas de proceso solo estan marcadas en lo que se ha tocado desde la
+   aplicacion. Contando casillas, todo el historico salia como pendiente: los
+   metros por fabricar se disparaban, el ritmo se hundia, y el plazo de entrega
+   que salia de dividir uno entre otro no describia nada.
+
+   Terminar es el momento en que la linea deja de ser trabajo de planta. Es lo
+   que sella el FIN DE PROCESO y lo que la manda a almacen, asi que es tambien
+   el momento en el que cuenta como fabricada. Despachada tambien cuenta: no se
+   despacha lo que no se hizo. */
+const terminadaP = c => [ESTADO.TERMINADO, ESTADO.DESPACHADO].includes(estadoDe(c));
+const fabricadas = () => activas().filter(({c})=>!anuladaP(c) && terminadaP(c));
 
 /** Cuando se acabo de fabricar: el fin de proceso, y si falta, la creacion. */
 const fechaFin = c => toDate(c[C.FFIN]) || toDate(c[C.FECHA]);
@@ -41,12 +54,10 @@ function percentil(xs, p){
 function renderResumen(){
   const todas = activas().filter(({c})=>!anuladaP(c));
   const hechas = fabricadas();
-  /* Pendiente es lo que queda por hacer, no lo que quedo a medias en la hoja:
-     una linea despachada ya no es trabajo de nadie aunque le falte marcar un
-     proceso, y contarla inflaba los m2 pendientes. Los totales y lo fabricado
-     si la siguen incluyendo: eso es historia, y la historia no se borra al
-     despachar. */
-  const abiertas = todas.filter(({c})=>progreso(c).pct < 1 && !despachadaP(c));
+  /* Pendiente es lo que nadie ha dado por terminado. Por el mismo motivo que
+     arriba: mirar las casillas hacia pasar por pendiente todo el historico de
+     la hoja, que esta hecho desde hace meses. */
+  const abiertas = todas.filter(({c})=>!terminadaP(c));
   const sum = (xs, f) => xs.reduce((s,x)=>s+(f(x.c)||0), 0);
 
   /* ---------- 1. cuanto se fabrica ---------- */
@@ -112,11 +123,11 @@ function renderResumen(){
     const e = porProd.get(k) || {m2:0, hechos:0, pend:0, paneles:0, dias:[]};
     const m = MODELO.metros(c) || 0;
     e.m2 += m; e.paneles += num(c[C.CANT]) || 0;
-    if(progreso(c).pct >= 1){
+    if(terminadaP(c)){
       e.hechos += m;
       const d = diasDeFabricacion(c);
       if(d !== null) e.dias.push(d);
-    } else if(!despachadaP(c)) e.pend += m;   // despachada = ya no esta pendiente
+    } else e.pend += m;
     porProd.set(k, e);
   });
   tablaMini("#r-productos",
@@ -210,12 +221,34 @@ function renderPoliuretano(todas){
     aviso.className = "nota ok";
     aviso.innerHTML = `La hoja y la fórmula coinciden en todas las líneas.`;
   } else {
+    /* Decir «171 líneas no cuadran» no sirve de nada si no se dice CON QUE no
+       cuadran. Se enseña la formula que usa la hoja al lado de la que usa la
+       aplicacion, y la desviacion tipica: con eso se ve de un vistazo si sobra
+       un factor, si es el espesor, o si de verdad hay filas sueltas mal. */
+    const laDeLaHoja = (typeof COLUMNAS_CALCULADAS !== "undefined" && COLUMNAS_CALCULADAS)
+      ? (COLUMNAS_CALCULADAS.get(C.POLI_UNI) || COLUMNAS_CALCULADAS.get(C.POLI_TOT) || {}).plantilla
+      : null;
+    const desvios = raros.map(x=>x.desvioPct).sort((a,b)=>a-b);
+    const tipica = desvios[Math.floor(desvios.length/2)];
+    const todasIgual = desvios[0] > 0 &&
+      (desvios[desvios.length-1] - desvios[0]) < Math.max(1, tipica * 0.5);
+
     aviso.className = "nota warn";
-    aviso.innerHTML = `<b>${raros.length} línea(s)</b> en las que lo que dice la hoja
-      no coincide con la fórmula: ` +
-      raros.slice(0,6).map(x=>`OP ${esc(x.op)} (fila ${x.fila}, ${x.desvioPct} %)`).join(" · ") +
-      (raros.length > 6 ? " …" : "") +
-      `. Suele significar que la fórmula de la hoja cambió y aquí no, o al revés.`;
+    aviso.innerHTML =
+      `<b>${raros.length} línea(s)</b> en las que la hoja y la fórmula de aquí no dan
+       lo mismo. Desviación típica: <b>${tipica} %</b>.` +
+      (todasIgual
+        ? ` Como es <b>casi la misma en todas</b>, no son filas sueltas mal escritas:
+            hay un factor de diferencia entre las dos fórmulas.`
+        : ` La desviación cambia mucho de una a otra, así que parecen casos sueltos
+            y no un factor de diferencia.`) +
+      `<div style="margin-top:8px;font-family:var(--mono);font-size:12px">
+         la hoja: ${laDeLaHoja ? esc(laDeLaHoja) : "no se pudo leer su fórmula"}<br>
+         aquí:    largo × ${MODELO.ancho} × espesor × ${MODELO.densidad}
+       </div>` +
+      `<div style="margin-top:8px">Para corregirlo hay que decidir cuál de las dos es
+       la buena. Si manda la hoja, dime qué dice su fórmula y la ajusto aquí; si manda
+       ésta, se arregla en la hoja y el aviso desaparece solo.</div>`;
   }
 }
 
@@ -245,7 +278,7 @@ function consumoLamina(filas){
   const acc = new Map();
   for(const {c} of filas){
     if(anuladaP(c)) continue;
-    const hecha = progreso(c).pct >= 1;
+    const hecha = terminadaP(c);
     for(const {cara, metros} of (MODELO.laminas || [])){
       const tipo = String(c[C[cara]] ?? "").trim();
       if(!tipo) continue;
@@ -284,7 +317,7 @@ function renderLamina(todas){
 /** Poliuretano de lo que sigue abierto: es lo que hay que tener para poder
  *  fabricar lo comprometido, y no se deduce del total ya gastado. */
 function renderPoliPendiente(todas){
-  const abiertas = todas.filter(({c})=>progreso(c).pct < 1 && !despachadaP(c));
+  const abiertas = todas.filter(({c})=>!terminadaP(c));
   const porProducto = new Map();
   abiertas.forEach(({c})=>{
     const k = String(c[C.PROD] ?? "").trim() || "sin producto";

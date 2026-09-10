@@ -688,6 +688,27 @@ function comprueba(nombre, cond, detalle){
   comprueba("una línea despachada no está en la cola",
     !enCola.some(x => String(x.c[19]).toUpperCase() === "DESPACHADO"));
 
+  console.log("\n=== el resumen cuenta por el botón Terminar ===");
+  /* La hoja lleva años funcionando: sus lineas tienen ESTADO puesto, pero las
+     casillas de proceso solo estan marcadas en lo que se toco desde la
+     aplicacion. Contando casillas, todo el historico salia como pendiente, el
+     ritmo se hundia, y el plazo de entrega que sale de dividir uno entre otro
+     no describia nada. */
+  const estadosFabricadas = leer(
+    "[...new Set(fabricadas().map(x => String(x.c[C.DESP]).toUpperCase()))].join(\", \")");
+  comprueba("solo cuenta lo TERMINADO o DESPACHADO",
+    leer('fabricadas().every(x => ["TERMINADO","DESPACHADO"].includes(String(x.c[C.DESP]).toUpperCase()))'),
+    "estados que cuentan: " + estadosFabricadas);
+  comprueba("una línea con estado puesto cuenta aunque no tenga casillas marcadas",
+    leer('fabricadas().some(x => progreso(x.c).pct < 1)') ||
+    leer('activas().filter(({c}) => ["TERMINADO","DESPACHADO"].includes(String(c[C.DESP]).toUpperCase()) && progreso(c).pct < 1).length') === 0,
+    "fabricadas: " + leer("fabricadas().length"));
+  comprueba("lo que está al 100 % pero sin Terminar NO cuenta como fabricado",
+    !leer('fabricadas().some(x => !["TERMINADO","DESPACHADO"].includes(String(x.c[C.DESP]).toUpperCase()))'));
+  const nPend = leer('activas().filter(({c}) => !anuladaP(c) && !["TERMINADO","DESPACHADO"].includes(String(c[C.DESP]).toUpperCase())).length');
+  comprueba("y sigue contando como pendiente", nPend > 0, "líneas pendientes: " + nPend);
+
+
   console.log("\n=== consumo de lámina, por acabado ===");
   $$(".tab").find(t=>t.dataset.view==="resumen")
     .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));

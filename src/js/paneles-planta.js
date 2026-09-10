@@ -237,6 +237,11 @@ $("#p-lista").addEventListener("click", async ev=>{
     toast(`Línea ${row.c[C.OP]} terminada`, "ok");
     plantaDibujada = "";                      // sale de la cola: hay que rehacerla
     renderPlanta();
+    /* Terminar es lo que hace que la linea cuente como fabricada, asi que las
+       cifras del resumen cambian en este momento y no cuando alguien se acuerde
+       de mirarlas. Se recalculan ya. */
+    if(typeof renderResumen === "function" && $("#v-resumen")) renderResumen();
+    if(typeof renderAlmacen === "function" && $("#a-lista")) renderAlmacen();
   }catch(e){ /* ponerEstado ya lo dijo y deshizo */ }
 });
 
