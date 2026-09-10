@@ -2,6 +2,26 @@
 # Publica src/ en Hostinger.  Uso:  ./deploy.sh
 set -euo pipefail
 
+# ============================== NO PUBLICAR DESDE AQUI ==============================
+# ESTE NO ES EL REPOSITORIO DE LA APLICACION VIVA.
+#
+# La aplicacion que usa Interfrigo vive en:
+#     I:\Mi unidad\Software\PUERTAS\produccion# y se publica con:
+#     bash publicar-inventario.sh    (desde I:\Mi unidad\Software\PUERTAS)
+#
+# Este repositorio es una linea distinta, sin el modulo de INVENTARIO. Su
+# deploy.sh apuntaba a la MISMA carpeta del servidor, asi que publicar desde
+# aqui pisaba la aplicacion buena: se llevo por delante modulo.js, config-app.js,
+# auth.js, usuarios.js y componentes.css, y con ellos el inventario entero.
+# Se veia como «desaparecio inventario», sin ningun error por ningun lado.
+#
+# Si de verdad hace falta publicar desde aqui, hay que quitar estas dos lineas
+# a mano y saber lo que se esta haciendo.
+echo "Este repositorio NO publica: la aplicacion viva esta en I:/Mi unidad/Software/PUERTAS." >&2
+echo "Publica con:  bash publicar-inventario.sh   (desde esa carpeta)" >&2; exit 1
+# ====================================================================================
+
+
 AQUI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="${AQUI}/src"
 
