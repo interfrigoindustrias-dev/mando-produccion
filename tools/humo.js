@@ -709,6 +709,38 @@ function comprueba(nombre, cond, detalle){
   comprueba("y sigue contando como pendiente", nPend > 0, "líneas pendientes: " + nPend);
 
 
+  console.log("\n=== el plazo de entrega sale de lo que pasó, no de una cuenta ===");
+  /* Antes se ofrecia el mayor entre el historico y «lo que tardaria en vaciarse
+     la cola», y salian 242 dias. Vaciar la cola supone que un pedido nuevo
+     espera a que se acabe TODO lo anterior, y aqui se trabaja por prioridad;
+     ademas el historico YA lleva la cola dentro, asi que era contarla dos
+     veces. */
+  const entrega = $("#r-entrega").textContent.replace(/\s+/g, " ");
+  const titular = +((($("#r-entrega .entrega-num b")) || {}).textContent || 0);
+  const plazosReales = leer(
+    "fabricadas().map(({c}) => diasDeFabricacion(c)).filter(v => v !== null)");
+  const p90real = leer(
+    "percentil(fabricadas().map(({c}) => diasDeFabricacion(c)).filter(v => v !== null), 0.9)");
+  comprueba("el titular es el plazo real, no un producto de dos cifras",
+    titular === p90real,
+    `titular ${titular} · p90 de ${plazosReales.length} líneas: ${p90real}`);
+  comprueba("se desglosa por prioridad",
+    $$("#r-entrega tbody tr").length > 0,
+    $$("#r-entrega tbody tr").map(t => t.textContent.replace(/\s+/g," ").trim()).join(" | "));
+  comprueba("la carga de hoy se dice aparte, no como promesa",
+    /carga de hoy/i.test(entrega) && /d[ií]as de taller/i.test(entrega));
+  comprueba("el ritmo se cuenta en días de trabajo, no de calendario",
+    leer("laborablesDe(7)") === 5.5 && Math.round(leer("naturalesDe(5.5)")) === 7,
+    "7 días de calendario = " + leer("laborablesDe(7)") + " de trabajo");
+
+  const conDespacho = '(function(){ const c=[]; c[C.FECHA]="01/01/2026"; c[C.FDESP]="11/01/2026"; return diasDeFabricacion(c); })()';
+  const sinNada     = '(function(){ const c=[]; c[C.FECHA]="01/01/2026"; return diasDeFabricacion(c); })()';
+  comprueba("una línea sin fin de proceso usa la fecha de despacho",
+    leer(conDespacho) === 10, "días: " + leer(conDespacho));
+  comprueba("y sin ninguna de las dos no se inventa un plazo de cero",
+    leer(sinNada) === null, "da: " + JSON.stringify(leer(sinNada)));
+
+
   console.log("\n=== consumo de lámina, por acabado ===");
   $$(".tab").find(t=>t.dataset.view==="resumen")
     .dispatchEvent(new w.MouseEvent("click", {bubbles:true}));

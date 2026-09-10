@@ -28,16 +28,30 @@
 const terminadaP = c => [ESTADO.TERMINADO, ESTADO.DESPACHADO].includes(estadoDe(c));
 const fabricadas = () => activas().filter(({c})=>!anuladaP(c) && terminadaP(c));
 
-/** Cuando se acabo de fabricar: el fin de proceso, y si falta, la creacion. */
-const fechaFin = c => toDate(c[C.FFIN]) || toDate(c[C.FECHA]);
+/** Cuando se acabo de fabricar.
+ *
+ *  El fin de proceso lo pone la aplicacion al pulsar Terminar, asi que las
+ *  lineas de antes no lo tienen. Para esas vale la fecha de despacho: no se
+ *  despacha lo que no se ha fabricado. Antes se caia a la fecha de CREACION, y
+ *  eso decia que la linea se acabo el dia que entro — cero dias de plazo, y el
+ *  mes de produccion contado en el mes equivocado. */
+const fechaFin = c => toDate(c[C.FFIN]) || toDate(c[C.FDESP]) || null;
 
-/** Dias que tardo una linea desde que entro hasta que se acabo. */
+/** Dias naturales desde que entro el pedido hasta que se acabo. Es el plazo
+ *  que vivio el cliente, con su espera en cola incluida. */
 function diasDeFabricacion(c){
-  const ini = toDate(c[C.FECHA]), fin = toDate(c[C.FFIN]);
+  const ini = toDate(c[C.FECHA]), fin = fechaFin(c);
   if(!ini || !fin) return null;
   const d = Math.round((fin - ini) / 86400000);
   return d >= 0 ? d : null;
 }
+
+/* SE TRABAJA DE LUNES A SABADO MEDIO DIA: cinco dias y medio por semana. Es el
+   unico dato que no esta en la hoja y que hubo que preguntar. Todo lo demas
+   sale de los datos. */
+const DIAS_SEMANA = 5.5;
+const laborablesDe = naturales => naturales * DIAS_SEMANA / 7;
+const naturalesDe  = laborables => laborables * 7 / DIAS_SEMANA;
 /** Mediana: con pocos pedidos, un caso raro mueve la media y no la mediana. */
 function mediana(xs){
   if(!xs.length) return null;
@@ -89,8 +103,11 @@ function renderResumen(){
   const desde = new Date(); desde.setDate(desde.getDate() - 60);
   const recientes = hechas.filter(({c})=>{ const f = fechaFin(c); return f && f >= desde; });
   const m2Recientes = sum(recientes, MODELO.metros);
-  const ritmo = m2Recientes / 60;                       // m2 por dia natural
-  const diasCola = ritmo > 0 ? Math.ceil(m2Pend / ritmo) : null;
+  /* Por dia DE TRABAJO, no por dia de calendario: dividir entre 60 metia los
+     domingos y las medias tardes del sabado en el ritmo, y hacia parecer la
+     planta un 27 % mas lenta de lo que es. */
+  const ritmo = m2Recientes / laborablesDe(60);
+  const diasTrabajoCola = ritmo > 0 ? Math.ceil(m2Pend / ritmo) : null;
 
   kpiCards("#r-kpis", [
     ["m² fabricados", n2(sum(hechas, MODELO.metros)), "Líneas con los tres procesos hechos"],
@@ -100,13 +117,14 @@ function renderResumen(){
      "Mediana de días entre la entrada del pedido y el fin de fabricación"],
     ["Nueve de cada diez", p90 === null ? "—" : "≤ " + p90 + " d",
      "El 90 % de las líneas se acabó dentro de este plazo"],
-    ["Ritmo", ritmo ? n2(ritmo) + " m²/d" : "—", "Metros acabados por día natural, últimos 60 días"],
-    ["Vaciar la cola", diasCola === null ? "—" : diasCola + " d",
-     "Al ritmo actual, lo que tardaría en fabricarse todo lo pendiente"]
+    ["Ritmo", ritmo ? n2(ritmo) + " m²/d" : "—",
+     "Metros acabados por día de trabajo (lunes a sábado medio día), últimos 60 días"],
+    ["Vaciar la cola", diasTrabajoCola === null ? "—" : diasTrabajoCola + " d",
+     "Días de trabajo que costaría fabricar todo lo pendiente, si no entrara nada más"]
   ]);
 
   /* ---------- compromiso de entrega ---------- */
-  pintarEntrega(medio, p90, diasCola, ritmo, m2Pend);
+  pintarEntrega(hechas, diasTrabajoCola, ritmo, m2Pend);
 
   /* ---------- metros por mes ---------- */
   tablaMini("#r-meses",
@@ -143,37 +161,82 @@ function renderResumen(){
 }
 
 /** Lo que se le puede prometer hoy a un cliente que llame preguntando. */
-function pintarEntrega(medio, p90, diasCola, ritmo, m2Pend){
+function pintarEntrega(hechas, diasTrabajoCola, ritmo, m2Pend){
   const el = $("#r-entrega"); if(!el) return;
-  if(medio === null && diasCola === null){
+
+  /* EL PLAZO ES LO QUE HA PASADO, NO UNA CUENTA.
+     Antes se ofrecia el mayor entre el historico y «lo que tardaria en vaciarse
+     la cola», y salian 242 dias. Estaba mal de raiz por dos motivos:
+
+       · vaciar la cola supone que un pedido nuevo espera a que se acabe TODO lo
+         anterior, y aqui no se trabaja asi: se trabaja por prioridad, y una
+         URGENTE se pone delante el mismo dia;
+       · el plazo historico YA lleva dentro la espera en cola, porque se mide
+         desde que entra el pedido. Coger el mayor de los dos era sumar la cola
+         dos veces.
+
+     Lo que se ha tardado de verdad, separado por prioridad, responde a la
+     pregunta sin modelar nada: es lo que le paso a los pedidos que ya se
+     entregaron. La carga de hoy se enseña al lado, como contexto, no como
+     promesa. */
+  const porPrio = new Map();
+  hechas.forEach(({c})=>{
+    const d = diasDeFabricacion(c);
+    if(d === null) return;
+    const p = String(c[C.PRIO] ?? "").trim().toUpperCase() || "SIN PRIORIDAD";
+    (porPrio.get(p) || porPrio.set(p, []).get(p)).push(d);
+  });
+  const todos = [...porPrio.values()].flat();
+
+  if(!todos.length){
     el.innerHTML = `<p class="mut">Todavía no hay líneas terminadas con fecha de
-      inicio y de fin, así que no se puede estimar un plazo con datos propios.
-      En cuanto se cierren unas cuantas, aparece aquí.</p>`;
+      entrada y de salida, así que no se puede decir cuánto se tarda sin
+      inventarlo. Aparece en cuanto se cierren unas cuantas.</p>`;
     return;
   }
-  /* Dos numeros distintos y conviene no confundirlos: lo que se ha tardado
-     historicamente, y lo que se tardaria ahora contando la cola que ya hay
-     delante. Se ofrece el mayor de los dos, que es el honesto. */
-  const historico = p90 ?? medio;
-  const conCola = diasCola;
-  const propuesta = Math.max(historico ?? 0, conCola ?? 0);
-  const holgura = Math.ceil(propuesta * 1.15);          // un 15 % de margen
+
+  const orden = ["URGENTE","ALTA","MEDIA","BAJA","SIN PRIORIDAD"];
+  const filas = orden.filter(p => porPrio.has(p)).map(p=>{
+    const xs = porPrio.get(p);
+    return {prio:p, n:xs.length, med:mediana(xs), p90:percentil(xs, 0.9)};
+  });
+  const p90General = percentil(todos, 0.9);
+
+  /* Con pocos casos un percentil no dice nada: se avisa en vez de dar una
+     cifra con aire de precision. */
+  const pocos = n => n < 8;
 
   el.innerHTML = `
     <div class="entrega">
-      <div class="entrega-num"><b>${holgura}</b><span>días</span></div>
+      <div class="entrega-num"><b>${p90General}</b><span>días</span></div>
       <div class="entrega-txt">
-        <p>Es el plazo que se puede comprometer hoy para un pedido nuevo, con un
-        15 % de margen sobre el peor de estos dos datos:</p>
-        <ul>
-          <li>Lo que se ha tardado: <b>${historico ?? "—"} días</b> en nueve de cada diez líneas.</li>
-          <li>La cola que ya hay delante: <b>${conCola ?? "—"} días</b>
-            (${n2(m2Pend)} m² pendientes a ${ritmo ? n2(ritmo) : "—"} m²/día).</li>
-        </ul>
-        <p class="mut">Sube en cuanto entra trabajo y baja cuando la cola se vacía,
-        así que conviene mirarlo el día que se promete, no repetir el de la
-        semana pasada.</p>
+        <p>Es lo que se ha tardado en <b>nueve de cada diez</b> de las
+        ${todos.length} líneas ya entregadas, contando desde que entró el pedido
+        hasta que salió. Lleva dentro la espera en cola, porque así lo vivió el
+        cliente.</p>
       </div>
+    </div>
+
+    <table class="mini" style="margin-top:14px">
+      <thead><tr><th>Prioridad</th><th>Líneas</th><th>La mitad se entregó en</th>
+        <th>Nueve de cada diez</th></tr></thead>
+      <tbody>${filas.map(f=>`<tr>
+        <td>${f.prio === "SIN PRIORIDAD"
+              ? `<span class="tag t-non">SIN PRIORIDAD</span>`
+              : `<span class="tag t-${f.prio.toLowerCase()}">${esc(f.prio)}</span>`}</td>
+        <td class="num">${f.n}</td>
+        <td class="num">${f.med} d</td>
+        <td class="num">${f.p90} d${pocos(f.n) ? ` <span class="mut">(pocos casos)</span>` : ""}</td>
+      </tr>`).join("")}</tbody>
+    </table>
+
+    <div class="nota" style="margin-top:12px">
+      <b>La carga de hoy</b>, que no es el plazo pero lo empuja:
+      quedan <b>${n2(m2Pend)} m²</b> por fabricar y el ritmo de los últimos 60 días
+      es de <b>${ritmo ? n2(ritmo) : "—"} m² por día de trabajo</b> —lunes a sábado
+      medio día—, o sea <b>${diasTrabajoCola ?? "—"} días de taller</b> si no entrara
+      nada más. Si esa cifra se dispara respecto a lo normal, los plazos de arriba
+      se van a alargar antes de que el histórico lo note.
     </div>`;
 }
 
