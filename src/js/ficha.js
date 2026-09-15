@@ -66,7 +66,6 @@ $("#d-procs").addEventListener("click", ev=>{
 });
 $("#d-save").onclick = async ()=>{
   const r=detRow, row=ROWS.find(x=>x.r===r); if(!row) return;
-  const estabaCompleta = completa(row.c);
   const ups=[], cambios=[], op=row.c[C.OP];
   const nom = v => v===true?"hecho" : v===false?"pendiente" : "no aplica";
   $$("#d-procs .pc").forEach(pc=>{
@@ -83,6 +82,17 @@ $("#d-save").onclick = async ()=>{
   //  Regla 4: al marcar Despachado se rellena la fecha de despacho si está vacía
   if($("#d-desp").value==="Despachado" && !$("#d-fdesp").value.trim() && CFG.auto!==false)
     $("#d-fdesp").value = hoy();
+  /* Terminar desde la ficha sella el fin de proceso, igual que el boton de
+     planta. Salvo si quien edita escribio a mano otra fecha de proceso en esta
+     misma ficha: entonces manda lo que escribio. */
+  const pasaATerminado = $("#d-desp").value==="Terminado" && String(row.c[C.DESP]??"").trim()!=="Terminado";
+  if(pasaATerminado && CFG.auto!==false && $("#d-fproc").value.trim()===fmtDate(row.c[C.FPROC]))
+    $("#d-fproc").value = hoy();
+  if(pasaATerminado && CFG.auto!==false && !String(row.c[C.FINI]??"").trim()){
+    ups.push({a1:`AB${r}`, v:[[hoy()]]});
+    cambios.push({campo:"Inicio de producción", antes:"", despues:hoy()});
+    row.c[C.FINI] = hoy();
+  }
   //  fecha:true → comparar por texto formateado, porque en memoria es un número de serie
   const pairs=[[C.DESP,"Y","Estado despacho",$("#d-desp").value,false],
                [C.FDESP,"Z","Fecha despacho",$("#d-fdesp").value.trim(),true],
@@ -112,8 +122,8 @@ $("#d-save").onclick = async ()=>{
   try{
     await writeCells(ups); $("#ov-det").classList.add("hide"); lastHash=""; render();
     logChanges("EDITA", op, r, cambios);
-    // Si se tocó algún proceso, la fecha de proceso pasa a hoy.
-    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await tocarFechaProceso(r, estabaCompleta);
+    // Si se marcó algún proceso: En proceso y comienzo, si no los tenía.
+    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await marcarInicioProduccion(r);
     toast("Cambios guardados","ok"); setSync("","Guardado");
   }catch(e){ toast(e.message,"err"); refresh(false); }
 };

@@ -32,6 +32,10 @@ const COLOR_PROC = {
   19:"#5A4EA0",  // RIEL
   20:"#7A4B8C"   // EMBOCINAR
 };
+/* Lo que ve Planta: sin estado, en proceso, devuelta, o separada sin terminar.
+   En cuanto llega a Terminado/En Almacen/Despachado/Anulada sin ser ninguna de
+   esas excepciones, ya es trabajo de otra vista. */
+const enColaPlanta = c => !desp(c) || enProceso(c) || devuelta(c) || urgenteAuto(c);
 function plantaList(){
   const q=$("#p-q").value.trim().toLowerCase(), fp=$("#p-prio").value, fe=$("#p-est").value;
   const L = activas().filter(({c})=>{
@@ -49,7 +53,7 @@ function plantaList(){
        La unica excepcion son las separadas sin terminar: tienen comprador
        esperando algo que no esta hecho, asi que siguen siendo trabajo de
        planta aunque figuren en almacen. Sale como URGENTE · VENDIDA. */
-    if(desp(c) && !urgenteAuto(c) && !devuelta(c)) return false;
+    if(!enColaPlanta(c)) return false;
 
     if(fe==="urge" && !urge) return false;
     if(fe==="pend"  && p>=1) return false;

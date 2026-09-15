@@ -121,16 +121,106 @@ async function marcarInicioProduccion(r){
   if(CFG.auto===false) return;
   const row = ROWS.find(x=>x.r===r);
   if(!row || anulada(row.c)) return;
-  if(String(row.c[C.FINI]??"").trim()) return;      // ya tiene fecha: no se toca
-  if(progreso(row.c).ok <= 0) return;               // aún no hay ningún proceso hecho
+  const c = row.c;
+  if(progreso(c).ok <= 0) return;                   // aún no hay ningún proceso hecho
 
+  /* Primer paso marcado: En proceso + comienzo. Dos reglas, iguales que en
+     paneles:
+       · el estado solo se pone si la puerta NO tenia ninguno. Marcar un
+         proceso en una devuelta la deja devuelta, y en una terminada no la
+         devuelve a produccion;
+       · el comienzo se sella UNA vez: si ya tenia fecha, ya se habia empezado.
+     Desmarcar despues no deshace ninguna de las dos. */
   const h = hoy();
-  row.c[C.FINI] = h;
+  const ups = [], logs = [];
+  const sinEstado = !String(c[C.DESP]??"").trim();
+  const sinComienzo = !String(c[C.FINI]??"").trim();
+  if(sinEstado){
+    ups.push({a1:`Y${r}`, v:[[EN_PROCESO]]});
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Estado despacho", antes:"", despues:EN_PROCESO});
+  }
+  if(sinComienzo){
+    ups.push({a1:`AB${r}`, v:[[h]]});
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Inicio de producción", antes:"", despues:h});
+  }
+  if(!ups.length) return;
+  if(sinEstado) c[C.DESP] = EN_PROCESO;             // se ve ya; la hoja va detras
+  if(sinComienzo) c[C.FINI] = h;
   try{
-    await writeCells([{a1:`AB${r}`, v:[[h]]}]);
-    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r,
-              campo:"Inicio de producción", antes:"", despues:h}]);
-  }catch(e){ row.c[C.FINI]=""; console.warn("inicio produccion:", e.message); }
+    await writeCells(ups);
+    logBulk(logs);
+  }catch(e){
+    if(sinEstado) c[C.DESP] = "";
+    if(sinComienzo) c[C.FINI] = "";
+    console.warn("inicio produccion:", e.message);
+    toast("No se pudo poner En proceso: " + e.message, "err");
+  }
+}
+
+/** Pone «En proceso» a las puertas que ya estaban empezadas cuando nacio el
+ *  flujo de estados y siguen sin estado. Con el flujo, esas puertas solo
+ *  cambiarian al marcar su siguiente paso, y mientras tanto la hoja diria que
+ *  no se han empezado. El usuario pidio actualizarlas todas.
+ *
+ *  Tres cosas a proposito:
+ *    · solo toca el ESTADO, y solo si esta vacio y hay algun paso marcado;
+ *    · NO inventa el comienzo: si no tenia fecha, no se sabe cuando empezo, y
+ *      poner la de hoy seria escribir un dato falso;
+ *    · NO apunta cada puerta en el historial: el historial cuenta como «tocada»
+ *      cualquier fila con apunte y les reiniciaria el reloj de la subida de
+ *      prioridad a puertas que nadie ha mirado.
+ *  Idempotente: una vez puestas, no queda nada que hacer. */
+async function repairEnProceso(){
+  if(CFG.auto===false || busyWrites>0) return 0;
+  const cambiar = ROWS.filter(({c}) => rowActive(c) && !anulada(c) &&
+    !String(c[C.DESP]??"").trim() && progreso(c).ok > 0);
+  if(!cambiar.length) return 0;
+  cambiar.forEach(({c}) => { c[C.DESP] = EN_PROCESO; });
+  try{
+    await writeCells(cambiar.map(({r}) => ({a1:`Y${r}`, v:[[EN_PROCESO]]})));
+    lastHash = "";
+    render(); renderDashVisible();
+    return cambiar.length;
+  }catch(e){
+    cambiar.forEach(({c}) => { c[C.DESP] = ""; });
+    console.warn("en proceso:", e.message);
+    return 0;
+  }
+}
+
+/** Lo que hay que escribir ademas del estado al cambiarlo.
+ *    Terminado  -> FIN DE PROCESO (X) = hoy, y el comienzo si faltaba.
+ *    Despachado -> FECHA DE DESPACHO (Z) = hoy, si no tenia.
+ *
+ *  El fin se escribe SIEMPRE al terminar, no solo si esta vacio: antes la
+ *  columna X se reescribia con cada marca de proceso, asi que lo que tenga una
+ *  puerta sin terminar es la ultima vez que alguien marco algo, no su fin. Una
+ *  devuelta que se vuelve a terminar tambien estrena fecha: se termino otra vez.
+ *
+ *  Devuelve {ups, cambios} y ya deja los valores puestos en la fila. */
+function fechasAlCambiarEstado(row, nuevo){
+  const c = row.c, r = row.r, h = hoy();
+  const ups = [], cambios = [];
+  if(CFG.auto === false) return {ups, cambios};
+  if(nuevo === "Terminado"){
+    if(fmtDate(c[C.FPROC]) !== h){
+      ups.push({a1:`X${r}`, v:[[h]]});
+      cambios.push({campo:"Fin de proceso", antes:fmtDate(c[C.FPROC]), despues:h});
+      c[C.FPROC] = h;
+    }
+    // Terminada sin haber marcado nada: al menos queda cuando se empezo.
+    if(!String(c[C.FINI]??"").trim()){
+      ups.push({a1:`AB${r}`, v:[[h]]});
+      cambios.push({campo:"Inicio de producción", antes:"", despues:h});
+      c[C.FINI] = h;
+    }
+  }
+  if(nuevo === "Despachado" && !fmtDate(c[C.FDESP])){
+    ups.push({a1:`Z${r}`, v:[[h]]});
+    cambios.push({campo:"Fecha despacho", antes:"", despues:h});
+    c[C.FDESP] = h;
+  }
+  return {ups, cambios};
 }
 
 /** Sube a ALTA lo que ya agotó su margen de espera.
@@ -181,23 +271,13 @@ const hoy0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
    futura de una puerta sin empezar era escribir un dato falso.
 
    La prioridad ya no decide CUANDO aparece una puerta, decide en que orden se
-   hace. Quien sella la fecha sigue siendo tocarFechaProceso, con el dia en que
-   de verdad se toco. */
+   hace. La fecha de fin la sella pulsar Terminada (fechasAlCambiarEstado). */
 
-async function tocarFechaProceso(r, estabaCompleta){
-  if(CFG.auto===false) return;
-  const row = ROWS.find(x=>x.r===r);
-  if(!row || anulada(row.c)) return;
-  if(estabaCompleta && completa(row.c)) return;   // seguía terminada: fecha congelada
-
-  const h = hoy(), antes = fmtDate(row.c[C.FPROC]);
-  if(antes === h) return;
-  row.c[C.FPROC] = h;
-  try{
-    await writeCells([{a1:`X${r}`, v:[[h]]}]);
-    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r, campo:"Fecha proceso", antes, despues:h}]);
-  }catch(e){ row.c[C.FPROC] = antes; console.warn("fecha proceso:", e.message); }
-}
+/* Aqui vivia tocarFechaProceso, que reescribia la columna X con la fecha de
+   hoy cada vez que se marcaba un proceso. Con el flujo de estados X es el FIN
+   DE PROCESO y lo sella pulsar Terminada (fechasAlCambiarEstado): seguir
+   pisandola en cada marca haria que una puerta a medias pareciera acabada el
+   ultimo dia que alguien toco una casilla. */
 
 /* Nombres de los procesos, para reconocerlos en el historial. */
 const CAMPOS_PROCESO = new Set(PROCS.map(p => p.k));

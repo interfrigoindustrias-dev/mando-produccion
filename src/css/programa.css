@@ -1,0 +1,173 @@
+/* Programacion de la produccion de puertas
+   Un tablero de dias con fichas que se arrastran. Todo lo que no es tablero
+   cabe en UNA linea arriba —semana, cifras, meta y acciones—, para que la
+   programacion se lleve la pantalla. Pensado tambien para tablet: las fichas
+   se cogen con el dedo y la semana se desplaza de lado dentro del tablero. */
+
+/* ---------- la linea de arriba ---------- */
+.pg-barra{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 8px}
+.pg-nav{display:flex;align-items:center;gap:5px;flex:none}
+.pg-nav .btn{min-width:32px;height:30px;padding:0 9px}
+.pg-semana{font-weight:800;font-size:13px;color:var(--tx);margin-left:3px;white-space:nowrap;
+  text-transform:capitalize}
+.pg-despues{font-size:11.5px;font-weight:700;color:var(--acc);white-space:nowrap}
+
+/* Las cifras, en fila y pequeñas: son contexto, no protagonistas. */
+.pg-barra .pg-kpis{display:flex;gap:6px;margin:0;flex:1 1 auto;min-width:0;flex-wrap:nowrap;
+  overflow-x:auto;scrollbar-width:none}
+.pg-barra .pg-kpis::-webkit-scrollbar{display:none}
+.pg-barra .pg-kpis .kpi{flex:0 0 auto;padding:4px 10px;min-width:0;display:flex;flex-direction:column;
+  justify-content:center}
+.pg-barra .pg-kpis .kpi b{font-size:15px;line-height:1.1;white-space:nowrap}
+.pg-barra .pg-kpis .kpi span{font-size:9.5px;letter-spacing:.04em;white-space:nowrap}
+.pg-barra .pg-kpis .kpi .fdesc,.pg-barra .pg-kpis .kpi button{display:none}
+
+.pg-meta{display:flex;align-items:center;gap:5px;flex:none;font-size:12px;color:var(--tx2);
+  padding:3px 8px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg2)}
+.pg-meta .inp{width:58px;height:28px;padding:2px 6px;font-size:13px}
+.pg-meta b{color:var(--tx);white-space:nowrap}
+.pg-acc{display:flex;gap:6px;flex:none}
+.pg-acc .btn{height:30px}
+
+/* ---------- tablero ---------- */
+/* «Sin programar» es la columna ancha: es de donde se sacan las fichas, y con
+   el ancho de un dia habia que desplazarse sin fin para ver lo pendiente. Los
+   siete dias reparten el resto y, si no caben, el tablero se desplaza de lado:
+   un dia estrujado hasta partir el cliente en tres renglones no sirve. */
+.pg-tablero{display:flex;gap:6px;align-items:stretch;overflow-x:auto;
+  padding:1px 1px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+/* 128 px de minimo: con eso lunes a domingo y la columna ancha caben enteros
+   desde una pantalla de 1 280 px, sin desplazar. */
+.pg-col{flex:1 0 128px;display:flex;flex-direction:column;min-height:260px;
+  height:calc(100dvh - 205px);
+  background:var(--bg3);border:1px solid var(--line);border-radius:var(--r2);
+  scroll-snap-align:start;min-width:0}
+.pg-col.pg-sin{flex:0 0 clamp(290px, 22vw, 420px);
+  background:color-mix(in srgb,var(--acc) 6%,var(--bg3))}
+.pg-col.pg-atr{flex:0 0 150px;background:color-mix(in srgb,var(--bad) 8%,var(--bg3));
+  border-color:color-mix(in srgb,var(--bad) 35%,var(--line))}
+.pg-col.pg-hoy{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.pg-col.pg-finde{background:color-mix(in srgb,var(--tx3) 7%,var(--bg3))}
+/* Un dia que ya paso: se ve lo que tenia, atenuado, y no admite fichas. */
+.pg-col.pg-pasado{opacity:.72}
+.pg-col.pg-pasado .pg-cab b{color:var(--tx2)}
+.pg-col.pg-sobre{background:color-mix(in srgb,var(--acc) 14%,var(--bg3));border-color:var(--acc)}
+
+.pg-cab{padding:7px 9px 6px;border-bottom:1px solid var(--line);display:grid;gap:3px}
+.pg-cab b{font-size:12.5px;text-transform:capitalize;color:var(--tx);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.pg-cab span{font-size:11px;color:var(--tx2)}
+.pg-cab span b{font-size:11px;text-transform:none}
+.pg-q{height:32px;margin-top:3px;font-size:13px}
+
+/* Carga del dia frente a la meta: verde hasta el 85 %, ambar hasta el 100 %,
+   rojo por encima. Se ve de un vistazo que dia no cabe. */
+.pg-carga{display:block;height:4px;border-radius:99px;background:var(--bg2);overflow:hidden;margin-top:1px}
+.pg-carga em{display:block;height:100%;background:var(--ok);border-radius:99px}
+.pg-carga.justo em{background:var(--warn)}
+.pg-carga.sobre em{background:var(--bad)}
+
+/* min-height:0 es lo que deja a la lista encogerse dentro de la columna y
+   desplazarse por dentro. Sin el, un hijo flex no baja de su contenido y la
+   columna de «sin programar» arrastraba la pagina entera. */
+.pg-lista{flex:1;min-height:0;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:6px}
+/* En la columna ancha las fichas van de dos en dos: el doble a la vista. Ahi
+   el orden no se escribe —soltar en «sin programar» solo quita el dia—, asi
+   que la rejilla no confunde puestos. */
+.pg-sin .pg-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+  align-content:start}
+.pg-sin .pg-lista .pg-vacio{grid-column:1/-1}
+.pg-vacio{margin:auto;padding:16px 6px;text-align:center;font-size:12px;color:var(--tx3);
+  border:1.5px dashed var(--line2);border-radius:var(--r);width:100%;box-sizing:border-box}
+
+/* ---------- ficha ---------- */
+.pg-card{background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--line2);
+  border-radius:var(--r);padding:6px 7px 5px;display:grid;gap:2px;
+  font-size:11px;color:var(--tx2);user-select:none;-webkit-user-select:none;
+  touch-action:pan-y;min-width:0}
+.pg-card.movible{cursor:grab}
+.pg-card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.pg-card.prio-URGENTE,.pg-card.prio-ALTA{border-left-color:var(--bad)}
+.pg-card.prio-MEDIA{border-left-color:var(--warn)}
+.pg-card.prio-BAJA{border-left-color:var(--tx3)}
+/* La devuelta resalta aunque su prioridad sea baja: ya se hizo mal una vez. */
+.pg-card.dev{border-left-color:var(--bad);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--bad) 45%,transparent) inset}
+.pg-card.pg-apagada{opacity:.25}
+
+.pg-top{display:flex;align-items:center;gap:4px;min-width:0}
+.pg-op{font-family:var(--mono);font-weight:800;font-size:12px;color:var(--tx);white-space:nowrap}
+.pg-top .mini{font-size:9px;padding:0 1px;height:auto;font-weight:800;letter-spacing:0;max-width:54px;min-width:0}
+.pg-pts{margin-left:auto;white-space:nowrap;font-size:10.5px}
+.pg-pts b{color:var(--tx);font-size:12px}
+.pg-cli{font-weight:700;color:var(--tx);font-size:11.5px;line-height:1.2;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-med{display:grid;gap:0;line-height:1.25;font-size:10.5px}
+.pg-med div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-marcas{display:flex;gap:3px;flex-wrap:wrap}
+.pg-marcas .tag{font-size:9px;padding:0 4px}
+.pg-pie{display:flex;align-items:center;gap:5px;font-size:10px}
+.pg-pie .pbar{width:40px;height:5px}
+.pg-esp{margin-left:auto;white-space:nowrap}
+
+/* ---------- arrastre ---------- */
+.pg-ghost{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;
+  box-shadow:var(--sh);opacity:.95;cursor:grabbing}
+.pg-origen{opacity:.35}
+.pg-hueco{border:2px dashed var(--acc);border-radius:var(--r);
+  background:color-mix(in srgb,var(--acc) 8%,transparent);box-sizing:border-box}
+.pg-hueco.pg-no{border-color:var(--line2);background:transparent;opacity:.6}
+body.pg-arrastrando{cursor:grabbing;user-select:none;-webkit-user-select:none}
+body.pg-arrastrando .pg-card{cursor:grabbing}
+
+/* ---------- en planta: la tarjeta dice que esta programada ---------- */
+.tag.t-prog{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);
+  border-color:color-mix(in srgb,var(--acc) 40%,transparent);font-weight:800;
+  text-transform:capitalize}
+.tag.t-prog.atr{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad);
+  border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+
+@media (max-width: 820px){
+  .pg-barra{gap:6px}
+  .pg-barra .pg-kpis{flex-basis:100%;order:3}
+  .pg-col{flex:0 0 72vw;height:calc(100dvh - 240px)}
+  .pg-col.pg-sin{flex:0 0 86vw}
+}
+
+/* ---------- hoja carta: OP sin programar ---------- */
+/* Vertical, en blanco y negro, para decidir a lapiz y pasarlo luego al
+   tablero. Las celdas se parten dentro de su columna: las tablas de la app
+   fuerzan nowrap y en papel montaban un texto encima del de al lado. */
+.pg-print{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-size:8.5pt}
+.pg-print .pp-cab{display:flex;align-items:flex-end;gap:5mm;border-bottom:.7mm solid #000;
+  padding-bottom:2mm;margin-bottom:3mm}
+.pg-print .pp-tit{flex:1}
+.pg-print .pp-tit b{display:block;font-size:13pt;font-weight:900}
+.pg-print .pp-tit span{font-size:8pt}
+.pg-print .pp-meta{text-align:right;font-size:7.5pt}
+.pg-print table{width:100%;border-collapse:collapse;table-layout:fixed}
+.pg-print th,.pg-print td{border:.3mm solid #000;padding:1.2mm 1.4mm;text-align:left;vertical-align:top;
+  white-space:normal;overflow-wrap:anywhere;line-height:1.25;font-size:8pt}
+.pg-print th{font-size:6.8pt;text-transform:uppercase;letter-spacing:.03em;background:#e6e6e6}
+.pg-print thead{display:table-header-group}         /* la cabecera se repite en cada hoja */
+.pg-print tr{break-inside:avoid;page-break-inside:avoid}
+.pg-print td.n{text-align:right;white-space:nowrap}
+.pg-print td.op{font-weight:900;white-space:nowrap}
+.pg-print tr.pp-dev td{background:#efefef}
+/* #, OP, cliente, tipo, material, medidas, espesor, apertura, dia, puesto */
+.pp-sinprog th:nth-child(1){width:7mm}
+.pp-sinprog th:nth-child(2){width:16mm}
+.pp-sinprog th:nth-child(4){width:24mm}
+.pp-sinprog th:nth-child(5){width:20mm}
+.pp-sinprog th:nth-child(6){width:18mm}
+.pp-sinprog th:nth-child(7){width:15mm}
+.pp-sinprog th:nth-child(8){width:15mm}
+.pp-sinprog th:nth-child(9){width:20mm}
+.pp-sinprog th:nth-child(10){width:13mm}
+.pg-print .pp-pie{display:flex;gap:10mm;margin-top:6mm;font-size:8pt;font-weight:700}
+.pg-print .pp-pie span{flex:1;display:flex;align-items:flex-end;gap:2mm}
+.pg-print .pp-pie i{flex:1;border-bottom:.3mm solid #000;height:6mm}
+
+@media print{
+  .pg-print th, .pg-print tr.pp-dev td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}

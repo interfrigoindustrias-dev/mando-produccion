@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Inventario de Almacén | Interfrigo</title>
+<meta name="theme-color" content="#8A4B08">
+<meta name="description" content="Inventario de insumos y materia prima — Interfrigo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="img/icono-192.png">
+<link rel="apple-touch-icon" href="img/icono-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Inventario">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/componentes.css">
+<link rel="stylesheet" href="css/dashboards.css">
+<link rel="stylesheet" href="css/movil.css">
+<link rel="stylesheet" href="css/inventario.css">
+<script>window.MODULO = "inventario";</script>
+</head>
+<body>
+
+<!-- ============================== LOGIN / CONFIG ============================== -->
+<div id="gate">
+  <div class="card">
+    <div class="logo"></div>
+    <h1>Inventario de Almacén</h1>
+    <p class="mut">Insumos y materia prima — hoja <b id="g-sheet">MOVIMIENTOS</b></p>
+
+    <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
+      <span id="g-falta"></span>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn pri grow" id="g-login">Entrar con Google</button>
+      <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+    </div>
+    <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
+    <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
+  </div>
+</div>
+
+<!-- ============================== APP ============================== -->
+<div id="app" class="hide">
+<header>
+  <div class="logo sm"></div>
+  <div class="modsel">
+    <button class="modbtn" id="btn-modulo" title="Cambiar de producto">
+      <span id="mod-nombre">Inventario</span><i>▾</i></button>
+    <div class="modmenu hide" id="mod-menu"></div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="exist" aria-selected="true">Existencias</button>
+    <button class="tab" role="tab" data-view="kardex" aria-selected="false">Kardex</button>
+    <button class="tab" role="tab" data-view="req" aria-selected="false">Requisiciones</button>
+  </div>
+  <button class="btn pri sm" id="i-nuevo">+ Registrar movimiento</button>
+  <div class="grow"></div>
+  <span id="sync"><i class="dot"></i><span id="sync-t">—</span></span>
+  <button class="btn sm hide" id="reconectar" title="La sesión de Google caducó">⚡ Reconectar</button>
+  <button class="btn sm campana" id="btn-avisos" title="Novedades">
+    🔔<span class="badge hide" id="avisos-n">0</span></button>
+  <button class="btn sm" id="btn-reload" title="Refrescar ahora">⟳</button>
+  <button class="btn sm hide" id="btn-instalar" title="Instalar como aplicación">⤓ Instalar</button>
+  <button class="btn sm" id="btn-tema" title="Tema claro / oscuro">◐</button>
+  <span class="chip"><span class="rolchip" id="u-rol"></span><span id="u-mail">—</span><span class="avatar" id="u-av">?</span></span>
+  <button class="btn sm hide" id="btn-usuarios" title="Gestionar usuarios">👥</button>
+  <button class="btn sm" id="btn-cfg" title="Configuración">⚙</button>
+  <button class="btn sm" id="btn-out" title="Salir">⏻</button>
+</header>
+
+<main>
+  <!-- ---------- EXISTENCIAS ---------- -->
+  <section id="v-exist">
+    <div class="kpis" id="i-kpis"></div>
+
+    <div class="bar">
+      <label class="f wide"><span>Buscar</span><input class="inp" id="i-q" placeholder="código, nombre…" autocomplete="off"></label>
+      <label class="f"><span>Categoría</span><select class="inp" id="i-cat"></select></label>
+      <label class="f"><span>Bodega</span><select class="inp" id="i-bod"></select></label>
+      <label class="f"><span>Existencia</span><select class="inp" id="i-exi">
+        <option value="">Todas</option><option value="bajo">Bajo mínimo</option>
+        <option value="cero">En cero</option><option value="neg">Negativas</option>
+        <option value="hay">Con existencia</option>
+        <option value="alto">Sobre máximo</option></select></label>
+      <button class="btn sm" id="i-clear">Limpiar</button>
+      <div class="grow"></div>
+      <span class="cnt" id="i-cnt"></span>
+      <button class="btn sm" id="i-nuevoins">+ Nuevo insumo</button>
+      <button class="btn sm" id="i-informe">📄 Informe por fechas</button>
+      <button class="btn sm" id="i-csv">⇩ CSV</button>
+    </div>
+
+    <div class="tw"><table id="i-tabla"></table></div>
+  </section>
+
+  <!-- ---------- KARDEX ---------- -->
+  <section id="v-kardex" class="hide">
+    <div class="sec" style="margin-bottom:12px">
+      <h2>Kardex de movimientos
+        <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— solo se agregan filas; para corregir se hace un ajuste, nunca se borra</span>
+      </h2>
+      <div class="bar" style="margin:0">
+        <label class="f wide"><span>Buscar</span><input class="inp" id="k-q" placeholder="código, OP, remisión, usuario…" autocomplete="off"></label>
+        <label class="f"><span>Tipo</span><select class="inp" id="k-tipo"></select></label>
+        <label class="f"><span>Bodega</span><select class="inp" id="k-bod"></select></label>
+        <label class="f"><span>Desde</span><input class="inp" id="k-desde" type="date"></label>
+        <label class="f"><span>Hasta</span><input class="inp" id="k-hasta" type="date"></label>
+        <button class="btn sm" id="k-clear">Limpiar</button>
+        <div class="grow"></div>
+        <span class="cnt" id="k-cnt"></span>
+        <button class="btn sm" id="k-csv">⇩ CSV</button>
+      </div>
+    </div>
+    <div class="tw"><table id="k-tabla"></table></div>
+  </section>
+
+  <!-- ---------- REQUISICIONES ---------- -->
+  <section id="v-req" class="hide">
+    <div class="kpis" id="r-kpis"></div>
+
+    <div class="bar">
+      <label class="f wide"><span>Buscar</span><input class="inp" id="r-q" placeholder="número, insumo, solicitante…" autocomplete="off"></label>
+      <label class="f"><span>Estado</span><select class="inp" id="r-est">
+        <option value="">Todos</option><option value="BORRADOR">Por aprobar</option>
+        <option value="APROBADA">Aprobada</option><option value="PARCIAL">Parcial</option>
+        <option value="ATENDIDA">Atendida</option><option value="ANULADA">Anulada</option></select></label>
+      <label class="f"><span>Tipo</span><select class="inp" id="r-tipo">
+        <option value="">Todos</option><option value="TRASLADO">Traslado</option>
+        <option value="COMPRA">Compra</option></select></label>
+      <button class="btn sm" id="r-clear">Limpiar</button>
+      <div class="grow"></div>
+      <span class="cnt" id="r-cnt"></span>
+      <button class="btn pri sm" id="r-nueva">+ Nueva requisición</button>
+      <button class="btn sm" id="r-csv">⇩ CSV</button>
+    </div>
+
+    <div class="tw"><table id="r-tabla"></table></div>
+  </section>
+</main>
+</div>
+
+<!-- ============================== MOVIMIENTO DE ALMACÉN ============================== -->
+<div class="ov hide" id="ov-mov"><div class="mod" style="max-width:680px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Registrar movimiento de almacén</h1>
+    <button class="x" data-close>×</button>
+  </header>
+  <form class="form" id="form-mov" autocomplete="off">
+    <div class="sec" data-paso="1">
+      <h2>Tipo de movimiento</h2>
+      <div class="pgrid" id="mv-tipos"></div>
+      <p class="mut" id="mv-ayuda" style="margin-top:12px"></p>
+    </div>
+
+    <div class="sec" data-paso="1">
+      <h2>Qué y dónde</h2>
+      <label class="f"><span class="req">Insumo</span>
+        <input class="inp big" id="mv-q" autocomplete="off" role="combobox"
+               aria-autocomplete="list" aria-expanded="false" aria-controls="mv-lista"
+               placeholder="Escribe código o nombre y elige de la lista…">
+        <div class="combo hide" id="mv-lista" role="listbox"></div>
+        <input type="hidden" id="mv-ins"></label>
+
+      <!-- Existencia por bodega del insumo elegido. Siempre visible: se decide
+           de dónde sacar el material sin salir del formulario. -->
+      <div id="mv-saldos" class="saldos hide"></div>
+
+      <div class="grid" style="margin-top:12px">
+        <label class="f"><span class="req" id="mv-bod-lbl">Bodega</span>
+          <select class="inp" id="mv-bod" required></select></label>
+        <label class="f hide" id="mv-bod2-w"><span class="req">Bodega destino</span>
+          <select class="inp" id="mv-bod2"></select></label>
+        <label class="f hide" id="mv-origen-w"><span class="req">Viene de</span>
+          <select class="inp" id="mv-origen">
+            <option value="OP">Una OP</option>
+            <option value="REMISION">Una remisión</option></select></label>
+      </div>
+
+    </div>
+
+    <div class="sec" data-paso="2">
+      <h2 id="mv-h2-cuanto">Cuánto</h2>
+
+      <!-- Cómo se cuenta lo que se registra: por presentación o en unidad base.
+           Solo aparece si el insumo declara un FACTOR. -->
+      <div id="mv-modo-w" class="hide" style="margin-top:12px">
+        <span class="f"><span>Se cuenta</span></span>
+        <div class="seg" id="mv-modo">
+          <button type="button" data-modo="pres" class="a">Por presentación</button>
+          <button type="button" data-modo="base">Por medida</button>
+        </div>
+      </div>
+
+      <div class="grid" id="mv-cant-w" style="margin-top:12px">
+        <label class="f"><span class="req" id="mv-cant-lbl">Cantidad</span>
+          <input class="inp" id="mv-cant" type="number" step="any" min="0" required></label>
+      </div>
+      <p class="mut" id="mv-conv" style="margin-top:8px"></p>
+      <p class="mut" id="mv-saldo" style="margin-top:6px"></p>
+
+      <!-- ENSAMBLE: qué productos salen del que se corta. -->
+      <div id="mv-ens-w" class="hide" style="margin-top:16px">
+        <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+          color:var(--tx2);border-bottom:1px solid var(--line);padding-bottom:8px">
+          <span id="mv-ens-h">Qué sale de ahí</span></h2>
+        <!-- Piezas catalogadas: las unicas que pueden salir de este insumo. -->
+        <div id="mv-ens-hijos" class="hide">
+          <div id="mv-ens-piezas" class="despz"></div>
+          <div id="mv-ens-sug" class="sugs"></div>
+        </div>
+
+        <!-- Sin piezas catalogadas se busca a mano, como siempre. -->
+        <div id="mv-ens-libre" class="hide">
+          <div id="mv-ens-fila">
+            <label class="f"><span>Producto que resulta</span>
+              <input class="inp" id="me-q" autocomplete="off" role="combobox"
+                     aria-autocomplete="list" aria-expanded="false" aria-controls="me-lista"
+                     placeholder="Escribe código o nombre…">
+              <div class="combo hide" id="me-lista" role="listbox"></div>
+              <input type="hidden" id="me-ins"></label>
+            <label class="f"><span>Cantidad</span>
+              <input class="inp" id="me-cant" type="number" step="any" min="0"></label>
+            <button type="button" class="btn pri" id="me-add">+ Añadir</button>
+          </div>
+          <div id="mv-ens-lista" class="tw" style="max-height:220px;margin-top:10px"></div>
+        </div>
+        <p class="mut" id="mv-merma" style="margin-top:8px"></p>
+      </div>
+
+      <div class="grid" style="margin-top:12px">
+        <label class="f hide" id="mv-op-w"><span id="mv-op-lbl">OP</span>
+          <input class="inp" id="mv-op" list="dl-mvop" placeholder="492"><datalist id="dl-mvop"></datalist></label>
+        <label class="f hide" id="mv-doc-w"><span id="mv-doc-lbl">Documento</span>
+          <input class="inp" id="mv-doc"></label>
+        <label class="f hide" id="mv-ter-w"><span id="mv-ter-lbl">Tercero</span>
+          <input class="inp" id="mv-ter" list="dl-mvter"><datalist id="dl-mvter"></datalist></label>
+      </div>
+
+      <label class="f" style="margin-top:12px"><span id="mv-obs-lbl">Observaciones</span>
+        <textarea class="inp" id="mv-obs" rows="2"></textarea></label>
+    </div>
+
+    <div class="warn hide" id="mv-warn"></div>
+
+    <div class="sticky-actions">
+      <span class="mut grow" id="mv-resumen"></span>
+      <button type="button" class="btn" data-close>Cancelar</button>
+      <button type="button" class="btn" id="mv-prev" hidden>Atrás</button>
+      <button type="button" class="btn pri" id="mv-next" hidden>Siguiente</button>
+      <button type="submit" class="btn pri" id="mv-save">Registrar</button>
+    </div>
+  </form>
+</div></div>
+
+
+<!-- ============================== INFORME POR FECHAS ============================== -->
+<div class="ov hide" id="ov-inf"><div class="mod" style="max-width:980px">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px">Informe de inventario entre fechas</h1>
+      <p class="mut" style="margin:4px 0 0">Marca los insumos y elige el período. Para cada uno
+        sale el saldo con que empezó, lo que entró, lo que salió y con qué terminó.</p>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="bar" style="margin:0 0 12px">
+    <label class="f"><span>Desde</span><input class="inp" id="inf-desde" type="date"></label>
+    <label class="f"><span>Hasta</span><input class="inp" id="inf-hasta" type="date"></label>
+    <label class="f"><span>Bodega</span><select class="inp" id="inf-bod"></select></label>
+    <label class="f wide"><span>Buscar</span><input class="inp" id="inf-q" placeholder="código, nombre…" autocomplete="off"></label>
+    <button class="btn sm" id="inf-todos">Marcar todos</button>
+    <button class="btn sm" id="inf-ninguno">Ninguno</button>
+    <div class="grow"></div>
+    <span class="cnt" id="inf-cnt"></span>
+  </div>
+
+  <div class="tw" style="max-height:46vh"><table id="inf-tabla"></table></div>
+
+  <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
+    <span class="mut grow" id="inf-nota"></span>
+    <button class="btn" data-close>Cerrar</button>
+    <button class="btn pri" id="inf-csv">⇩ Descargar CSV</button>
+  </div>
+</div></div>
+
+<!-- ============================== NUEVO INSUMO ============================== -->
+<div class="ov hide" id="ov-nins"><div class="mod" style="max-width:620px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Nuevo insumo</h1>
+    <button class="x" data-close>×</button>
+  </header>
+  <form class="form" id="form-nins" autocomplete="off">
+    <div class="sec">
+      <label class="f"><span class="req">Código</span>
+        <input class="inp big" id="ni-cod" required placeholder="IGO013" maxlength="40"></label>
+      <p class="mut" style="margin:8px 0 0">Es la llave del insumo: es lo que queda escrito en
+        cada movimiento. <b>No se podrá cambiar</b> una vez tenga historial.</p>
+
+      <label class="f" style="margin-top:14px"><span class="req">Nombre</span>
+        <input class="inp" id="ni-nom" required placeholder="PERFIL VAIVEN PARA INYECCION"></label>
+
+      <div class="grid" style="margin-top:12px">
+        <label class="f"><span>Categoría</span>
+          <input class="inp" id="ni-cat" list="dl-cat" placeholder="Perfilería"><datalist id="dl-cat"></datalist></label>
+        <label class="f"><span class="req">Unidad base</span>
+          <input class="inp" id="ni-uni" list="dl-uni" value="und"><datalist id="dl-uni">
+            <option value="und"><option value="m"><option value="m2"><option value="kg">
+            <option value="l"><option value="par"><option value="rollo"><option value="caja">
+          </datalist></label>
+      </div>
+      <p class="mut" style="margin-top:8px">La <b>unidad base</b> es en la que se guarda el saldo.
+        Si el insumo se mide en metros, pon <code>m</code> aunque lo compres por perfiles.</p>
+
+      <div class="grid" style="margin-top:14px">
+        <label class="f"><span>Presentación</span>
+          <input class="inp" id="ni-pres" placeholder="Perfil de 6 m"></label>
+        <label class="f"><span>Factor</span>
+          <input class="inp" id="ni-factor" type="number" step="any" min="0" placeholder="6"></label>
+      </div>
+      <div class="grid" style="margin-top:14px">
+        <label class="f"><span>Sale de cortar</span>
+          <input class="inp" id="ni-origen" list="dl-origen" placeholder="Opcional — ej. IGO005"
+                 autocomplete="off"><datalist id="dl-origen"></datalist></label>
+        <label class="f"><span>Largo de cada pieza</span>
+          <input class="inp" id="ni-largo" type="number" step="any" min="0" placeholder="2.5"></label>
+      </div>
+      <p class="mut" style="margin-top:8px">Solo si este insumo <b>sale de cortar otro</b>.
+        Un tramo de 2,5 m que sale del perfil <code>IGO005</code>: origen <b>IGO005</b> y largo
+        <b>2,5</b>. Con eso solo aparecerá al cortar ese perfil, y la app cuadrará el corte
+        aunque el tramo se cuente en unidades y la barra en metros. Van los dos o ninguno.</p>
+
+      <p class="mut" style="margin-top:8px">Cuántas unidades base trae una presentación.
+        Un perfil de 6 m es presentación <b>«Perfil de 6 m»</b> y factor <b>6</b>: al registrar
+        2 perfiles entran 12 m. Déjalos vacíos si el insumo se maneja solo en su unidad base.</p>
+
+      <div class="grid" style="margin-top:14px">
+        <label class="f"><span>Mínimo</span>
+          <input class="inp" id="ni-min" type="number" step="any" min="0" placeholder="Opcional"></label>
+        <label class="f"><span>Máximo</span>
+          <input class="inp" id="ni-max" type="number" step="any" min="0" placeholder="Opcional"></label>
+      </div>
+      <p class="mut" style="margin-top:8px">En unidad base. Por debajo del mínimo la app avisa de que
+        hay que reponer; por encima del máximo, de capital parado. Vacíos si no aplican.</p>
+    </div>
+
+    <div class="warn hide" id="ni-warn"></div>
+
+    <div class="sticky-actions">
+      <span class="mut grow">Se crea activo y con existencia en cero. Para darle
+        existencia inicial, registra una ENTRADA o un AJUSTE.</span>
+      <button type="button" class="btn" data-close>Cancelar</button>
+      <button type="submit" class="btn pri" id="ni-save">Crear insumo</button>
+    </div>
+  </form>
+</div></div>
+
+<!-- ============================== NUEVA REQUISICIÓN ============================== -->
+<div class="ov hide" id="ov-nreq"><div class="mod" style="max-width:820px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Nueva requisición de material</h1>
+    <button class="x" data-close>×</button>
+  </header>
+  <form class="form" id="form-nreq" autocomplete="off">
+    <div class="sec">
+      <h2>Tipo</h2>
+      <div class="pgrid" id="nr-tipos"></div>
+      <p class="mut" id="nr-ayuda" style="margin-top:12px"></p>
+      <div class="grid" style="margin-top:12px">
+        <label class="f"><span class="req" id="nr-bod-lbl">Bodega</span>
+          <select class="inp" id="nr-bod" required></select></label>
+        <label class="f hide" id="nr-bod2-w"><span class="req">Bodega que lo recibe</span>
+          <select class="inp" id="nr-bod2"></select></label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Qué se pide</h2>
+      <div id="nr-fila">
+        <label class="f"><span>Insumo</span>
+          <input class="inp" id="nr-q" autocomplete="off" role="combobox"
+                 aria-autocomplete="list" aria-expanded="false" aria-controls="nr-lista"
+                 placeholder="Escribe código o nombre…">
+          <div class="combo hide" id="nr-lista" role="listbox"></div>
+          <input type="hidden" id="nr-ins"></label>
+        <label class="f"><span>Cantidad</span>
+          <input class="inp" id="nr-cant" type="number" step="any" min="0"></label>
+        <button type="button" class="btn pri" id="nr-add">+ Añadir</button>
+      </div>
+      <div id="nr-lineas" class="tw" style="max-height:280px"></div>
+    </div>
+
+    <div class="sec">
+      <label class="f"><span>Observaciones</span>
+        <textarea class="inp" id="nr-obs" rows="2" placeholder="Para qué es, para cuándo se necesita…"></textarea></label>
+    </div>
+
+    <div class="sticky-actions">
+      <span class="mut grow">Se crea en borrador. Un administrador debe aprobarla antes de cargar nada.</span>
+      <button type="button" class="btn" data-close>Cancelar</button>
+      <button type="submit" class="btn pri" id="nr-save">Crear requisición</button>
+    </div>
+  </form>
+</div></div>
+
+<!-- ============================== DETALLE DE REQUISICIÓN ============================== -->
+<div class="ov hide" id="ov-dreq"><div class="mod" style="max-width:900px">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <div class="op" style="font-size:22px" id="dr-num"></div>
+      <div class="mut" id="dr-sub" style="margin-top:4px"></div>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <p class="mut hide" id="dr-obs" style="margin:0 0 10px"></p>
+  <p class="mut hide" id="dr-aprob" style="margin:0 0 10px"></p>
+  <div class="warn hide" id="dr-nota"></div>
+
+  <div class="tw" style="max-height:44vh"><table id="dr-tabla"></table></div>
+
+  <div class="grid" style="margin-top:14px">
+    <label class="f"><span>Factura / remisión de la llegada</span>
+      <input class="inp" id="dr-doc" placeholder="Solo para compras"></label>
+    <label class="f"><span>Proveedor</span>
+      <input class="inp" id="dr-prov" placeholder="Solo para compras"></label>
+  </div>
+
+  <div style="display:flex;gap:10px;align-items:center;margin-top:18px">
+    <button class="btn dan hide" id="dr-anular">Anular</button>
+    <div class="grow"></div>
+    <button class="btn" data-close>Cerrar</button>
+    <button class="btn pri hide" id="dr-aprobar">✓ Aprobar</button>
+    <button class="btn pri hide" id="dr-cargar">⇄ Cargar traslado</button>
+    <button class="btn pri hide" id="dr-llegada">↓ Registrar llegada</button>
+  </div>
+</div></div>
+
+<!-- ============================== CONFIGURACIÓN ============================== -->
+<div class="ov hide" id="ov-cfg"><div class="mod" style="max-width:560px">
+  <header style="display:flex;align-items:center"><h1 class="grow" style="margin:0;font-size:17px">Configuración</h1><button class="x" data-close>×</button></header>
+  <div id="c-origen" class="aviso"></div>
+  <label class="f" style="margin-bottom:12px"><span class="req">Google OAuth Client ID</span>
+    <input class="inp" id="c-cid" placeholder="1234567890-abc....apps.googleusercontent.com"></label>
+  <label class="f" style="margin-bottom:12px"><span class="req">ID de la Google Sheet</span>
+    <input class="inp" id="c-sid" placeholder="1AbC...  (el tramo entre /d/ y /edit de la URL)"></label>
+  <div class="grid g2">
+    <label class="f"><span>Nombre de la hoja</span><input class="inp" id="c-tab" value="MOVIMIENTOS"></label>
+    <label class="f"><span>Refresco automático</span><select class="inp" id="c-poll">
+      <option value="0">Desactivado</option><option value="10">10 s</option>
+      <option value="20">20 s</option><option value="30">30 s</option>
+      <option value="60" selected>60 s</option><option value="120">2 min</option></select></label>
+    <label class="f"><span>Formato de fecha</span><select class="inp" id="c-df">
+      <option value="DMY" selected>dd/mm/aaaa</option><option value="MDY">mm/dd/aaaa</option></select></label>
+    <label class="f"><span>Encabezado de ficha</span><input class="inp" id="c-brand" placeholder="Nombre de la empresa"></label>
+  </div>
+  <label class="proc hide" style="margin-top:14px"><input type="checkbox" id="c-auto" checked>
+    <span>Automatizaciones activas</span></label>
+  <p class="mut" style="margin-top:14px;font-size:12px;line-height:1.6">
+    El almacén no tiene automatizaciones: nada se mueve solo. Cada entrada, salida,
+    traslado y ajuste lo registra una persona, y queda con su nombre en el kardex.</p>
+  <p class="mut" style="margin-top:14px;font-size:12px">
+    Se guarda solo en este navegador (<code>localStorage</code>). El origen de esta página debe estar
+    autorizado en el Client ID, y la hoja compartida con permiso de edición a cada usuario.
+  </p>
+  <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
+    <button class="btn" id="c-empresa" title="Descarta lo guardado en este equipo y usa la configuración común">⟲ Usar la de la empresa</button>
+    <button class="btn" id="c-enlace" title="Copia un enlace que deja configurado cualquier celular o equipo con solo abrirlo">🔗 Enlace para otros equipos</button>
+    <button class="btn" id="c-actualizar" title="Descarta la copia guardada y vuelve a descargar la aplicación">↻ Forzar actualización</button>
+    <div class="grow"></div>
+    <button class="btn" data-close>Cancelar</button><button class="btn pri" id="c-save">Guardar</button>
+  </div>
+</div></div>
+
+<!-- ============================== AVISOS ============================== -->
+<div class="ov hide" id="ov-avisos"><div class="mod" style="max-width:640px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Novedades del almacén</h1>
+    <button class="x" id="av-cerrar">×</button>
+  </header>
+  <p class="mut" style="margin:0 0 12px">Lo que hace falta reponer y los movimientos
+    que registraron otras personas desde tu última visita.</p>
+  <div id="av-lista" class="av-lista"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:16px">
+    <button class="btn pri" id="av-cerrar2">Entendido</button>
+  </div>
+</div></div>
+
+<!-- ============================== USUARIOS ============================== -->
+<div class="ov hide" id="ov-usuarios"><div class="mod" style="max-width:840px">
+  <header style="display:flex;align-items:flex-start;gap:12px">
+    <div class="grow">
+      <h1 style="margin:0;font-size:17px">Usuarios y permisos</h1>
+      <p class="mut" style="margin:4px 0 0">Quién puede entrar y qué puede hacer.</p>
+    </div>
+    <button class="x" data-close>×</button>
+  </header>
+
+  <div class="aviso" id="us-limite"></div>
+
+  <div class="tw" style="max-height:44vh"><table id="us-tabla"></table></div>
+
+  <h2 style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);margin:18px 0 10px">
+    Añadir a alguien</h2>
+  <div class="bar" style="margin:0">
+    <label class="f wide"><span>Correo de Google</span>
+      <input class="inp" id="us-correo" type="email" placeholder="nombre@interfrigo.com.co"></label>
+    <label class="f"><span>Nombre</span><input class="inp" id="us-nombre" placeholder="Opcional"></label>
+    <label class="f"><span>Rol</span><select class="inp" id="us-rol"></select></label>
+    <button class="btn pri" id="us-add">Añadir</button>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+    <button class="btn" data-close>Cerrar</button>
+  </div>
+</div></div>
+
+<!-- ============================== INSTALAR ============================== -->
+<div class="ov hide" id="ov-instalar"><div class="mod" style="max-width:520px">
+  <header style="display:flex;align-items:center;gap:12px">
+    <h1 class="grow" style="margin:0;font-size:17px">Instalar la aplicación</h1>
+    <button class="x" data-close>×</button>
+  </header>
+  <div id="i-pasos"></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:18px">
+    <button class="btn pri" data-close>Entendido</button>
+  </div>
+</div></div>
+
+<div id="toast"></div>
+<div id="print"></div>
+
+<script src="config-app.js" onerror="void 0"></script>
+<script src="js/modulo.js"></script>
+<script src="js/modelo.js"></script>
+<script src="js/constantes.js"></script>
+<script src="js/util.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/usuarios.js"></script>
+<script src="js/inventario.js"></script>
+<script src="js/requisiciones.js"></script>
+<script src="js/inventario-app.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

@@ -132,6 +132,8 @@ async function enterApp(){
   await sincronizarValidacion();        // la hoja ofrece las mismas opciones
   await si("repairSeparadas",    n=>`${n} separada(s) pasadas a su propia columna`);
   await si("repairFechasFalsas", n=>`${n} fecha(s) de proceso restaurada(s)`);
+  // Solo puertas: las ya empezadas sin estado pasan a En proceso (una vez).
+  await si("repairEnProceso",    n=>`${n} puerta(s) empezada(s) pasada(s) a En proceso`);
   // El escalado va ANTES: subir una OP de prioridad cambia su fecha programada,
   // y si se hiciera después quedaría con la fecha de la prioridad vieja.
   await si("autoPrioridades", n=>`${n} OP subieron de prioridad por antigüedad`);

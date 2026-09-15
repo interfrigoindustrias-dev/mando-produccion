@@ -51,9 +51,8 @@ function pintarEntrega(F){
   const ptsRecientes = recientes.reduce((a,x)=>a+puntos(x.c), 0);
   const ritmo = ptsRecientes / 60;                       // puntos por dia natural
 
-  // La cola: lo que hay pedido y sin terminar. Es lo que va DELANTE del pedido
-  // nuevo, y por eso cuenta tanto como lo que se tarda en hacerlo.
-  const pend = F.filter(({c})=>!completa(c) && !despachada(c) && !anulada(c));
+  // La cola es la de planta: lo que va DELANTE de un pedido nuevo.
+  const pend = F.filter(({c})=>enColaPlanta(c));
   const ptsPend = pend.reduce((a,x)=>a+puntos(x.c), 0);
   const diasCola = ritmo > 0 ? Math.ceil(ptsPend / ritmo) : null;
 
@@ -122,18 +121,31 @@ function renderResumen(){
   pintarEntrega(F);
 
   const alm = F.filter(({c})=>completa(c) && desp(c)==="En Almacén");
-  const prod= F.filter(({c})=>enProduccion(c));
-  const stk = F.filter(({c})=>enStock(c));
+  /* «En produccion» es la cola de planta, la misma definicion en las tres
+     vistas. Antes contaba «avance menor al 100 % sin despachar ni almacenar»,
+     y por eso el resumen y planta daban cifras distintas: dejaba fuera las
+     puertas al 100 % esperando Terminada y las devueltas por calidad, y metia
+     las terminadas a medias que ya estaban en calidad. */
+  const prod= F.filter(({c})=>enColaPlanta(c));
+  const cal = F.filter(({c})=>terminada(c));
+  /* Stock: marcada STOCK y ni terminada ni despachada. «En proceso» cuenta —
+     antes una puerta empezada no tenia estado y entraba; con el flujo nuevo
+     tiene uno y se habria caido del stock sin que nadie la moviera. */
+  const stk = F.filter(({c})=>tri(c[C.STOCK])===true && ["", EN_PROCESO, "En Almacén"].includes(desp(c)));
   const abiertasTodas = F.filter(({c})=>!completa(c));
   const avg = prod.length ? Math.round(prod.reduce((a,x)=>a+progreso(x.c).pct,0)/prod.length*100) : 0;
   kpiCards("#r-inv",[
     ["En almacén",      alm.length,  "Terminadas (100%) con estado En Almacén", 0, alm],
-    ["En producción",   prod.length, "Avance <100%, sin despachar ni almacenar, no anuladas", 1, prod],
+    ["En producción",   prod.length, "Lo mismo que ve Planta: sin estado, más devueltas por calidad y vendidas sin terminar", 1, prod],
+    ["En calidad",      cal.length,  "Terminadas en planta, esperando que calidad las apruebe", 0, cal],
     ["Stock total",     stk.length,  "Marcadas STOCK, en almacén o sin estado", 0, stk],
     ["Avance promedio", avg+"%",     "Promedio de avance de las que están en producción", 0, prod],
     // El Excel suma PUNTOS de TODA fila con avance <100%, sin excluir almacén ni despacho
-    ["Puntos en prod.", sum(abiertasTodas), "Suma de PUNTOS de toda puerta con avance menor al 100%", 0, abiertasTodas],
-    ["Total en empresa",alm.length+prod.length, "En almacén + en producción"]
+    /* Se llamaba «Puntos en prod.» y quedaba al lado de «En produccion» con otra
+       cifra: esta sigue la formula del Excel —toda puerta por debajo del 100 %,
+       tambien las que estan en almacen—, que no es la cola de planta. */
+    ["Puntos sin terminar", sum(abiertasTodas), "Toda puerta con avance menor al 100 %, esté donde esté (incluye almacén). Es la cuenta del Excel, no la cola de Planta", 0, abiertasTodas],
+    ["Total en empresa",alm.length+cal.length+prod.length, "En producción + en calidad + en almacén"]
   ]);
 
   /* ---- Ritmo, antigüedad y proyección ----
@@ -225,7 +237,7 @@ function renderResumen(){
   const carga = PROCS.map(p=>[p.k, prod.filter(({c})=>tri(c[p.i])===false).length]);
   barras("#r-carga", carga, undefined, true);
 
-  const lista = activas().filter(x=>enProduccion(x.c))
+  const lista = activas().filter(x=>enColaPlanta(x.c))
     .sort((a,b)=>progreso(b.c).pct-progreso(a.c).pct);
   $("#r-nprod").textContent = `— ${lista.length} puertas`;
   tablaMini("#r-tabla", ["OP","Cliente","Tipo","Material","Medidas","Avance","Faltan","Prioridad"],
@@ -344,7 +356,7 @@ function renderAlmacen(){
     ["Total en almacén", B.length, "Terminadas y almacenadas, más las separadas", 1],
     ["En almacén", B.filter(c=>desp(c)==="En Almacén").length, "Avance 100% con estado En Almacén"],
     ["Separadas",  B.filter(separada).length, "Apartadas para un comprador (columna SEPARADA PARA)"],
-    ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
+    ["En producción", A.filter(enColaPlanta).length, "Lo mismo que ve Planta"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
   tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Separada para"],
@@ -502,19 +514,20 @@ async function guardarDespacho(r, val){
   if(antes===val) return false;
 
   const ups=[{a1:`Y${r}`, v:[[val]]}], cambios=[{campo:"Estado despacho", antes, despues:val}];
-  if(val==="Despachado" && !fmtDate(row.c[C.FDESP]) && CFG.auto!==false){
-    const h=hoy();
-    ups.push({a1:`Z${r}`, v:[[h]]});
-    cambios.push({campo:"Fecha despacho", antes:"", despues:h});
-    row.c[C.FDESP]=h;
-  }
+  // Terminado sella el fin de proceso; Despachado, la fecha de despacho.
+  const previas = {x: row.c[C.FPROC], ab: row.c[C.FINI], z: row.c[C.FDESP]};
+  const f = fechasAlCambiarEstado(row, val);
+  ups.push(...f.ups); cambios.push(...f.cambios);
   writeSeq++; row.c[C.DESP]=val;
   try{
     await writeCells(ups);
     logChanges("EDITA", row.c[C.OP], r, cambios);
     lastHash=""; setSync("","Guardado");
     return true;
-  }catch(e){ row.c[C.DESP]=antes; toast(e.message,"err"); return false; }
+  }catch(e){
+    row.c[C.DESP]=antes; row.c[C.FPROC]=previas.x; row.c[C.FINI]=previas.ab; row.c[C.FDESP]=previas.z;
+    toast(e.message,"err"); return false;
+  }
 }
 $("#a-tabla").addEventListener("change", async ev=>{
   // Selección para imprimir. No toca la hoja: solo elige qué se imprime.
