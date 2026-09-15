@@ -214,7 +214,11 @@ function render(){
 function kpis(rows){
   const all = ROWS.filter(r=>rowActive(r.c));
   const vivas = all.filter(r=>!anuladaP(r.c));
-  const abiertas = vivas.filter(r=>progreso(r.c).pct < 1);
+  /* ABIERTA ES LO QUE NADIE HA DADO POR TERMINADO, igual que en Planta,
+     Programacion y Resumen. Contar por casillas (<100%) dejaba una linea al
+     100% pero sin pulsar Terminar fuera de "abiertas" aunque siguiera siendo
+     cola de planta. */
+  const abiertas = vivas.filter(r=>!hechaEnPlantaP(r.c) && !despachadaP(r.c));
   const sum = (xs, f) => xs.reduce((s,x)=>s+(f(x.c)||0), 0);
   const porPrio = p => abiertas.filter(r=>String(r.c[C.PRIO]??"").trim().toUpperCase()===p).length;
   const avg = abiertas.length

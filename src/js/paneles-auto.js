@@ -85,16 +85,36 @@ async function tocarFechaProceso(r){
   if(!row) return;
   const c = row.c;
   if(progreso(c).ok === 0) return;                  // aun no se ha empezado
-  if(String(c[C.FINI] ?? "").trim()) return;        // ya estaba sellado
 
   const h = hoy();
+  const ups = [], log = [];
+  const sinEstado = !estadoDe(c);
+  if(sinEstado){
+    ups.push({a1: `${col("DESP")}${r}`, v: [[ESTADO.PROCESO]]});
+    log.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Estado", antes:"", despues:ESTADO.PROCESO});
+  }
+  if(!String(c[C.FINI] ?? "").trim()){
+    ups.push({a1: `${col("FINI")}${r}`, v: [[h]]});
+    log.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso", antes:"", despues:h});
+  }
+  if(!ups.length) return;
+
+  const previoEstado = c[C.DESP], previoIni = c[C.FINI];
+  if(sinEstado) c[C.DESP] = ESTADO.PROCESO;          // optimista: se ve ya
+  if(!String(c[C.FINI] ?? "").trim()) c[C.FINI] = h;
+  // El desplegable de estado de Control de OPs, si esa fila esta a la vista.
+  const sel = document.querySelector(`#tb tr[data-r="${r}"] [data-edit-estado]`);
+  if(sel && sinEstado) sel.value = ESTADO.PROCESO;
   try{
-    await writeCells([{a1: `${col("FINI")}${r}`, v: [[h]]}]);
-    logBulk([{accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso",
-              antes:"", despues:h}]);
-    c[C.FINI] = h;
+    await writeCells(ups);
+    logBulk(log);
     lastHash = "";
-  }catch(e){ console.warn("comienzo proceso:", e.message); }
+  }catch(e){
+    c[C.DESP] = previoEstado; c[C.FINI] = previoIni;
+    if(sel && sinEstado) sel.value = previoEstado || "";
+    console.warn("comienzo proceso:", e.message);
+    if(typeof toast === "function") toast("No se pudo poner EN PROCESO: " + e.message, "err");
+  }
 }
 
 /* ------------------------------ 3. fin del proceso ------------------------------ */
