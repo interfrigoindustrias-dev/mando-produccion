@@ -115,21 +115,48 @@ function pintarOrigenListas(){
 
 /** Encabezados de la hoja, tal cual. Indice 0 = A. */
 let ENCABEZADOS = [];
-/** Que paso con las columnas propias: "listas", "creadas" o el motivo del no. */
-let ESTADO_COLUMNAS = {ok:false, motivo:"sin comprobar"};
 
 const normaliza = t => String(t ?? "").trim().toUpperCase()
   .normalize("NFD").replace(/[̀-ͯ]/g, "");
+/** Que paso con las columnas propias.
+ *
+ *  Se decide COLUMNA A COLUMNA. Antes el primer tropiezo abortaba todas: si el
+ *  sitio de una columna nueva estaba ocupado, la cotizacion y la orden de
+ *  compra —que llevan semanas funcionando— dejaban de guardarse tambien.
+ *
+ *  `ok` y `motivo` siguen hablando de la cotizacion y la orden de compra, que es
+ *  lo que miraba la ficha; lo de cada columna esta en `campos`. */
+let ESTADO_COLUMNAS = {ok:false, motivo:"sin comprobar", campos:{}};
+
+/** ¿Esta columna propia tiene sitio reservado en la hoja? */
+const columnaLista = k => !!(ESTADO_COLUMNAS.campos && ESTADO_COLUMNAS.campos[k] &&
+                             ESTADO_COLUMNAS.campos[k].ok);
+
+/** Indices de las columnas propias que NO se pudieron reservar. Ahi puede haber
+ *  datos de otra cosa, y al escribir una fila entera hay que saltarlas. Antes de
+ *  comprobar la hoja se devuelven todas: lo seguro es no tocar. */
+function columnasPropiasSinReservar(){
+  return (MODELO.columnasPropias || [])
+    .filter(p => !columnaLista(p.k))
+    .map(p => C[p.k]).filter(i => i !== undefined);
+}
 
 async function resolverColumnasPropias(){
   const propias = MODELO.columnasPropias || [];
-  if(!propias.length) return (ESTADO_COLUMNAS = {ok:true, motivo:"no hay"});
+  const campos = {};
+  const cierra = () => {
+    const cot = ["COTIZ","OC"].filter(k => propias.some(p => p.k === k));
+    const mal = cot.map(k => campos[k]).find(e => e && !e.ok);
+    return (ESTADO_COLUMNAS = {ok: !mal, motivo: mal ? mal.motivo : "listas", campos});
+  };
+  if(!propias.length) return cierra();
 
   try{
     const j = await api(`/values/${encodeURIComponent(rng("A1:AZ1"))}`);
     ENCABEZADOS = ((j.values || [])[0] || []).map(v => String(v ?? ""));
   }catch(e){
-    return (ESTADO_COLUMNAS = {ok:false, motivo:"no se pudieron leer los encabezados"});
+    propias.forEach(p => campos[p.k] = {ok:false, motivo:"no se pudieron leer los encabezados"});
+    return cierra();
   }
 
   // Hasta donde llega de verdad lo escrito en la fila 1.
@@ -138,29 +165,27 @@ async function resolverColumnasPropias(){
 
   const porCrear = [];
   for(const {k, encabezado} of propias){
+    const no = motivo => { campos[k] = {ok:false, motivo}; };
     const yaEsta = ENCABEZADOS.findIndex(t => normaliza(t) === normaliza(encabezado));
     if(yaEsta >= 0){
       if(yaEsta >= NCOL){
-        return (ESTADO_COLUMNAS = {ok:false,
-          motivo:`«${encabezado}» está en la columna ${A1(yaEsta)}, más allá de donde llega la aplicación`});
+        no(`«${encabezado}» está en la columna ${A1(yaEsta)}, más allá de donde llega la aplicación`);
+        continue;
       }
       C[k] = yaEsta;                       // esta donde esta: se usa ahi
+      campos[k] = {ok:true, motivo:"ya estaba"};
       continue;
     }
     const destino = C[k];
-    if(destino === undefined || destino >= NCOL){
-      return (ESTADO_COLUMNAS = {ok:false, motivo:`no hay sitio para «${encabezado}»`});
-    }
+    if(destino === undefined || destino >= NCOL){ no(`no hay sitio para «${encabezado}»`); continue; }
     // El sitio previsto tiene que estar VACIO. Si hay algo, no se toca.
     if(normaliza(ENCABEZADOS[destino] || "")){
-      return (ESTADO_COLUMNAS = {ok:false,
-        motivo:`la columna ${A1(destino)} ya se llama «${ENCABEZADOS[destino]}»`});
+      no(`la columna ${A1(destino)} ya se llama «${ENCABEZADOS[destino]}»`); continue;
     }
     if(destino <= ultima){
       /* Hueco en medio: puede ser una columna en uso sin encabezado. Con eso
          no se juega — se avisa y se deja como esta. */
-      return (ESTADO_COLUMNAS = {ok:false,
-        motivo:`la columna ${A1(destino)} está en medio de la hoja y no tiene encabezado`});
+      no(`la columna ${A1(destino)} está en medio de la hoja y no tiene encabezado`); continue;
     }
     porCrear.push({k, encabezado, i: destino});
   }
@@ -169,23 +194,25 @@ async function resolverColumnasPropias(){
     try{
       /* La hoja puede ser mas estrecha que el modelo: la de paneles llegaba a
          la W y estas van en X e Y. Se ensancha antes de escribir, o la API
-         responde «exceeds grid limits» y los dos campos se quedan sin sitio. */
+         responde «exceeds grid limits» y los campos se quedan sin sitio. */
       if(typeof ensureCols === "function"){
         const ancho = Math.max(...porCrear.map(p => p.i)) + 1;
         const nuevas = await ensureCols(ancho);
         if(nuevas) console.info(`hoja ensanchada en ${nuevas} columna(s)`);
       }
-      for(const {encabezado, i} of porCrear){
+      for(const {k, encabezado, i} of porCrear){
         await api(`/values/${encodeURIComponent(rng(`${A1(i)}1`))}?valueInputOption=USER_ENTERED`,
           {method:"PUT", body: JSON.stringify({values: [[encabezado]]})});
         ENCABEZADOS[i] = encabezado;
+        campos[k] = {ok:true, motivo:"creada"};
       }
       toast(`Columna(s) añadida(s) a la hoja: ${porCrear.map(p=>p.encabezado).join(", ")}`, "ok");
     }catch(e){
-      return (ESTADO_COLUMNAS = {ok:false, motivo:"no se pudieron crear: " + e.message});
+      porCrear.filter(p => !campos[p.k]).forEach(p =>
+        campos[p.k] = {ok:false, motivo:"no se pudo crear: " + e.message});
     }
   }
-  return (ESTADO_COLUMNAS = {ok:true, motivo: porCrear.length ? "creadas" : "ya estaban"});
+  return cierra();
 }
 
 /** Los dos campos nuevos solo se ofrecen si tienen columna de verdad. */

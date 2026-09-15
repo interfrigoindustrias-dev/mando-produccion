@@ -36,6 +36,19 @@ const COLOR_PROC = {
    En cuanto llega a Terminado/En Almacen/Despachado/Anulada sin ser ninguna de
    esas excepciones, ya es trabajo de otra vista. */
 const enColaPlanta = c => !desp(c) || enProceso(c) || devuelta(c) || urgenteAuto(c);
+const porOpPlanta = (a, b) =>
+  String(a.c[C.OP]).localeCompare(String(b.c[C.OP]), "es", {numeric:true});
+/* Orden de ataque cuando NO hay programacion para una ficha. La urgente
+   marcada a mano va antes que la automatica: alguien la puso ahi mirando algo
+   que el sistema no sabe. La devuelta va delante de todo: ya se fabrico una
+   vez, ya ocupo su turno, y hay alguien esperandola desde antes que las demas. */
+const escalonPlanta = x => devuelta(x.c) ? -4
+  : urgenteManual(x.c) ? -3
+  : urgenteAuto(x.c) ? -2
+  : altaOlvidada(x.r, x.c) ? -1
+  : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
+const ordenNaturalPlanta = (a, b) =>
+  (escalonPlanta(a) - escalonPlanta(b)) || porOpPlanta(a, b);
 function plantaList(){
   const q=$("#p-q").value.trim().toLowerCase(), fp=$("#p-prio").value, fe=$("#p-est").value;
   const L = activas().filter(({c})=>{
@@ -71,26 +84,27 @@ function plantaList(){
     return true;
   });
   const ord=$("#p-ord").value;
-  const porOp = (a,b)=>String(a.c[C.OP]).localeCompare(String(b.c[C.OP]),"es",{numeric:true});
-  /* Orden de ataque. La urgente marcada a mano va antes que la automatica:
-     alguien la puso ahi mirando algo que el sistema no sabe. */
-  /* La devuelta va delante de todo, urgentes incluidas: ya se fabrico una vez,
-     ya ocupo su turno, y hay alguien esperandola desde antes que las demas. */
-  const prioDe = x => devuelta(x.c) ? -4
-    : urgenteManual(x.c) ? -3
-    : urgenteAuto(x.c) ? -2
-    : altaOlvidada(x.r, x.c) ? -1
-    : (PRIO_ORD[String(x.c[C.PRIO]??"").trim().toUpperCase()] ?? 3);
+  /* Lo programado manda sobre el orden natural, salvo las devueltas: una
+     puerta que calidad rechazo va delante aunque otra ya tenga dia asignado. */
+  const P = typeof mapaPrograma === "function" ? mapaPrograma() : null;
+  const progDe = x => P ? P.get(claveFicha(x.c, x.r)) || null : null;
+  const porSelector = (a,b)=>{
+    if(ord==="op") return porOpPlanta(a,b);
+    if(ord==="avance") return (progreso(a.c).pct - progreso(b.c).pct) || porOpPlanta(a,b);
+    if(ord==="pts") return ((num(b.c[C.PTS])||0) - (num(a.c[C.PTS])||0)) || porOpPlanta(a,b);
+    return ordenNaturalPlanta(a,b);
+  };
+  const porPrograma = (a,b)=>{
+    const ga = progDe(a), gb = progDe(b);
+    if(ga && !gb) return -1;
+    if(gb && !ga) return 1;
+    if(ga && gb) return (ga.fecha - gb.fecha) || (ga.orden - gb.orden) || porOpPlanta(a,b);
+    return porSelector(a,b);
+  };
   L.sort((a,b)=>{
-    if(ord==="op") return porOp(a,b);
-    if(ord==="avance") return progreso(a.c).pct - progreso(b.c).pct;
-    if(ord==="pts") return (num(b.c[C.PTS])||0) - (num(a.c[C.PTS])||0);
-    const pa=prioDe(a), pb=prioDe(b);
-    if(pa!==pb) return pa-pb;
-    /* Dentro de cada prioridad manda el numero de OP, de menor a mayor: lo que
-       se pidio antes se hace antes. La fecha de proceso decidia esto, y dejaba
-       dos OP consecutivas separadas por media lista sin motivo visible. */
-    return porOp(a,b);
+    const da = devuelta(a.c), db = devuelta(b.c);
+    if(da !== db) return da ? -1 : 1;
+    return porPrograma(a,b);
   });
   return L;
 }
@@ -109,6 +123,24 @@ const metaTarjeta = c => [
 ].filter(Boolean).join(" · ");
 
 const etiquetaPrio = p => p ? tagPrio(p) : '<span class="tag t-non">SIN PRIORIDAD</span>';
+
+/* En planta la fecha que importa es cuando se EMPEZO. La de la columna X es el
+   fin de proceso: una puerta que esta en planta todavia no la tiene. */
+const fechaTarjeta = c => {
+  const ini = fmtDate(c[C.FINI]);
+  return ini ? `Inició ${esc(ini)}` : "Sin empezar";
+};
+
+/* Si esta programada se dice, con el dia y el puesto. Sin esto se veria una
+   BAJA delante de una urgente y pareceria un fallo del orden. */
+const etiquetaProgramada = (c, r) => {
+  const g = typeof progDePuerta === "function" ? progDePuerta(c, r) : null;
+  if(!g) return "";
+  const atr = g.fecha < hoy0();
+  return `<span class="tag t-prog${atr ? " atr" : ""}" title="${
+    atr ? "Programada para un día que ya pasó" : "Puesta en este orden en Programación"}">${
+    atr ? "ATRASADA · " : ""}${esc(etiquetaDiaPrograma(g.fecha))} · #${g.orden}</span>`;
+};
 
 /* Distintivo de la tarjeta. Las dos urgencias se pintan distinto porque no se
    arreglan igual: la manual se quita cambiando la prioridad, la automatica se
@@ -155,7 +187,8 @@ function pintarTarjeta(r){
   set("cli", esc(c[C.CLI]??""));
   set("met", metaTarjeta(c));
   set("prio", etiquetaPlanta(c));
-  set("fecha", esc(fmtDate(c[C.FPROC]))||"sin fecha");
+  set("prog", etiquetaProgramada(c, r));
+  set("fecha", fechaTarjeta(c));
   set("pts", `${num(c[C.PTS])??"—"}<em>pts</em>`);
 
   // Las observaciones aparecen y desaparecen: si cambia que haya o no, la
@@ -244,7 +277,8 @@ function renderPlanta(){
         <span class="cli" data-f="cli">${esc(c[C.CLI]??"")}</span>
         <span class="met" data-f="met">${metaTarjeta(c)}</span>
         <span data-f="prio">${etiquetaPlanta(c)}</span>
-        <span class="met" data-f="fecha">${esc(fmtDate(c[C.FPROC]))||"sin fecha"}</span>
+        <span data-f="prog">${etiquetaProgramada(c, r)}</span>
+        <span class="met" data-f="fecha">${fechaTarjeta(c)}</span>
         <span class="pts" data-f="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
         <span class="av"  data-f="av">${pc}%</span>
         <button class="pterm" data-term="${r}"

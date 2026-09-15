@@ -436,3 +436,207 @@ table.lineas th:last-child, table.lineas td:last-child{ width:44px }
 
 /* La lamina que aun hay que comprar, marcada: es la fila que interesa al pedir. */
 #r-lam-tabla tr.pend td:nth-child(3){ color:var(--warn); font-weight:700 }
+
+/* ============================== PROGRAMACION ==============================
+   Todo cabe en la altura de la pantalla: arriba una sola linea con las cifras
+   y la semana; debajo el tablero, cuya altura fija ajustarAlto(). «Sin
+   programar» es la columna ancha, con el buscador dentro y las fichas en
+   rejilla; cada dia, de lunes a domingo, es una columna estrecha. Cada
+   columna se desplaza por dentro: la pagina no se mueve.                  */
+#v-programa{ display:flex; flex-direction:column; gap:8px }
+#v-programa.hide{ display:none }
+#v-programa .nota{ margin:0 }
+
+.pg-linea{ display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  background:var(--bg2); border:1px solid var(--line); border-radius:var(--r2); padding:6px 8px }
+.pg-kpis{ display:flex; gap:6px; flex-wrap:wrap; min-width:0 }
+.pg-kpi{ display:inline-flex; align-items:baseline; gap:5px; padding:4px 10px; border-radius:99px;
+  background:var(--bg3); border:1px solid var(--line); white-space:nowrap; cursor:default }
+.pg-kpi b{ font-size:15px; font-variant-numeric:tabular-nums }
+.pg-kpi i{ font-style:normal; font-size:11.5px; color:var(--tx2) }
+.pg-kpi.hi b{ color:var(--acc) }
+.pg-kpi.justo{ border-color:color-mix(in srgb,var(--warn) 60%,var(--line)) }
+.pg-kpi.justo b{ color:var(--warn) }
+.pg-kpi.mal{ border-color:color-mix(in srgb,var(--bad) 60%,var(--line)) }
+.pg-kpi.mal b{ color:var(--bad) }
+.pg-nav{ display:flex; align-items:center; gap:6px; margin-left:auto; white-space:nowrap }
+.pg-semana{ font-size:13.5px; padding:0 4px }
+
+.pg-tablero{
+  display:grid;
+  grid-template-columns:minmax(330px, 2.3fr) repeat(7, minmax(142px, 1fr));
+  gap:6px; overflow-x:auto; overflow-y:hidden; min-height:360px;
+  -webkit-overflow-scrolling:touch;
+}
+.pg-col{ display:flex; flex-direction:column; min-width:0; min-height:0;
+  background:var(--bg2); border:1px solid var(--line); border-radius:var(--r2) }
+.pg-col.pg-sin{ background:var(--bg3) }
+.pg-col.pg-hoy{ border-color:var(--acc); box-shadow:inset 0 3px 0 var(--acc) }
+.pg-col.pg-pasado{ opacity:.72 }
+.pg-col.pg-pasado .pg-cab{ background:repeating-linear-gradient(135deg,transparent 0 6px,
+  color-mix(in srgb,var(--tx3) 10%,transparent) 6px 12px) }
+.pg-col.pg-domingo{ background:color-mix(in srgb,var(--bg3) 55%,var(--bg2)) }
+.pg-col.pg-sobre{ border-color:var(--acc); background:color-mix(in srgb,var(--acc) 9%,var(--bg2)) }
+
+.pg-cab{ display:flex; flex-direction:column; gap:3px; padding:7px 8px 6px;
+  border-bottom:1px solid var(--line); flex:none }
+.pg-cab > b{ font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.pg-cab > b em{ font-style:normal; font-weight:500; color:var(--tx2); margin-left:6px; font-size:11.5px }
+.pg-cab > span{ font-size:11px; color:var(--tx2); white-space:nowrap }
+.pg-q{ height:32px !important; padding:5px 9px !important; font-size:13px; width:100% }
+.pg-carga{ display:block; height:4px; border-radius:9px; background:var(--bg3); overflow:hidden }
+.pg-carga.vacia{ background:transparent }
+.pg-carga em{ display:block; height:100%; background:var(--ok); border-radius:9px }
+.pg-carga.justo em{ background:var(--warn) }
+.pg-carga.sobre em{ background:var(--bad) }
+
+.pg-scroll{ flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:6px }
+.pg-lista{ display:flex; flex-direction:column; gap:5px; min-height:40px }
+.pg-col.pg-dia .pg-lista{ flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:5px }
+.pg-rejilla{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  gap:5px; align-content:start }
+.pg-atras{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:5px; margin-bottom:6px }
+.pg-sub{ margin:4px 2px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+  color:var(--tx2) }
+.pg-sub.mal{ color:var(--bad) }
+.pg-vacio{ margin:auto; color:var(--tx3); font-size:11.5px; padding:14px 4px; text-align:center;
+  grid-column:1 / -1 }
+
+.pg-card{
+  --tone:#7c8aa0;
+  background:var(--bg2); border:1px solid var(--line); border-left:4px solid var(--tone);
+  border-radius:8px; padding:5px 7px; display:flex; flex-direction:column; gap:2px;
+  box-shadow:0 1px 2px rgba(0,0,0,.06); outline:none; flex:none; min-width:0;
+}
+.pg-card.movible{ cursor:grab; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none }
+.pg-card:focus-visible{ box-shadow:0 0 0 2px var(--acc) }
+.pg-card.prio-URGENTE{ --tone:#e0392c; background:color-mix(in srgb,#e0392c 8%,var(--bg2)) }
+.pg-card.prio-ALTA{ --tone:#e0392c }
+.pg-card.prio-MEDIA{ --tone:#e0980f }
+.pg-card.prio-BAJA{ --tone:#17a05e }
+.pg-card.atrasada{ box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--bad) 55%,transparent) }
+.pg-card.atrasada .pg-esp{ color:var(--bad); font-weight:700 }
+.pg-card.pg-apagada{ opacity:.22 }
+.pg-top{ display:flex; align-items:center; gap:4px; min-width:0 }
+.pg-op{ font-size:15px; font-weight:800; letter-spacing:-.01em; white-space:nowrap }
+/* En las columnas estrechas de los dias no cabe el desplegable: la prioridad
+   se lee, y se cambia desde Sin programar o desde Control de OPs. */
+.pg-ptxt{ display:none; font-size:10px; font-weight:800; white-space:nowrap }
+.pg-ptxt.t-urgente, .pg-ptxt.t-alta{ color:var(--bad) }
+.pg-ptxt.t-media{ color:var(--warn) }
+.pg-ptxt.t-baja{ color:var(--ok) }
+.pg-dia .pg-top select{ display:none }
+.pg-dia .pg-ptxt{ display:inline }
+.pg-top select{ font-size:10px; padding:0 2px; max-width:72px; min-width:0 }
+.pg-esps{ margin-left:auto; display:flex; gap:2px; flex-wrap:nowrap; overflow:hidden }
+.pg-esps i{ font-style:normal; font-size:10px; font-weight:700; padding:0 5px; border-radius:99px;
+  border:1px solid var(--line2); white-space:nowrap }
+.pg-cli{ font-weight:700; font-size:11.5px; line-height:1.2; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis }
+.pg-nums{ display:flex; gap:7px; font-size:10.5px; color:var(--tx2); white-space:nowrap; overflow:hidden }
+.pg-de{ font-size:10px; font-weight:700; color:var(--tx2); padding:0 4px; border-radius:4px; background:var(--bg3) }
+.pg-prod{ font-size:10.5px; color:var(--tx2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.pg-prod b{ color:var(--tx) }
+.pg-caras{ font-size:10px; color:var(--tx3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.pg-m2{ font-size:10.5px; white-space:nowrap }
+.pg-m2 b{ color:var(--tx); font-variant-numeric:tabular-nums }
+.pg-nums b{ color:var(--tx); font-variant-numeric:tabular-nums }
+.pg-pie{ display:flex; align-items:center; gap:5px; font-size:10px; color:var(--tx2) }
+.pg-pie .pbar{ flex:0 0 34px }
+.pg-pie .pg-esp{ margin-left:auto; white-space:nowrap }
+
+/* Mientras se arrastra */
+body.pg-arrastrando, body.pg-arrastrando *{ cursor:grabbing !important; user-select:none }
+.pg-ghost{ position:fixed; left:0; top:0; z-index:1000; pointer-events:none; margin:0;
+  box-shadow:0 14px 34px rgba(0,0,0,.28); opacity:.96 }
+.pg-origen{ display:none !important }
+.pg-hueco{ border:2px dashed var(--acc); border-radius:8px; min-height:44px;
+  background:color-mix(in srgb,var(--acc) 8%,transparent); flex:none }
+.pg-hueco.pg-no{ border-color:var(--line2); background:transparent }
+
+/* Planta: donde empieza lo programado y donde el resto */
+.pl-bloque{ margin:14px 0 6px; padding:8px 12px; border-radius:var(--r);
+  font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.03em;
+  background:var(--bg3); color:var(--tx2) }
+.pl-bloque.prog{ background:color-mix(in srgb,var(--acc) 16%,var(--bg2)); color:var(--acc) }
+.pl-bloque span{ font-weight:500; text-transform:none; letter-spacing:0; margin-left:8px; font-size:12px }
+.pc-prog{ font-size:12px; font-weight:700; padding:2px 8px; border-radius:99px;
+  background:color-mix(in srgb,var(--acc) 15%,transparent); color:var(--acc) }
+.pc-prog.atrasada{ background:color-mix(in srgb,var(--bad) 15%,transparent); color:var(--bad) }
+
+/* Resumen: carga por dia */
+.mini .sobre{ color:var(--bad); font-weight:800 }
+.mini .justo{ color:var(--warn); font-weight:700 }
+
+/* Tablet y movil: el tablero se desliza de lado; la columna ancha sigue
+   siendo la ancha. */
+@media (max-width: 1180px){
+  .pg-tablero{ grid-template-columns:min(88vw, 560px) repeat(7, minmax(170px, 42vw));
+    scroll-snap-type:x proximity }
+  .pg-col{ scroll-snap-align:start }
+  .pg-nav{ margin-left:0 }
+}
+@media (max-width: 620px){
+  .pg-tablero{ grid-template-columns:88vw repeat(7, 70vw) }
+  .pg-kpi i{ font-size:10.5px }
+}
+
+/* ============================== PROGRAMACION IMPRESA ==============================
+   Hoja carta VERTICAL, blanco y negro, lo que falta por programar. Cada OP es
+   un bloque que no se parte entre hojas; su numero y cliente ocupan la altura
+   de sus lineas. Todo cabe en el ancho util de la hoja (193,9 mm).        */
+.pg-print{ font:8.5pt/1.25 Arial, Helvetica, sans-serif; color:#000; background:#fff;
+  width:100%; box-sizing:border-box }
+/* Fuera de la aplicacion: nada de sus colores de tabla ni de cabecera. */
+.pg-print *{ color:#000 !important; background:transparent; box-shadow:none; text-shadow:none;
+  box-sizing:border-box }
+.pg-print .c-logo{ background:#000 !important; width:32mm; height:8mm }
+
+.pg-print .pp-cab{ display:flex; align-items:center; gap:5mm; width:100%;
+  border-bottom:.7mm solid #000; padding-bottom:2.2mm }
+.pg-print .pp-tit{ display:flex; flex-direction:column; min-width:0; flex:1 }
+.pg-print .pp-tit b{ font-size:14pt; letter-spacing:-.01em }
+.pg-print .pp-tit span{ font-size:8.5pt; color:#333 !important }
+.pg-print .pp-meta{ flex:none; display:flex; flex-direction:column; align-items:flex-end;
+  font-size:7.5pt; line-height:1.35; white-space:nowrap }
+
+.pg-print .pp-cifras{ display:flex; gap:7mm; padding:2mm 1mm 2.5mm; font-size:9pt }
+.pg-print .pp-cifras b{ font-size:11pt; font-variant-numeric:tabular-nums }
+
+.pg-print table{ width:100%; border-collapse:collapse; table-layout:fixed }
+.pg-print col.ppc-op{ width:20mm }
+.pg-print col.ppc-cli{ width:40mm }
+.pg-print col.ppc-cant{ width:11mm }
+.pg-print col.ppc-largo{ width:12mm }
+.pg-print col.ppc-prod{ width:25mm }
+.pg-print col.ppc-cara{ width:34mm }
+.pg-print col.ppc-m2{ width:17.9mm }
+.pg-print thead{ display:table-header-group }        /* se repite en cada hoja */
+.pg-print tfoot{ display:table-row-group }           /* el total, solo al final */
+.pg-print th{ background:#000 !important; color:#fff !important; font-size:7.5pt; font-weight:700;
+  text-transform:uppercase; letter-spacing:.04em; text-align:left; padding:1.6mm 1.6mm;
+  border:.25mm solid #000 !important }
+.pg-print td{ padding:1.2mm 1.6mm; height:6mm; vertical-align:middle; font-size:8.5pt;
+  border-bottom:.2mm solid #9a9a9a !important; border-left:0; border-right:0; border-top:0;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; position:static;
+  text-transform:none; letter-spacing:0 }
+.pg-print .n{ text-align:right; font-variant-numeric:tabular-nums }
+
+/* El bloque de cada OP */
+.pg-print tbody.pp-bloque{ break-inside:avoid; page-break-inside:avoid }
+.pg-print tbody.pp-bloque tr:first-child td{ border-top:.45mm solid #000 !important }
+.pg-print tbody.pp-bloque.par td{ background:#f1f1f1 !important }
+.pg-print td.pp-cli{ vertical-align:top; white-space:normal;
+  border-left:.2mm solid #9a9a9a !important; border-right:.2mm solid #9a9a9a !important; padding-top:1.5mm }
+.pg-print td.pp-opc{ white-space:nowrap }
+.pg-print td.pp-opc b{ font-size:9.5pt }
+.pg-print td.pp-cli small{ display:block; font-size:6.8pt; margin-top:.6mm; color:#333 !important }
+.pg-print td.pp-cli em{ display:inline-block; font-style:normal; font-size:6.5pt; font-weight:700;
+  border:.25mm solid #000 !important; border-radius:1mm; padding:0 1mm; margin-top:.8mm }
+.pg-print td.pp-cli{ font-weight:700; font-size:8.5pt; line-height:1.2 }
+.pg-print td.pp-cli small{ font-weight:400 }
+.pg-print td.pp-prod{ font-weight:700 }
+.pg-print .pp-nada{ text-align:center; padding:6mm }
+
+.pg-print tfoot td{ border-top:.7mm solid #000 !important; border-bottom:0 !important;
+  font-weight:700; font-size:9pt; padding-top:2mm; background:transparent !important }

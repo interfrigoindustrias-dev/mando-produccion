@@ -60,10 +60,15 @@ function textoEspera(dias){
 }
 
 function renderPlanta(){
-  const orden = secuenciaPaneles(plantaPendientes());
+  /* Primero lo programado, en el orden de la programacion; despues el resto
+     con la secuencia de siempre. Sin la pestaña de programacion —o sin sus
+     columnas en la hoja— es exactamente la secuencia de antes. */
+  const orden = typeof ordenPlanta === "function"
+    ? ordenPlanta(plantaPendientes()) : secuenciaPaneles(plantaPendientes());
 
   // Firma de lo dibujado: si nada cambio, no se toca el DOM.
   const firma = orden.map(x=>[x.r, x.prioridad, x.espesor,
+    x.prog ? iso(x.prog.fecha)+"#"+x.prog.orden : "",
     PROCS.map(p=>tri(x.c[p.i])).join("")].join("|")).join(";");
   if(firma === plantaDibujada){ pintarResumenPlanta(orden); return; }
   plantaDibujada = firma;
@@ -71,8 +76,25 @@ function renderPlanta(){
   const lista = $("#p-lista");
   let espesorAnterior = null, tanda = 0, nTanda = 0;
   const trozos = [];
+  const hayProgramadas = orden.some(x=>x.prog);
+  let bloque = null;
 
   orden.forEach((x, i)=>{
+    /* Donde empieza lo programado y donde empieza el resto. Se dice, porque
+       el orden cambia de regla en ese punto y quien mira la cola lo tiene que
+       saber: arriba manda una persona, abajo manda la secuencia. */
+    const este = x.prog ? "prog" : "resto";
+    if(hayProgramadas && este !== bloque){
+      if(espesorAnterior !== null){
+        trozos.push(`<div class="tanda-fin">Fin de la tanda de <b>${esc(espesorAnterior)}</b>
+          · ${nTanda} línea(s) · <b>${n2(tanda)}</b> m²</div>`);
+      }
+      trozos.push(este === "prog"
+        ? `<div class="pl-bloque prog">📅 Programación de la producción <span>en el orden que se fijó</span></div>`
+        : `<div class="pl-bloque">Sin programar <span>orden de siempre: prioridad y tandas por espesor</span></div>`);
+      bloque = este;
+      espesorAnterior = null;
+    }
     // Cada cambio de espesor es una parada de maquina: se anuncia, y se cierra
     // la tanda anterior diciendo cuanto se fabrico sin tocar el montaje.
     if(x.espesor !== espesorAnterior){
@@ -106,6 +128,8 @@ function renderPlanta(){
           <span data-f="prio">${etiquetaPrio(x.prioridad)}</span>
           ${x.adelantada ? `<span class="pc-adel" title="Lleva ${x.sinTocar} días sin tocarse: se adelanta al resto de las ALTA">adelantada</span>` : ""}
           <span class="pc-esp" title="Espesor por el que se agrupa">${esc(x.espesor)}</span>
+          ${x.prog ? `<span class="pc-prog ${x.prog.fecha < new Date(new Date().setHours(0,0,0,0)) ? "atrasada" : ""}"
+            title="Programada en la pestaña Programación">📅 ${esc(etDia(x.prog.fecha))} · puesto ${x.prog.orden === 9999 ? "—" : x.prog.orden}</span>` : ""}
         </div>
         <div class="pc-cli" data-f="cli">${esc(c[C.CLI]??"")}</div>
         <div class="pc-met" data-f="met">${esc(c[C.PROD]??"")} ·
@@ -159,6 +183,8 @@ function pintarResumenPlanta(orden){
   const urgentes = orden.filter(x=>x.prioridad === "URGENTE").length;
   kpiCards("#p-kpis", [
     ["Líneas en cola", orden.length, "En el orden en que conviene fabricarlas"],
+    ["Programadas", orden.filter(x=>x.prog).length,
+     "Van primero, en el orden que se fijó en Programación"],
     ["Paneles", n0(paneles), ""],
     ["m² pendientes", n2(m2), ""],
     ["kg de poliuretano", n2(kg), "Lo que hará falta para toda la cola"],
@@ -235,14 +261,15 @@ $("#p-lista").addEventListener("click", async ev=>{
   try{
     await ponerEstado(r, ESTADO.TERMINADO);
     toast(`Línea ${row.c[C.OP]} terminada`, "ok");
-    plantaDibujada = "";                      // sale de la cola: hay que rehacerla
-    renderPlanta();
-    /* Terminar es lo que hace que la linea cuente como fabricada, asi que las
-       cifras del resumen cambian en este momento y no cuando alguien se acuerde
-       de mirarlas. Se recalculan ya. */
-    if(typeof renderResumen === "function" && $("#v-resumen")) renderResumen();
-    if(typeof renderAlmacen === "function" && $("#a-lista")) renderAlmacen();
-  }catch(e){ /* ponerEstado ya lo dijo y deshizo */ }
+  }catch(e){ return; }                        // ponerEstado ya lo dijo y deshizo
+
+  /* Terminar es lo que hace que la linea cuente como fabricada: en este momento
+     cambian TODAS las cifras que cuelgan del estado, no cuando alguien se
+     acuerde de abrir el Resumen. Va FUERA del try de arriba a proposito: un
+     fallo al pintar no es un fallo al guardar, y metido dentro el catch se lo
+     tragaba y la pantalla se quedaba igual y en silencio. */
+  plantaDibujada = "";                        // sale de la cola: hay que rehacerla
+  recalcularTableros();
 });
 
 

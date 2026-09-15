@@ -74,44 +74,105 @@ function diasSinTocar(r, c){
    se los pisa. */
 const COLUMNAS_NUEVAS = [
   {a1:"AN1", t:"COTIZACION"},
-  {a1:"AO1", t:"ORDEN DE COMPRA"}
+  {a1:"AO1", t:"ORDEN DE COMPRA"},
+  /* La programacion de la produccion: que dia se empieza cada OP y en que
+     puesto de ese dia. Van en la hoja y no en el navegador porque las lee
+     planta desde otra pantalla. */
+  {a1:"AP1", t:"ORDEN PROGRAMADO"},
+  {a1:"AQ1", t:"FECHA PROGRAMADA"}
 ];
+
+/* Si la programacion puede guardar, y si no, por que. Lo lee programa.js para
+   decirlo arriba del tablero en vez de fallar al soltar una ficha. */
+let PROG_COLUMNAS = {ok:false, motivo:"todavía no se ha comprobado la hoja"};
+
+/* Columnas propias que no se han podido confirmar. tramosFila (modelo.js) las
+   salta al crear una fila: si AP o AQ tuvieran datos de otra cosa, escribirles
+   la cadena vacia de una ficha nueva los borraria. Mientras no se confirmen
+   —tambien antes de comprobarlas, al arrancar— no se tocan. Mismo nombre y
+   contrato que en paneles; las dos paginas no se cargan juntas. */
+function columnasPropiasSinReservar(){
+  const out = [];
+  if(!PROG_COLUMNAS.ok) out.push(C.PROG_ORDEN, C.PROG_FECHA);
+  return out.filter(i => i !== undefined);
+}
+
+const idxA1 = a1 => {                          // "AN1" -> indice 0-based
+  const L = a1.replace(/\d+$/, "");
+  return [...L].reduce((n,ch)=>n*26 + (ch.charCodeAt(0)-64), 0) - 1;
+};
+const normaEncabezado = t => String(t ?? "").trim().toUpperCase()
+  .normalize("NFD").replace(/[̀-ͯ]/g, "");
+
 async function migrarColumnas(){
-  if(CFG.auto===false) return 0;
+  /* Comprobar los encabezados no es una automatizacion: se hace siempre. Solo
+     CREAR columnas depende de que las automatizaciones esten encendidas. */
+  const crear = CFG.auto !== false;
 
   /* Primero la rejilla. La hoja llegaba hasta AM —39 columnas— y escribir en
      AN o AO no es «celda vacia», es fuera del tablero: la API rechaza el rango
      entero. Como cada guardado escribe la fila completa de A a la ultima
      columna, sin esto NINGUN guardado funcionaria. */
-  try{
-    const gid = await ensureGid();
-    if(gid !== null){
-      const meta = await api("?fields=sheets.properties(title,sheetId,gridProperties.columnCount)");
-      const sh = (meta.sheets||[]).find(x=>x.properties.title===CFG.tab);
-      const hay = sh && sh.properties.gridProperties ? sh.properties.gridProperties.columnCount : 0;
-      if(hay && hay < NCOL){
-        await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:[
-          {appendDimension:{sheetId:gid, dimension:"COLUMNS", length: NCOL - hay}}]})});
+  if(crear){
+    try{
+      const gid = await ensureGid();
+      if(gid !== null){
+        const meta = await api("?fields=sheets.properties(title,sheetId,gridProperties.columnCount)");
+        const sh = (meta.sheets||[]).find(x=>x.properties.title===CFG.tab);
+        const hay = sh && sh.properties.gridProperties ? sh.properties.gridProperties.columnCount : 0;
+        if(hay && hay < NCOL){
+          await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:[
+            {appendDimension:{sheetId:gid, dimension:"COLUMNS", length: NCOL - hay}}]})});
+        }
       }
+    }catch(e){
+      console.warn("ampliar columnas:", e.message);
+      PROG_COLUMNAS = {ok:false, motivo:"no se pudo ampliar la hoja: " + e.message};
+      return 0;
     }
-  }catch(e){ console.warn("ampliar columnas:", e.message); return 0; }
+  }
 
   let cab;
   try{
-    const res = await api(`/values/${encodeURIComponent(CFG.tab)}!A1:AO1`);
+    const res = await api(`/values/${encodeURIComponent(CFG.tab)}!A1:${LAST_COL}1`);
     cab = (res.values && res.values[0]) || [];
-  }catch(e){ console.warn("migrar columnas:", e.message); return 0; }
+  }catch(e){
+    console.warn("migrar columnas:", e.message);
+    PROG_COLUMNAS = {ok:false, motivo:"no se pudo leer la fila de encabezados"};
+    return 0;
+  }
 
-  const idx = a1 => {                          // "AN1" -> indice 0-based
-    const L = a1.replace(/\d+$/, "");
-    return [...L].reduce((n,ch)=>n*26 + (ch.charCodeAt(0)-64), 0) - 1;
-  };
-  const faltan = COLUMNAS_NUEVAS.filter(x => !String(cab[idx(x.a1)] ?? "").trim());
-  if(!faltan.length) return 0;
-  try{
-    await writeCells(faltan.map(x=>({a1:x.a1, v:[[x.t]]})));
-    return faltan.length;
-  }catch(e){ console.warn("migrar columnas:", e.message); return 0; }
+  /* Solo se escribe donde no hay NADA. Si alguien ya puso otra cosa en esa
+     celda —o la llamo distinto— no se le pisa: esa columna puede tener datos. */
+  const faltan = COLUMNAS_NUEVAS.filter(x => idxA1(x.a1) < NCOL && !String(cab[idxA1(x.a1)] ?? "").trim());
+  let creadas = 0;
+  if(faltan.length && crear){
+    try{
+      await writeCells(faltan.map(x=>({a1:x.a1, v:[[x.t]]})));
+      faltan.forEach(x => { cab[idxA1(x.a1)] = x.t; });
+      creadas = faltan.length;
+    }catch(e){ console.warn("migrar columnas:", e.message); }
+  }
+
+  /* La programacion solo se da por lista si sus DOS columnas dicen exactamente
+     lo que tienen que decir. Leer AP y AQ a ciegas seria leer lo que otro haya
+     puesto ahi como si fueran dias y puestos. */
+  const prog = COLUMNAS_NUEVAS.filter(x => /^A[PQ]1$/.test(x.a1));
+  const mal = prog.find(x => normaEncabezado(cab[idxA1(x.a1)]) !== normaEncabezado(x.t));
+  if(C.PROG_ORDEN === undefined || C.PROG_FECHA === undefined){
+    PROG_COLUMNAS = {ok:false, motivo:"esta versión de la aplicación todavía no conoce esas columnas"};
+  }else if(mal){
+    const hay = String(cab[idxA1(mal.a1)] ?? "").trim();
+    PROG_COLUMNAS = {ok:false, motivo: hay
+      ? `la columna ${mal.a1.replace(/\d+$/,"")} ya se llama «${hay}»`
+      : `falta la columna ${mal.a1.replace(/\d+$/,"")} y tu acceso no puede crearla`};
+  }else{
+    PROG_COLUMNAS = {ok:true, motivo:""};
+  }
+  // Si el tablero esta abierto, que diga ya si se puede guardar o no.
+  const vp = document.getElementById("v-programa");
+  if(vp && !vp.classList.contains("hide") && typeof renderPrograma === "function") renderPrograma();
+  return creadas;
 }
 
 /** Fecha de inicio de producción: la columna AB de la hoja.

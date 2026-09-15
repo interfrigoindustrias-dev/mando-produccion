@@ -92,6 +92,32 @@ function pintarEntrega(F){
     </div>`;
 }
 
+/** El estado de la programacion, en el resumen. Lo que interesa desde aqui no
+ *  es mover fichas sino saber si la planta tiene trabajo decidido: cuanto hay
+ *  programado, cuanto no, y si la semana cabe en la meta. */
+function pintarProgramaResumen(){
+  const caja = $("#r-prog"); if(!caja) return;
+  if(typeof metricasPrograma !== "function"){ caja.innerHTML = ""; return; }
+  const M = metricasPrograma();
+  const n = v => (Math.round((v || 0) * 10) / 10).toLocaleString("es-CO");
+  if(!M.listo){
+    kpiCards("#r-prog", [["Programación", "—",
+      "Todavía no se puede guardar: faltan las columnas en la hoja. Ábrela en la pestaña Programación para ver por qué"]]);
+    return;
+  }
+  const carga = M.semana.cap ? Math.round(M.semana.pts / M.semana.cap * 100) : null;
+  kpiCards("#r-prog", [
+    ["Programadas",   `${M.programadas.n} · ${n(M.programadas.pts)} pts`, "OP con día y puesto: planta las hace primero"],
+    ["Sin programar", `${M.sinProgramar.n} · ${n(M.sinProgramar.pts)} pts`,
+     "Planta las hace después, con el orden de siempre", M.sinProgramar.n > 0],
+    ["Atrasadas",     M.atrasadas.n, "Programadas para un día que ya pasó y todavía en proceso", M.atrasadas.n > 0],
+    ["Para hoy",      `${M.hoy.n} · ${n(M.hoy.pts)} pts`, "Lo programado para empezar hoy"],
+    ["Carga de la semana", carga === null ? "—" : carga + " %",
+     `${n(M.semana.pts)} de ${n(M.semana.cap)} puntos de meta en lo que queda de semana`,
+     carga !== null && carga > 100]
+  ]);
+}
+
 function renderResumen(){
   const dia = toDate($("#r-dia").value) || new Date();
   const l = lunes(dia), d7 = new Date(l); d7.setDate(d7.getDate()+6);
@@ -119,6 +145,7 @@ function renderResumen(){
   ]);
 
   pintarEntrega(F);
+  pintarProgramaResumen();
 
   const alm = F.filter(({c})=>completa(c) && desp(c)==="En Almacén");
   /* «En produccion» es la cola de planta, la misma definicion en las tres

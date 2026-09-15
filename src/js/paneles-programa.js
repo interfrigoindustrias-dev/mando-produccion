@@ -90,7 +90,7 @@ function fichasAbiertas(){
       avance: progreso(c).pct,
       dias: diasEnCola(c),
       prog: progDeLinea(c),
-      puerta: puertaDe(c),
+      puerta: typeof puertaDe === "function" ? puertaDe(c) : "",
       nOp: porOp.get(opk),              // lineas abiertas de su OP
       iOp: vistas.get(opk)              // cual de ellas es
     };

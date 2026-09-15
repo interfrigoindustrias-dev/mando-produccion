@@ -166,7 +166,7 @@ $("#tb").addEventListener("change", async ev=>{
   if(e){
     // El estado no es un campo mas: pasar a DESPACHADO sella tambien la fecha.
     try{ await ponerEstado(+e.dataset.editEstado, e.value); }
-    finally{ render(); }
+    finally{ recalcularTableros(); }
   }
 });
 

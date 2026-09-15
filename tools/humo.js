@@ -10,7 +10,7 @@ const path = require("path");
 const vm = require("vm");
 const { JSDOM } = require("jsdom");
 
-const RAIZ = "C:\\Users\\User\\Proyectos\\mando-produccion\\src";
+const RAIZ = path.resolve(__dirname, "..", "src");
 const SHEET = "HOJA_DE_PRUEBA";
 
 /* ------------------------------ hoja falsa ------------------------------ */
@@ -354,9 +354,10 @@ function comprueba(nombre, cond, detalle){
       $$("#f-filtros .filtro-btn span").map(e=>e.textContent).join(" · "));
 
   console.log("\n=== las columnas que se escriben son las de PANELES ===");
+  // Y = cotizacion/OC (siempre existieron); Z y AA son las de Programacion.
   const fuera = ESCRITURAS.filter(e => e.tab === "PANEL")
-    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 24; });
-  comprueba("nada se escribe más allá de la columna Y", !fuera.length,
+    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 26; });
+  comprueba("nada se escribe más allá de la columna AA", !fuera.length,
     fuera.map(e=>e.a1).join(", "));
   const valPanel = VALIDACIONES.filter(v => v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
   const cols = [...new Set(valPanel.map(v=>v.startColumnIndex))].sort((a,b)=>a-b);
@@ -811,7 +812,7 @@ function comprueba(nombre, cond, detalle){
     "columnas: " + [...new Set(casillas.map(v=>v.startColumnIndex))].join(", "));
 
   console.log("\n=== las demás vistas, entrando por las pestañas ===");
-  for(const vista of ["planta","resumen","almacen"]){
+  for(const vista of ["programa","planta","resumen","almacen"]){
     const antes = errConsola.length;
     const tab = $$(".tab").find(t => t.dataset.view === vista);
     comprueba(`existe la pestaña ${vista}`, !!tab);
@@ -858,6 +859,20 @@ function comprueba(nombre, cond, detalle){
     !p.w.document.getElementById("app").classList.contains("hide"));
   comprueba("puertas pinta su tabla",
     p.w.document.querySelectorAll("#tb tr").length > 0);
+  {
+    const antes = p.errConsola.length;
+    const tab = [...p.w.document.querySelectorAll(".tab")].find(t => t.dataset.view === "programa");
+    comprueba("puertas tiene la pestaña programa", !!tab);
+    if(tab){
+      let reventó = null;
+      try{ tab.dispatchEvent(new p.w.MouseEvent("click", {bubbles:true})); }
+      catch(e){ reventó = e.message; }
+      await new Promise(r => setTimeout(r, 250));
+      comprueba("programa (puertas) se pinta sin reventar",
+        !reventó && p.errConsola.length === antes,
+        reventó || p.errConsola.slice(antes).join(" | "));
+    }
+  }
   const valPuerta = VALIDACIONES.filter(v => v.tipo === "ONE_OF_LIST")
     .map(v=>v.startColumnIndex).filter(v=>v!==undefined);
   comprueba("puertas sigue escribiendo sus desplegables en M, Y y AM",

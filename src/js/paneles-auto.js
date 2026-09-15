@@ -22,6 +22,10 @@ const ESTADO = {PROCESO:"EN PROCESO", TERMINADO:"TERMINADO",
 const estadoDe = c => String(c[C.DESP] ?? "").trim().toUpperCase();
 const anuladaP = c => estadoDe(c) === ESTADO.ANULADA;
 const despachadaP = c => estadoDe(c) === ESTADO.DESPACHADO;
+/* Terminada en planta: ya no es cola de fabricacion, aunque calidad/almacen
+   sigan teniendo trabajo con ella. La usa Programacion para saber que ya no
+   hay que ofrecerla ni contarla como abierta. */
+const hechaEnPlantaP = c => estadoDe(c) === ESTADO.TERMINADO;
 
 /* ------------------------------ 1. escalado de prioridad ------------------------------
    POR ESCALONES, NO DE UN SALTO. BAJA espera 8 dias sin tocarse y se vuelve
@@ -142,5 +146,29 @@ async function ponerEstado(r, valor){
     c[C.DESP] = antes; c[C.FFIN] = previaFin; c[C.FDESP] = previaDesp;
     toast(e.message, "err");
     throw e;
+  }
+}
+
+/** Recalcula todos los tableros que dependen del estado de una linea, y si
+ *  alguno falla lo dice en vez de dejar la pantalla a medio actualizar en
+ *  silencio. Cada vista se salta si no esta en esta pagina (su ancla no
+ *  existe) o si su funcion de pintado aun no cargo. */
+function recalcularTableros(){
+  const tableros = [
+    ["la programación",   "renderPrograma","g-tablero"],
+    ["la cola de planta", "renderPlanta",  "p-lista"],
+    ["el resumen",        "renderResumen", "v-resumen"],
+    ["el almacén",        "renderAlmacen", "a-lista"],
+    ["la tabla",          "render",        "tb"]
+  ];
+  for(const [nombre, fn, ancla] of tableros){
+    if(!document.getElementById(ancla)) continue;
+    if(typeof window[fn] !== "function") continue;
+    try{ window[fn](); }
+    catch(e){
+      console.error("recalcular/"+fn, e);
+      if(typeof toast === "function")
+        toast("No se pudo recalcular "+nombre+": "+e.message, "err");
+    }
   }
 }

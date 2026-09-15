@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/componentes.css">
 <link rel="stylesheet" href="css/dashboards.css">
 <link rel="stylesheet" href="css/planta.css">
+<link rel="stylesheet" href="css/programa.css">
 <link rel="stylesheet" href="css/impresion.css">
 <link rel="stylesheet" href="css/movil.css">
 </head>
@@ -54,6 +55,7 @@
   </div>
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" data-view="control" aria-selected="true">Control de OPs</button>
+    <button class="tab" role="tab" data-view="programa" aria-selected="false">Programación</button>
     <button class="tab" role="tab" data-view="planta" aria-selected="false">Planta</button>
     <button class="tab" role="tab" data-view="resumen" aria-selected="false">Resumen</button>
     <button class="tab" role="tab" data-view="calidad" aria-selected="false">Calidad</button>
@@ -155,6 +157,36 @@
     <p class="mut hide" id="q-empty" style="padding:26px 2px">Nada pendiente de revisar. </p>
   </section>
 
+  <!-- ---------- PROGRAMACIÓN ---------- -->
+  <section id="v-programa" class="hide">
+    <div class="pg-barra">
+      <div class="pg-nav">
+        <button class="btn sm" id="pg-prev" title="Semana anterior" aria-label="Semana anterior">‹</button>
+        <button class="btn sm" id="pg-hoy">Hoy</button>
+        <button class="btn sm" id="pg-next" title="Semana siguiente" aria-label="Semana siguiente">›</button>
+        <span class="pg-semana" id="pg-semana"></span>
+        <span class="pg-despues hide" id="pg-despues"></span>
+      </div>
+      <div class="kpis pg-kpis" id="pg-kpis"></div>
+      <div class="pg-meta" title="Se guarda en la pestaña META de la hoja">
+        <span>Meta</span>
+        <input class="inp" id="pg-meta-pts" type="number" min="1" step="any" inputmode="decimal" aria-label="Puntos de la meta">
+        <span>pts en</span>
+        <input class="inp" id="pg-meta-dias" type="number" min="1" max="90" step="1" inputmode="numeric" aria-label="Días hábiles de la meta">
+        <span>días</span>
+        <b id="pg-meta-dia"></b>
+        <button class="btn pri sm hide" id="pg-meta-guardar">Guardar</button>
+      </div>
+      <div class="pg-acc">
+        <button class="btn sm" id="pg-proponer"
+          title="Mete lo que no tiene día en los próximos días hábiles, hasta llenar la meta de cada uno. Lo ya programado no se mueve.">Proponer</button>
+        <button class="btn sm" id="pg-print" title="Hoja carta con las OP sin programar, para decidir en papel">🖨 Imprimir</button>
+      </div>
+    </div>
+    <div id="pg-aviso" class="aviso hide"></div>
+    <div id="pg-tablero" class="pg-tablero"></div>
+  </section>
+
   <!-- ---------- PLANTA (tablet del jefe de planta) ---------- -->
   <section id="v-planta" class="hide">
     <div class="bar">
@@ -175,7 +207,6 @@
         <option value="pts">Más puntos primero</option>
         <option value="avance">Menos avance primero</option></select></label>
       <div class="grow"></div>
-      <button class="btn sm" id="btn-crono" title="Repartir lo pendiente en días">🗓 Cronograma</button>
       <span class="cnt" id="p-cnt"></span>
     </div>
     <div id="p-resumen" class="presumen"></div>
@@ -195,6 +226,8 @@
     <div class="kpis" id="r-prod"></div>
     <h2 class="dash-h">Inventario</h2>
     <div class="kpis" id="r-inv"></div>
+    <h2 class="dash-h">Programación</h2>
+    <div class="kpis" id="r-prog"></div>
     <h2 class="dash-h">Plazo de entrega</h2>
     <p class="expl">Lo que se le puede prometer hoy a un cliente que llame preguntando,
       calculado con lo que de verdad ha tardado esta planta y con la cola que ya hay
@@ -518,40 +551,6 @@
   </div>
 </div></div>
 
-<!-- ============================== CRONOGRAMA ============================== -->
-<div class="ov hide" id="ov-crono"><div class="mod mod-ancho">
-  <header style="display:flex;align-items:flex-start;gap:12px">
-    <div class="grow">
-      <h1 style="margin:0;font-size:17px">Cronograma de planta</h1>
-      <p class="mut" style="margin:4px 0 0">Reparto del trabajo pendiente, agrupado por
-        cliente y tipo para no cambiar de montaje a media jornada.</p>
-    </div>
-    <button class="x" data-close>×</button>
-  </header>
-
-  <!-- La meta manda sobre el reparto. Vive en la pestaña META de la hoja, así que
-       quien la cambie la cambia para todos. -->
-  <div class="crmeta">
-    <span class="crml">Quiero</span>
-    <input class="inp" id="cr-meta-pts" type="number" min="1" step="any" style="width:92px">
-    <span class="crml">puntos en</span>
-    <input class="inp" id="cr-meta-dias" type="number" min="1" max="90" step="1" style="width:78px">
-    <span class="crml">días hábiles</span>
-    <button class="btn pri sm hide" id="cr-guardar">Guardar meta</button>
-    <span class="mut crmn">Se guarda en la pestaña <b>META</b> de la hoja</span>
-  </div>
-
-  <div class="crkpis" id="cr-kpis"></div>
-  <div class="aviso" id="cr-veredicto"></div>
-
-  <div class="tw" style="max-height:56vh"><table id="cr-tabla" class="crtabla"></table></div>
-
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
-    <button class="btn" id="cr-print">Imprimir</button>
-    <button class="btn pri" data-close>Cerrar</button>
-  </div>
-</div></div>
-
 <!-- ============================== MODELO ============================== -->
 <div class="ov hide" id="ov-modelo"><div class="mod mod-ancho">
   <header style="display:flex;align-items:flex-start;gap:12px">
@@ -671,7 +670,7 @@
 <script src="js/meta.js"></script>
 <script src="js/campos.js"></script>
 <script src="js/informes.js"></script>
-<script src="js/cronograma.js"></script>
+<script src="js/programa.js"></script>
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>

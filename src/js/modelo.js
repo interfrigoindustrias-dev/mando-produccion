@@ -17,8 +17,8 @@
    las listas, aqui tambien: un valor que la hoja no acepte se guarda igual pero
    queda marcado y descuadra los informes. */
 const MODELO_PUERTAS = {
-  ncol: 41,
-  lastCol: "AO",
+  ncol: 43,
+  lastCol: "AQ",
 
   // Indices de columna, empezando en 0 = A
   col: {
@@ -38,7 +38,9 @@ const MODELO_PUERTAS = {
     SEPA:37,      // AL  SEPARADA PARA
     SELLO:38,     // AM  SELLO
     COT:39,       // AN  COTIZACION       (numero o referencia)
-    OC:40         // AO  ORDEN DE COMPRA
+    OC:40,        // AO  ORDEN DE COMPRA
+    PROG_ORDEN:41,// AP  puesto dentro del dia programado   (Programacion)
+    PROG_FECHA:42 // AQ  dia en que se empieza a fabricar   (Programacion)
   },
 
   /* Columnas que calcula LA HOJA y que la aplicacion no debe tocar.
@@ -189,8 +191,8 @@ const MODELO_PANELES = {
      cara— y yo modelaba solo hasta la U: existian y no se leian. X e Y las
      añade la aplicacion para la cotizacion y la orden de compra, y solo si de
      verdad estan libres: paneles-listas.js mira los encabezados antes. */
-  ncol: 25,
-  lastCol: "Y",
+  ncol: 27,
+  lastCol: "AA",
 
   col: {
     FECHA:0,      // A
@@ -215,7 +217,9 @@ const MODELO_PANELES = {
     LAM_A:21,     // V   metro lineal de lamina de la cara A
     LAM_B:22,     // W   metro lineal de lamina de la cara B
     COTIZ:23,     // X   cotizacion            (la coloca la aplicacion)
-    OC:24         // Y   orden de compra       (la coloca la aplicacion)
+    OC:24,        // Y   orden de compra       (la coloca la aplicacion)
+    PROG_ORDEN:25,// Z   puesto dentro del dia programado   (Programacion)
+    PROG_FECHA:26 // AA  dia en que se empieza a fabricar   (Programacion)
   },
 
   /* COLUMNAS QUE SON FORMULA DE LA HOJA. No se escriben NUNCA, ni con un
@@ -232,8 +236,10 @@ const MODELO_PANELES = {
 
   /** Campos que la aplicacion añade a la hoja si no estan ya. Se resuelven al
    *  arrancar contra los encabezados de verdad, nunca a ciegas. */
-  columnasPropias: [{k:"COTIZ", encabezado:"COTIZACION"},
-                    {k:"OC",    encabezado:"ORDEN DE COMPRA"}],
+  columnasPropias: [{k:"COTIZ",      encabezado:"COTIZACION"},
+                    {k:"OC",         encabezado:"ORDEN DE COMPRA"},
+                    {k:"PROG_ORDEN", encabezado:"ORDEN PROGRAMADO"},
+                    {k:"PROG_FECHA", encabezado:"FECHA PROGRAMADA"}],
 
   procs: [
     {i:12, c:"M", k:"PERFIL",    s:"PE"},
@@ -346,6 +352,10 @@ function tramosFila(modelo, fila, celdas){
   const deLaHoja = typeof columnasDeMatriz === "function" ? columnasDeMatriz() : null;
   const saltar = new Set(deLaHoja && deLaHoja.length ? deLaHoja
     : (modelo.formulas || []).map(k => modelo.col[k]).filter(i => i !== undefined));
+  /* Una columna propia que NO se pudo reservar puede tener datos de otra cosa:
+     escribirle una cadena vacia al crear una fila la borraria. Se salta. */
+  if(typeof columnasPropiasSinReservar === "function")
+    columnasPropiasSinReservar().forEach(i => saltar.add(i));
   const tramos = [];
   let ini = null;
   for(let i = 0; i <= modelo.ncol; i++){

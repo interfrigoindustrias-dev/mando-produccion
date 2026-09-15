@@ -123,6 +123,8 @@ function renderResumen(){
      "Días de trabajo que costaría fabricar todo lo pendiente, si no entrara nada más"]
   ]);
 
+  pintarProgramaResumen();
+
   /* ---------- compromiso de entrega ---------- */
   pintarEntrega(hechas, diasTrabajoCola, ritmo, m2Pend);
 
@@ -158,6 +160,44 @@ function renderResumen(){
   renderPoliuretano(todas);
   renderLamina(todas);
   renderPoliPendiente(todas);
+}
+
+/** Lo que hay programado y lo que falta por programar, contra la capacidad
+ *  real. Es la pregunta de cada mañana: ¿cabe lo de esta semana? */
+function pintarProgramaResumen(){
+  if(typeof metricasPrograma !== "function" || !$("#r-prog-kpis")) return;
+  const M = metricasPrograma();
+  const nota = $("#r-prog-nota");
+  if(!M.listo){
+    nota.className = "nota warn"; nota.hidden = false;
+    nota.textContent = "La programación todavía no tiene dónde guardarse en la hoja: " +
+      "revisa el aviso de la pestaña Programación.";
+  } else nota.hidden = true;
+
+  const semana = M.estaSemana;
+  const m2 = semana.reduce((t, d)=>t + d.m2, 0);
+  const cap = semana.reduce((t, d)=>t + (d.cap || 0), 0);
+  kpiCards("#r-prog-kpis", [
+    ["Líneas sin terminar", M.abiertas.n, `${M.abiertas.ops} OP · ${n2(M.abiertas.m2)} m²`],
+    ["Líneas programadas", M.programadas.n, `${n2(M.programadas.m2)} m² con día y puesto`],
+    ["Líneas sin programar", M.sinProgramar.n, `${n2(M.sinProgramar.m2)} m²: planta las hace después de lo programado`,
+     M.sinProgramar.n > 0],
+    ["Atrasadas", M.atrasadas.n, "Programadas para un día que ya pasó y aún abiertas", M.atrasadas.n > 0],
+    ["Carga de la semana", cap ? Math.round(m2 / cap * 100) + " %" : "—",
+     `${n2(m2)} m² programados de ${n2(cap)} m² de capacidad en lo que queda de semana`, cap && m2 > cap]
+  ]);
+
+  // El domingo solo sale si tiene algo: no se trabaja y no tiene capacidad.
+  const filas = (dias, et) => dias.filter(d=>d.dia.getDay() !== 0 || d.n).map(d=>{
+    const pct = d.cap ? Math.round(d.m2 / d.cap * 100) : null;
+    return [esc(et) + " · " + esc(etDia(d.dia)), d.ops, d.lineas, n0(d.paneles), n2(d.m2),
+      d.cap ? n2(d.cap) : "—",
+      pct === null ? "—" : `<span class="${pct > 100 ? "sobre" : pct >= 85 ? "justo" : ""}">${pct} %</span>`];
+  });
+  const todasFilas = [...filas(M.estaSemana, "Esta semana"), ...filas(M.proxima, "Próxima")];
+  const visibles = [...M.estaSemana, ...M.proxima].filter(d=>d.dia.getDay() !== 0 || d.n);
+  tablaMini("#r-prog-tabla", ["Día","OP","Líneas","Paneles","m² programados","Capacidad m²","Carga"], todasFilas,
+    visibles.map(d=>d.cap && d.m2 > d.cap ? "pend" : ""));
 }
 
 /** Lo que se le puede prometer hoy a un cliente que llame preguntando. */

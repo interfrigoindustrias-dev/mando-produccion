@@ -9,7 +9,7 @@
 /* Solo las vistas que EXISTEN en esta pagina. Puertas y paneles comparten este
    archivo pero no tienen los mismos tableros: dar por hecho que estan todas
    reventaba la navegacion entera en la pagina que no los tuviera. */
-const VIEWS = ["control","planta","calidad","resumen","almacen","stock"]
+const VIEWS = ["control","programa","planta","calidad","resumen","almacen","stock"]
   .filter(v => document.getElementById("v-"+v));
 
 function goto(v){
@@ -19,7 +19,7 @@ function goto(v){
   /* Cada vista la pinta el modulo de su producto. Se llama solo a la que
      existe: puertas y paneles no comparten tableros, y dar por hecho que
      estan todos rompia la navegacion en la pagina que no los tuviera. */
-  const pintar = {planta:"renderPlanta", calidad:"renderCalidad", resumen:"renderResumen",
+  const pintar = {programa:"renderPrograma", planta:"renderPlanta", calidad:"renderCalidad", resumen:"renderResumen",
                   almacen:"renderAlmacen", stock:"renderStock"}[v];
   if(pintar && typeof window[pintar] === "function") window[pintar]();
   if(v==="stock" && typeof renderModelos === "function") renderModelos();
