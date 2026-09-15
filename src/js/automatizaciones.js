@@ -79,12 +79,18 @@ const COLUMNAS_NUEVAS = [
      puesto de ese dia. Van en la hoja y no en el navegador porque las lee
      planta desde otra pantalla. */
   {a1:"AP1", t:"ORDEN PROGRAMADO"},
-  {a1:"AQ1", t:"FECHA PROGRAMADA"}
+  {a1:"AQ1", t:"FECHA PROGRAMADA"},
+  /* El numero de la OP de paneles que se creo para esta puerta («540»): es lo
+     que la marca como puerta con panel. El vinculo de verdad lo guarda cada
+     linea de panel en su OP PUERTA; esto es la marca del lado de puertas. */
+  {a1:"AR1", t:"OP PANEL"}
 ];
 
 /* Si la programacion puede guardar, y si no, por que. Lo lee programa.js para
    decirlo arriba del tablero en vez de fallar al soltar una ficha. */
 let PROG_COLUMNAS = {ok:false, motivo:"todavía no se ha comprobado la hoja"};
+/* OP PANEL confirmada: solo entonces se escribe la marca en la puerta. */
+let PANEL_COL_OK = false;
 
 /* Columnas propias que no se han podido confirmar. tramosFila (modelo.js) las
    salta al crear una fila: si AP o AQ tuvieran datos de otra cosa, escribirles
@@ -94,6 +100,7 @@ let PROG_COLUMNAS = {ok:false, motivo:"todavía no se ha comprobado la hoja"};
 function columnasPropiasSinReservar(){
   const out = [];
   if(!PROG_COLUMNAS.ok) out.push(C.PROG_ORDEN, C.PROG_FECHA);
+  if(!PANEL_COL_OK) out.push(C.PANEL);
   return out.filter(i => i !== undefined);
 }
 
@@ -159,6 +166,8 @@ async function migrarColumnas(){
      puesto ahi como si fueran dias y puestos. */
   const prog = COLUMNAS_NUEVAS.filter(x => /^A[PQ]1$/.test(x.a1));
   const mal = prog.find(x => normaEncabezado(cab[idxA1(x.a1)]) !== normaEncabezado(x.t));
+  const pan = COLUMNAS_NUEVAS.find(x => x.a1 === "AR1");
+  PANEL_COL_OK = C.PANEL !== undefined && normaEncabezado(cab[idxA1(pan.a1)]) === normaEncabezado(pan.t);
   if(C.PROG_ORDEN === undefined || C.PROG_FECHA === undefined){
     PROG_COLUMNAS = {ok:false, motivo:"esta versión de la aplicación todavía no conoce esas columnas"};
   }else if(mal){

@@ -255,7 +255,7 @@ function hacerFetch(){
 }
 
 /* ------------------------------ arranque ------------------------------ */
-async function arrancar(pagina, tab){
+async function arrancar(pagina){
   ESCRITURAS = []; VALIDACIONES = [];
   const html = fs.readFileSync(path.join(RAIZ, pagina), "utf8");
   const dom = new JSDOM(html, {
@@ -275,8 +275,10 @@ async function arrancar(pagina, tab){
   try{ delete w.navigator.serviceWorker; }catch(e){}
   w.CONFIG_SERVIDOR = {
     clientId: "prueba.apps.googleusercontent.com",
+    // Fijo, igual que en produccion (config-app.js): la pestaña de paneles no
+    // cambia segun que pagina se este cargando en la prueba.
     modulos: {puertas:{sheetId:"HOJA", tab:"OP PUERTA"},
-              paneles:{sheetId:"HOJA", tab: tab}}
+              paneles:{sheetId:"HOJA", tab:"PANEL"}}
   };
 
   const fallos = [];
@@ -329,7 +331,7 @@ function comprueba(nombre, cond, detalle){
 (async ()=>{
   /* ============ PANELES ============ */
   console.log("\n=== paneles.html — arranque natural ===");
-  const {w, fallos, errConsola, leer} = await arrancar("paneles.html", "PANEL");
+  const {w, fallos, errConsola, leer} = await arrancar("paneles.html");
   const $ = s => w.document.querySelector(s);
   const $$ = s => [...w.document.querySelectorAll(s)];
   ROWS_LAMINA = () => leer("ROWS").filter(x => Number(x.c[21]) > 0).length;
@@ -354,10 +356,10 @@ function comprueba(nombre, cond, detalle){
       $$("#f-filtros .filtro-btn span").map(e=>e.textContent).join(" · "));
 
   console.log("\n=== las columnas que se escriben son las de PANELES ===");
-  // Y = cotizacion/OC (siempre existieron); Z y AA son las de Programacion.
+  // Y = cotizacion/OC; Z y AA son de Programacion; AB es OP PUERTA (panel-para-puerta).
   const fuera = ESCRITURAS.filter(e => e.tab === "PANEL")
-    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 26; });
-  comprueba("nada se escribe más allá de la columna AA", !fuera.length,
+    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 27; });
+  comprueba("nada se escribe más allá de la columna AB", !fuera.length,
     fuera.map(e=>e.a1).join(", "));
   const valPanel = VALIDACIONES.filter(v => v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
   const cols = [...new Set(valPanel.map(v=>v.startColumnIndex))].sort((a,b)=>a-b);
@@ -786,9 +788,15 @@ function comprueba(nombre, cond, detalle){
     leer("MODELO.listas.PRODUCTOS").length + ": " + leer("MODELO.listas.PRODUCTOS").join(" · "));
   comprueba("acabados: los de la hoja", desdeHoja("CARAS", 8),
     leer("MODELO.listas.CARAS").length + ": " + leer("MODELO.listas.CARAS").join(" · "));
+  // ESTADOS lleva ademas "PARA PUERTA", que la aplicacion ofrece aunque la
+  // hoja todavia no lo traiga en su desplegable (ver ESTADOS_SIN_PARA_PUERTA).
+  const estadosEsperados = [...VALIDACION_HOJA[19], "PARA PUERTA"];
+  const estadosOk = leer("MODELO.listas.ESTADOS").length === estadosEsperados.length &&
+    leer("MODELO.listas.ESTADOS").every((v,i)=>v === estadosEsperados[i]);
   comprueba("ranurado y estado, también",
-    desdeHoja("RANURADOS", 7) && desdeHoja("ESTADOS", 19),
-    "ranurado: " + leer("MODELO.listas.RANURADOS").join(" · "));
+    desdeHoja("RANURADOS", 7) && estadosOk,
+    "ranurado: " + leer("MODELO.listas.RANURADOS").join(" · ") +
+    " | estado: " + leer("MODELO.listas.ESTADOS").join(" · "));
   comprueba("el buscador de producto se rehizo con la lista nueva",
     [...$("#dl-productos").querySelectorAll("option")].map(o=>o.value)
       .includes('PANEL 8"'),
@@ -850,7 +858,7 @@ function comprueba(nombre, cond, detalle){
 
   /* ============ PUERTAS: que no se haya roto nada ============ */
   console.log("\n=== puertas.html — que siga igual ===");
-  const p = await arrancar("puertas.html", "OP PUERTA");
+  const p = await arrancar("puertas.html");
   comprueba("puertas carga sin errores", !p.fallos.length, p.fallos.join("\n        "));
   comprueba("puertas sin errores en consola", !p.errConsola.length,
     p.errConsola.join("\n        "));
@@ -878,6 +886,46 @@ function comprueba(nombre, cond, detalle){
   comprueba("puertas sigue escribiendo sus desplegables en M, Y y AM",
     [12,24,38].every(c => valPuerta.includes(c)),
     "columnas: " + JSON.stringify([...new Set(valPuerta)].sort((a,b)=>a-b)));
+
+  console.log("\n=== crear una puerta con panel (contrato con Paneles) ===");
+  {
+    const $p  = s => p.w.document.querySelector(s);
+    const $$p = s => [...p.w.document.querySelectorAll(s)];
+    $p("#btn-nueva").dispatchEvent(new p.w.MouseEvent("click", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 60));
+    $p("#n-cli").value = "PUERTA DE PRUEBA";
+    $p("#n-mat").value = "PP 9002";
+    $p("#n-tipo").value = "SE12";
+    const opNueva = $p("#n-op").value;
+    $p("#n-panel").checked = true;
+    $p("#n-panel").dispatchEvent(new p.w.Event("change", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 30));
+    const lineas = $$p("#np-lineas .np-linea");
+    comprueba("marcar «lleva panel» agrega una línea sola", lineas.length === 1,
+      "líneas: " + lineas.length);
+    if(lineas.length){
+      lineas[0].querySelector(".np-cant").value = "3";
+      lineas[0].querySelector(".np-largo").value = "2.2";
+      lineas[0].querySelector(".np-prod").value = 'PANEL 4"';
+    }
+    $p("#form-new").dispatchEvent(new p.w.Event("submit", {bubbles:true, cancelable:true}));
+    await new Promise(r => setTimeout(r, 500));
+
+    const filaPuerta = DATOS["OP PUERTA"].find(f => String(f[1]).trim() === opNueva);
+    comprueba("la puerta se creó", !!filaPuerta, "OP buscada: " + opNueva);
+    const opPanel = filaPuerta ? String(filaPuerta[43] ?? "").trim() : "";
+    comprueba("la puerta queda marcada con el OP de su panel (columna AR)",
+      !!opPanel, filaPuerta ? "AR=" + JSON.stringify(filaPuerta[43]) : "");
+    const filaPanel = opPanel ? DATOS.PANEL.find(f => String(f[2] ?? "").trim() === opPanel) : null;
+    comprueba("se creó la línea del panel en la hoja de Paneles",
+      !!filaPanel, "OP de panel buscada: " + opPanel);
+    comprueba("la línea de panel queda vinculada a la puerta (columna OP PUERTA)",
+      filaPanel && String(filaPanel[27] ?? "").trim() === opNueva,
+      filaPanel ? "AB=" + JSON.stringify(filaPanel[27]) : "");
+    comprueba("la línea de panel nace sin estado (Planta la pone EN PROCESO)",
+      filaPanel && String(filaPanel[19] ?? "").trim() === "",
+      filaPanel ? "estado=" + JSON.stringify(filaPanel[19]) : "");
+  }
 
   console.log(malas ? `\n${malas} comprobación(es) fallan\n` : "\nTodo correcto\n");
   process.exit(malas ? 1 : 0);

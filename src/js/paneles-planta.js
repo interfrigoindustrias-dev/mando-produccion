@@ -128,6 +128,7 @@ function renderPlanta(){
           <span data-f="prio">${etiquetaPrio(x.prioridad)}</span>
           ${x.adelantada ? `<span class="pc-adel" title="Lleva ${x.sinTocar} días sin tocarse: se adelanta al resto de las ALTA">adelantada</span>` : ""}
           <span class="pc-esp" title="Espesor por el que se agrupa">${esc(x.espesor)}</span>
+          ${puertaDe(c) ? `<span class="pc-puerta" title="Panel para armar la puerta ${esc(puertaDe(c))}: al terminar no va a almacén">🚪 Puerta ${esc(puertaDe(c))}</span>` : ""}
           ${x.prog ? `<span class="pc-prog ${x.prog.fecha < new Date(new Date().setHours(0,0,0,0)) ? "atrasada" : ""}"
             title="Programada en la pestaña Programación">📅 ${esc(etDia(x.prog.fecha))} · puesto ${x.prog.orden === 9999 ? "—" : x.prog.orden}</span>` : ""}
         </div>
@@ -260,7 +261,9 @@ $("#p-lista").addEventListener("click", async ev=>{
   plantaOcupada = Date.now();
   try{
     await ponerEstado(r, ESTADO.TERMINADO);
-    toast(`Línea ${row.c[C.OP]} terminada`, "ok");
+    toast(puertaDe(row.c)
+      ? `Línea ${row.c[C.OP]} terminada · lista para la puerta ${puertaDe(row.c)}`
+      : `Línea ${row.c[C.OP]} terminada`, "ok");
   }catch(e){ return; }                        // ponerEstado ya lo dijo y deshizo
 
   /* Terminar es lo que hace que la linea cuente como fabricada: en este momento

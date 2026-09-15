@@ -117,7 +117,7 @@ function tagPrio(v){
 function tagEstado(v){
   const s = String(v||"").trim(), u = s.toUpperCase();
   const k = u===ESTADO.DESPACHADO ? "t-des" : u===ESTADO.ANULADA ? "t-anu"
-          : u===ESTADO.TERMINADO  ? "t-alm" : "t-non";
+          : u===ESTADO.TERMINADO  ? "t-alm" : u===ESTADO.PARA_PUERTA ? "t-puerta" : "t-non";
   return `<span class="tag ${k}">${esc(s||"—")}</span>`;
 }
 const n2 = v => { const n = num(v); return n===null ? "—" : n.toLocaleString("es-CO",
@@ -183,7 +183,8 @@ function render(){
     }).join("");
     return `<tr class="${pc>=100?"done":""} ${anuladaP(c)?"anu":""}" data-r="${r}">
       <td class="stick"><input type="checkbox" class="cks" data-r="${r}" ${SEL.has(r)?"checked":""}></td>
-      <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>
+      <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>${
+        puertaDe(c) ? ` <span class="tag t-puerta" title="Panel para armar la puerta ${esc(puertaDe(c))}">🚪 ${esc(puertaDe(c))}</span>` : ""}
         <div class="sub">${esc(fmtDate(c[C.FECHA]))}</div></td>
       <td><span class="cli" title="${esc(c[C.CLI]??"")}">${esc(c[C.CLI]??"")}</span></td>
       <td>${selPrio(r, c[C.PRIO])}</td>
@@ -240,6 +241,8 @@ function kpis(rows){
     ["BAJA", porPrio("BAJA"), "A los 8 días en este nivel suben a MEDIA"],
     ["Terminadas", vivas.filter(r=>estadoDe(r.c)===ESTADO.TERMINADO).length,
      "Fabricadas, esperando despacho"],
+    ["Para puerta", vivas.filter(r=>paraPuertaP(r.c)).length,
+     "Paneles terminados para armar una puerta: no van a despacho"],
     ["Despachadas", vivas.filter(r=>despachadaP(r.c)).length, ""],
     ["Anuladas", all.length - vivas.length, "Fuera de producción y de almacén"],
     [act.length ? "Líneas filtradas" : "Sin filtrar", rows.length, act.join(" · ")]

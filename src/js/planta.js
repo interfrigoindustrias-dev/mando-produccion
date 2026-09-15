@@ -188,6 +188,7 @@ function pintarTarjeta(r){
   set("met", metaTarjeta(c));
   set("prio", etiquetaPlanta(c));
   set("prog", etiquetaProgramada(c, r));
+  set("panel", typeof etiquetaPanelPuerta === "function" ? etiquetaPanelPuerta(c) : "");
   set("fecha", fechaTarjeta(c));
   set("pts", `${num(c[C.PTS])??"—"}<em>pts</em>`);
 
@@ -247,6 +248,12 @@ function pintarResumenPlanta(L){
 }
 
 function renderPlanta(){
+  /* El estado de los paneles de cada puerta se lee de la hoja de paneles aparte
+     y sin esperar: la tarjeta sale ya y el aviso aparece cuando llega. */
+  if(typeof cargarPanelesDePuertas === "function" &&
+     (!PANELES_PUERTA.mapa || Date.now() - PANELES_PUERTA.t > 60000) && !PANELES_PUERTA.pidiendo){
+    cargarPanelesDePuertas().then(m => { if(m) plantaList().forEach(({r}) => pintarTarjeta(r)); });
+  }
   const L=plantaList();
   pintarResumenPlanta(L);
   const cnt=$("#p-cnt");
@@ -278,6 +285,7 @@ function renderPlanta(){
         <span class="met" data-f="met">${metaTarjeta(c)}</span>
         <span data-f="prio">${etiquetaPlanta(c)}</span>
         <span data-f="prog">${etiquetaProgramada(c, r)}</span>
+        <span data-f="panel">${typeof etiquetaPanelPuerta === "function" ? etiquetaPanelPuerta(c) : ""}</span>
         <span class="met" data-f="fecha">${fechaTarjeta(c)}</span>
         <span class="pts" data-f="pts">${num(c[C.PTS])??"—"}<em>pts</em></span>
         <span class="av"  data-f="av">${pc}%</span>

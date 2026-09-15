@@ -18,6 +18,8 @@
 
 /** De donde salio cada lista: sirve para poder decirlo en la interfaz. */
 let LISTAS_ORIGEN = "modelo";
+/** El desplegable de ESTADO de la hoja no trae PARA PUERTA. */
+let ESTADOS_SIN_PARA_PUERTA = false;
 
 /** Rango de muestra. La validacion se aplica a un bloque de filas, asi que
  *  basta mirar unas pocas: se toma la primera regla que aparezca en cada
@@ -76,6 +78,15 @@ async function leerListasDeLaHoja(){
     if(faltaban.length) novedades.push(`${nombre}: +${faltaban.length}`);
     MODELO.listas[nombre] = ops;
     cambiadas++;
+  }
+
+  /* PARA PUERTA lo pone la aplicacion al terminar un panel de puerta. Si el
+     desplegable de la hoja todavia no lo trae, se ofrece igual aqui: la hoja
+     no se toca, y la celda saldra marcada como fuera de lista hasta que se
+     añada alli. */
+  if(MODELO.listas.ESTADOS && !MODELO.listas.ESTADOS.includes("PARA PUERTA")){
+    MODELO.listas.ESTADOS = [...MODELO.listas.ESTADOS, "PARA PUERTA"];
+    ESTADOS_SIN_PARA_PUERTA = true;
   }
 
   if(cambiadas){

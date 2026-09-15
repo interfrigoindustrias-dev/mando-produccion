@@ -25,7 +25,7 @@
    que sella el FIN DE PROCESO y lo que la manda a almacen, asi que es tambien
    el momento en el que cuenta como fabricada. Despachada tambien cuenta: no se
    despacha lo que no se hizo. */
-const terminadaP = c => [ESTADO.TERMINADO, ESTADO.DESPACHADO].includes(estadoDe(c));
+const terminadaP = c => [ESTADO.TERMINADO, ESTADO.PARA_PUERTA, ESTADO.DESPACHADO].includes(estadoDe(c));
 const fabricadas = () => activas().filter(({c})=>!anuladaP(c) && terminadaP(c));
 
 /** Cuando se acabo de fabricar.

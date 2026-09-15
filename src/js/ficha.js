@@ -235,6 +235,14 @@ function hintOp(){
 $("#form-new").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const btn=$("#n-save"); btn.disabled=true;
+  /* Las lineas de panel se leen ANTES de escribir la puerta: si una esta a
+     medias se dice ahora y no se guarda nada, en vez de crear la puerta y
+     descubrir despues que su panel no se pudo hacer. */
+  let lineasPanel = null;
+  if(typeof llevaPanelLaPuerta === "function" && llevaPanelLaPuerta()){
+    try{ lineasPanel = lineasPanelDelFormulario(); }
+    catch(e){ toast("Panel: " + e.message, "err"); btn.disabled=false; return; }
+  }
   try{
     const q = Math.max(1, Math.min(40, parseInt($("#n-qty").value,10)||1));
     const op = $("#n-op").value.trim();
@@ -278,21 +286,25 @@ $("#form-new").addEventListener("submit", async ev=>{
     });
     await writeCells(data);
 
-    /* El panel va DESPUES y aparte: si fallara, la puerta ya esta guardada. El
-       panel es un extra, y perder la puerta por no poder escribir su panel
-       seria mucho peor que quedarse sin el panel. */
-    if(typeof llevaPanelLaPuerta === "function" && llevaPanelLaPuerta()){
-      const opPanel = q > 1 ? `${op}-1` : op;
+    /* Los paneles van DESPUES y aparte: si fallaran, las puertas ya estan
+       guardadas. Una OP de paneles por ficha, con todas sus lineas para cada
+       puerta, y cada puerta marcada con esa OP. */
+    if(lineasPanel){
+      const puertas = rows.map((r,k)=>({r, op: q>1 ? `${op}-${k+1}` : op}));
       try{
-        const fila = await crearPanelDeLaPuerta(
-          opPanel, $("#n-cli").value.trim().toUpperCase(),
-          $("#n-prio").value, $("#n-fecha").value.trim());
-        toast(`Panel creado en la hoja de Paneles, fila ${fila}`, "ok");
-        logBulk([{accion:"CREAR", op:opPanel, fila:"—", campo:"Panel de la puerta",
-                  antes:"", despues:`fila ${fila} de la hoja de paneles`}]);
+        const res = await crearPanelesDeLaFicha(puertas, $("#n-cli").value.trim().toUpperCase(),
+          $("#n-prio").value, $("#n-fecha").value.trim(), lineasPanel);
+        let marcada = false;
+        try{ marcada = await marcarPuertasConPanel(puertas, res.op); }
+        catch(e){ console.warn("marcar puerta con panel:", e.message); }
+        toast(`Panel OP ${res.op} creado en Paneles: ${res.lineas.length} línea(s)` +
+              (marcada ? "" : " · no se pudo marcar la puerta con su OP"), marcada ? "ok" : "err");
+        logBulk(puertas.map(p=>({accion:"CREAR", op:p.op, fila:p.r, campo:"Panel de la puerta",
+          antes:"", despues:`OP de paneles ${res.op}`})));
+        if(typeof cargarPanelesDePuertas === "function") cargarPanelesDePuertas(true);
       }catch(e){
-        // Con el numero de OP delante: sin el, no se sabe cual crear a mano.
-        toast(`La puerta se guardó, pero el panel de la OP ${opPanel} no: ${e.message}`, "err");
+        // Con la OP de la puerta delante: sin ella, no se sabe cual crear a mano.
+        toast(`La puerta ${op} se guardó, pero su panel no: ${e.message}`, "err");
       }
     }
     // Quitar la casilla de verificación en la hoja a los procesos que no aplican,
@@ -309,6 +321,7 @@ $("#form-new").addEventListener("submit", async ev=>{
     lastHash=""; await refresh(false);
     $("#n-op").value = String(nextOp()); $("#n-fecha").value = hoy();
     $("#n-qty").value="1"; $("#n-obs").value=""; hintOp();
+    if(typeof limpiarPanelDePuerta === "function") limpiarPanelDePuerta();
   }catch(e){ toast(e.message,"err"); }
   finally{ btn.disabled=false; }
 });

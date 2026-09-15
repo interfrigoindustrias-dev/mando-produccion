@@ -15,17 +15,24 @@
  *  las de puertas apuntan a otra cosa en la hoja de paneles. */
 const col = k => A1(C[k]);
 
-const ESTADO = {PROCESO:"EN PROCESO", TERMINADO:"TERMINADO",
+const ESTADO = {PROCESO:"EN PROCESO", TERMINADO:"TERMINADO", PARA_PUERTA:"PARA PUERTA",
                 DESPACHADO:"DESPACHADO", ANULADA:"ANULADA"};
 
 /** El estado que tiene ahora la linea, normalizado. */
 const estadoDe = c => String(c[C.DESP] ?? "").trim().toUpperCase();
 const anuladaP = c => estadoDe(c) === ESTADO.ANULADA;
 const despachadaP = c => estadoDe(c) === ESTADO.DESPACHADO;
+const paraPuertaP = c => estadoDe(c) === ESTADO.PARA_PUERTA;
 /* Terminada en planta: ya no es cola de fabricacion, aunque calidad/almacen
    sigan teniendo trabajo con ella. La usa Programacion para saber que ya no
    hay que ofrecerla ni contarla como abierta. */
-const hechaEnPlantaP = c => estadoDe(c) === ESTADO.TERMINADO;
+const hechaEnPlantaP = c => estadoDe(c) === ESTADO.TERMINADO || paraPuertaP(c);
+
+/** El codigo de la puerta que arma este panel, o "" si es un panel normal.
+ *  Solo se lee si la columna OP PUERTA esta reservada: si no, AB podria tener
+ *  cualquier otra cosa. */
+const puertaDe = c => (typeof columnaLista === "function" && columnaLista("PUERTA"))
+  ? String(c[C.PUERTA] ?? "").trim() : "";
 
 /* ------------------------------ 1. escalado de prioridad ------------------------------
    POR ESCALONES, NO DE UN SALTO. BAJA espera 8 dias sin tocarse y se vuelve
@@ -131,6 +138,10 @@ async function ponerEstado(r, valor){
   const row = ROWS.find(x => x.r === r);
   if(!row) return;
   const c = row.c;
+  /* Un panel que es para una puerta no se termina «para almacen»: se termina
+     para armar su puerta. Terminar lo lleva a PARA PUERTA, y por eso no
+     aparece en almacen ni se ofrece para despachar. */
+  if(String(valor).trim().toUpperCase() === ESTADO.TERMINADO && puertaDe(c)) valor = ESTADO.PARA_PUERTA;
   const antes = String(c[C.DESP] ?? "");
   if(antes === valor) return;
   const ups = [{a1: `${col("DESP")}${r}`, v: [[valor]]}];
@@ -139,7 +150,7 @@ async function ponerEstado(r, valor){
   const v = String(valor).trim().toUpperCase();
   const h = hoy();
 
-  if(v === ESTADO.TERMINADO && !String(c[C.FFIN] ?? "").trim()){
+  if((v === ESTADO.TERMINADO || v === ESTADO.PARA_PUERTA) && !String(c[C.FFIN] ?? "").trim()){
     ups.push({a1: `${col("FFIN")}${r}`, v: [[h]]});
     cambios.push({campo:"Fin proceso", antes:"", despues:h});
     c[C.FFIN] = h;
