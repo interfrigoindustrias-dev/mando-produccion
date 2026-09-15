@@ -44,6 +44,22 @@ const MODULOS = {
     tabPorDefecto: "PANEL",
     logTab: "LOG PANELES",
     modelosTab: "MODELOS PANELES"
+  },
+  /* El almacén no es una vista de puertas: es un producto aparte. No lleva OPs
+     ni fichas ni procesos, sus datos son otros y sus avisos también (aquí lo
+     que urge es lo que falta, no lo que alguien marcó). Por eso tiene página
+     propia en vez de una pestaña dentro de puertas. */
+  inventario: {
+    id: "inventario",
+    nombre: "Inventario",
+    titulo: "Inventario de Almacén",
+    pagina: "inventario.html",
+    color: "#8A4B08",          // ámbar tierra: ni el azul de puertas ni el verde de paneles
+    colorOscuro: "#e0a458",
+    // No usa una pestaña de OPs: su verdad está en INSUMOS, BODEGAS y MOVIMIENTOS.
+    tabPorDefecto: "MOVIMIENTOS",
+    logTab: "LOG APP",
+    modelosTab: null
   }
 };
 
@@ -89,19 +105,33 @@ function configDelModulo(){
   return MOD.id === "puertas" ? c : null;
 }
 
-/* ---------- Conmutador de producto ---------- */
+/* ---------- Pestañas de producto ----------
+   Los tres modulos se ven SIEMPRE, como las pestañas de un navegador, en vez de
+   esconderse tras un desplegable. Conviven pero no se mezclan: cada pestaña
+   lleva su color y va a su propia pagina, con sus propios datos.
+
+   Se generan desde aqui, sobre el contenedor .modsel que ya traen las tres
+   paginas, para que añadir un producto sea añadir una entrada a MODULOS y nada
+   mas. */
 document.addEventListener("DOMContentLoaded", ()=>{
-  const btn = document.getElementById("btn-modulo");
-  const menu = document.getElementById("mod-menu");
-  const nom = document.getElementById("mod-nombre");
-  if(nom) nom.textContent = MOD.nombre;
-  if(!btn || !menu) return;
+  const caja = document.querySelector(".modsel");
+  if(!caja) return;
 
-  menu.innerHTML = Object.values(MODULOS).map(m=>`
-    <a href="${m.pagina}" class="${m.id===MOD.id?"act":""}">
-      <span class="punto" style="background:${m.color}"></span>${m.nombre}
-    </a>`).join("");
-
-  btn.onclick = ev => { ev.stopPropagation(); menu.classList.toggle("hide"); };
-  document.addEventListener("click", () => menu.classList.add("hide"));
+  caja.className = "modtabs";
+  caja.setAttribute("role", "tablist");
+  caja.setAttribute("aria-label", "Producto");
+  caja.innerHTML = Object.values(MODULOS).map(m=>{
+    const act = m.id === MOD.id;
+    return `<a class="modtab${act ? " act" : ""}" href="${m.pagina}"
+      role="tab" aria-selected="${act}" aria-current="${act ? "page" : "false"}"
+      title="${esca(m.titulo)}" style="--mt:${m.color}">
+      <span class="punto"></span><span class="nm">${esca(m.nombre)}</span></a>`;
+  }).join("");
 });
+
+/* esc() vive en util.js, que se carga DESPUES que este archivo. Los nombres de
+   producto son nuestros, pero no se construye HTML sin escapar. */
+function esca(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}

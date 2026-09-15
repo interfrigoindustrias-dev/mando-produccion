@@ -12,6 +12,7 @@ const ARMAZON = [
   "index.html",
   "puertas.html",
   "paneles.html",
+  "inventario.html",
   "manifest.webmanifest",
   "css/base.css",
   "css/componentes.css",
@@ -20,6 +21,7 @@ const ARMAZON = [
   "css/impresion.css",
   "css/movil.css",
   "css/paneles.css",
+  "css/inventario.css",
   "js/modulo.js",
   "js/modelo.js",
   "js/constantes.js",
@@ -58,6 +60,9 @@ const ARMAZON = [
   "js/paneles-planta.js",
   "js/paneles-resumen.js",
   "js/paneles-almacen.js",
+  "js/inventario.js",
+  "js/inventario-app.js",
+  "js/requisiciones.js",
   "img/logo.png",
   /* Los diagramas de las hojas carta. Sin esto dependen de la red justo en el
      momento de imprimir, que es cuando peor viene. */

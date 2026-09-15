@@ -254,3 +254,22 @@ select.mini.ap.vacio{color:var(--tx3);font-weight:400}
 .ayp b{flex:none;min-width:118px;font-size:11px;font-weight:800;letter-spacing:.06em}
 .ayp b.ayp-auto{color:var(--bad)}
 .ayp span{color:var(--tx2)}
+
+/* ---------- Pestañas de producto ----------
+   Los tres modulos a la vista, como las pestañas de un navegador. Cada una con
+   el color de su producto: el activo va solido, los otros solo con su punto,
+   para que se vea de un vistazo en cual estas sin tener que leer. */
+.modtabs{display:flex;gap:3px;align-items:center;background:var(--bg3);
+  padding:3px;border-radius:11px}
+.modtab{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;
+  border-radius:8px;font-weight:600;font-size:13px;color:var(--tx2);
+  text-decoration:none;white-space:nowrap;transition:.12s}
+.modtab .punto{width:9px;height:9px;border-radius:999px;background:var(--mt);flex:none}
+.modtab:hover{background:var(--bg2);color:var(--tx)}
+.modtab.act{background:var(--mt);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.modtab.act .punto{background:#fff}
+/* En pantallas estrechas el nombre estorba: basta el color para reconocerla. */
+@media (max-width:820px){
+  .modtab{padding:7px 10px}
+  .modtab:not(.act) .nm{display:none}
+}
