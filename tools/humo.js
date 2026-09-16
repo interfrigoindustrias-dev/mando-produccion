@@ -87,6 +87,9 @@ let ANCHO_PANEL_HOJA = 23;
 /** Lo que la aplicacion escribio, para poder comprobarlo despues. */
 let ESCRITURAS = [];
 let VALIDACIONES = [];
+/** Simula que el servidor no tiene sesion (auth.php responde 401), para
+ *  probar la pantalla de login de verdad en vez del arranque normal. */
+let SIN_SESION = false;
 
 function celdasDe(rango){                 // "'PANEL'!A1:U"  ->  {tab, a1}
   const m = String(rango).match(/^'?([^'!]+)'?!(.+)$/);
@@ -146,6 +149,8 @@ function hacerFetch(){
     const ok = obj => ({ok:true, status:200, json: async()=>obj, text: async()=>JSON.stringify(obj)});
 
     if(u.includes("auth.php")){
+      // Para probar la pantalla de login de verdad, sin sesion en el servidor.
+      if(SIN_SESION) return {ok:false, status:401, json: async()=>({}), text: async()=>""};
       return ok({access_token:"t0k3n", expires_in:3600, email:"yo@interfrigo.com.co"});
     }
     // Añadir al final: es como se escribe el historial.
@@ -347,6 +352,8 @@ function comprueba(nombre, cond, detalle){
   comprueba("sin errores en consola", !errConsola.length, errConsola.join("\n        "));
   comprueba("entra a la aplicación sin pedir nada",
     $("#app") && !$("#app").classList.contains("hide"));
+  comprueba("con sesión de sobra, el formulario de login nunca se llega a enseñar",
+    $("#g-form") && $("#g-form").classList.contains("hide"));
   comprueba("la tabla se pinta sola", $$("#tb tr").length > 0,
     "filas pintadas: " + $$("#tb tr").length);
   comprueba("los KPI se pintan solos", $$("#kpis .kpi").length > 0);
@@ -886,6 +893,17 @@ function comprueba(nombre, cond, detalle){
   comprueba("puertas sigue escribiendo sus desplegables en M, Y y AM",
     [12,24,38].every(c => valPuerta.includes(c)),
     "columnas: " + JSON.stringify([...new Set(valPuerta)].sort((a,b)=>a-b)));
+
+  console.log("\n=== sin sesión, el formulario de login sí se enseña ===");
+  SIN_SESION = true;
+  const sinS = await arrancar("puertas.html");
+  await new Promise(r => setTimeout(r, 50));
+  SIN_SESION = false;
+  comprueba("no entra a la aplicación",
+    sinS.w.document.getElementById("app").classList.contains("hide"));
+  comprueba("el splash se esconde y el formulario de login aparece",
+    sinS.w.document.getElementById("g-splash").classList.contains("hide") &&
+    !sinS.w.document.getElementById("g-form").classList.contains("hide"));
 
   console.log("\n=== crear una puerta con panel (contrato con Paneles) ===");
   {

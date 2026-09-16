@@ -121,6 +121,7 @@ function sinAcceso(motivo){
                          .map(u => u.nombre || u.correo);
   $("#gate").classList.remove("hide");
   $("#app").classList.add("hide");
+  mostrarFormularioGate();
   $("#g-msg").innerHTML = motivo === "inactivo"
     ? `Tu acceso está <b>desactivado</b>.`
     : `La cuenta <b>${esc(userMail)}</b> no está en la lista de usuarios.`;

@@ -20,6 +20,17 @@
 const HINT_KEY = "puertas.ultimo.correo";
 const AUTH = "auth.php";
 
+/** Cambia el splash de arranque (solo el logo) por el formulario de login de
+ *  verdad. Se llama SOLO cuando hace falta que la persona haga algo —falta
+ *  configuracion, la sesion no existe, o el acceso fue denegado—, nunca
+ *  mientras se comprueba si ya hay sesion: ese es el caso normal al cambiar
+ *  de modulo o de pestaña, y ahi el splash basta. */
+function mostrarFormularioGate(){
+  const s = $("#g-splash"), f = $("#g-form");
+  if(s) s.classList.add("hide");
+  if(f) f.classList.remove("hide");
+}
+
 let pidiendoToken = null;
 const paginaActual = () => location.pathname.split("/").pop() || MOD.pagina;
 
@@ -99,5 +110,6 @@ async function logout(){
   clearTimeout(temporizadorRenovar);
   $("#app").classList.add("hide");
   $("#gate").classList.remove("hide");
+  mostrarFormularioGate();
   $("#g-msg").textContent = "";
 }

@@ -90,6 +90,28 @@ label.f>span{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;t
 #gate{min-height:100dvh;display:grid;place-items:center;padding:24px}
 .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--sh)}
 #gate .card{width:100%;max-width:460px;padding:30px}
+
+/* Mientras se comprueba si ya hay sesion, se ve esto —solo el logo, en un
+   pulso suave— y NUNCA el formulario de «Entrar con Google»: para quien ya
+   tiene sesion (el caso normal al cambiar de modulo o de pestaña) eso seria
+   un parpadeo del login sin sentido, ahi y fuera en milisegundos. El
+   formulario solo se enseña si de verdad hace falta iniciar sesion. */
+.g-splash{display:flex;justify-content:center;padding:26px 0;animation:g-pulso 1.3s ease-in-out infinite}
+.g-splash .logo{width:150px;height:44px}
+@keyframes g-pulso{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* Entradas suaves: cuando algo pasa de oculto a visible, aparece con un
+   fundido corto en vez de un salto seco. Como .hide es display:none, una
+   transition no arrancaria sola; una animation si, porque se dispara cada
+   vez que el elemento vuelve a tener caja (deja de ser display:none). */
+#app:not(.hide), #gate #g-form:not(.hide), [id^="v-"]:not(.hide){
+  animation:g-fadein .2s ease
+}
+@keyframes g-fadein{ from{opacity:0} to{opacity:1} }
+@media (prefers-reduced-motion:reduce){
+  .g-splash{animation:none}
+  #app:not(.hide), #gate #g-form:not(.hide), [id^="v-"]:not(.hide){animation:none}
+}
 h1{font-size:20px;margin:16px 0 4px;letter-spacing:-.01em}
 h2{font-size:15px;margin:0 0 12px}
 .mut{color:var(--tx2);font-size:13px;margin:0}

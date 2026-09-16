@@ -26,20 +26,23 @@
 <!-- ============================== LOGIN / CONFIG ============================== -->
 <div id="gate">
   <div class="card">
-    <div class="logo"></div>
-    <h1>Inventario de Almacén</h1>
-    <p class="mut">Insumos y materia prima — hoja <b id="g-sheet">MOVIMIENTOS</b></p>
+    <div id="g-splash" class="g-splash"><div class="logo"></div></div>
+    <div id="g-form" class="hide">
+      <div class="logo"></div>
+      <h1>Inventario de Almacén</h1>
+      <p class="mut">Insumos y materia prima — hoja <b id="g-sheet">MOVIMIENTOS</b></p>
 
-    <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
-      <span id="g-falta"></span>
-    </div>
+      <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
+        <span id="g-falta"></span>
+      </div>
 
-    <div style="display:flex;gap:8px;margin-top:20px">
-      <button class="btn pri grow" id="g-login">Entrar con Google</button>
-      <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      <div style="display:flex;gap:8px;margin-top:20px">
+        <button class="btn pri grow" id="g-login">Entrar con Google</button>
+        <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      </div>
+      <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
+      <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
     </div>
-    <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
-    <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
   </div>
 </div>
 

@@ -302,22 +302,24 @@ async function enterApp(){
   // Si Google devolvió un problema, se dice en vez de dejar la pantalla muda.
   const err = new URLSearchParams(location.search).get("auth_error");
   if(err){
+    mostrarFormularioGate();
     $("#g-msg").textContent = err === "access_denied"
       ? "Se canceló el acceso. Vuelve a intentarlo."
       : "No se pudo entrar (" + err + ").";
     history.replaceState(null, "", location.pathname);
   }
 
-  if(!cfgOk()) return;
+  if(!cfgOk()){ mostrarFormularioGate(); return; }
 
-  // ¿Ya hay sesión en el servidor? Entonces se entra sin un solo clic.
-  $("#g-msg").textContent = "Conectando…";
+  // ¿Ya hay sesión en el servidor? Entonces se entra sin un solo clic, y sin
+  // que se vea el formulario de login en ningún momento.
   // Igual que en app.js: el error de enterApp tiene que verse, no tragarse.
   pedirToken().then(t => {
     if(t) return enterApp();
-    $("#g-msg").textContent = ""; $("#g-login").focus();
+    mostrarFormularioGate(); $("#g-login").focus();
   }).catch(e => {
     console.error(e);
+    mostrarFormularioGate();
     $("#g-msg").innerHTML = `No se pudo entrar: ${esc(e.message)}<br>
       <button class="btn sm" onclick="location.reload()" style="margin-top:8px">Reintentar</button>`;
   });
