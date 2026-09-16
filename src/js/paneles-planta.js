@@ -11,9 +11,17 @@
 
 /* ------------------------------ que ve planta ------------------------------ */
 /** Lo que esta pendiente de fabricar. Lo terminado, despachado o anulado ya no
- *  es trabajo de planta y tenerlo a la vista solo estorba. */
+ *  es trabajo de planta y tenerlo a la vista solo estorba.
+ *
+ *  SOLO LO PROGRAMADO. Planta no decide el orden por su cuenta: lo fija quien
+ *  planifica en la pestaña Programación, y lo que no tiene dia ahi todavia no
+ *  esta listo para bajar a maquina. Si esa pestaña no esta disponible —faltan
+ *  sus columnas en la hoja— no hay nada programado que mostrar, y exigirlo
+ *  dejaria planta vacia sin remedio; en ese caso se vuelve a la cola de
+ *  siempre, igual que antes de que existiera Programación. */
 function plantaPendientes(){
   const q = $("#p-q").value.trim().toLowerCase();
+  const soloProgramadas = typeof programaListo === "function" && programaListo();
 
   /* TODO lo que no esta terminado. Antes se escondia lo que tuviera fecha
      posterior a hoy; se quita, porque escondia trabajo real y nadie sabia que
@@ -26,6 +34,7 @@ function plantaPendientes(){
        otro caben una revision, un retoque, o simplemente esperar a que quien
        manda la de por buena. */
     if(estadoDe(c) === ESTADO.TERMINADO) return false;
+    if(soloProgramadas && typeof progDeLinea === "function" && !progDeLinea(c)) return false;
 
     if(!filtroPasa("p-prio", String(c[C.PRIO]??"").trim().toUpperCase())) return false;
     if(!filtroPasa("p-esp", espesorDe(c))) return false;
@@ -170,8 +179,13 @@ function renderPlanta(){
       · ${nTanda} línea(s) · <b>${n2(tanda)}</b> m²</div>`);
   }
 
-  lista.innerHTML = trozos.join("") ||
-    `<div class="empty">No hay nada pendiente de fabricar con estos filtros.</div>`;
+  const sinFiltros = !$("#p-q").value.trim() && filtroVacio("p-prio") && filtroVacio("p-esp");
+  const faltaProgramar = sinFiltros && typeof programaListo === "function" && programaListo() &&
+    typeof lineasAbiertas === "function" && lineasAbiertas().length > 0;
+  lista.innerHTML = trozos.join("") || (faltaProgramar
+    ? `<div class="empty">Nada tiene día todavía: planta solo enseña lo programado.
+        Ponle día en <b>Programación</b> para que baje a la cola.</div>`
+    : `<div class="empty">No hay nada pendiente de fabricar con estos filtros.</div>`);
   pintarResumenPlanta(orden);
 }
 

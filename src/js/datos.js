@@ -36,6 +36,12 @@ async function refresh(silent){
        (typeof LOG_LISTO === "undefined" || LOG_LISTO)){
       autoPrioridades();
     }
+    /* Propio de paneles: las lineas atrasadas de la programacion ruedan solas
+       al dia que toca. No existe en puertas, de ahi el `typeof`. */
+    if(typeof autoReprogramarAtrasadas === "function" &&
+       (typeof LOG_LISTO === "undefined" || LOG_LISTO)){
+      autoReprogramarAtrasadas();
+    }
     setSync("", "Al día · "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){
     setSync("err", "Error"); if(!silent) toast(e.message,"err"); console.error(e);

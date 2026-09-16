@@ -87,6 +87,7 @@ function fichasAbiertas(){
       caraB: String(c[C.CARA_B] ?? "").trim(),
       m2: MODELO.metros(c) || 0,
       kg: kgDe(c) || 0,
+      lam: laminaDe(c) || 0,
       avance: progreso(c).pct,
       dias: diasEnCola(c),
       prog: progDeLinea(c),
@@ -164,7 +165,9 @@ function metricasPrograma(){
   const suma = xs => ({n: xs.length, m2: xs.reduce((t, o) => t + o.m2, 0),
     lineas: xs.length,
     ops: new Set(xs.map(o => o.opk)).size,
-    paneles: xs.reduce((t, o) => t + o.cant, 0)});
+    paneles: xs.reduce((t, o) => t + o.cant, 0),
+    kg: xs.reduce((t, o) => t + o.kg, 0),
+    lam: xs.reduce((t, o) => t + o.lam, 0)});
   const porDia = d => ops.filter(o => o.prog && o.prog.fecha.getTime() === d.getTime());
   const semana = lu => diasDeSemana(lu, true).map(d => ({dia: d, ...suma(porDia(d)), cap: capacidadDia(d)}));
   const lu = lunes(h); lu.setHours(0,0,0,0);
@@ -247,6 +250,8 @@ function renderPrograma(){
         `Todas las líneas sin terminar, sin despachar y sin anular —${n2(M.abiertas.m2)} m²—. Es el mismo criterio que Planta y que «Líneas abiertas» de Control de OPs.`)}
       ${chip(M.sinProgramar.n, "sin programar", `${M.sinProgramar.n} líneas de ${M.sinProgramar.ops} OP · ${n2(M.sinProgramar.m2)} m²`, M.sinProgramar.n ? "hi" : "")}
       ${chip(M.programadas.n, "programadas", `${M.programadas.n} líneas · ${n2(M.programadas.m2)} m²${otras ? ` · ${otras} en semanas siguientes` : ""}`)}
+      ${chip(n2(M.programadas.kg), "kg poliuretano", `Poliuretano que hace falta para fabricar toda la programación —${M.programadas.n} líneas programadas—`)}
+      ${chip(n2(M.programadas.lam), "m lámina", `Metros lineales de lámina que hace falta para fabricar toda la programación —${M.programadas.n} líneas programadas—`)}
       ${M.atrasadas.n ? chip(M.atrasadas.n, "atrasadas", "Programadas para un día que ya pasó y aún abiertas", "mal") : ""}
       ${chip(n2(m2Semana), "m² en la semana", "Programado de lunes a domingo en la semana a la vista")}
       ${chip(carga === null ? "—" : carga + " %", "carga",
@@ -416,6 +421,82 @@ async function guardarPrograma(cambios, movida){
     recalcularTableros();
   }
   progOcupado = Date.now();
+}
+
+/* ------------------------------ atrasadas: reprogramacion automatica ------------------------------
+   Una linea programada para un dia que ya paso y que sigue abierta no se queda
+   esperando a que alguien la arrastre: pasa sola al dia que toca, de primeras,
+   y lo que ya estaba puesto ese dia se corre un puesto para hacerle sitio.
+
+   EL DIA QUE TOCA ES HOY, no «un dia mas tarde que antes»: si llevaba varios
+   dias atrasada no tiene sentido ponerla en un dia que tambien ya paso, asi
+   que salta directa al primer dia util que queda por delante. Si sigue sin
+   terminarse, mañana volvera a estar atrasada —porque su fecha sera ayer— y
+   rodara otra vez a la cabeza del nuevo hoy: por eso lo atrasado siempre
+   aparece primero en el dia en que de verdad se puede fabricar.
+
+   Es EL MISMO gesto que arrastrar una ficha a la cabeza de un dia, asi que en
+   cuanto una persona la acomode a mano en el programador —a ese dia o a otro,
+   en el puesto que sea— deja de estar atrasada y este automatismo no vuelve a
+   tocarla, hasta que si tambien se le pasa esa fecha nueva, vuelva a rodar. */
+
+/** Hoy, o el lunes si hoy es domingo: domingo no se trabaja, y amontonar ahi
+ *  lo atrasado lo dejaria un dia entero sin que nadie lo viera. */
+function diaQueToca(){
+  const h = hoy0();
+  if(h.getDay() !== 0) return h;
+  const l = new Date(h); l.setDate(l.getDate() + 1);
+  return l;
+}
+
+/** Corre las atrasadas al dia que toca, de primeras. Se llama en cada
+ *  refresco —ver datos.js—, igual que autoPrioridades: por eso no hace nada si
+ *  no hay columnas donde guardar o si alguien esta arrastrando una ficha en
+ *  este momento. */
+async function autoReprogramarAtrasadas(){
+  if(!programaListo() || programaEnUso()) return 0;
+  const h = hoy0();
+  const abiertas = fichasAbiertas();
+  const atrasadas = abiertas.filter(o => o.prog && o.prog.fecha < h)
+    .sort((a, b) => (a.prog.fecha - b.prog.fecha) || (a.prog.orden - b.prog.orden) || (a.r - b.r));
+  if(!atrasadas.length) return 0;
+
+  const destino = diaQueToca();
+  const atrasadasK = new Set(atrasadas.map(o => o.k));
+  const yaEnDestino = abiertas
+    .filter(o => o.prog && o.prog.fecha.getTime() === destino.getTime() && !atrasadasK.has(o.k))
+    .sort((a, b) => (a.prog.orden - b.prog.orden) || (a.r - b.r));
+
+  const secuencia = [...atrasadas, ...yaEnDestino];
+  const ups = [], log = [], previos = [];
+  secuencia.forEach((o, i) => {
+    const orden = i + 1, c = o.x.c, r = o.r;
+    const mismaF = o.prog && o.prog.fecha.getTime() === destino.getTime();
+    if(mismaF && o.prog.orden === orden) return;           // ya estaba en su sitio
+    previos.push({c, f: c[C.PROG_FECHA], o: c[C.PROG_ORDEN]});
+    ups.push({a1: `${col("PROG_FECHA")}${r}`, v: [[iso(destino)]]},
+             {a1: `${col("PROG_ORDEN")}${r}`, v: [[orden]]});
+    if(atrasadasK.has(o.k))
+      log.push({accion: "AUTO", op: c[C.OP], fila: r, campo: "Programación",
+                antes: `${etDia(o.prog.fecha)} · puesto ${o.prog.orden}`,
+                despues: `${etDia(destino)} · puesto ${orden} (atrasada)`});
+    c[C.PROG_FECHA] = iso(destino);
+    c[C.PROG_ORDEN] = orden;
+  });
+  if(!ups.length) return 0;
+
+  recalcularTableros();                        // se ve ya; la hoja va detras
+  try{
+    await writeCells(ups);
+    if(log.length) logBulk(log);
+    lastHash = "";
+    return log.length;
+  }catch(e){
+    previos.forEach(p => { p.c[C.PROG_FECHA] = p.f; p.c[C.PROG_ORDEN] = p.o; });
+    console.warn("reprogramar atrasadas:", e.message);
+    recalcularTableros();
+    return 0;
+  }
 }
 
 /** La secuencia de OP de una columna tal y como esta en pantalla. */

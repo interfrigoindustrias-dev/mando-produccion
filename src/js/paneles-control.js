@@ -16,6 +16,13 @@
 const kgDe = c => (typeof kgPoliuretano === "function" ? kgPoliuretano(c) : 0);
 /** Kilos por panel suelto. */
 const kgUnidDe = c => (typeof kgUnidadPoliuretano === "function" ? kgUnidadPoliuretano(c) : 0);
+/** Metros lineales de lamina de la linea, sumando las caras que llevan acabado
+ *  —V y W de la hoja—. Misma cuenta que usa el consumo de lamina del resumen. */
+const laminaDe = c => (MODELO.laminas || []).reduce((s, {cara, metros}) => {
+  if(typeof metrosLamina !== "function") return s;
+  const tipo = String(c[C[cara]] ?? "").trim();
+  return tipo ? s + (metrosLamina(c, metros) || 0) : s;
+}, 0);
 
 const PROGRESOS = [["Sin iniciar (0%)","pend"], ["En proceso","wip"],
                    ["Fabricadas (100%)","done"], ["Abiertas (<100%)","open"]];
