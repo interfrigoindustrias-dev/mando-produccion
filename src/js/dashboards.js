@@ -710,6 +710,39 @@ function renderModelos(){
       <td colspan="2"></td></tr></tbody>`;
 }
 
+/* Imprimir el inventario por modelo tal como esta en pantalla —con el filtro de
+   Tipo que este puesto—, pero en papel: sin el boton "+Crear" de cada fila, que
+   ahi no sirve para nada, y en horizontal porque la tabla es ancha. Reusa el
+   mismo cajon #print que las fichas, asi que no hace falta abrir una ventana
+   ni depender de que el usuario no tenga bloqueado el pop-up. */
+function imprimirModelos(){
+  const tabla = $("#m-tabla");
+  if(!tabla || !tabla.querySelector("tbody tr")){ toast("Nada que imprimir","err"); return; }
+  const clone = tabla.cloneNode(true);
+  clone.querySelectorAll("tr").forEach(tr=>{
+    // La ultima columna es la de accion ("+Crear" o el encabezado vacio que le
+    // corresponde). La fila TOTAL la funde con Avance en un colspan="2": ahi
+    // se achica en vez de quitarse entera, o la fila queda corta una columna.
+    const ultima = tr.lastElementChild; if(!ultima) return;
+    const cs = parseInt(ultima.getAttribute("colspan")||"1", 10);
+    if(cs>1) ultima.setAttribute("colspan", cs-1); else ultima.remove();
+  });
+  const fTipo = (()=>{ const e=$("#s-tipo"); return e ? e.value : ""; })();
+  let rule = $("#page-rule");
+  if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
+  rule.textContent = "@page{size:letter landscape;margin:12mm}";
+  $("#print").innerHTML = `<div class="inv-print">
+    <div class="inv-print-h">
+      <span class="c-logo"></span>
+      <div><b>Inventario por modelo</b><span>Solo puertas marcadas STOCK${fTipo?" · "+esc(fTipo):""}</span></div>
+      <div class="inv-print-f">${esc(fmt(new Date()))}</div>
+    </div>
+    ${clone.outerHTML}
+  </div>`;
+  window.print();
+}
+$("#m-print").onclick = imprimirModelos;
+
 /* Modelo abierto en el modal. Se guarda para poder repintarlo cuando cambia algo
    —un estado, una separacion— sin que el modal se cierre bajo la mano. */
 let stockModelo = "";
@@ -860,7 +893,9 @@ function stockList(){
     if(!eq(c[C.ESP],g("s-esp")) || !eq(c[C.AP],g("s-ap"))) return false;
     if(!eq(medidaDe(c), g("s-med"))) return false;
     const fe=g("s-est");
-    if(fe==="__none"){ if(desp(c)!=="") return false; } else if(!eq(desp(c),fe)) return false;
+    if(fe==="__disp"){ if(!disponible(c)) return false; }
+    else if(fe==="__none"){ if(desp(c)!=="") return false; }
+    else if(!eq(desp(c),fe)) return false;
     const fa=g("s-av");
     if(fa==="done" && !completa(c)) return false;
     if(fa==="open" &&  completa(c)) return false;
@@ -868,10 +903,12 @@ function stockList(){
   });
 }
 function renderStock(){
-  const L=stockList(), B=stockBase().map(x=>x.c);
+  const L=stockList(), Br=stockBase(), B=Br.map(x=>x.c);
   kpiCards("#s-kpis",[
     ["En inventario",   B.length, "Marcadas STOCK y sin despachar", 1],
     ["Stock en almacén",B.filter(c=>desp(c)==="En Almacén").length, "De las anteriores, con estado En Almacén"],
+    ["Disponibles",     B.filter(disponible).length, "En almacén, terminadas y todavía sin separar", 1,
+     Br.filter(({c})=>disponible(c))],
     ["Stock terminado", B.filter(completa).length, "Stock con avance 100%"],
     ["Stock en proceso",B.filter(c=>!completa(c)).length, "Stock con avance menor al 100%"],
     ["Listadas",        L.length, "Filas mostradas con el filtro actual"]
@@ -891,7 +928,7 @@ function renderStock(){
         selDesp(r, c[C.DESP]),
         celdaSeparar(r, para)];
     }),
-    L.map(({c})=> separadaPara(c) ? "sep" : ""));
+    L.map(({c})=> separadaPara(c) ? "sep" : (disponible(c) ? "disp" : "")));
   contador("#s-cnt", L.length, B.length,
            ["s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"], "s-q");
   pintarChipModelo();

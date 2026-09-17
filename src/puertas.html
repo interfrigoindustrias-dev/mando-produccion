@@ -295,6 +295,7 @@
     <div class="sec">
       <h2>Inventario por modelo
         <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— solo puertas marcadas STOCK</span>
+        <button class="btn sm" id="m-print" style="margin-left:auto">🖨 Imprimir</button>
       </h2>
       <div class="tw" style="max-height:none"><table id="m-tabla"></table></div>
     </div>
@@ -306,7 +307,8 @@
       <label class="f"><span>Apertura</span><select class="inp" id="s-ap"></select></label>
       <label class="f"><span>Dimensiones</span><select class="inp" id="s-med"></select></label>
       <label class="f"><span>Estado</span><select class="inp" id="s-est">
-        <option value="">Todos</option><option>En Almacén</option><option>Separado</option>
+        <option value="">Todos</option><option value="__disp">Disponibles</option>
+        <option>En Almacén</option><option>Separado</option>
         <option>Anulada</option><option value="__none">Sin estado</option></select></label>
       <label class="f"><span>Avance</span><select class="inp" id="s-av">
         <option value="">Todos</option><option value="done">Terminadas</option><option value="open">En proceso</option></select></label>

@@ -77,6 +77,8 @@ const clienteBase = c => {
   return (i < 0 ? t : t.slice(0, i)).trim();
 };
 const separada = c => separadaPara(c) !== "";
+/** Disponible: terminada, en almacén y todavía sin dueño — lista para vender ya. */
+const disponible = c => String(c[C.DESP]??"").trim()==="En Almacén" && !separada(c);
 
 /* URGENTE tiene dos origenes y se distinguen a proposito: uno es una decision
    y el otro una consecuencia, y no se corrigen igual. */

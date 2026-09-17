@@ -103,6 +103,9 @@
 /* Para quién quedó separada una puerta de stock. */
 .para{font-weight:700}
 #s-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}
+/* Disponible: en almacén, terminada y sin separar — lista para vender ya. */
+#s-tabla tbody tr.disp td{background:color-mix(in srgb,var(--ok) 10%,transparent)}
+#s-tabla tbody tr.disp td:first-child{box-shadow:inset 3px 0 0 var(--ok)}
 /* Nota de calidad vista desde almacén: corta, y entera al pasar el ratón. */
 .qnota-mini{display:block;max-width:210px;font-size:12px;color:var(--tx2);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

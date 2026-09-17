@@ -252,6 +252,25 @@
 .c-fir .f3{display:flex;gap:1.2mm;flex:1}
 .c-fir .f3 i{flex:1}
 
+/* ---------- Inventario por modelo: la tabla completa en papel ---------- */
+.inv-print{background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif}
+.inv-print-h{display:flex;align-items:center;gap:5mm;border-bottom:.8mm solid #000;
+  padding-bottom:2mm;margin-bottom:3mm}
+.inv-print-h .c-logo{width:32mm;height:8mm;flex:none}
+.inv-print-h b{display:block;font-size:13pt;font-weight:900}
+.inv-print-h span{font-size:8pt;font-weight:600;color:#333}
+.inv-print-h .inv-print-f{margin-left:auto;font-size:8pt;font-weight:700;flex:none}
+.inv-print table{width:100%;border-collapse:collapse;font-size:8pt}
+.inv-print th,.inv-print td{border:.3mm solid #999;padding:1.4mm 1.8mm;text-align:left}
+.inv-print th{background:#eee;font-weight:800;text-transform:uppercase;
+  font-size:6.5pt;letter-spacing:.03em}
+.inv-print td.n,.inv-print td.num{text-align:right;font-variant-numeric:tabular-nums}
+.inv-print td.n.z{color:#888}
+.inv-print tr.tot td{border-top:.6mm solid #000;font-weight:900;background:#f0f0f0}
+.inv-print tr.otras td{background:#f6f6f6;font-style:italic}
+.inv-print thead{display:table-header-group}
+.inv-print tr{break-inside:avoid;page-break-inside:avoid}
+
 @media print{
   /* Sin esto Chrome omite los fondos: el logo y las franjas negras no se imprimen */
   *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
