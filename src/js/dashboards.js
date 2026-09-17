@@ -628,7 +628,36 @@ function esModelo(c, m, conPrio){
   if(conPrio && m.prio && String(c[C.PRIO]??"").trim().toUpperCase()!==m.prio) return false;
   return true;
 }
-function renderModelos(){
+/** Cuenta de un grupo de puertas para una fila del inventario por modelo.
+ *  Compartida por la tabla en pantalla, la impresion y el total: los tres
+ *  tienen que salir siempre del mismo calculo, o los numeros no cuadran. */
+function contarGrupo(hay){
+  const abiertas = hay.filter(c=>!completa(c));
+  return {
+    alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
+    // Disponible: en almacén Y sin separar. "En almacén" solo dice donde
+    // esta la puerta; sin este dato, una vendida-pero-sin-entregar parecia
+    // tan libre para vender como una que de verdad nadie ha pedido.
+    disp: hay.filter(disponible).length,
+    // Terminada = fabricada y esperando el visto bueno de calidad. Estaba
+    // contada dentro del total pero sin columna propia, asi que las puertas
+    // que salian de planta parecian haberse evaporado hasta llegar a almacen.
+    term: hay.filter(c=>terminada(c)).length,
+    sep:  hay.filter(separada).length,
+    // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
+    prod: abiertas.filter(c=>progreso(c).ok > 0).length,
+    proy: abiertas.filter(c=>progreso(c).ok === 0).length,
+    tot:  hay.length,
+    av:   abiertas.length
+      ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—",
+  };
+}
+
+/** El inventario por modelo entero: una fila por modelo del catalogo, la fila
+ *  de lo que no encaja en ninguno, y el total. Lo usan tanto la tabla en
+ *  pantalla como la version para imprimir, para no calcularlo dos veces ni
+ *  arriesgarse a que un dia digan cosas distintas. */
+function calcularModelos(){
   // La prioridad no interviene: el modelo se identifica por tipo, espesor,
   // apertura y medidas, que es lo que define fisicamente la puerta.
   const base = stockBase().map(x=>x.c);          // marcadas STOCK y sin despachar
@@ -643,25 +672,35 @@ function renderModelos(){
 
   const filas = modelos.map(m=>{
     const hay = base.filter(c=>esModelo(c,m,false));
-    return {m, hay,
-      alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
-      // Terminada = fabricada y esperando el visto bueno de calidad. Estaba
-      // contada dentro del total pero sin columna propia, asi que las puertas
-      // que salian de planta parecian haberse evaporado hasta llegar a almacen.
-      term: hay.filter(c=>terminada(c)).length,
-      sep:  hay.filter(separada).length,
-      // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
-      prod: hay.filter(c=>!completa(c) && progreso(c).ok > 0).length,
-      proy: hay.filter(c=>!completa(c) && progreso(c).ok === 0).length,
-      tot:  hay.length};
+    return {m, hay, ...contarGrupo(hay)};
   });
-  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, term:a.term+f.term, sep:a.sep+f.sep,
-                                  prod:a.prod+f.prod, proy:a.proy+f.proy, tot:a.tot+f.tot}),
-                         {alm:0,term:0,sep:0,prod:0,proy:0,tot:0});
+
+  // Todo lo que esta en stock pero no encaja en ningun modelo del catalogo,
+  // para que los totales cuadren y se vea que falta por definir. Con un tipo
+  // elegido, esta fila solo cuenta las de ese tipo: si no, el total de la
+  // tabla no cuadraria con lo que se esta viendo.
+  const otrasPuertas = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)))
+    .filter(c=>!fTipo || String(c[C.TIPO] ?? "").trim() === fTipo);
+  const otras = otrasPuertas.length ? {
+    hay: otrasPuertas, ...contarGrupo(otrasPuertas),
+    det: otrasPuertas.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n"),
+  } : null;
+
+  const grupos = otras ? [...filas, otras] : filas;
+  const T = grupos.reduce((a,f)=>({alm:a.alm+f.alm, disp:a.disp+f.disp, term:a.term+f.term,
+    sep:a.sep+f.sep, prod:a.prod+f.prod, proy:a.proy+f.proy, tot:a.tot+f.tot}),
+    {alm:0,disp:0,term:0,sep:0,prod:0,proy:0,tot:0});
+
+  return {fTipo, filas, otras, T};
+}
+
+function renderModelos(){
+  const {filas, otras, T} = calcularModelos();
   const n = (v,cls) => `<td class="n ${v?(cls||""):"z"}">${v}</td>`;
   $("#m-tabla").innerHTML =
     `<thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
       <th title="Marcadas STOCK, terminadas y con estado En Almacén">En almacén</th>
+      <th title="En almacén y todavía sin separar: listas para vender ya">Disponibles</th>
       <th title="Fabricadas y en estado Terminado: esperan revisión de calidad">Terminadas</th>
       <th title="Marcadas STOCK en estado Separado">Separadas</th>
       <th title="Empezadas: tienen al menos un proceso marcado">En producción</th>
@@ -669,75 +708,73 @@ function renderModelos(){
       <th title="Todas las marcadas STOCK sin despachar">Total</th>
       <th title="Avance promedio de las que están en producción">Avance</th>
       <th></th></tr></thead><tbody>`+
-    filas.map(({m,hay,alm,term,sep,prod,proy,tot})=>{
-      const abiertas = hay.filter(c=>!completa(c));
-      const av = abiertas.length
-        ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—";
-      return `<tr>
+    filas.map(({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
       <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
       <td class="num">${m.ancho??"—"}×${m.alto??"—"}</td><td class="num">${m.esp??"—"}</td>
       <td>${esc(m.ap||"—")}</td>
-      ${n(alm)}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
+      ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
       <td class="num">${av}</td>
-      <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`;
-    }).join("")+
-    // Todo lo que esta en stock pero no encaja en ningun modelo del catalogo,
-    // para que los totales cuadren y se vea que falta por definir.
-    (()=>{
-      // Con un tipo elegido, esta fila solo cuenta las de ese tipo: si no, el
-      // total de la tabla no cuadraria con lo que se esta viendo.
-      const otras = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)))
-        .filter(c=>!fTipo || String(c[C.TIPO] ?? "").trim() === fTipo);
-      if(!otras.length) return "";
-      const oAlm = otras.filter(c=>completa(c) && desp(c)==="En Almacén").length;
-      const oTer = otras.filter(c=>terminada(c)).length;
-      const oSep = otras.filter(separada).length;
-      const oPro = otras.filter(c=>!completa(c) && progreso(c).ok > 0).length;
-      const oProy= otras.filter(c=>!completa(c) && progreso(c).ok === 0).length;
-      const ab   = otras.filter(c=>!completa(c));
-      const av   = ab.length ? Math.round(ab.reduce((a,c)=>a+progreso(c).pct,0)/ab.length*100)+"%" : "—";
-      const det  = otras.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n");
-      T.alm+=oAlm; T.term+=oTer; T.sep+=oSep; T.prod+=oPro; T.proy+=oProy; T.tot+=otras.length;
-      return `<tr class="otras" title="${esc(det)}">
+      <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`).join("")+
+    (otras ? `<tr class="otras" title="${esc(otras.det)}">
         <td class="mod">Sin modelo definido</td>
-        <td colspan="4" class="sub">${otras.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
-        ${n(oAlm)}${n(oTer)}${n(oSep)}${n(oPro)}${n(oProy)}${n(otras.length)}
-        <td class="num">${av}</td><td></td></tr>`;
-    })()+
+        <td colspan="4" class="sub">${otras.hay.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
+        ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
+        <td class="num">${otras.av}</td><td></td></tr>` : "")+
     `<tr class="tot"><td>TOTAL</td><td colspan="4"></td>
-      <td class="n">${T.alm}</td><td class="n">${T.term}</td><td class="n">${T.sep}</td>
+      <td class="n">${T.alm}</td><td class="n">${T.disp}</td><td class="n">${T.term}</td><td class="n">${T.sep}</td>
       <td class="n">${T.prod}</td><td class="n">${T.proy}</td><td class="n">${T.tot}</td>
       <td colspan="2"></td></tr></tbody>`;
 }
 
-/* Imprimir el inventario por modelo tal como esta en pantalla —con el filtro de
-   Tipo que este puesto—, pero en papel: sin el boton "+Crear" de cada fila, que
-   ahi no sirve para nada, y en horizontal porque la tabla es ancha. Reusa el
-   mismo cajon #print que las fichas, asi que no hace falta abrir una ventana
-   ni depender de que el usuario no tenga bloqueado el pop-up. */
+/* Imprimir el inventario por modelo —con el filtro de Tipo que este puesto—
+   en una hoja aparte, construida desde los mismos datos que la tabla en
+   pantalla (calcularModelos), nunca clonando el DOM: clonar #m-tabla traia
+   su mismo id y las reglas de pantalla de dashboards.css —pensadas para tema
+   oscuro y una tabla que se desplaza dentro de su caja— se colaban en el
+   papel y desbordaban cada fila a su propia hoja. Sigue el mismo patron que
+   ya usan Programa y Paneles para imprimir (.pg-print, en programa.css). */
 function imprimirModelos(){
-  const tabla = $("#m-tabla");
-  if(!tabla || !tabla.querySelector("tbody tr")){ toast("Nada que imprimir","err"); return; }
-  const clone = tabla.cloneNode(true);
-  clone.querySelectorAll("tr").forEach(tr=>{
-    // La ultima columna es la de accion ("+Crear" o el encabezado vacio que le
-    // corresponde). La fila TOTAL la funde con Avance en un colspan="2": ahi
-    // se achica en vez de quitarse entera, o la fila queda corta una columna.
-    const ultima = tr.lastElementChild; if(!ultima) return;
-    const cs = parseInt(ultima.getAttribute("colspan")||"1", 10);
-    if(cs>1) ultima.setAttribute("colspan", cs-1); else ultima.remove();
-  });
-  const fTipo = (()=>{ const e=$("#s-tipo"); return e ? e.value : ""; })();
+  const {fTipo, filas, otras, T} = calcularModelos();
+  if(!filas.length && !otras){ toast("Nada que imprimir","err"); return; }
+  const n = (v,cls) => `<td class="n${v?" "+(cls||""):" z"}">${v}</td>`;
+  const filaHTML = ({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
+    <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
+    <td class="n">${m.ancho??"—"}×${m.alto??"—"}</td><td class="n">${m.esp??"—"}</td>
+    <td>${esc(m.ap||"—")}</td>
+    ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
+    <td class="n">${av}</td></tr>`;
+  // En pantalla el detalle de "sin modelo" se lee al pasar el mouse; en papel
+  // eso no existe, asi que aqui va escrito debajo, en la misma fila.
+  const otrasHTML = otras ? `<tr class="im-otras">
+    <td class="mod" colspan="5">Sin modelo definido
+      <span class="im-det">${esc(otras.hay.map(c=>`OP ${c[C.OP]}`).join(" · "))}</span></td>
+    ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
+    <td class="n">${otras.av}</td></tr>` : "";
+
   let rule = $("#page-rule");
   if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
   rule.textContent = "@page{size:letter landscape;margin:12mm}";
-  $("#print").innerHTML = `<div class="inv-print">
-    <div class="inv-print-h">
+  $("#print").innerHTML = `<div class="im-print">
+    <div class="im-cab">
       <span class="c-logo"></span>
-      <div><b>Inventario por modelo</b><span>Solo puertas marcadas STOCK${fTipo?" · "+esc(fTipo):""}</span></div>
-      <div class="inv-print-f">${esc(fmt(new Date()))}</div>
+      <div class="im-tit"><b>Inventario por modelo</b>
+        <span>Solo puertas marcadas STOCK${fTipo?" · "+esc(fTipo):""}</span></div>
+      <div class="im-meta">Impreso ${esc(fmt(new Date()))}</div>
     </div>
-    ${clone.outerHTML}
+    <table>
+      <colgroup><col class="im-c-mod"><col class="im-c-tipo"><col class="im-c-med">
+        <col class="im-c-esp"><col class="im-c-ap"><col class="im-c-n"><col class="im-c-n">
+        <col class="im-c-n"><col class="im-c-n"><col class="im-c-n"><col class="im-c-n">
+        <col class="im-c-n"><col class="im-c-n"></colgroup>
+      <thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
+        <th>En almacén</th><th>Disponibles</th><th>Terminadas</th><th>Separadas</th>
+        <th>En producción</th><th>Proyectadas</th><th>Total</th><th>Avance</th></tr></thead>
+      <tbody>${filas.map(filaHTML).join("")}${otrasHTML}</tbody>
+      <tfoot><tr><td>TOTAL</td><td colspan="4"></td>
+        <td class="n">${T.alm}</td><td class="n disp">${T.disp}</td><td class="n">${T.term}</td>
+        <td class="n">${T.sep}</td><td class="n">${T.prod}</td><td class="n">${T.proy}</td>
+        <td class="n">${T.tot}</td><td></td></tr></tfoot>
+    </table>
   </div>`;
   window.print();
 }
@@ -787,6 +824,8 @@ function pintarModeloModal(){
   $("#mm-kpis").innerHTML =
     cuenta("En almacén", L.filter(({c})=>completa(c) && desp(c)==="En Almacén").length,
            "Terminadas y con estado En Almacén") +
+    cuenta("Disponibles", L.filter(({c})=>disponible(c)).length,
+           "En almacén y todavía sin separar: listas para vender ya") +
     cuenta("Terminadas", L.filter(({c})=>terminada(c)).length,
            "Fabricadas, esperando revisión de calidad") +
     cuenta("Separadas",  L.filter(({c})=>separada(c)).length,
@@ -811,7 +850,7 @@ function pintarModeloModal(){
         `<button class="btn sm" data-ver-ficha="${r}">Ficha</button>`
       ];
     }),
-    L.map(({c}) => separadaPara(c) ? "sep" : ""));
+    L.map(({c}) => separadaPara(c) ? "sep" : (disponible(c) ? "disp" : "")));
 
   $("#mm-vacio").classList.toggle("hide", L.length > 0);
   }
