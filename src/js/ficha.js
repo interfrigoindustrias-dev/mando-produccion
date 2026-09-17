@@ -232,6 +232,48 @@ function hintOp(){
   const t=targetRows(q);
   $("#n-target").textContent = `Se escribirá en fila${q>1?"s":""} ${t[0]}${q>1?"–"+t[t.length-1]:""}`;
 }
+/* Duplicar: abre Nueva ficha precargada con la especificacion de una puerta
+   que ya existe, para no volver a teclear algo casi igual. El OP y la fecha
+   siempre son nuevos —es una puerta distinta, no la misma con otro numero—,
+   y los procesos se marcan segun cuales le APLICAN a la original (no segun
+   cuales ya tiene hechos: una puerta duplicada empieza de cero). */
+function duplicarFicha(r){
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const c = row.c;
+  $("#form-new").reset();
+  $("#n-op").value = String(nextOp());
+  $("#n-fecha").value = hoy();
+  $("#n-qty").value = 1;
+  $("#n-prio").value = PRIORIDADES.includes(String(c[C.PRIO]).toUpperCase())
+    ? String(c[C.PRIO]).toUpperCase() : "BAJA";
+  $("#n-cli").value = c[C.CLI] ?? "";
+  $("#n-cot").value = c[C.COT] ?? ""; $("#n-oc").value = c[C.OC] ?? "";
+  $("#n-comp").checked  = tri(c[C.COMP])===true;
+  $("#n-stock").checked = tri(c[C.STOCK])===true;
+  $("#n-mat").value = c[C.MAT] ?? ""; $("#n-tipo").value = c[C.TIPO] ?? "";
+  $("#n-ancho").value = num(c[C.ANCHO]) ?? ""; $("#n-alto").value = num(c[C.ALTO]) ?? "";
+  $("#n-pts").value = num(c[C.PTS]) ?? 1;
+  $("#n-esp").value = c[C.ESP] ?? ""; $("#n-ap").value = c[C.AP] ?? "";
+  if($("#n-visor")){
+    $("#n-marco").value = c[C.MARCO] ?? ""; $("#n-marco").dispatchEvent(new Event("change"));
+    $("#n-visor").value = c[C.VISOR] ?? ""; $("#n-visor").dispatchEvent(new Event("change"));
+    $("#n-empvref").value = c[C.EMPVREF] ?? "";
+    $("#n-bump").value = c[C.BUMP] ?? ""; $("#n-bump").dispatchEvent(new Event("change"));
+    $("#n-tbump").value = c[C.TBUMP] ?? "";
+    $("#n-sello").value = c[C.SELLO] ?? "";
+    $("#n-alff").checked = tri(c[C.ALFF])===true;
+    $("#n-alfp").checked = tri(c[C.ALFP])===true;
+  }
+  $("#n-obs").value = c[C.OBS] ?? "";
+  // Que procesos aplican, tal como los tiene la original — sobreescribe lo que
+  // aplicaProcs() haya marcado solo al disparar los "change" de arriba.
+  $$("#n-procs input").forEach(ck=>{ ck.checked = tri(c[+ck.dataset.i]) !== null; });
+  hintOp();
+  $("#ov-nueva").classList.remove("hide");
+  toast(`Ficha ${c[C.OP]} duplicada: revisa los datos y guarda`,"ok");
+  setTimeout(()=>$("#n-cli").focus(), 60);
+}
+
 $("#form-new").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const btn=$("#n-save"); btn.disabled=true;

@@ -174,10 +174,9 @@ function render(){
     return `<tr class="${pc>=100?"done":""}" data-r="${r}">
       <td class="stick"><input type="checkbox" class="cks" data-r="${r}" ${SEL.has(r)?"checked":""}></td>
       <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>
-        <button class="op-copy" data-copy="${esc(c[C.OP]??"")}" title="Copiar OP de puerta">⧉</button>
+        <button class="op-copy" data-dup="${r}" title="Duplicar esta ficha en una puerta nueva">⧉ Duplicar</button>
         ${(()=>{ const op = C.PANEL!==undefined ? String(c[C.PANEL]??"").trim() : "";
-          return op ? `<div class="op-panel">🚪 <b>${esc(op)}</b>
-            <button class="op-copy" data-copy="${esc(op)}" title="Copiar OP de panel">⧉</button></div>` : ""; })()}
+          return op ? `<div class="op-panel">🚪 <b>${esc(op)}</b></div>` : ""; })()}
         <div class="sub">${esc(fmtDate(c[C.FECHA]))}</div></td>
       <td><span class="cli" title="${esc(c[C.CLI]??"")}">${esc(c[C.CLI]??"")}</span>
         ${tri(c[C.COMP])?'<span class="sub">COMPL.</span>':""}${tri(c[C.STOCK])?'<span class="sub"> STOCK</span>':""}</td>
@@ -267,14 +266,8 @@ async function setProc(r, i, next){
   }catch(e){ row.c[i]=prev; paintRow(r); toast(e.message,"err"); }
 }
 $("#tb").addEventListener("click", ev=>{
-  const cp = ev.target.closest("[data-copy]");
-  if(cp){
-    const val = cp.dataset.copy;
-    navigator.clipboard.writeText(val)
-      .then(()=> toast(`OP ${val} copiada`,"ok"))
-      .catch(()=> toast("No se pudo copiar: sin permiso de portapapeles","err"));
-    return;
-  }
+  const dup = ev.target.closest("[data-dup]");
+  if(dup){ duplicarFicha(+dup.dataset.dup); return; }
   const p = ev.target.closest(".p");
   if(p){
     const r=+p.dataset.r, i=+p.dataset.i, cur=tri(ROWS.find(x=>x.r===r).c[i]);
