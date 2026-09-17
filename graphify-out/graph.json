@@ -104,7 +104,7 @@
       "file_type": "code",
       "norm_label": "abrirmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L755"
+      "source_location": "L792"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -129,6 +129,18 @@
       "norm_label": "almacenlist()",
       "source_file": "src/js/dashboards.js",
       "source_location": "L290"
+    },
+    {
+      "id": "src_js_dashboards_calcularmodelos",
+      "label": "calcularModelos()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
+      "file_type": "code",
+      "norm_label": "calcularmodelos()",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L660"
     },
     {
       "id": "src_js_dashboards_cancelarseparar",
@@ -179,6 +191,18 @@
       "source_location": "L485"
     },
     {
+      "id": "src_js_dashboards_contargrupo",
+      "label": "contarGrupo()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Tableros y catalogo",
+      "file_type": "code",
+      "norm_label": "contargrupo()",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L634"
+    },
+    {
       "id": "src_js_dashboards_csvde",
       "label": "csvDe()",
       "_callable": true,
@@ -188,7 +212,7 @@
       "file_type": "code",
       "norm_label": "csvde()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L981"
+      "source_location": "L1020"
     },
     {
       "id": "src_js_dashboards_diasfabricacionpuerta",
@@ -236,7 +260,7 @@
       "file_type": "code",
       "norm_label": "imprimirmodelos()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L718"
+      "source_location": "L736"
     },
     {
       "id": "src_js_dashboards_loadmodelos",
@@ -260,7 +284,7 @@
       "file_type": "code",
       "norm_label": "marcarfilamodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L843"
+      "source_location": "L882"
     },
     {
       "id": "src_js_dashboards_medianapuertas",
@@ -332,7 +356,7 @@
       "file_type": "code",
       "norm_label": "pintarchipmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L821"
+      "source_location": "L860"
     },
     {
       "id": "src_js_dashboards_pintarentrega",
@@ -356,7 +380,7 @@
       "file_type": "code",
       "norm_label": "pintarmodelomodal()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L770"
+      "source_location": "L807"
     },
     {
       "id": "src_js_dashboards_pintarprogramaresumen",
@@ -392,7 +416,7 @@
       "file_type": "code",
       "norm_label": "puertasdemodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L765"
+      "source_location": "L802"
     },
     {
       "id": "src_js_dashboards_renderalmacen",
@@ -416,7 +440,7 @@
       "file_type": "code",
       "norm_label": "rendermodelos()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L631"
+      "source_location": "L697"
     },
     {
       "id": "src_js_dashboards_renderresumen",
@@ -440,7 +464,7 @@
       "file_type": "code",
       "norm_label": "renderstock()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L905"
+      "source_location": "L944"
     },
     {
       "id": "src_js_dashboards_seldesp",
@@ -476,7 +500,7 @@
       "file_type": "code",
       "norm_label": "stockbase()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L880"
+      "source_location": "L919"
     },
     {
       "id": "src_js_dashboards_stocklist",
@@ -488,7 +512,7 @@
       "file_type": "code",
       "norm_label": "stocklist()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L882"
+      "source_location": "L921"
     },
     {
       "id": "src_js_paneles_planta_etiquetaprio",
@@ -1599,7 +1623,7 @@
       "file_type": "code",
       "norm_label": "mmtabla",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L825"
+      "source_location": "L864"
     },
     {
       "id": "src_js_dashboards_mod_head",
@@ -6814,6 +6838,7 @@
     {
       "id": "src_puertas_almacen",
       "label": "Almac\u00e9n (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6828,6 +6853,7 @@
     {
       "id": "src_puertas_app",
       "label": "Control de Puertas (app shell)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6842,6 +6868,7 @@
     {
       "id": "src_puertas_avisos",
       "label": "Novedades / Avisos (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6856,6 +6883,7 @@
     {
       "id": "src_puertas_boton_imprimir_modelo",
       "label": "Bot\u00f3n Imprimir (Inventario por modelo)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6870,6 +6898,7 @@
     {
       "id": "src_puertas_calidad",
       "label": "Calidad (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6884,6 +6913,7 @@
     {
       "id": "src_puertas_configuracion",
       "label": "Configuraci\u00f3n (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6898,6 +6928,7 @@
     {
       "id": "src_puertas_control_de_ops",
       "label": "Control de OPs (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6912,6 +6943,7 @@
     {
       "id": "src_puertas_detalle_puerta",
       "label": "Detalle de puerta (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6926,6 +6958,7 @@
     {
       "id": "src_puertas_estado_stock",
       "label": "Estado en Stock (filtro s-est)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6940,6 +6973,7 @@
     {
       "id": "src_puertas_filtro_disponibles",
       "label": "Filtro estado: Disponibles",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6954,6 +6988,7 @@
     {
       "id": "src_puertas_imprimir_etiqueta_logo",
       "label": "Imprimir etiqueta: elegir logo (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6968,6 +7003,7 @@
     {
       "id": "src_puertas_informes_programados",
       "label": "Informes programados (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6982,6 +7018,7 @@
     {
       "id": "src_puertas_inventario_por_modelo",
       "label": "Inventario por modelo",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -6996,6 +7033,7 @@
     {
       "id": "src_puertas_kpi_detalle",
       "label": "Detalle de una tarjeta KPI (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7010,6 +7048,7 @@
     {
       "id": "src_puertas_modelo_de_stock",
       "label": "Modelo de stock (modal detalle)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7024,6 +7063,7 @@
     {
       "id": "src_puertas_nueva_ficha",
       "label": "Nueva ficha de puerta (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7038,6 +7078,7 @@
     {
       "id": "src_puertas_planta",
       "label": "Planta (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7052,6 +7093,7 @@
     {
       "id": "src_puertas_programacion",
       "label": "Programaci\u00f3n (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7066,6 +7108,7 @@
     {
       "id": "src_puertas_resumen",
       "label": "Resumen / Dashboards (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7080,6 +7123,7 @@
     {
       "id": "src_puertas_separar_puerta",
       "label": "Separar puerta (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7094,6 +7138,7 @@
     {
       "id": "src_puertas_stock",
       "label": "Stock (vista)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7108,6 +7153,7 @@
     {
       "id": "src_puertas_usuarios_y_permisos",
       "label": "Usuarios y permisos (modal)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7122,6 +7168,7 @@
     {
       "id": "src_puertas_estado_despacho",
       "label": "Estado de despacho (Terminado/En Almac\u00e9n/Despachado/Anulada)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7136,6 +7183,7 @@
     {
       "id": "src_puertas_panel_de_puerta",
       "label": "Puerta con panel (genera OP en Paneles)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -7150,6 +7198,7 @@
     {
       "id": "src_puertas_proceso_de_fabricacion",
       "label": "Procesos de fabricaci\u00f3n (CP, IN, AC, CM, MA, CR, RI, EM)",
+      "_origin": "semantic",
       "author": null,
       "captured_at": null,
       "community": 7,
@@ -8276,7 +8325,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L760",
+      "source_location": "L797",
       "weight": 1.0
     },
     {
@@ -8289,6 +8338,42 @@
       "context": "call",
       "source_file": "src/js/dashboards.js",
       "source_location": "L293",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_calcularmodelos",
+      "target": "src_js_dashboards_stockbase",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L663",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_calcularmodelos",
+      "target": "src_js_dashboards_esmodelo",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L674",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_calcularmodelos",
+      "target": "src_js_dashboards_contargrupo",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L675",
       "weight": 1.0
     },
     {
@@ -8325,6 +8410,18 @@
       "context": "call",
       "source_file": "src/js/dashboards.js",
       "source_location": "L339",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_imprimirmodelos",
+      "target": "src_js_dashboards_calcularmodelos",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L737",
       "weight": 1.0
     },
     {
@@ -8372,7 +8469,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L777",
+      "source_location": "L814",
       "weight": 1.0
     },
     {
@@ -8384,7 +8481,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L806",
+      "source_location": "L845",
       "weight": 1.0
     },
     {
@@ -8396,7 +8493,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L807",
+      "source_location": "L846",
       "weight": 1.0
     },
     {
@@ -8408,7 +8505,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L810",
+      "source_location": "L849",
       "weight": 1.0
     },
     {
@@ -8420,7 +8517,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L767",
+      "source_location": "L804",
       "weight": 1.0
     },
     {
@@ -8432,7 +8529,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L767",
+      "source_location": "L804",
       "weight": 1.0
     },
     {
@@ -8497,26 +8594,14 @@
     },
     {
       "source": "src_js_dashboards_rendermodelos",
-      "target": "src_js_dashboards_stockbase",
+      "target": "src_js_dashboards_calcularmodelos",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L634",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards_rendermodelos",
-      "target": "src_js_dashboards_esmodelo",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L645",
+      "source_location": "L698",
       "weight": 1.0
     },
     {
@@ -8552,7 +8637,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L906",
+      "source_location": "L945",
       "weight": 1.0
     },
     {
@@ -8564,7 +8649,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L906",
+      "source_location": "L945",
       "weight": 1.0
     },
     {
@@ -8576,7 +8661,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L928",
+      "source_location": "L967",
       "weight": 1.0
     },
     {
@@ -8588,7 +8673,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L929",
+      "source_location": "L968",
       "weight": 1.0
     },
     {
@@ -8600,7 +8685,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L934",
+      "source_location": "L973",
       "weight": 1.0
     },
     {
@@ -8624,7 +8709,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L889",
+      "source_location": "L928",
       "weight": 1.0
     },
     {
@@ -13143,6 +13228,17 @@
     },
     {
       "source": "src_js_dashboards",
+      "target": "src_js_dashboards_csvde",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L1020",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards",
       "target": "src_js_dashboards_renderresumen",
       "relation": "contains",
       "_origin": "ast",
@@ -13451,13 +13547,35 @@
     },
     {
       "source": "src_js_dashboards",
+      "target": "src_js_dashboards_contargrupo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L634",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards",
+      "target": "src_js_dashboards_calcularmodelos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L660",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards",
       "target": "src_js_dashboards_rendermodelos",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L631",
+      "source_location": "L697",
       "weight": 1.0
     },
     {
@@ -13468,7 +13586,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L718",
+      "source_location": "L736",
       "weight": 1.0
     },
     {
@@ -13479,7 +13597,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L755",
+      "source_location": "L792",
       "weight": 1.0
     },
     {
@@ -13490,7 +13608,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L765",
+      "source_location": "L802",
       "weight": 1.0
     },
     {
@@ -13501,7 +13619,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L770",
+      "source_location": "L807",
       "weight": 1.0
     },
     {
@@ -13512,7 +13630,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L821",
+      "source_location": "L860",
       "weight": 1.0
     },
     {
@@ -13523,7 +13641,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L825",
+      "source_location": "L864",
       "weight": 1.0
     },
     {
@@ -13534,7 +13652,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L843",
+      "source_location": "L882",
       "weight": 1.0
     },
     {
@@ -13545,7 +13663,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L880",
+      "source_location": "L919",
       "weight": 1.0
     },
     {
@@ -13556,7 +13674,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L882",
+      "source_location": "L921",
       "weight": 1.0
     },
     {
@@ -13567,7 +13685,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L905",
+      "source_location": "L944",
       "weight": 1.0
     },
     {
@@ -13579,17 +13697,6 @@
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
       "source_location": "L98",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards",
-      "target": "src_js_dashboards_csvde",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L981",
       "weight": 1.0
     },
     {
@@ -17127,42 +17234,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_js_dashboards_renderalmacen",
-      "target": "src_js_constantes_separada",
-      "relation": "indirect_call",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "argument",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L385",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards_rendermodelos",
-      "target": "src_js_constantes_separada",
-      "relation": "indirect_call",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "argument",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L652",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards_renderstock",
-      "target": "src_js_constantes_disponible",
-      "relation": "indirect_call",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "argument",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L910",
-      "weight": 1.0
-    },
-    {
       "source": "src_js_paneles_control_filllists",
       "target": "src_js_paneles_control_numord",
       "relation": "indirect_call",
@@ -17698,6 +17769,270 @@
       "weight": 1.0
     },
     {
+      "source": "src_puertas_almacen",
+      "target": "src_puertas_estado_despacho",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "select#a-est",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_avisos",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#btn-avisos",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_configuracion",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#btn-cfg",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_informes_programados",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#btn-informes",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_nueva_ficha",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#btn-nueva",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_usuarios_y_permisos",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#btn-usuarios",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_almacen",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=almacen]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_calidad",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=calidad]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_control_de_ops",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=control]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_planta",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=planta]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_programacion",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=programa]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_resumen",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=resumen]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_app",
+      "target": "src_puertas_stock",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button.tab[data-view=stock]",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_calidad",
+      "target": "src_puertas_almacen",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "div.aviso 'Una puerta al 100% todav\u00eda no est\u00e1 en almac\u00e9n: est\u00e1 lista para que la revisen'",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_control_de_ops",
+      "target": "src_puertas_estado_despacho",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "select#f-desp",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_control_de_ops",
+      "target": "src_puertas_proceso_de_fabricacion",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "th[title] CP/IN/AC/CM/MA/CR/RI/EM columns in table#tb",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_estado_stock",
+      "target": "src_puertas_filtro_disponibles",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "option[value=__disp] inside select#s-est",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_inventario_por_modelo",
+      "target": "src_puertas_boton_imprimir_modelo",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "button#m-print inside Inventario por modelo header",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_nueva_ficha",
+      "target": "src_puertas_panel_de_puerta",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "#n-panel checkbox 'Esta puerta lleva panel' and #n-panel-campos",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_panel_de_puerta",
+      "target": "src_puertas_planta",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "p.expl 'la tarjeta de Planta avisa cuando est\u00e1 listo'",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_planta",
+      "target": "src_puertas_proceso_de_fabricacion",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "select#p-est option 'Iniciadas sin terminar' referencing procesos",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_resumen",
+      "target": "src_puertas_proceso_de_fabricacion",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "h2 'Carga por proceso' + p.expl 'ese proceso todav\u00eda sin marcar'",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_stock",
+      "target": "src_puertas_inventario_por_modelo",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "section#v-stock > div.sec (Inventario por modelo)",
+      "weight": 1.0
+    },
+    {
+      "source": "src_puertas_stock",
+      "target": "src_puertas_estado_stock",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/puertas.html",
+      "source_location": "select#s-est",
+      "weight": 1.0
+    },
+    {
       "source": "docs_paneles_formula_poliuretano",
       "target": "docs_paneles_ancho_116",
       "relation": "shares_data_with",
@@ -17742,6 +18077,17 @@
       "weight": 1.0
     },
     {
+      "source": "src_puertas_stock",
+      "target": "src_puertas_separar_puerta",
+      "relation": "references",
+      "_origin": "semantic",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/puertas.html",
+      "source_location": "section#v-stock vs div#ov-separar",
+      "weight": 1.0
+    },
+    {
       "source": "docs_paneles_revisarpoliuretano",
       "target": "docs_paneles_validacion_hoja",
       "relation": "semantically_similar_to",
@@ -17753,270 +18099,10 @@
       "weight": 1.0
     },
     {
-      "source": "docs_paneles_m2_unidad_trabajo",
-      "target": "docs_paneles_formula_poliuretano",
-      "relation": "shares_data_with",
-      "_origin": "semantic",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "docs/PANELES.md",
-      "source_location": null,
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_almacen",
-      "target": "src_puertas_estado_despacho",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "select#a-est",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_avisos",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#btn-avisos",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_configuracion",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#btn-cfg",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_informes_programados",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#btn-informes",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_nueva_ficha",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#btn-nueva",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_usuarios_y_permisos",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#btn-usuarios",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_almacen",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=almacen]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_calidad",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=calidad]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_control_de_ops",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=control]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_planta",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=planta]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_programacion",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=programa]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_resumen",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=resumen]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_app",
-      "target": "src_puertas_stock",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button.tab[data-view=stock]",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_calidad",
-      "target": "src_puertas_almacen",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "div.aviso 'Una puerta al 100% todav\u00eda no est\u00e1 en almac\u00e9n: est\u00e1 lista para que la revisen'",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_control_de_ops",
-      "target": "src_puertas_estado_despacho",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "select#f-desp",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_control_de_ops",
-      "target": "src_puertas_proceso_de_fabricacion",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "th[title] CP/IN/AC/CM/MA/CR/RI/EM columns in table#tb",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_estado_stock",
-      "target": "src_puertas_filtro_disponibles",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "option[value=__disp] inside select#s-est",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_inventario_por_modelo",
-      "target": "src_puertas_boton_imprimir_modelo",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "button#m-print inside Inventario por modelo header",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_nueva_ficha",
-      "target": "src_puertas_panel_de_puerta",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "#n-panel checkbox 'Esta puerta lleva panel' and #n-panel-campos",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_panel_de_puerta",
-      "target": "src_puertas_planta",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "p.expl 'la tarjeta de Planta avisa cuando est\u00e1 listo'",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_planta",
-      "target": "src_puertas_proceso_de_fabricacion",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "select#p-est option 'Iniciadas sin terminar' referencing procesos",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_resumen",
-      "target": "src_puertas_proceso_de_fabricacion",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "h2 'Carga por proceso' + p.expl 'ese proceso todav\u00eda sin marcar'",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_stock",
-      "target": "src_puertas_inventario_por_modelo",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "section#v-stock > div.sec (Inventario por modelo)",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_stock",
-      "target": "src_puertas_estado_stock",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/puertas.html",
-      "source_location": "select#s-est",
-      "weight": 1.0
-    },
-    {
-      "source": "src_puertas_stock",
-      "target": "src_puertas_separar_puerta",
-      "relation": "references",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "src/puertas.html",
-      "source_location": "section#v-stock vs div#ov-separar",
-      "weight": 1.0
-    },
-    {
       "source": "src_puertas_almacen",
       "target": "src_puertas_imprimir_etiqueta_logo",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18027,6 +18113,7 @@
       "source": "src_puertas_calidad",
       "target": "src_puertas_imprimir_etiqueta_logo",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18037,6 +18124,7 @@
       "source": "src_puertas_control_de_ops",
       "target": "src_puertas_detalle_puerta",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18047,6 +18135,7 @@
       "source": "src_puertas_estado_stock",
       "target": "src_puertas_separar_puerta",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18057,6 +18146,7 @@
       "source": "src_puertas_inventario_por_modelo",
       "target": "src_puertas_modelo_de_stock",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18067,6 +18157,7 @@
       "source": "src_puertas_resumen",
       "target": "src_puertas_kpi_detalle",
       "relation": "references",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
@@ -18077,10 +18168,22 @@
       "source": "src_puertas_control_de_ops",
       "target": "src_puertas_almacen",
       "relation": "shares_data_with",
+      "_origin": "semantic",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "src/puertas.html",
       "source_location": "select#f-desp options vs select#a-est options (Terminado/En Almac\u00e9n/Despachado/Anulada)",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_paneles_m2_unidad_trabajo",
+      "target": "docs_paneles_formula_poliuretano",
+      "relation": "shares_data_with",
+      "_origin": "semantic",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/PANELES.md",
+      "source_location": null,
       "weight": 1.0
     }
   ],
@@ -18174,5 +18277,5 @@
       "source_file": "docs/PANELES.md"
     }
   ],
-  "built_at_commit": "96517f183dedf9ac69625f298f510663accca2f0"
+  "built_at_commit": "d44ef55fffeae1ceb3a5156bb40fbe49e25b485e"
 }

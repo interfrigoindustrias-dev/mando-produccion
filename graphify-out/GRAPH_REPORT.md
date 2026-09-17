@@ -5,9 +5,9 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 610 nodes · 961 edges · 42 communities (34 shown, 5 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 34 edges (avg confidence: 0.72)
-- Token cost: 97,760 input · 0 output
+- 612 nodes · 963 edges · 42 communities (34 shown, 5 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.71)
+- Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
 - Tableros y catalogo
@@ -67,12 +67,12 @@
   src/js/calidad.js → src/js/constantes.js
 - `render()` --references--> `SEL`  [EXTRACTED]
   src/js/control.js → src/js/constantes.js
-- `renderAlmacen()` --indirect_call--> `separada()`  [INFERRED]
-  src/js/dashboards.js → src/js/constantes.js
-- `renderModelos()` --indirect_call--> `separada()`  [INFERRED]
-  src/js/dashboards.js → src/js/constantes.js
-- `renderStock()` --indirect_call--> `disponible()`  [INFERRED]
-  src/js/dashboards.js → src/js/constantes.js
+- `refresh()` --indirect_call--> `fillLists()`  [INFERRED]
+  src/js/datos.js → src/js/paneles-control.js
+- `refresh()` --indirect_call--> `render()`  [INFERRED]
+  src/js/datos.js → src/js/paneles-control.js
+- `setCheckboxUI()` --indirect_call--> `col()`  [INFERRED]
+  src/js/api.js → src/js/paneles-auto.js
 
 ## Import Cycles
 - None detected.
@@ -80,16 +80,16 @@
 ## Hyperedges (group relationships)
 - **Módulos que usan paneles-filtros.js** — src_js_paneles_filtros, src_js_paneles_control, src_js_paneles_planta, src_js_paneles_almacen [EXTRACTED 1.00]
 - **Módulos de Puertas no cargados por Paneles** — docs_paneles_vistas_separadas, docs_paneles_control_js, docs_paneles_ficha_js, docs_paneles_planta_js, docs_paneles_dashboards_js, docs_paneles_automatizaciones_js [EXTRACTED 1.00]
-- **Automatismos de estado en Paneles** — docs_paneles_automatismos, docs_paneles_terminar_button, docs_paneles_llegar_100_no_cierra, src_js_paneles_planta, src_js_paneles_almacen [INFERRED 0.85]
 - **Sistema de impresión por vista** — src_puertas_control_de_ops, src_puertas_stock, src_puertas_almacen, src_puertas_programacion [INFERRED 0.75]
-- **Seguimiento de procesos de fabricación entre vistas** — src_puertas_control_de_ops, src_puertas_planta, src_puertas_resumen, src_puertas_proceso_de_fabricacion [INFERRED 0.80]
 - **Ciclo de vida de una puerta (creación a stock/almacén)** — src_puertas_nueva_ficha, src_puertas_control_de_ops, src_puertas_calidad, src_puertas_almacen, src_puertas_stock [INFERRED 0.80]
+- **Seguimiento de procesos de fabricación entre vistas** — src_puertas_control_de_ops, src_puertas_planta, src_puertas_resumen, src_puertas_proceso_de_fabricacion [INFERRED 0.80]
+- **Automatismos de estado en Paneles** — docs_paneles_automatismos, docs_paneles_terminar_button, docs_paneles_llegar_100_no_cierra, src_js_paneles_planta, src_js_paneles_almacen [INFERRED 0.85]
 
 ## Communities (42 total, 5 thin omitted)
 
 ### Community 0 - "Tableros y catalogo"
 Cohesion: 0.08
-Nodes (33): abrirModelo(), almacenBase(), almacenList(), bCarta, bStk, bTodas, celdaSeparar(), clicSeparar() (+25 more)
+Nodes (36): abrirModelo(), almacenBase(), almacenList(), bCarta, bStk, bTodas, calcularModelos(), celdaSeparar() (+28 more)
 
 ### Community 1 - "secuencia.js"
 Cohesion: 0.08
@@ -224,24 +224,24 @@ Cohesion: 0.70
 Nodes (4): filtroPuesto(), pintarContador(), plegarBarra(), plegarFiltros()
 
 ## Knowledge Gaps
-- **89 isolated node(s):** `ORDEN_PRIO`, `CAMPOS_EDITABLES`, `DIAS_SEMANA`, `FRECUENCIAS`, `INF_HEAD` (+84 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 184 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **89 isolated node(s):** `ORDEN_PRIO`, `NUMERICOS`, `ESTADO`, `CAMPOS_EDITABLES`, `DIAS_SEMANA` (+84 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 183 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ROWS` connect `Control de OPs` to `Constantes del modelo`, `Cliente de Google Sheets`, `paneles-ficha.js`, `Impresion`, `Vista de planta`, `calidad.js`?**
-  _High betweenness centrality (0.196) - this node is a cross-community bridge._
-- **Why does `openDet()` connect `paneles-ficha.js` to `Control de OPs`?**
-  _High betweenness centrality (0.141) - this node is a cross-community bridge._
+  _High betweenness centrality (0.139) - this node is a cross-community bridge._
 - **Why does `Columnas de la hoja (A-U)` connect `secuencia.js` to `paneles-ficha.js`?**
-  _High betweenness centrality (0.138) - this node is a cross-community bridge._
-- **What connects `ORDEN_PRIO`, `CAMPOS_EDITABLES`, `DIAS_SEMANA` to the rest of the system?**
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+- **What connects `ORDEN_PRIO`, `NUMERICOS`, `ESTADO` to the rest of the system?**
   _89 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
-  _Cohesion score 0.08246225319396051 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.080338266384778 - nodes in this community are weakly interconnected._
 - **Should `secuencia.js` be split into smaller, more focused modules?**
   _Cohesion score 0.0796221322537112 - nodes in this community are weakly interconnected._
 - **Should `paneles-filtros.js` be split into smaller, more focused modules?**
   _Cohesion score 0.10695187165775401 - nodes in this community are weakly interconnected._
+- **Should `Programación de Paneles` be split into smaller, more focused modules?**
+  _Cohesion score 0.14583333333333334 - nodes in this community are weakly interconnected._
