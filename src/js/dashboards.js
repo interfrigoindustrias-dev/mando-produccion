@@ -751,9 +751,10 @@ function imprimirModelos(){
     ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
     <td class="n">${otras.av}</td></tr>` : "";
 
+  const MARGEN_MM = 12, ANCHO_MM = 279.4, ALTO_MM = 215.9;     // carta horizontal
   let rule = $("#page-rule");
   if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
-  rule.textContent = "@page{size:letter landscape;margin:12mm}";
+  rule.textContent = `@page{size:letter landscape;margin:${MARGEN_MM}mm}`;
   $("#print").innerHTML = `<div class="im-print">
     <div class="im-cab">
       <span class="c-logo"></span>
@@ -776,8 +777,36 @@ function imprimirModelos(){
         <td class="n">${T.tot}</td><td></td></tr></tfoot>
     </table>
   </div>`;
+
+  /* No basta con que la tabla "quepa" a ojo: en un dispositivo real (no en
+     una PDF virtual) Chrome puede seguir repartiendo mal las filas por
+     hoja, sin que ninguna regla de @page o break-inside lo arregle desde
+     aqui. La unica forma de garantizar UNA sola hoja pase lo que pase es
+     dejar de confiar en como el motor de impresion reparte el contenido:
+     se mide la altura real fuera de pantalla y, si no cabe, se encoge con
+     `zoom` —que sí reduce el tamaño de la caja para el motor de impresion,
+     a diferencia de `transform`, que solo cambia el dibujo— hasta que quepa
+     en una hoja. Con eso ya no hay filas que repartir entre paginas. */
+  const caja = $("#print .im-print");
+  const pxPorMm = 96/25.4;
+  const anchoDisp = (ANCHO_MM - MARGEN_MM*2) * pxPorMm;
+  const altoDisp  = (ALTO_MM  - MARGEN_MM*2) * pxPorMm;
+  const printEl = $("#print");
+  const prevCss = printEl.style.cssText;
+  printEl.style.cssText = "display:block!important;position:fixed;left:-99999px;top:0;visibility:hidden";
+  caja.style.width = anchoDisp + "px";
+  const altoNatural = caja.getBoundingClientRect().height;
+  // El 0.94 es margen de seguridad: medido fuera de pantalla y aplicado ya
+  // encogido no dan exactamente el mismo alto (redondeos de sub-pixel con
+  // zoom fraccionario), y sin este colchon una tabla que "just" cabia
+  // terminaba desbordando una fila a una segunda hoja de todos modos.
+  // No mas abajo del 45%: mas encogido que eso deja de leerse, y a esa altura
+  // ya es mas sano aceptar una segunda hoja que entregar un cuadro ilegible.
+  const escala = Math.max(0.45, Math.min(1, (altoDisp*0.94)/altoNatural));
+  caja.style.zoom = escala;
+  printEl.style.cssText = prevCss;
+
   // Sin esta espera, Chrome paginaba con las filas todavia sin medir de verdad
-  // —cada una pedia una hoja entera para ella sola, 43 hojas para 17 modelos—
   // porque innerHTML e imprimir en el mismo tick no le da tiempo al motor de
   // impresion a calcular la altura real de la tabla. Es lo mismo que ya hace
   // imprimirPrograma() (programa.js) para esto mismo.
