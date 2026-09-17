@@ -271,19 +271,25 @@
 .im-print table{width:100%;border-collapse:collapse;table-layout:fixed}
 .im-print th,.im-print td{border:.3mm solid #000;padding:1.3mm 1.6mm;text-align:left;
   vertical-align:top;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.im-print td:not(.n){white-space:normal;overflow-wrap:anywhere}   /* Modelo, Tipo, Ap.: que quiebre en vez de recortar */
 .im-print thead{display:table-header-group}      /* la cabecera se repite en cada hoja */
 .im-print tfoot{display:table-row-group}         /* el total, solo al final */
 .im-print tbody tr{break-inside:avoid;page-break-inside:avoid}
-.im-print th{background:#000!important;color:#fff!important;font-size:6.6pt;font-weight:700;
-  text-transform:uppercase;letter-spacing:.02em;text-align:right;white-space:normal;
-  line-height:1.15}
+.im-print th{background:#000!important;color:#fff!important;font-size:6.4pt;font-weight:700;
+  text-transform:uppercase;letter-spacing:.01em;text-align:right;white-space:normal;
+  line-height:1.15;overflow-wrap:anywhere;word-break:break-word}
 .im-print th:nth-child(-n+5){text-align:left}    /* Modelo..Ap.: texto, no numero */
-.im-print col.im-c-mod{width:40mm}
-.im-print col.im-c-tipo{width:18mm}
-.im-print col.im-c-med{width:18mm}
-.im-print col.im-c-esp{width:11mm}
-.im-print col.im-c-ap{width:9mm}
-.im-print col.im-c-n{width:17mm}
+/* El ancho total se queda deliberadamente por debajo de lo que cabe hasta en
+   una hoja carta VERTICAL (no solo la horizontal que pide @page): si algun
+   controlador de impresora ignora el tamaño de pagina de la hoja de estilos,
+   la tabla no deberia entrar en el modo "ajustar al ancho" que es el que
+   dispara una fila por hoja. */
+.im-print col.im-c-mod{width:30mm}
+.im-print col.im-c-tipo{width:14mm}
+.im-print col.im-c-med{width:14mm}
+.im-print col.im-c-esp{width:8mm}
+.im-print col.im-c-ap{width:7mm}
+.im-print col.im-c-n{width:13.5mm}
 .im-print td.mod{font-weight:700;white-space:normal}
 .im-print td.n{text-align:right;font-variant-numeric:tabular-nums}
 .im-print td.n.z{color:#999!important}

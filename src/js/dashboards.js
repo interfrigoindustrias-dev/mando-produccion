@@ -776,7 +776,12 @@ function imprimirModelos(){
         <td class="n">${T.tot}</td><td></td></tr></tfoot>
     </table>
   </div>`;
-  window.print();
+  // Sin esta espera, Chrome paginaba con las filas todavia sin medir de verdad
+  // —cada una pedia una hoja entera para ella sola, 43 hojas para 17 modelos—
+  // porque innerHTML e imprimir en el mismo tick no le da tiempo al motor de
+  // impresion a calcular la altura real de la tabla. Es lo mismo que ya hace
+  // imprimirPrograma() (programa.js) para esto mismo.
+  setTimeout(()=> window.print(), 60);
 }
 $("#m-print").onclick = imprimirModelos;
 
