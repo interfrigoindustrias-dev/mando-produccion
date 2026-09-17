@@ -35,7 +35,7 @@
 #m-tabla tr.otras td{background:color-mix(in srgb,var(--info) 14%,var(--bg2));
   border-top:2px solid color-mix(in srgb,var(--info) 45%,transparent);
   border-bottom:2px solid color-mix(in srgb,var(--info) 45%,transparent)}
-#m-tabla tr.otras .mod{color:var(--info);font-weight:800}
+#m-tabla tr.otras .mnom{color:var(--info);font-weight:800}
 #m-tabla tr.otras:hover td{background:color-mix(in srgb,var(--info) 22%,var(--bg2))}
 /* Almacén: las separadas resaltan en rojo */
 #a-tabla tr.sep td{background:color-mix(in srgb,var(--bad) 13%,var(--bg2));
@@ -43,7 +43,7 @@
 #a-tabla tr.sep:hover td{background:color-mix(in srgb,var(--bad) 20%,var(--bg2))}
 #a-tabla tr.sep td:first-child{box-shadow:inset 4px 0 0 var(--bad)}
 #a-tabla tr.anu td{opacity:.5;text-decoration:line-through}
-#m-tabla .mod{font-weight:700}
+#m-tabla .mnom{font-weight:700}
 
 
 /* Texto que explica qué significa cada bloque */
@@ -65,7 +65,7 @@
 #m-tabla tbody tr{cursor:pointer}
 #m-tabla tbody tr.tot,#m-tabla tbody tr.otras{cursor:default}
 #m-tabla tbody tr.sel{background:color-mix(in srgb,var(--br) 16%,transparent)}
-#m-tabla tbody tr.sel .mod{font-weight:800}
+#m-tabla tbody tr.sel .mnom{font-weight:800}
 #s-modelo{display:flex;align-items:center;gap:8px}
 #s-modelo .x{margin-left:auto}
 

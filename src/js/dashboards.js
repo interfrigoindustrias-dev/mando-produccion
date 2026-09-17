@@ -709,14 +709,14 @@ function renderModelos(){
       <th title="Avance promedio de las que están en producción">Avance</th>
       <th></th></tr></thead><tbody>`+
     filas.map(({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
-      <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
+      <td class="mnom">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
       <td class="num">${m.ancho??"—"}×${m.alto??"—"}</td><td class="num">${m.esp??"—"}</td>
       <td>${esc(m.ap||"—")}</td>
       ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
       <td class="num">${av}</td>
       <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`).join("")+
     (otras ? `<tr class="otras" title="${esc(otras.det)}">
-        <td class="mod">Sin modelo definido</td>
+        <td class="mnom">Sin modelo definido</td>
         <td colspan="4" class="sub">${otras.hay.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
         ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
         <td class="num">${otras.av}</td><td></td></tr>` : "")+
@@ -738,7 +738,7 @@ function imprimirModelos(){
   if(!filas.length && !otras){ toast("Nada que imprimir","err"); return; }
   const n = (v,cls) => `<td class="n${v?" "+(cls||""):" z"}">${v}</td>`;
   const filaHTML = ({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
-    <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
+    <td class="mnom">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
     <td class="n">${m.ancho??"—"}×${m.alto??"—"}</td><td class="n">${m.esp??"—"}</td>
     <td>${esc(m.ap||"—")}</td>
     ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
@@ -746,7 +746,7 @@ function imprimirModelos(){
   // En pantalla el detalle de "sin modelo" se lee al pasar el mouse; en papel
   // eso no existe, asi que aqui va escrito debajo, en la misma fila.
   const otrasHTML = otras ? `<tr class="im-otras">
-    <td class="mod" colspan="5">Sin modelo definido
+    <td class="mnom" colspan="5">Sin modelo definido
       <span class="im-det">${esc(otras.hay.map(c=>`OP ${c[C.OP]}`).join(" · "))}</span></td>
     ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
     <td class="n">${otras.av}</td></tr>` : "";
@@ -779,15 +779,18 @@ function imprimirModelos(){
   </div>`;
 
   /* No basta con que la tabla "quepa" a ojo: en un dispositivo real (no en
-     una PDF virtual) Chrome puede seguir repartiendo mal las filas por
-     hoja, sin que ninguna regla de @page o break-inside lo arregle desde
-     aqui. La unica forma de garantizar UNA sola hoja pase lo que pase es
-     dejar de confiar en como el motor de impresion reparte el contenido:
-     se mide la altura real fuera de pantalla y, si no cabe, se encoge con
-     `zoom` —que sí reduce el tamaño de la caja para el motor de impresion,
-     a diferencia de `transform`, que solo cambia el dibujo— hasta que quepa
-     en una hoja. Con eso ya no hay filas que repartir entre paginas. */
+     el Chrome headless de prueba) el dialogo de impresion seguia repartiendo
+     mal las filas aunque el CSS ya no tuviera break-inside:avoid, y `zoom`
+     —que en la prueba SI reducia el alto para el motor de impresion— resulto
+     no servir ahi: el dialogo de impresion de un equipo real lo ignoraba y
+     la tabla salia en su tamaño de siempre. Cambiar el font-size de verdad
+     (con el padding en `em` en impresion.css, para que baje con el) funciona
+     igual en cualquier motor de impresion, porque es tipografia basica, no
+     un truco visual. Se mide la altura real fuera de pantalla y, si no cabe,
+     se encoge la letra hasta que quepa en una sola hoja. */
   const caja = $("#print .im-print");
+  const tabla = caja.querySelector("table");
+  const cab = caja.querySelector(".im-cab");
   const pxPorMm = 96/25.4;
   const anchoDisp = (ANCHO_MM - MARGEN_MM*2) * pxPorMm;
   const altoDisp  = (ALTO_MM  - MARGEN_MM*2) * pxPorMm;
@@ -795,15 +798,17 @@ function imprimirModelos(){
   const prevCss = printEl.style.cssText;
   printEl.style.cssText = "display:block!important;position:fixed;left:-99999px;top:0;visibility:hidden";
   caja.style.width = anchoDisp + "px";
-  const altoNatural = caja.getBoundingClientRect().height;
-  // El 0.94 es margen de seguridad: medido fuera de pantalla y aplicado ya
-  // encogido no dan exactamente el mismo alto (redondeos de sub-pixel con
-  // zoom fraccionario), y sin este colchon una tabla que "just" cabia
-  // terminaba desbordando una fila a una segunda hoja de todos modos.
-  // No mas abajo del 45%: mas encogido que eso deja de leerse, y a esa altura
-  // ya es mas sano aceptar una segunda hoja que entregar un cuadro ilegible.
-  const escala = Math.max(0.45, Math.min(1, (altoDisp*0.94)/altoNatural));
-  caja.style.zoom = escala;
+  const altoCab = cab.getBoundingClientRect().height;
+  const altoTablaNatural = tabla.getBoundingClientRect().height;
+  // El 0.94 es margen de seguridad: medido fuera de pantalla y ya con la
+  // letra encogida no dan exactamente el mismo alto (redondeos de sub-pixel),
+  // y sin este colchon una tabla que "apenas" cabia terminaba desbordando una
+  // fila a una segunda hoja de todos modos. No mas abajo del 50%: mas
+  // encogido que eso deja de leerse, y a esa altura ya es mas sano aceptar
+  // una segunda hoja que entregar un cuadro ilegible.
+  const disponibleTabla = altoDisp*0.94 - altoCab;
+  const escala = Math.max(0.5, Math.min(1, disponibleTabla/altoTablaNatural));
+  if(escala < 1) tabla.style.fontSize = (8.5*escala).toFixed(2) + "pt";
   printEl.style.cssText = prevCss;
 
   // Sin esta espera, Chrome paginaba con las filas todavia sin medir de verdad

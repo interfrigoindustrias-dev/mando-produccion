@@ -268,8 +268,17 @@
 .im-tit b{display:block;font-size:13pt;font-weight:900;letter-spacing:-.01em}
 .im-tit span{font-size:8pt;font-weight:600;color:#333!important}
 .im-meta{flex:none;font-size:8pt;font-weight:700}
-.im-print table{width:100%;border-collapse:collapse;table-layout:fixed}
-.im-print th,.im-print td{border:.3mm solid #000;padding:1.3mm 1.6mm;text-align:left;
+/* El tamaño de letra de la tabla se fija en JS (imprimirModelos), no aqui: es
+   lo que se encoge para que TODO quepa en una sola hoja sin importar cuantos
+   modelos haya. `zoom` no sirvio para esto — en un dispositivo real (fuera
+   del Chrome headless de prueba) el dialogo de impresion lo ignoraba y la
+   tabla salia en su tamaño de siempre. Cambiar el font-size de verdad si
+   funciona igual en cualquier motor de impresion: es tipografia basica, no
+   un truco visual. Por eso el padding va en `em` —relativo a ESE tamaño— en
+   vez de en mm fijos: si no, encoger la letra dejaba el padding intacto y la
+   fila apenas bajaba de alto. */
+.im-print table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.5pt;line-height:1.2}
+.im-print th,.im-print td{border:.3mm solid #000;padding:.43em .53em;text-align:left;
   vertical-align:top;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .im-print td:not(.n){white-space:normal;overflow-wrap:anywhere}   /* Modelo, Tipo, Ap.: que quiebre en vez de recortar */
 .im-print thead{display:table-header-group}      /* la cabecera se repite en cada hoja */
@@ -279,7 +288,7 @@
    sobre papel de sobra — es un bug conocido del motor de impresion, no una
    cuestion de medidas. Las filas son una sola linea de texto; no necesitan
    proteccion contra partirse a la mitad. */
-.im-print th{background:#000!important;color:#fff!important;font-size:6.4pt;font-weight:700;
+.im-print th{background:#000!important;color:#fff!important;font-size:.75em;font-weight:700;
   text-transform:uppercase;letter-spacing:.01em;text-align:right;white-space:normal;
   line-height:1.15;overflow-wrap:anywhere;word-break:break-word}
 .im-print th:nth-child(-n+5){text-align:left}    /* Modelo..Ap.: texto, no numero */
@@ -294,13 +303,13 @@
 .im-print col.im-c-esp{width:8mm}
 .im-print col.im-c-ap{width:7mm}
 .im-print col.im-c-n{width:13.5mm}
-.im-print td.mod{font-weight:700;white-space:normal}
+.im-print td.mnom{font-weight:700;white-space:normal}
 .im-print td.n{text-align:right;font-variant-numeric:tabular-nums}
 .im-print td.n.z{color:#999!important}
 .im-print td.n.disp{font-weight:900}
 .im-print tbody tr:nth-child(even) td{background:#f3f3f3!important}
 .im-print tr.im-otras td{font-style:italic}
-.im-print .im-det{display:block;font-style:normal;font-weight:400;font-size:6.8pt;
+.im-print .im-det{display:block;font-style:normal;font-weight:400;font-size:.8em;
   color:#444!important;white-space:normal;margin-top:.5mm}
 .im-print tfoot td{border-top:.7mm solid #000!important;font-weight:900;background:#e8e8e8!important}
 @media print{
