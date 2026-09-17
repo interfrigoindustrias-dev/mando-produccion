@@ -104,7 +104,7 @@
       "file_type": "code",
       "norm_label": "abrirmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L797"
+      "source_location": "L826"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -212,7 +212,7 @@
       "file_type": "code",
       "norm_label": "csvde()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1025"
+      "source_location": "L1054"
     },
     {
       "id": "src_js_dashboards_diasfabricacionpuerta",
@@ -284,7 +284,7 @@
       "file_type": "code",
       "norm_label": "marcarfilamodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L887"
+      "source_location": "L916"
     },
     {
       "id": "src_js_dashboards_medianapuertas",
@@ -356,7 +356,7 @@
       "file_type": "code",
       "norm_label": "pintarchipmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L865"
+      "source_location": "L894"
     },
     {
       "id": "src_js_dashboards_pintarentrega",
@@ -380,7 +380,7 @@
       "file_type": "code",
       "norm_label": "pintarmodelomodal()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L812"
+      "source_location": "L841"
     },
     {
       "id": "src_js_dashboards_pintarprogramaresumen",
@@ -416,7 +416,7 @@
       "file_type": "code",
       "norm_label": "puertasdemodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L807"
+      "source_location": "L836"
     },
     {
       "id": "src_js_dashboards_renderalmacen",
@@ -464,7 +464,7 @@
       "file_type": "code",
       "norm_label": "renderstock()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L949"
+      "source_location": "L978"
     },
     {
       "id": "src_js_dashboards_seldesp",
@@ -500,7 +500,7 @@
       "file_type": "code",
       "norm_label": "stockbase()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L924"
+      "source_location": "L953"
     },
     {
       "id": "src_js_dashboards_stocklist",
@@ -512,7 +512,7 @@
       "file_type": "code",
       "norm_label": "stocklist()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L926"
+      "source_location": "L955"
     },
     {
       "id": "src_js_control_editcampo",
@@ -1875,7 +1875,7 @@
       "file_type": "code",
       "norm_label": "mmtabla",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L869"
+      "source_location": "L898"
     },
     {
       "id": "src_js_dashboards_mod_head",
@@ -8357,7 +8357,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L802",
+      "source_location": "L831",
       "weight": 1.0
     },
     {
@@ -8501,7 +8501,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L819",
+      "source_location": "L848",
       "weight": 1.0
     },
     {
@@ -8513,7 +8513,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L850",
+      "source_location": "L879",
       "weight": 1.0
     },
     {
@@ -8525,7 +8525,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L851",
+      "source_location": "L880",
       "weight": 1.0
     },
     {
@@ -8537,7 +8537,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L854",
+      "source_location": "L883",
       "weight": 1.0
     },
     {
@@ -8549,7 +8549,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L809",
+      "source_location": "L838",
       "weight": 1.0
     },
     {
@@ -8561,7 +8561,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L809",
+      "source_location": "L838",
       "weight": 1.0
     },
     {
@@ -8662,30 +8662,6 @@
     },
     {
       "source": "src_js_dashboards_renderstock",
-      "target": "src_js_dashboards_stockbase",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L950",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards_renderstock",
-      "target": "src_js_dashboards_stocklist",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/js/dashboards.js",
-      "source_location": "L950",
-      "weight": 1.0
-    },
-    {
-      "source": "src_js_dashboards_renderstock",
       "target": "src_js_dashboards_seldesp",
       "relation": "calls",
       "_origin": "ast",
@@ -8693,7 +8669,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L972",
+      "source_location": "L1001",
       "weight": 1.0
     },
     {
@@ -8705,7 +8681,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L973",
+      "source_location": "L1002",
       "weight": 1.0
     },
     {
@@ -8717,7 +8693,31 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L978",
+      "source_location": "L1007",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_renderstock",
+      "target": "src_js_dashboards_stockbase",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L979",
+      "weight": 1.0
+    },
+    {
+      "source": "src_js_dashboards_renderstock",
+      "target": "src_js_dashboards_stocklist",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/js/dashboards.js",
+      "source_location": "L979",
       "weight": 1.0
     },
     {
@@ -8741,7 +8741,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L933",
+      "source_location": "L962",
       "weight": 1.0
     },
     {
@@ -13194,7 +13194,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1025",
+      "source_location": "L1054",
       "weight": 1.0
     },
     {
@@ -13557,7 +13557,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L797",
+      "source_location": "L826",
       "weight": 1.0
     },
     {
@@ -13568,7 +13568,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L807",
+      "source_location": "L836",
       "weight": 1.0
     },
     {
@@ -13579,7 +13579,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L812",
+      "source_location": "L841",
       "weight": 1.0
     },
     {
@@ -13590,7 +13590,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L865",
+      "source_location": "L894",
       "weight": 1.0
     },
     {
@@ -13601,7 +13601,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L869",
+      "source_location": "L898",
       "weight": 1.0
     },
     {
@@ -13612,7 +13612,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L887",
+      "source_location": "L916",
       "weight": 1.0
     },
     {
@@ -13623,7 +13623,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L924",
+      "source_location": "L953",
       "weight": 1.0
     },
     {
@@ -13634,7 +13634,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L926",
+      "source_location": "L955",
       "weight": 1.0
     },
     {
@@ -13645,7 +13645,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L949",
+      "source_location": "L978",
       "weight": 1.0
     },
     {
@@ -18248,5 +18248,5 @@
       "source_file": "docs/PANELES.md"
     }
   ],
-  "built_at_commit": "9d9785ac7bee4d95236d913ef9c4b44dd3a7f6ce"
+  "built_at_commit": "9ba89e73267b162f9c09ef3d349d3d5935258ef7"
 }
