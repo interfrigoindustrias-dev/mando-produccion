@@ -36,10 +36,10 @@
     "semantic_hash": "24f5e4b2536eb44100e290d4d68a744c"
   },
   "src/js/dashboards.js": {
-    "mtime": 1789674630.1532855,
-    "seen": 1789674849.3263545,
-    "ast_hash": "15f2ebefab00a56b9200369ff13aa5b5",
-    "semantic_hash": "15f2ebefab00a56b9200369ff13aa5b5"
+    "mtime": 1789677021.993138,
+    "seen": 1789677260.5826938,
+    "ast_hash": "e3e7d70a9e165238e5da3060c2cb9aa0",
+    "semantic_hash": "e3e7d70a9e165238e5da3060c2cb9aa0"
   },
   "src/js/constantes.js": {
     "mtime": 1789671201.7942634,
@@ -52,5 +52,11 @@
     "seen": 1789671994.1212766,
     "ast_hash": "85e4f03870474e468103d9e01eecc02d",
     "semantic_hash": "85e4f03870474e468103d9e01eecc02d"
+  },
+  "src/js/control.js": {
+    "mtime": 1789676995.994771,
+    "seen": 1789677260.5826976,
+    "ast_hash": "fe95e28fff73425595517b244c740539",
+    "semantic_hash": "fe95e28fff73425595517b244c740539"
   }
 }
