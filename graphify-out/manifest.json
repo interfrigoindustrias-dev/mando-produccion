@@ -54,9 +54,15 @@
     "semantic_hash": "85e4f03870474e468103d9e01eecc02d"
   },
   "src/js/control.js": {
-    "mtime": 1789676995.994771,
-    "seen": 1789677260.5826976,
-    "ast_hash": "fe95e28fff73425595517b244c740539",
-    "semantic_hash": "fe95e28fff73425595517b244c740539"
+    "mtime": 1789678068.9475071,
+    "seen": 1789678279.757471,
+    "ast_hash": "ea4c25d46cbefacaa1b9a3033ac1f4a0",
+    "semantic_hash": "ea4c25d46cbefacaa1b9a3033ac1f4a0"
+  },
+  "src/js/ficha.js": {
+    "mtime": 1789678044.6887324,
+    "seen": 1789678279.757476,
+    "ast_hash": "c53d0dee3bae63adf5fa1ffbab9567d1",
+    "semantic_hash": "c53d0dee3bae63adf5fa1ffbab9567d1"
   }
 }
