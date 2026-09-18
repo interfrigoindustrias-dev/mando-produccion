@@ -104,7 +104,7 @@
       "file_type": "code",
       "norm_label": "abrirmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L831"
+      "source_location": "L832"
     },
     {
       "id": "src_js_dashboards_almacenbase",
@@ -212,7 +212,7 @@
       "file_type": "code",
       "norm_label": "csvde()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1059"
+      "source_location": "L1060"
     },
     {
       "id": "src_js_dashboards_diasfabricacionpuerta",
@@ -284,7 +284,7 @@
       "file_type": "code",
       "norm_label": "marcarfilamodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L921"
+      "source_location": "L922"
     },
     {
       "id": "src_js_dashboards_medianapuertas",
@@ -356,7 +356,7 @@
       "file_type": "code",
       "norm_label": "pintarchipmodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L899"
+      "source_location": "L900"
     },
     {
       "id": "src_js_dashboards_pintarentrega",
@@ -380,7 +380,7 @@
       "file_type": "code",
       "norm_label": "pintarmodelomodal()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L846"
+      "source_location": "L847"
     },
     {
       "id": "src_js_dashboards_pintarprogramaresumen",
@@ -416,7 +416,7 @@
       "file_type": "code",
       "norm_label": "puertasdemodelo()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L841"
+      "source_location": "L842"
     },
     {
       "id": "src_js_dashboards_renderalmacen",
@@ -464,7 +464,7 @@
       "file_type": "code",
       "norm_label": "renderstock()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L983"
+      "source_location": "L984"
     },
     {
       "id": "src_js_dashboards_seldesp",
@@ -500,7 +500,7 @@
       "file_type": "code",
       "norm_label": "stockbase()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L958"
+      "source_location": "L959"
     },
     {
       "id": "src_js_dashboards_stocklist",
@@ -512,7 +512,7 @@
       "file_type": "code",
       "norm_label": "stocklist()",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L960"
+      "source_location": "L961"
     },
     {
       "id": "src_js_control_editcampo",
@@ -1875,7 +1875,7 @@
       "file_type": "code",
       "norm_label": "mmtabla",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L903"
+      "source_location": "L904"
     },
     {
       "id": "src_js_dashboards_mod_head",
@@ -8357,7 +8357,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L836",
+      "source_location": "L837",
       "weight": 1.0
     },
     {
@@ -8501,7 +8501,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L853",
+      "source_location": "L854",
       "weight": 1.0
     },
     {
@@ -8513,7 +8513,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L884",
+      "source_location": "L885",
       "weight": 1.0
     },
     {
@@ -8525,7 +8525,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L885",
+      "source_location": "L886",
       "weight": 1.0
     },
     {
@@ -8537,7 +8537,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L888",
+      "source_location": "L889",
       "weight": 1.0
     },
     {
@@ -8549,7 +8549,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L843",
+      "source_location": "L844",
       "weight": 1.0
     },
     {
@@ -8561,7 +8561,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L843",
+      "source_location": "L844",
       "weight": 1.0
     },
     {
@@ -8669,7 +8669,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1006",
+      "source_location": "L1007",
       "weight": 1.0
     },
     {
@@ -8681,7 +8681,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1007",
+      "source_location": "L1008",
       "weight": 1.0
     },
     {
@@ -8693,7 +8693,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1012",
+      "source_location": "L1013",
       "weight": 1.0
     },
     {
@@ -8705,7 +8705,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L984",
+      "source_location": "L985",
       "weight": 1.0
     },
     {
@@ -8717,7 +8717,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L984",
+      "source_location": "L985",
       "weight": 1.0
     },
     {
@@ -8741,7 +8741,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/js/dashboards.js",
-      "source_location": "L967",
+      "source_location": "L968",
       "weight": 1.0
     },
     {
@@ -13194,7 +13194,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L1059",
+      "source_location": "L1060",
       "weight": 1.0
     },
     {
@@ -13557,7 +13557,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L831",
+      "source_location": "L832",
       "weight": 1.0
     },
     {
@@ -13568,7 +13568,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L841",
+      "source_location": "L842",
       "weight": 1.0
     },
     {
@@ -13579,7 +13579,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L846",
+      "source_location": "L847",
       "weight": 1.0
     },
     {
@@ -13590,7 +13590,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L899",
+      "source_location": "L900",
       "weight": 1.0
     },
     {
@@ -13601,7 +13601,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L903",
+      "source_location": "L904",
       "weight": 1.0
     },
     {
@@ -13612,7 +13612,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L921",
+      "source_location": "L922",
       "weight": 1.0
     },
     {
@@ -13623,7 +13623,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L958",
+      "source_location": "L959",
       "weight": 1.0
     },
     {
@@ -13634,7 +13634,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L960",
+      "source_location": "L961",
       "weight": 1.0
     },
     {
@@ -13656,7 +13656,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/js/dashboards.js",
-      "source_location": "L983",
+      "source_location": "L984",
       "weight": 1.0
     },
     {
@@ -18248,5 +18248,5 @@
       "source_file": "docs/PANELES.md"
     }
   ],
-  "built_at_commit": "cb8eb36ebb087911380558f7c56f2f0bf7a8dca6"
+  "built_at_commit": "9d71979ac91f607954c67ac814514f5ec8e5085a"
 }
