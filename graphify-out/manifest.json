@@ -12,10 +12,10 @@
     "semantic_hash": "47bef4139961d41e1d9f2d8ffa000145"
   },
   "src/js/paneles-control.js": {
-    "mtime": 1789571364.0998414,
-    "seen": 1789572290.9360077,
-    "ast_hash": "3df0ef66e1ff201d64ba1cd31a0c90fc",
-    "semantic_hash": "3df0ef66e1ff201d64ba1cd31a0c90fc"
+    "mtime": 1789763530.6210003,
+    "seen": 1789763881.298633,
+    "ast_hash": "999d5ef5c8871d2c39ac24d5323c440e",
+    "semantic_hash": "999d5ef5c8871d2c39ac24d5323c440e"
   },
   "src/js/datos.js": {
     "mtime": 1789571364.0998414,
@@ -24,10 +24,10 @@
     "semantic_hash": "64acf30604ee79ae4b5c04f325d5b8a4"
   },
   "tools/humo.js": {
-    "mtime": 1789571809.6083174,
-    "seen": 1789572290.9360096,
-    "ast_hash": "fa6b2f5d782d7976d30da4ab54ddd5c9",
-    "semantic_hash": "fa6b2f5d782d7976d30da4ab54ddd5c9"
+    "mtime": 1789763676.02972,
+    "seen": 1789763881.2986422,
+    "ast_hash": "69ac90552faaf8a9bb29400fc3bb3312",
+    "semantic_hash": "69ac90552faaf8a9bb29400fc3bb3312"
   },
   "docs/PANELES.md": {
     "mtime": 1789571364.0998414,
@@ -54,10 +54,10 @@
     "semantic_hash": "85e4f03870474e468103d9e01eecc02d"
   },
   "src/js/control.js": {
-    "mtime": 1789761233.2254076,
-    "seen": 1789761376.0425937,
-    "ast_hash": "75cbcf121295a8eb0603c006604dc579",
-    "semantic_hash": "75cbcf121295a8eb0603c006604dc579"
+    "mtime": 1789763530.6210003,
+    "seen": 1789763881.298614,
+    "ast_hash": "6b3eba3b94e90986b3388d0f73b1ce93",
+    "semantic_hash": "6b3eba3b94e90986b3388d0f73b1ce93"
   },
   "src/js/ficha.js": {
     "mtime": 1789678044.6887324,

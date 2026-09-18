@@ -5,26 +5,26 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 613 nodes · 958 edges · 44 communities (36 shown, 5 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.73)
+- 619 nodes · 966 edges · 44 communities (36 shown, 5 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 33 edges (avg confidence: 0.74)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
 - Tableros y catalogo
 - secuencia.js
+- paneles-control.js
 - paneles-filtros.js
 - Programación de Paneles
-- paneles-control.js
 - Vistas y secciones de Puertas
 - humo.js
 - Utilidades y fechas
 - Cliente de Google Sheets
 - Constantes del modelo
+- Control de OPs
 - paneles-ficha.js
 - informes.js
 - usuarios.js
 - Impresion
-- Control de OPs
 - Constantes del modelo
 - paneles-resumen.js
 - Ayudantes de tableros
@@ -54,8 +54,8 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `renderPrograma()` - 13 edges
-2. `render()` - 12 edges
-3. `Control de Puertas (app shell)` - 12 edges
+2. `Control de Puertas (app shell)` - 12 edges
+3. `render()` - 12 edges
 4. `ROWS` - 10 edges
 5. `renderResumen()` - 10 edges
 6. `pintarModeloModal()` - 8 edges
@@ -97,17 +97,17 @@ Nodes (36): abrirModelo(), almacenBase(), almacenList(), bCarta, bStk, bTodas, c
 Cohesion: 0.08
 Nodes (35): Ancho fijo 1,16 m, Columnas de la hoja (A-U), Decisión 27, Densidad del poliuretano: 38 kg/m3, Agrupación por espesor, no por producto, espesorMm(), Fórmula UNIDAD/TOTAL de poliuretano, lotePorEspesor (200 m2 por defecto) (+27 more)
 
-### Community 2 - "paneles-filtros.js"
+### Community 2 - "paneles-control.js"
+Cohesion: 0.11
+Nodes (28): autoReprogramarAtrasadas(), refresh(), renderDashVisible(), restartPoll(), setSync(), stopPoll(), aplicarFiltros(), btnCsv (+20 more)
+
+### Community 3 - "paneles-filtros.js"
 Cohesion: 0.11
 Nodes (28): Automatismos de estado (4), Llegar al 100% no cierra la línea, Botón Terminar, aComp, enAlmacen(), porPedido(), renderAlmacen(), avisarCambio() (+20 more)
 
-### Community 3 - "Programación de Paneles"
+### Community 4 - "Programación de Paneles"
 Cohesion: 0.15
 Nodes (30): ajustarAlto(), autoDesplazar(), autoReprogramarAtrasadas(), cambiosAlSoltar(), capacidadDia(), diaQueToca(), diasDeSemana(), empezarArrastre() (+22 more)
-
-### Community 4 - "paneles-control.js"
-Cohesion: 0.12
-Nodes (26): autoReprogramarAtrasadas(), refresh(), renderDashVisible(), restartPoll(), setSync(), stopPoll(), aplicarFiltros(), btnCsv (+18 more)
 
 ### Community 5 - "Vistas y secciones de Puertas"
 Cohesion: 0.11
@@ -129,25 +129,25 @@ Nodes (21): api(), ensureCols(), ensureGid(), ensureRows(), fetchRows(), NUMERIC
 Cohesion: 0.13
 Nodes (12): CFG, CON_RIEL, DESPACHOS, disponible(), LOG_HEAD, PRIORIDADES, SEL, separada() (+4 more)
 
-### Community 10 - "paneles-ficha.js"
+### Community 10 - "Control de OPs"
+Cohesion: 0.18
+Nodes (16): editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis(), medidaDe(), ordenar() (+8 more)
+
+### Community 11 - "paneles-ficha.js"
 Cohesion: 0.18
 Nodes (15): OP con sufijo para líneas múltiples, anadirLinea(), CAMPOS_EDITABLES, camposEditables(), celdaDe(), hintOp(), initForm(), lineaHTML() (+7 more)
 
-### Community 11 - "informes.js"
+### Community 12 - "informes.js"
 Cohesion: 0.16
 Nodes (15): abrirInformes(), bloqueColumnas(), bloqueCondiciones(), columnasDe(), csvInforme(), cuandoSale(), descargarInforme(), DIAS_SEMANA (+7 more)
 
-### Community 12 - "usuarios.js"
+### Community 13 - "usuarios.js"
 Cohesion: 0.18
 Nodes (14): enterApp(), goto(), pintarQuienSoy(), VIEWS, abrirUsuarios(), aplicarRol(), guardarUsuario(), loadUsuarios() (+6 more)
 
-### Community 13 - "Impresion"
+### Community 14 - "Impresion"
 Cohesion: 0.18
 Nodes (16): cabeceraCarta(), cartaHTML(), esperarImagenes(), familiasDe(), firmaCarta(), materialesCarta(), medidasCarta(), notasCarta() (+8 more)
-
-### Community 14 - "Control de OPs"
-Cohesion: 0.23
-Nodes (14): editCampo(), fillLists(), filtered(), filtrosActivos(), FSEL, kpis(), medidaDe(), paintRow() (+6 more)
 
 ### Community 15 - "Constantes del modelo"
 Cohesion: 0.17
@@ -234,8 +234,8 @@ Cohesion: 0.70
 Nodes (4): filtroPuesto(), pintarContador(), plegarBarra(), plegarFiltros()
 
 ## Knowledge Gaps
-- **93 isolated node(s):** `bCarta`, `bStk`, `bTodas`, `mmTabla`, `MOD_HEAD` (+88 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 187 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **95 isolated node(s):** `bCarta`, `bStk`, `bTodas`, `mmTabla`, `MOD_HEAD` (+90 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 191 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -245,13 +245,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.106) - this node is a cross-community bridge._
 - **Why does `Columnas de la hoja (A-U)` connect `secuencia.js` to `paneles-ficha.js`?**
   _High betweenness centrality (0.088) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `render()` (e.g. with `refresh()` and `paneles-control.js`) actually correct?**
+  _`render()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `bCarta`, `bStk`, `bTodas` to the rest of the system?**
-  _93 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _95 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
   _Cohesion score 0.080338266384778 - nodes in this community are weakly interconnected._
 - **Should `secuencia.js` be split into smaller, more focused modules?**
   _Cohesion score 0.0796221322537112 - nodes in this community are weakly interconnected._
-- **Should `paneles-filtros.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.10695187165775401 - nodes in this community are weakly interconnected._
-- **Should `Programación de Paneles` be split into smaller, more focused modules?**
-  _Cohesion score 0.14583333333333334 - nodes in this community are weakly interconnected._
+- **Should `paneles-control.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.10588235294117647 - nodes in this community are weakly interconnected._
