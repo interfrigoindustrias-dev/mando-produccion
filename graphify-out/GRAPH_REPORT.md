@@ -58,10 +58,10 @@
 3. `Control de Puertas (app shell)` - 12 edges
 4. `ROWS` - 10 edges
 5. `renderResumen()` - 10 edges
-6. `render()` - 8 edges
+6. `pintarModeloModal()` - 8 edges
 7. `fichasAbiertas()` - 8 edges
 8. `api()` - 8 edges
-9. `pintarModeloModal()` - 8 edges
+9. `render()` - 8 edges
 10. `autoReprogramarAtrasadas()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -234,7 +234,7 @@ Cohesion: 0.70
 Nodes (4): filtroPuesto(), pintarContador(), plegarBarra(), plegarFiltros()
 
 ## Knowledge Gaps
-- **93 isolated node(s):** `ORDEN_PRIO`, `CAMPOS_EDITABLES`, `DIAS_SEMANA`, `FRECUENCIAS`, `INF_HEAD` (+88 more)
+- **93 isolated node(s):** `bCarta`, `bStk`, `bTodas`, `mmTabla`, `MOD_HEAD` (+88 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 187 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -245,7 +245,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.106) - this node is a cross-community bridge._
 - **Why does `Columnas de la hoja (A-U)` connect `secuencia.js` to `paneles-ficha.js`?**
   _High betweenness centrality (0.088) - this node is a cross-community bridge._
-- **What connects `ORDEN_PRIO`, `CAMPOS_EDITABLES`, `DIAS_SEMANA` to the rest of the system?**
+- **What connects `bCarta`, `bStk`, `bTodas` to the rest of the system?**
   _93 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Tableros y catalogo` be split into smaller, more focused modules?**
   _Cohesion score 0.080338266384778 - nodes in this community are weakly interconnected._
