@@ -86,6 +86,14 @@
     <div class="bar barfil">
       <label class="f wide"><span>Buscar</span>
         <input class="inp" id="f-q" placeholder="OP, cliente, producto&#8230;" autocomplete="off"></label>
+      <label class="f"><span>Ordenar</span><select class="inp" id="f-orden">
+        <option value="reciente" selected>Más reciente primero</option>
+        <option value="antigua">Más antigua primero</option>
+        <option value="cli-az">Cliente (A-Z)</option>
+        <option value="cli-za">Cliente (Z-A)</option>
+        <option value="prio">Prioridad (urgente primero)</option>
+        <option value="av-desc">Avance (mayor a menor)</option>
+        <option value="av-asc">Avance (menor a mayor)</option></select></label>
       <button type="button" class="btn sm filtros-btn" id="f-abrir"
         data-plegar="#f-caja">Filtros <b></b></button>
       <div class="filtros-caja" id="f-caja">

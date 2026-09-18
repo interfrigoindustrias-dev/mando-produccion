@@ -88,6 +88,14 @@
 
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="f-q" placeholder="OP, cliente, ensamble, obs…" autocomplete="off"></label>
+      <label class="f"><span>Ordenar</span><select class="inp" id="f-orden">
+        <option value="reciente" selected>Más reciente primero</option>
+        <option value="antigua">Más antigua primero</option>
+        <option value="cli-az">Cliente (A-Z)</option>
+        <option value="cli-za">Cliente (Z-A)</option>
+        <option value="prio">Prioridad (urgente primero)</option>
+        <option value="av-desc">Avance (mayor a menor)</option>
+        <option value="av-asc">Avance (menor a mayor)</option></select></label>
       <label class="f"><span>Progreso</span><select class="inp" id="f-prog">
         <option value="" selected>Todas</option><option value="pend">Sin iniciar (0%)</option>
         <option value="wip">En proceso</option><option value="done">Completa (100%)</option>

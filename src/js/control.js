@@ -10,6 +10,29 @@
 const FSEL = ["f-prog","f-desp","f-prio","f-ens","f-mat","f-tipo","f-esp","f-ap","f-med"];
 const medidaDe = c => (num(c[C.ANCHO])!==null && num(c[C.ALTO])!==null)
   ? `${num(c[C.ANCHO])}×${num(c[C.ALTO])}` : "";
+
+/* ------------------------------ orden ------------------------------
+   El numero de OP crece con cada ficha nueva (nextOp() siempre da el
+   siguiente), asi que ordenar por el equivale a ordenar por creacion —sin
+   depender de la fecha, que en la hoja a veces se escribe a mano. El numero
+   de fila es el desempate: mantiene "48-1" antes que "48-2" aunque las dos
+   compartan OP base. */
+const ordenPrio = v => { const i = PRIORIDADES.indexOf(String(v??"").trim().toUpperCase()); return i<0 ? 99 : i; };
+const ORDENES = {
+  reciente:  {etq:"Más reciente primero", cmp:(a,b)=> (opBase(b.c[C.OP])??-1)-(opBase(a.c[C.OP])??-1) || a.r-b.r},
+  antigua:   {etq:"Más antigua primero",  cmp:(a,b)=> (opBase(a.c[C.OP])??-1)-(opBase(b.c[C.OP])??-1) || a.r-b.r},
+  "cli-az":  {etq:"Cliente (A-Z)",        cmp:(a,b)=> String(a.c[C.CLI]??"").localeCompare(String(b.c[C.CLI]??""),"es") || a.r-b.r},
+  "cli-za":  {etq:"Cliente (Z-A)",        cmp:(a,b)=> String(b.c[C.CLI]??"").localeCompare(String(a.c[C.CLI]??""),"es") || a.r-b.r},
+  prio:      {etq:"Prioridad (urgente primero)", cmp:(a,b)=> ordenPrio(a.c[C.PRIO])-ordenPrio(b.c[C.PRIO]) || a.r-b.r},
+  "av-desc": {etq:"Avance (mayor a menor)", cmp:(a,b)=> progreso(b.c).pct-progreso(a.c).pct || a.r-b.r},
+  "av-asc":  {etq:"Avance (menor a mayor)", cmp:(a,b)=> progreso(a.c).pct-progreso(b.c).pct || a.r-b.r},
+};
+function ordenar(filas){
+  const sel = $("#f-orden");
+  const orden = ORDENES[sel?.value] || ORDENES.reciente;
+  return filas.slice().sort(orden.cmp);
+}
+
 function filtered(){
   // Un filtro que no existe en esta pagina no filtra. El de ensamble solo esta
   // en puertas, y darlo por hecho hacia que render() reventara entero en paneles
@@ -17,7 +40,7 @@ function filtered(){
   const g = id => { const e = $("#"+id); return e ? e.value : ""; };
   const q = $("#f-q").value.trim().toLowerCase();
   const eq = (v,f) => !f || String(v??"").trim()===f;
-  return ROWS.filter(({c})=>{
+  const base = ROWS.filter(({c})=>{
     if(!rowActive(c)) return false;
     if(!eq(c[C.MAT],  g("f-mat")))  return false;
     if(!eq(c[C.TIPO], g("f-tipo"))) return false;
@@ -52,6 +75,7 @@ function filtered(){
     }
     return true;
   });
+  return ordenar(base);
 }
 /** Describe los filtros activos, para la tarjeta «Filtradas». */
 function filtrosActivos(){
@@ -140,6 +164,11 @@ async function editCampo(r, idx, col, campo, val){
     kpis(filtered());
   }catch(e){ row.c[idx]=antes; render(); toast(e.message,"err"); }
 }
+// Aparte de FSEL: "Limpiar" resetea los filtros, pero el orden no es un
+// filtro, es una preferencia de vista, y no tendria sentido que Limpiar
+// dejara la tabla desordenada.
+{ const o = $("#f-orden"); if(o) o.addEventListener("change", render); }
+
 $("#tb").addEventListener("change", ev=>{
   const p=ev.target.closest("[data-edit-prio]");
   if(p){

@@ -27,9 +27,30 @@ const laminaDe = c => (MODELO.laminas || []).reduce((s, {cara, metros}) => {
 const PROGRESOS = [["Sin iniciar (0%)","pend"], ["En proceso","wip"],
                    ["Fabricadas (100%)","done"], ["Abiertas (<100%)","open"]];
 
+/* ------------------------------ orden ------------------------------
+   Igual que en puertas (control.js): el numero de OP crece con cada ficha
+   nueva, asi que ordenar por el equivale a ordenar por creacion sin
+   depender de la fecha. El numero de fila desempata entre lineas que
+   comparten OP base (163-1, 163-2). */
+const ordenPrio = v => { const i = PRIORIDADES.indexOf(String(v??"").trim().toUpperCase()); return i<0 ? 99 : i; };
+const ORDENES = {
+  reciente:  {etq:"Más reciente primero", cmp:(a,b)=> (opBase(b.c[C.OP])??-1)-(opBase(a.c[C.OP])??-1) || a.r-b.r},
+  antigua:   {etq:"Más antigua primero",  cmp:(a,b)=> (opBase(a.c[C.OP])??-1)-(opBase(b.c[C.OP])??-1) || a.r-b.r},
+  "cli-az":  {etq:"Cliente (A-Z)",        cmp:(a,b)=> String(a.c[C.CLI]??"").localeCompare(String(b.c[C.CLI]??""),"es") || a.r-b.r},
+  "cli-za":  {etq:"Cliente (Z-A)",        cmp:(a,b)=> String(b.c[C.CLI]??"").localeCompare(String(a.c[C.CLI]??""),"es") || a.r-b.r},
+  prio:      {etq:"Prioridad (urgente primero)", cmp:(a,b)=> ordenPrio(a.c[C.PRIO])-ordenPrio(b.c[C.PRIO]) || a.r-b.r},
+  "av-desc": {etq:"Avance (mayor a menor)", cmp:(a,b)=> progreso(b.c).pct-progreso(a.c).pct || a.r-b.r},
+  "av-asc":  {etq:"Avance (menor a mayor)", cmp:(a,b)=> progreso(a.c).pct-progreso(b.c).pct || a.r-b.r},
+};
+function ordenar(filas){
+  const sel = $("#f-orden");
+  const orden = ORDENES[sel?.value] || ORDENES.reciente;
+  return filas.slice().sort(orden.cmp);
+}
+
 function filtered(){
   const q = $("#f-q").value.trim().toLowerCase();
-  return ROWS.filter(({c})=>{
+  const base = ROWS.filter(({c})=>{
     if(!rowActive(c)) return false;
     if(!filtroPasa("f-prod", c[C.PROD])) return false;
     if(!filtroPasa("f-ranu", c[C.RANU])) return false;
@@ -54,6 +75,7 @@ function filtered(){
     }
     return true;
   });
+  return ordenar(base);
 }
 function filtrosActivos(){
   const out = [];
@@ -322,6 +344,9 @@ function syncSel(){
   const e = $(sel); if(!e) return;
   e.addEventListener("input", ()=>{ pintarFiltros(); aplicarFiltros(); });
 });
+// Aparte de los filtros: el orden es una preferencia de vista, no algo que
+// "Limpiar" deba resetear.
+{ const o = $("#f-orden"); if(o) o.addEventListener("change", render); }
 ["#f-clear","#p-clear","#a-clear"].forEach(sel=>{
   const b = $(sel); if(!b) return;
   b.onclick = ()=>{

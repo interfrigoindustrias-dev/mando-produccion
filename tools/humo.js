@@ -395,7 +395,11 @@ function comprueba(nombre, cond, detalle){
 
   console.log("\n=== marcar un proceso ===");
   ESCRITURAS = [];
-  const boton = $("#tb .p");
+  // Por OP, no por posicion: Control de OPs ahora se puede ordenar de varias
+  // formas (mas reciente primero por defecto), asi que la fila de prueba ya
+  // no es necesariamente la primera que pinta la tabla.
+  const filaOP = op => $$('#tb tr[data-r]').find(tr => tr.querySelector(".op")?.textContent.trim() === op);
+  const boton = filaOP("1")?.querySelector(".p");
   comprueba("hay botones de proceso", !!boton);
   if(boton){
     boton.dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
@@ -413,7 +417,7 @@ function comprueba(nombre, cond, detalle){
      hecho, no que la linea este lista para almacen. Eso lo decide una persona
      con el boton Terminar. */
   ESCRITURAS = [];
-  const fila = $$('#tb tr[data-r]')[0];
+  const fila = filaOP("1");
   const rMarca = +fila.dataset.r;
   // Solo los que faltan: el paso anterior ya marco uno, y volver a pulsarlo
   // lo desmarcaria en vez de completar la linea.
