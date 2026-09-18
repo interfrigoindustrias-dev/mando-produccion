@@ -754,8 +754,11 @@ function imprimirModelos(){
   const MARGEN_MM = 12, ANCHO_MM = 279.4, ALTO_MM = 215.9;     // carta horizontal
   let rule = $("#page-rule");
   if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
-  rule.textContent = `@page{size:letter landscape;margin:${MARGEN_MM}mm}`;
-  $("#print").innerHTML = `<div class="im-print">
+  // Margen en 0: se lo pinta esta misma caja (ver el porque en impresion.css,
+  // junto a .im-print). Pedirle margen a @page fue lo que, en una impresora
+  // real, salia pintado de negro en vez de blanco.
+  rule.textContent = `@page{size:letter landscape;margin:0}`;
+  $("#print").innerHTML = `<div class="im-print" style="width:${ANCHO_MM}mm;height:${ALTO_MM}mm;padding:${MARGEN_MM}mm">
     <div class="im-cab">
       <span class="c-logo"></span>
       <div class="im-tit"><b>Inventario por modelo</b>
@@ -792,12 +795,10 @@ function imprimirModelos(){
   const tabla = caja.querySelector("table");
   const cab = caja.querySelector(".im-cab");
   const pxPorMm = 96/25.4;
-  const anchoDisp = (ANCHO_MM - MARGEN_MM*2) * pxPorMm;
-  const altoDisp  = (ALTO_MM  - MARGEN_MM*2) * pxPorMm;
+  const altoDisp = (ALTO_MM - MARGEN_MM*2) * pxPorMm;   // alto util, dentro del padding
   const printEl = $("#print");
   const prevCss = printEl.style.cssText;
   printEl.style.cssText = "display:block!important;position:fixed;left:-99999px;top:0;visibility:hidden";
-  caja.style.width = anchoDisp + "px";
   const altoCab = cab.getBoundingClientRect().height;
   const altoTablaNatural = tabla.getBoundingClientRect().height;
   // El 0.94 es margen de seguridad: medido fuera de pantalla y ya con la

@@ -259,7 +259,16 @@
    tabla que se desplaza dentro de su caja—, que desbordaban cada fila a su
    propia hoja. El `*{color:#000!important}` es a proposito: nada de lo que
    el tema oscuro le puso a estos nodos debe sobrevivir en papel. */
-.im-print{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-size:8.5pt}
+/* El margen NO se deja en manos de @page: en una impresora real, con
+   "Márgenes" puesto en el dialogo de Chrome, esa franja alrededor de la hoja
+   salia en negro —no era CSS nuestro, era el driver de la impresora pintando
+   la diferencia entre el tamaño de pagina que pedia @page y su propio
+   margen no imprimible—. Aqui se pide @page con margen 0 y el margen de
+   verdad lo dibuja este mismo div, del tamaño exacto de la hoja y con su
+   propio fondo blanco: asi el papel entero es nuestro, no queda ninguna
+   franja para que el controlador de impresora decida de que color pintarla. */
+.im-print{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-size:8.5pt;
+  box-sizing:border-box}
 .im-print *{color:#000!important;background:transparent!important;box-shadow:none!important;text-shadow:none!important}
 .im-cab{display:flex;align-items:center;gap:5mm;border-bottom:.8mm solid #000;
   padding-bottom:2mm;margin-bottom:3mm}
