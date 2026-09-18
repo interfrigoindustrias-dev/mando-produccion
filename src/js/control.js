@@ -155,7 +155,9 @@ $("#tb").addEventListener("change", ev=>{
     return;
   }
   const e=ev.target.closest("[data-edit-ens]");
-  if(e) editCampo(+e.dataset.editEns, C.ENS, "AA", "N° ensamble", e.value.trim());
+  if(e){ editCampo(+e.dataset.editEns, C.ENS, "AA", "N° ensamble", e.value.trim()); return; }
+  const s=ev.target.closest("[data-edit-stock]");
+  if(s) editCampo(+s.dataset.editStock, C.STOCK, "E", "Stock", s.checked);
 });
 
 function render(){
@@ -179,7 +181,8 @@ function render(){
           return op ? `<div class="op-panel">🚪 <b>${esc(op)}</b></div>` : ""; })()}
         <div class="sub">${esc(fmtDate(c[C.FECHA]))}</div></td>
       <td><span class="cli" title="${esc(c[C.CLI]??"")}">${esc(c[C.CLI]??"")}</span>
-        ${tri(c[C.COMP])?'<span class="sub">COMPL.</span>':""}${tri(c[C.STOCK])?'<span class="sub"> STOCK</span>':""}</td>
+        ${tri(c[C.COMP])?'<span class="sub">COMPL.</span>':""}</td>
+      <td style="text-align:center"><input type="checkbox" class="stockck" data-edit-stock="${r}" title="Marcar esta puerta como STOCK" ${tri(c[C.STOCK])===true?"checked":""}></td>
       <td>${esc(c[C.TIPO]??"")}</td><td>${esc(c[C.MAT]??"")}</td>
       <td class="num">${med}</td><td class="num">${esc(c[C.ESP]??"")}</td>
       <td>${selAp(r, c[C.AP])}</td><td class="num">${esc(c[C.PTS]??"")}</td>
