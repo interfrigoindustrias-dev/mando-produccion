@@ -278,7 +278,10 @@
    vez de en mm fijos: si no, encoger la letra dejaba el padding intacto y la
    fila apenas bajaba de alto. */
 .im-print table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.5pt;line-height:1.2}
-.im-print th,.im-print td{border:.3mm solid #000;padding:.43em .53em;text-align:left;
+/* Gris fino, no negro: el borde de cada celda alcanzaba, con border-collapse,
+   a dibujar un marco negro grueso alrededor de toda la hoja —ademas de gastar
+   tinta de mas, una tabla no necesita verse enjaulada para leerse bien. */
+.im-print th,.im-print td{border:.2mm solid #bbb;padding:.43em .53em;text-align:left;
   vertical-align:top;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .im-print td:not(.n){white-space:normal;overflow-wrap:anywhere}   /* Modelo, Tipo, Ap.: que quiebre en vez de recortar */
 .im-print thead{display:table-header-group}      /* la cabecera se repite en cada hoja */
@@ -311,7 +314,7 @@
 .im-print tr.im-otras td{font-style:italic}
 .im-print .im-det{display:block;font-style:normal;font-weight:400;font-size:.8em;
   color:#444!important;white-space:normal;margin-top:.5mm}
-.im-print tfoot td{border-top:.7mm solid #000!important;font-weight:900;background:#e8e8e8!important}
+.im-print tfoot td{border-top:.4mm solid #333!important;font-weight:900;background:#e8e8e8!important}
 @media print{
   .im-print th,.im-print tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
