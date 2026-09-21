@@ -781,6 +781,7 @@ function imprimirPrograma(){
         <td class="n">${n0(c[C.CANT])}</td>
         <td class="n">${n2(c[C.LARGO])}</td>
         <td class="pp-prod">${esc(c[C.PROD] ?? "")}</td>
+        <td>${esc(c[C.RANU] ?? "")}</td>
         <td>${esc(c[C.CARA_A] ?? "")}</td>
         <td>${esc(c[C.CARA_B] ?? "")}</td>
         <td class="n">${n2(m2)}</td>
@@ -809,12 +810,12 @@ function imprimirPrograma(){
     </div>
     <table class="pp-tabla">
       <colgroup><col class="ppc-op"><col class="ppc-cli"><col class="ppc-cant"><col class="ppc-largo">
-        <col class="ppc-prod"><col class="ppc-cara"><col class="ppc-cara"><col class="ppc-m2"></colgroup>
+        <col class="ppc-prod"><col class="ppc-ranu"><col class="ppc-cara"><col class="ppc-cara"><col class="ppc-m2"></colgroup>
       <thead><tr><th>OP</th><th>Cliente</th><th class="n">Cant</th><th class="n">Largo</th>
-        <th>Producto</th><th>Cara A</th><th>Cara B</th><th class="n">m²</th></tr></thead>
-      ${bloques || `<tbody><tr><td colspan="8" class="pp-nada">No hay nada sin programar.</td></tr></tbody>`}
+        <th>Producto</th><th>Ranurado</th><th>Cara A</th><th>Cara B</th><th class="n">m²</th></tr></thead>
+      ${bloques || `<tbody><tr><td colspan="9" class="pp-nada">No hay nada sin programar.</td></tr></tbody>`}
       <tfoot><tr><td colspan="2">Total · ${ops.length} OP · ${lineas} líneas</td>
-        <td class="n">${n0(paneles)}</td><td colspan="4"></td><td class="n">${n2(m2Total)}</td></tr></tfoot>
+        <td class="n">${n0(paneles)}</td><td colspan="5"></td><td class="n">${n2(m2Total)}</td></tr></tfoot>
     </table>
   </div>`;
   let rule = $("#page-rule");

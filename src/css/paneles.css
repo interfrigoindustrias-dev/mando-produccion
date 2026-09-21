@@ -615,13 +615,14 @@ body.pg-arrastrando, body.pg-arrastrando *{ cursor:grabbing !important; user-sel
 .pg-print .pp-cifras b{ font-size:11pt; font-variant-numeric:tabular-nums }
 
 .pg-print table{ width:100%; border-collapse:collapse; table-layout:fixed }
-.pg-print col.ppc-op{ width:20mm }
-.pg-print col.ppc-cli{ width:40mm }
-.pg-print col.ppc-cant{ width:11mm }
-.pg-print col.ppc-largo{ width:12mm }
-.pg-print col.ppc-prod{ width:25mm }
+.pg-print col.ppc-op{ width:18mm }
+.pg-print col.ppc-cli{ width:36mm }
+.pg-print col.ppc-cant{ width:10mm }
+.pg-print col.ppc-largo{ width:11mm }
+.pg-print col.ppc-prod{ width:21mm }
+.pg-print col.ppc-ranu{ width:15mm }
 .pg-print col.ppc-cara{ width:34mm }
-.pg-print col.ppc-m2{ width:17.9mm }
+.pg-print col.ppc-m2{ width:14.9mm }
 .pg-print thead{ display:table-header-group }        /* se repite en cada hoja */
 .pg-print tfoot{ display:table-row-group }           /* el total, solo al final */
 .pg-print th{ background:#000 !important; color:#fff !important; font-size:7.5pt; font-weight:700;
