@@ -128,7 +128,8 @@ $("#a-lista").addEventListener("click", async ev=>{
     try{
       await ponerEstado(r, ESTADO.DESPACHADO);
       toast(`Línea ${row.c[C.OP]} despachada`, "ok");
-      renderAlmacen();
+      // Despachar tambien mueve las cifras del resumen: se rehacen todas.
+      recalcularTableros();
     }catch(e){ /* ponerEstado ya avisó y deshizo */ }
     return;
   }
@@ -153,8 +154,8 @@ $("#a-lista").addEventListener("click", async ev=>{
   try{
     for(const x of xs) await ponerEstado(x.r, ESTADO.DESPACHADO);
     toast(`OP ${op}: ${xs.length} línea(s) despachada(s)`, "ok");
-    lastHash = ""; renderAlmacen();
-  }catch(e){ renderAlmacen(); }
+    lastHash = ""; recalcularTableros();
+  }catch(e){ recalcularTableros(); }
   finally{ todo.disabled = false; }
 });
 

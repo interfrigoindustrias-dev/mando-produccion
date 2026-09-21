@@ -66,7 +66,6 @@ $("#d-procs").addEventListener("click", ev=>{
 });
 $("#d-save").onclick = async ()=>{
   const r=detRow, row=ROWS.find(x=>x.r===r); if(!row) return;
-  const estabaCompleta = completa(row.c);
   const ups=[], cambios=[], op=row.c[C.OP];
   const nom = v => v===true?"hecho" : v===false?"pendiente" : "no aplica";
   $$("#d-procs .pc").forEach(pc=>{
@@ -83,6 +82,17 @@ $("#d-save").onclick = async ()=>{
   //  Regla 4: al marcar Despachado se rellena la fecha de despacho si está vacía
   if($("#d-desp").value==="Despachado" && !$("#d-fdesp").value.trim() && CFG.auto!==false)
     $("#d-fdesp").value = hoy();
+  /* Terminar desde la ficha sella el fin de proceso, igual que el boton de
+     planta. Salvo si quien edita escribio a mano otra fecha de proceso en esta
+     misma ficha: entonces manda lo que escribio. */
+  const pasaATerminado = $("#d-desp").value==="Terminado" && String(row.c[C.DESP]??"").trim()!=="Terminado";
+  if(pasaATerminado && CFG.auto!==false && $("#d-fproc").value.trim()===fmtDate(row.c[C.FPROC]))
+    $("#d-fproc").value = hoy();
+  if(pasaATerminado && CFG.auto!==false && !String(row.c[C.FINI]??"").trim()){
+    ups.push({a1:`AB${r}`, v:[[hoy()]]});
+    cambios.push({campo:"Inicio de producción", antes:"", despues:hoy()});
+    row.c[C.FINI] = hoy();
+  }
   //  fecha:true → comparar por texto formateado, porque en memoria es un número de serie
   const pairs=[[C.DESP,"Y","Estado despacho",$("#d-desp").value,false],
                [C.FDESP,"Z","Fecha despacho",$("#d-fdesp").value.trim(),true],
@@ -112,8 +122,8 @@ $("#d-save").onclick = async ()=>{
   try{
     await writeCells(ups); $("#ov-det").classList.add("hide"); lastHash=""; render();
     logChanges("EDITA", op, r, cambios);
-    // Si se tocó algún proceso, la fecha de proceso pasa a hoy.
-    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await tocarFechaProceso(r, estabaCompleta);
+    // Si se marcó algún proceso: En proceso y comienzo, si no los tenía.
+    if(ups.some(u=>/^[NOPQRSTU]\d+$/.test(u.a1))) await marcarInicioProduccion(r);
     toast("Cambios guardados","ok"); setSync("","Guardado");
   }catch(e){ toast(e.message,"err"); refresh(false); }
 };
@@ -222,9 +232,59 @@ function hintOp(){
   const t=targetRows(q);
   $("#n-target").textContent = `Se escribirá en fila${q>1?"s":""} ${t[0]}${q>1?"–"+t[t.length-1]:""}`;
 }
+/* Duplicar: abre Nueva ficha precargada con la especificacion de una puerta
+   que ya existe, para no volver a teclear algo casi igual. El OP y la fecha
+   siempre son nuevos —es una puerta distinta, no la misma con otro numero—,
+   y los procesos se marcan segun cuales le APLICAN a la original (no segun
+   cuales ya tiene hechos: una puerta duplicada empieza de cero). */
+function duplicarFicha(r){
+  const row = ROWS.find(x=>x.r===r); if(!row) return;
+  const c = row.c;
+  $("#form-new").reset();
+  $("#n-op").value = String(nextOp());
+  $("#n-fecha").value = hoy();
+  $("#n-qty").value = 1;
+  $("#n-prio").value = PRIORIDADES.includes(String(c[C.PRIO]).toUpperCase())
+    ? String(c[C.PRIO]).toUpperCase() : "BAJA";
+  $("#n-cli").value = c[C.CLI] ?? "";
+  $("#n-cot").value = c[C.COT] ?? ""; $("#n-oc").value = c[C.OC] ?? "";
+  $("#n-comp").checked  = tri(c[C.COMP])===true;
+  $("#n-stock").checked = tri(c[C.STOCK])===true;
+  $("#n-mat").value = c[C.MAT] ?? ""; $("#n-tipo").value = c[C.TIPO] ?? "";
+  $("#n-ancho").value = num(c[C.ANCHO]) ?? ""; $("#n-alto").value = num(c[C.ALTO]) ?? "";
+  $("#n-pts").value = num(c[C.PTS]) ?? 1;
+  $("#n-esp").value = c[C.ESP] ?? ""; $("#n-ap").value = c[C.AP] ?? "";
+  if($("#n-visor")){
+    $("#n-marco").value = c[C.MARCO] ?? ""; $("#n-marco").dispatchEvent(new Event("change"));
+    $("#n-visor").value = c[C.VISOR] ?? ""; $("#n-visor").dispatchEvent(new Event("change"));
+    $("#n-empvref").value = c[C.EMPVREF] ?? "";
+    $("#n-bump").value = c[C.BUMP] ?? ""; $("#n-bump").dispatchEvent(new Event("change"));
+    $("#n-tbump").value = c[C.TBUMP] ?? "";
+    $("#n-sello").value = c[C.SELLO] ?? "";
+    $("#n-alff").checked = tri(c[C.ALFF])===true;
+    $("#n-alfp").checked = tri(c[C.ALFP])===true;
+  }
+  $("#n-obs").value = c[C.OBS] ?? "";
+  // Que procesos aplican, tal como los tiene la original — sobreescribe lo que
+  // aplicaProcs() haya marcado solo al disparar los "change" de arriba.
+  $$("#n-procs input").forEach(ck=>{ ck.checked = tri(c[+ck.dataset.i]) !== null; });
+  hintOp();
+  $("#ov-nueva").classList.remove("hide");
+  toast(`Ficha ${c[C.OP]} duplicada: revisa los datos y guarda`,"ok");
+  setTimeout(()=>$("#n-cli").focus(), 60);
+}
+
 $("#form-new").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const btn=$("#n-save"); btn.disabled=true;
+  /* Las lineas de panel se leen ANTES de escribir la puerta: si una esta a
+     medias se dice ahora y no se guarda nada, en vez de crear la puerta y
+     descubrir despues que su panel no se pudo hacer. */
+  let lineasPanel = null;
+  if(typeof llevaPanelLaPuerta === "function" && llevaPanelLaPuerta()){
+    try{ lineasPanel = lineasPanelDelFormulario(); }
+    catch(e){ toast("Panel: " + e.message, "err"); btn.disabled=false; return; }
+  }
   try{
     const q = Math.max(1, Math.min(40, parseInt($("#n-qty").value,10)||1));
     const op = $("#n-op").value.trim();
@@ -268,21 +328,25 @@ $("#form-new").addEventListener("submit", async ev=>{
     });
     await writeCells(data);
 
-    /* El panel va DESPUES y aparte: si fallara, la puerta ya esta guardada. El
-       panel es un extra, y perder la puerta por no poder escribir su panel
-       seria mucho peor que quedarse sin el panel. */
-    if(typeof llevaPanelLaPuerta === "function" && llevaPanelLaPuerta()){
-      const opPanel = q > 1 ? `${op}-1` : op;
+    /* Los paneles van DESPUES y aparte: si fallaran, las puertas ya estan
+       guardadas. Una OP de paneles por ficha, con todas sus lineas para cada
+       puerta, y cada puerta marcada con esa OP. */
+    if(lineasPanel){
+      const puertas = rows.map((r,k)=>({r, op: q>1 ? `${op}-${k+1}` : op}));
       try{
-        const fila = await crearPanelDeLaPuerta(
-          opPanel, $("#n-cli").value.trim().toUpperCase(),
-          $("#n-prio").value, $("#n-fecha").value.trim());
-        toast(`Panel creado en la hoja de Paneles, fila ${fila}`, "ok");
-        logBulk([{accion:"CREAR", op:opPanel, fila:"—", campo:"Panel de la puerta",
-                  antes:"", despues:`fila ${fila} de la hoja de paneles`}]);
+        const res = await crearPanelesDeLaFicha(puertas, $("#n-cli").value.trim().toUpperCase(),
+          $("#n-prio").value, $("#n-fecha").value.trim(), lineasPanel);
+        let marcada = false;
+        try{ marcada = await marcarPuertasConPanel(puertas, res.op); }
+        catch(e){ console.warn("marcar puerta con panel:", e.message); }
+        toast(`Panel OP ${res.op} creado en Paneles: ${res.lineas.length} línea(s)` +
+              (marcada ? "" : " · no se pudo marcar la puerta con su OP"), marcada ? "ok" : "err");
+        logBulk(puertas.map(p=>({accion:"CREAR", op:p.op, fila:p.r, campo:"Panel de la puerta",
+          antes:"", despues:`OP de paneles ${res.op}`})));
+        if(typeof cargarPanelesDePuertas === "function") cargarPanelesDePuertas(true);
       }catch(e){
-        // Con el numero de OP delante: sin el, no se sabe cual crear a mano.
-        toast(`La puerta se guardó, pero el panel de la OP ${opPanel} no: ${e.message}`, "err");
+        // Con la OP de la puerta delante: sin ella, no se sabe cual crear a mano.
+        toast(`La puerta ${op} se guardó, pero su panel no: ${e.message}`, "err");
       }
     }
     // Quitar la casilla de verificación en la hoja a los procesos que no aplican,
@@ -299,6 +363,7 @@ $("#form-new").addEventListener("submit", async ev=>{
     lastHash=""; await refresh(false);
     $("#n-op").value = String(nextOp()); $("#n-fecha").value = hoy();
     $("#n-qty").value="1"; $("#n-obs").value=""; hintOp();
+    if(typeof limpiarPanelDePuerta === "function") limpiarPanelDePuerta();
   }catch(e){ toast(e.message,"err"); }
   finally{ btn.disabled=false; }
 });

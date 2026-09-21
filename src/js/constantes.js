@@ -25,9 +25,15 @@ const MATERIALES = MODELO.listas.MATERIALES;
 const TIPOS      = MODELO.listas.TIPOS;
 const ESPESORES  = MODELO.listas.ESPESORES;
 const APERTURAS  = MODELO.listas.APERTURAS;
-/* «Devuelta» va primera porque es la unica que significa trabajo por hacer:
-   las otras cuatro son sitios donde la puerta ya reposa. */
-const DESPACHOS = ["Devuelta","Terminado","En Almacén","Despachado","Anulada"];
+/* EL FLUJO DEL ESTADO, tal como lo definio el usuario (igual que en paneles):
+     crear la ficha         -> sin estado
+     marcar el primer paso  -> En proceso + COMIENZO (AB) = hoy
+     pulsar Terminada       -> Terminado  + FIN DE PROCESO (X) = hoy
+     despachar              -> Despachado + FECHA DE DESPACHO (Z) = hoy
+   «En proceso» y «Devuelta» van primero porque son las que significan trabajo
+   por hacer; las demas son sitios donde la puerta ya reposa. */
+const EN_PROCESO = "En proceso";
+const DESPACHOS = [EN_PROCESO,"Devuelta","Terminado","En Almacén","Despachado","Anulada"];
 
 /* --- Especificacion (columnas AC..AK) --- */
 const TIPOS_MARCO   = MODELO.listas.TIPOS_MARCO;
@@ -71,6 +77,8 @@ const clienteBase = c => {
   return (i < 0 ? t : t.slice(0, i)).trim();
 };
 const separada = c => separadaPara(c) !== "";
+/** Disponible: terminada, en almacén y todavía sin dueño — lista para vender ya. */
+const disponible = c => String(c[C.DESP]??"").trim()==="En Almacén" && !separada(c);
 
 /* URGENTE tiene dos origenes y se distinguen a proposito: uno es una decision
    y el otro una consecuencia, y no se corrigen igual. */
@@ -86,6 +94,8 @@ const terminada = c => String(c[C.DESP]??"").trim() === "Terminado";
  *  pero no es un sitio donde reposa: es trabajo, y del mas urgente que hay —ya
  *  se hizo una vez y hay alguien esperandola. */
 const devuelta = c => String(c[C.DESP]??"").trim() === "Devuelta";
+/** En proceso: alguien marco ya el primer paso y todavia no la han terminado. */
+const enProceso = c => String(c[C.DESP]??"").trim() === EN_PROCESO;
 /** Una puerta anulada queda fuera de producción, almacén y stock. */
 const anulada = c => String(c[C.DESP]??"").trim()==="Anulada";
 /* Despachada = salio por la puerta. No es trabajo de nadie ya, asi que no

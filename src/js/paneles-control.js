@@ -16,13 +16,41 @@
 const kgDe = c => (typeof kgPoliuretano === "function" ? kgPoliuretano(c) : 0);
 /** Kilos por panel suelto. */
 const kgUnidDe = c => (typeof kgUnidadPoliuretano === "function" ? kgUnidadPoliuretano(c) : 0);
+/** Metros lineales de lamina de la linea, sumando las caras que llevan acabado
+ *  —V y W de la hoja—. Misma cuenta que usa el consumo de lamina del resumen. */
+const laminaDe = c => (MODELO.laminas || []).reduce((s, {cara, metros}) => {
+  if(typeof metrosLamina !== "function") return s;
+  const tipo = String(c[C[cara]] ?? "").trim();
+  return tipo ? s + (metrosLamina(c, metros) || 0) : s;
+}, 0);
 
 const PROGRESOS = [["Sin iniciar (0%)","pend"], ["En proceso","wip"],
                    ["Fabricadas (100%)","done"], ["Abiertas (<100%)","open"]];
 
+/* ------------------------------ orden ------------------------------
+   Igual que en puertas (control.js): el numero de OP crece con cada ficha
+   nueva, asi que ordenar por el equivale a ordenar por creacion sin
+   depender de la fecha. El numero de fila desempata entre lineas que
+   comparten OP base (163-1, 163-2). */
+const ordenPrio = v => { const i = PRIORIDADES.indexOf(String(v??"").trim().toUpperCase()); return i<0 ? 99 : i; };
+const ORDENES = {
+  reciente:  {etq:"Más reciente primero", cmp:(a,b)=> (opBase(b.c[C.OP])??-1)-(opBase(a.c[C.OP])??-1) || a.r-b.r},
+  antigua:   {etq:"Más antigua primero",  cmp:(a,b)=> (opBase(a.c[C.OP])??-1)-(opBase(b.c[C.OP])??-1) || a.r-b.r},
+  "cli-az":  {etq:"Cliente (A-Z)",        cmp:(a,b)=> String(a.c[C.CLI]??"").localeCompare(String(b.c[C.CLI]??""),"es") || a.r-b.r},
+  "cli-za":  {etq:"Cliente (Z-A)",        cmp:(a,b)=> String(b.c[C.CLI]??"").localeCompare(String(a.c[C.CLI]??""),"es") || a.r-b.r},
+  prio:      {etq:"Prioridad (urgente primero)", cmp:(a,b)=> ordenPrio(a.c[C.PRIO])-ordenPrio(b.c[C.PRIO]) || a.r-b.r},
+  "av-desc": {etq:"Avance (mayor a menor)", cmp:(a,b)=> progreso(b.c).pct-progreso(a.c).pct || a.r-b.r},
+  "av-asc":  {etq:"Avance (menor a mayor)", cmp:(a,b)=> progreso(a.c).pct-progreso(b.c).pct || a.r-b.r},
+};
+function ordenar(filas){
+  const sel = $("#f-orden");
+  const orden = ORDENES[sel?.value] || ORDENES.reciente;
+  return filas.slice().sort(orden.cmp);
+}
+
 function filtered(){
   const q = $("#f-q").value.trim().toLowerCase();
-  return ROWS.filter(({c})=>{
+  const base = ROWS.filter(({c})=>{
     if(!rowActive(c)) return false;
     if(!filtroPasa("f-prod", c[C.PROD])) return false;
     if(!filtroPasa("f-ranu", c[C.RANU])) return false;
@@ -47,6 +75,7 @@ function filtered(){
     }
     return true;
   });
+  return ordenar(base);
 }
 function filtrosActivos(){
   const out = [];
@@ -117,7 +146,7 @@ function tagPrio(v){
 function tagEstado(v){
   const s = String(v||"").trim(), u = s.toUpperCase();
   const k = u===ESTADO.DESPACHADO ? "t-des" : u===ESTADO.ANULADA ? "t-anu"
-          : u===ESTADO.TERMINADO  ? "t-alm" : "t-non";
+          : u===ESTADO.TERMINADO  ? "t-alm" : u===ESTADO.PARA_PUERTA ? "t-puerta" : "t-non";
   return `<span class="tag ${k}">${esc(s||"—")}</span>`;
 }
 const n2 = v => { const n = num(v); return n===null ? "—" : n.toLocaleString("es-CO",
@@ -152,7 +181,6 @@ async function editCampo(r, idx, campoModelo, nombre, val){
     await writeCells([{a1:`${col(campoModelo)}${r}`, v:[[val]]}]);
     logChanges("EDITA", row.c[C.OP], r, [{campo:nombre, antes, despues:val}]);
     setSync("", "Guardado"); lastHash = "";
-    kpis(filtered());
   }catch(e){ row.c[idx] = antes; render(); toast(e.message, "err"); }
 }
 $("#tb").addEventListener("change", async ev=>{
@@ -166,7 +194,7 @@ $("#tb").addEventListener("change", async ev=>{
   if(e){
     // El estado no es un campo mas: pasar a DESPACHADO sella tambien la fecha.
     try{ await ponerEstado(+e.dataset.editEstado, e.value); }
-    finally{ render(); }
+    finally{ recalcularTableros(); }
   }
 });
 
@@ -183,7 +211,8 @@ function render(){
     }).join("");
     return `<tr class="${pc>=100?"done":""} ${anuladaP(c)?"anu":""}" data-r="${r}">
       <td class="stick"><input type="checkbox" class="cks" data-r="${r}" ${SEL.has(r)?"checked":""}></td>
-      <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>
+      <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>${
+        puertaDe(c) ? ` <span class="tag t-puerta" title="Panel para armar la puerta ${esc(puertaDe(c))}">🚪 ${esc(puertaDe(c))}</span>` : ""}
         <div class="sub">${esc(fmtDate(c[C.FECHA]))}</div></td>
       <td><span class="cli" title="${esc(c[C.CLI]??"")}">${esc(c[C.CLI]??"")}</span></td>
       <td>${selPrio(r, c[C.PRIO])}</td>
@@ -206,43 +235,7 @@ function render(){
   $("#tb-empty").classList.toggle("hide", rows.length > 0);
   const total = ROWS.filter(x=>rowActive(x.c)).length;
   $("#cnt-rows").textContent = `${rows.length} de ${total} líneas`;
-  kpis(rows);
   syncSel();
-}
-
-/** Lo que se mide en paneleria son metros y kilos, no unidades sueltas. */
-function kpis(rows){
-  const all = ROWS.filter(r=>rowActive(r.c));
-  const vivas = all.filter(r=>!anuladaP(r.c));
-  const abiertas = vivas.filter(r=>progreso(r.c).pct < 1);
-  const sum = (xs, f) => xs.reduce((s,x)=>s+(f(x.c)||0), 0);
-  const porPrio = p => abiertas.filter(r=>String(r.c[C.PRIO]??"").trim().toUpperCase()===p).length;
-  const avg = abiertas.length
-    ? Math.round(abiertas.reduce((s,r)=>s+progreso(r.c).pct,0)/abiertas.length*100) : 0;
-  const act = filtrosActivos();
-  const ops = new Set(vivas.map(r=>opBase(r.c[C.OP])).filter(v=>v!==null)).size;
-
-  const k = [
-    ["OP distintas", ops, "Números de OP con líneas vivas; una OP puede tener varias líneas"],
-    ["Líneas", vivas.length, "Cada fila de la hoja es una línea de fabricación"],
-    ["Líneas abiertas", abiertas.length, ""],
-    ["m² pendientes", n2(sum(abiertas, MODELO.metros)), "Metros que quedan por fabricar"],
-    ["kg poliuretano pendiente", n2(sum(abiertas, kgDe)),
-     "Lo que hay que tener en existencia para cubrir lo abierto"],
-    ["Avance medio", avg+"%", ""],
-    ["URGENTE", porPrio("URGENTE"), "Puestas urgentes a mano: no escalan ni caducan"],
-    ["ALTA", porPrio("ALTA"), ""],
-    ["MEDIA", porPrio("MEDIA"), "A los 4 días en este nivel suben a ALTA"],
-    ["BAJA", porPrio("BAJA"), "A los 8 días en este nivel suben a MEDIA"],
-    ["Terminadas", vivas.filter(r=>estadoDe(r.c)===ESTADO.TERMINADO).length,
-     "Fabricadas, esperando despacho"],
-    ["Despachadas", vivas.filter(r=>despachadaP(r.c)).length, ""],
-    ["Anuladas", all.length - vivas.length, "Fuera de producción y de almacén"],
-    [act.length ? "Líneas filtradas" : "Sin filtrar", rows.length, act.join(" · ")]
-  ];
-  $("#kpis").innerHTML = k.map(([s,v,t])=>
-    `<div class="kpi ${t?"hi":""}" title="${esc(t)}"><b>${v}</b><span>${esc(s)}</span>` +
-    (t?`<em class="fdesc">${esc(t)}</em>`:"") + `</div>`).join("");
 }
 
 /* ------------------------------ marcar procesos ------------------------------ */
@@ -262,7 +255,6 @@ function paintRow(r){
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100 ? "full" : ""; }
   const pct = tr.querySelector(".pct"); if(pct) pct.textContent = pc+"%";
   tr.classList.toggle("done", pc>=100);
-  kpis(filtered());
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
@@ -308,6 +300,9 @@ function syncSel(){
   const e = $(sel); if(!e) return;
   e.addEventListener("input", ()=>{ pintarFiltros(); aplicarFiltros(); });
 });
+// Aparte de los filtros: el orden es una preferencia de vista, no algo que
+// "Limpiar" deba resetear.
+{ const o = $("#f-orden"); if(o) o.addEventListener("change", render); }
 ["#f-clear","#p-clear","#a-clear"].forEach(sel=>{
   const b = $(sel); if(!b) return;
   b.onclick = ()=>{

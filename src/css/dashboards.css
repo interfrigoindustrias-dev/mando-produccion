@@ -35,7 +35,7 @@
 #m-tabla tr.otras td{background:color-mix(in srgb,var(--info) 14%,var(--bg2));
   border-top:2px solid color-mix(in srgb,var(--info) 45%,transparent);
   border-bottom:2px solid color-mix(in srgb,var(--info) 45%,transparent)}
-#m-tabla tr.otras .mod{color:var(--info);font-weight:800}
+#m-tabla tr.otras .mnom{color:var(--info);font-weight:800}
 #m-tabla tr.otras:hover td{background:color-mix(in srgb,var(--info) 22%,var(--bg2))}
 /* Almacén: las separadas resaltan en rojo */
 #a-tabla tr.sep td{background:color-mix(in srgb,var(--bad) 13%,var(--bg2));
@@ -43,7 +43,7 @@
 #a-tabla tr.sep:hover td{background:color-mix(in srgb,var(--bad) 20%,var(--bg2))}
 #a-tabla tr.sep td:first-child{box-shadow:inset 4px 0 0 var(--bad)}
 #a-tabla tr.anu td{opacity:.5;text-decoration:line-through}
-#m-tabla .mod{font-weight:700}
+#m-tabla .mnom{font-weight:700}
 
 
 /* Texto que explica qué significa cada bloque */
@@ -65,7 +65,7 @@
 #m-tabla tbody tr{cursor:pointer}
 #m-tabla tbody tr.tot,#m-tabla tbody tr.otras{cursor:default}
 #m-tabla tbody tr.sel{background:color-mix(in srgb,var(--br) 16%,transparent)}
-#m-tabla tbody tr.sel .mod{font-weight:800}
+#m-tabla tbody tr.sel .mnom{font-weight:800}
 #s-modelo{display:flex;align-items:center;gap:8px}
 #s-modelo .x{margin-left:auto}
 
@@ -103,6 +103,9 @@
 /* Para quién quedó separada una puerta de stock. */
 .para{font-weight:700}
 #s-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}
+/* Disponible: en almacén, terminada y sin separar — lista para vender ya. */
+#s-tabla tbody tr.disp td{background:color-mix(in srgb,var(--ok) 10%,transparent)}
+#s-tabla tbody tr.disp td:first-child{box-shadow:inset 3px 0 0 var(--ok)}
 /* Nota de calidad vista desde almacén: corta, y entera al pasar el ratón. */
 .qnota-mini{display:block;max-width:210px;font-size:12px;color:var(--tx2);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -121,6 +124,8 @@
 .mmk span{display:block;margin-top:5px;font-size:10px;font-weight:600;
   letter-spacing:.07em;text-transform:uppercase;color:var(--tx2)}
 #mm-tabla tbody tr.sep td{background:color-mix(in srgb,var(--warn,#E8A317) 10%,transparent)}
+#mm-tabla tbody tr.disp td{background:color-mix(in srgb,var(--ok) 10%,transparent)}
+#mm-tabla tbody tr.disp td:first-child{box-shadow:inset 3px 0 0 var(--ok)}
 
 /* La reserva se edita donde se lee. */
 .para{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}

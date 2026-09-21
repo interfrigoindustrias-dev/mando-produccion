@@ -17,8 +17,8 @@
    las listas, aqui tambien: un valor que la hoja no acepte se guarda igual pero
    queda marcado y descuadra los informes. */
 const MODELO_PUERTAS = {
-  ncol: 41,
-  lastCol: "AO",
+  ncol: 44,
+  lastCol: "AR",
 
   // Indices de columna, empezando en 0 = A
   col: {
@@ -38,7 +38,10 @@ const MODELO_PUERTAS = {
     SEPA:37,      // AL  SEPARADA PARA
     SELLO:38,     // AM  SELLO
     COT:39,       // AN  COTIZACION       (numero o referencia)
-    OC:40         // AO  ORDEN DE COMPRA
+    OC:40,        // AO  ORDEN DE COMPRA
+    PROG_ORDEN:41,// AP  puesto dentro del dia programado   (Programacion)
+    PROG_FECHA:42,// AQ  dia en que se empieza a fabricar   (Programacion)
+    PANEL:43      // AR  OP de paneles creada para esta puerta (la coloca la aplicacion)
   },
 
   /* Columnas que calcula LA HOJA y que la aplicacion no debe tocar.
@@ -189,8 +192,8 @@ const MODELO_PANELES = {
      cara— y yo modelaba solo hasta la U: existian y no se leian. X e Y las
      añade la aplicacion para la cotizacion y la orden de compra, y solo si de
      verdad estan libres: paneles-listas.js mira los encabezados antes. */
-  ncol: 25,
-  lastCol: "Y",
+  ncol: 28,
+  lastCol: "AB",
 
   col: {
     FECHA:0,      // A
@@ -215,7 +218,10 @@ const MODELO_PANELES = {
     LAM_A:21,     // V   metro lineal de lamina de la cara A
     LAM_B:22,     // W   metro lineal de lamina de la cara B
     COTIZ:23,     // X   cotizacion            (la coloca la aplicacion)
-    OC:24         // Y   orden de compra       (la coloca la aplicacion)
+    OC:24,        // Y   orden de compra       (la coloca la aplicacion)
+    PROG_ORDEN:25,// Z   puesto dentro del dia programado   (Programacion)
+    PROG_FECHA:26,// AA  dia en que se empieza a fabricar   (Programacion)
+    PUERTA:27     // AB  codigo de la puerta que arma este panel (panel-para-puerta)
   },
 
   /* COLUMNAS QUE SON FORMULA DE LA HOJA. No se escriben NUNCA, ni con un
@@ -232,8 +238,11 @@ const MODELO_PANELES = {
 
   /** Campos que la aplicacion añade a la hoja si no estan ya. Se resuelven al
    *  arrancar contra los encabezados de verdad, nunca a ciegas. */
-  columnasPropias: [{k:"COTIZ", encabezado:"COTIZACION"},
-                    {k:"OC",    encabezado:"ORDEN DE COMPRA"}],
+  columnasPropias: [{k:"COTIZ",      encabezado:"COTIZACION"},
+                    {k:"OC",         encabezado:"ORDEN DE COMPRA"},
+                    {k:"PROG_ORDEN", encabezado:"ORDEN PROGRAMADO"},
+                    {k:"PROG_FECHA", encabezado:"FECHA PROGRAMADA"},
+                    {k:"PUERTA",     encabezado:"OP PUERTA"}],
 
   procs: [
     {i:12, c:"M", k:"PERFIL",    s:"PE"},
@@ -257,7 +266,7 @@ const MODELO_PANELES = {
             "INOX 430 CAL 28","INOX 430 CAL 26","INOX 430 CAL 24",
             "INOX 430 CAL 22","INOX 430 CAL 20","INOX 430 CAL 18",
             "ALFAJOR"],
-    ESTADOS: ["EN PROCESO","TERMINADO","DESPACHADO","ANULADA"],
+    ESTADOS: ["EN PROCESO","TERMINADO","PARA PUERTA","DESPACHADO","ANULADA"],
     MATERIALES: [], TIPOS: [], APERTURAS: [], ESPESORES: [],
     TIPOS_MARCO: [], VISORES: [], BUMPERS: [], TAM_BUMPER: [], SELLOS: []
   },
@@ -346,6 +355,10 @@ function tramosFila(modelo, fila, celdas){
   const deLaHoja = typeof columnasDeMatriz === "function" ? columnasDeMatriz() : null;
   const saltar = new Set(deLaHoja && deLaHoja.length ? deLaHoja
     : (modelo.formulas || []).map(k => modelo.col[k]).filter(i => i !== undefined));
+  /* Una columna propia que NO se pudo reservar puede tener datos de otra cosa:
+     escribirle una cadena vacia al crear una fila la borraria. Se salta. */
+  if(typeof columnasPropiasSinReservar === "function")
+    columnasPropiasSinReservar().forEach(i => saltar.add(i));
   const tramos = [];
   let ini = null;
   for(let i = 0; i <= modelo.ncol; i++){
@@ -359,6 +372,90 @@ function tramosFila(modelo, fila, celdas){
     } else if(ini === null) ini = i;
   }
   return tramos;
+}
+
+/* ============================== EL PANEL DE UNA PUERTA ==============================
+   Contrato entre puertas y paneles. Una puerta puede llevar panel; ese panel
+   se fabrica en paneles como cualquier otro —se programa, pasa por planta,
+   cuenta en el resumen— pero NO se despacha: con el se arma la puerta. Asi que:
+
+     · toma el SIGUIENTE numero de OP de paneles, no el de la puerta: los dos
+       productos numeran por separado, y reutilizar el numero de la puerta
+       chocaba con OP de paneles que ya existian;
+     · lleva en OP PUERTA el codigo exacto de la fila de su puerta («1234-1»);
+     · al pulsar Terminar pasa a PARA PUERTA, no a TERMINADO, y por eso no
+       aparece en almacen ni en despacho.
+
+   Estas funciones las usan las dos paginas. Viven aqui porque modelo.js lo
+   cargan las dos, y leen la hoja de verdad: desde puertas no hay filas de
+   paneles en memoria.                                                       */
+const PANEL_PUERTA = {estado: "PARA PUERTA", clave: "PUERTA", encabezado: "OP PUERTA"};
+
+/** Rango A1 de una pestaña cualquiera del mismo documento. */
+const rangoPestana = (tab, a1) => `'${String(tab).replace(/'/g, "''")}'!${a1}`;
+
+/** Siguiente numero de OP de paneles: el mayor numero base de la columna OP,
+ *  mas uno. Es el mismo criterio que nextOp() dentro de paneles, para que no
+ *  haya dos numeradores que puedan dar el mismo numero. */
+async function siguienteOpPaneles(tab){
+  const K = MODELO_PANELES.col;
+  const d = await api(`/values/${encodeURIComponent(rangoPestana(tab, `${A1(K.OP)}2:${A1(K.OP)}`))}`);
+  const max = (d.values || []).reduce((m, fila) => Math.max(m, opBase(fila[0]) || 0), 0);
+  return max + 1;
+}
+
+/** Donde esta la columna OP PUERTA en la pestaña de paneles, leyendo la fila de
+ *  encabezados. -1 si todavia no existe: la crea paneles al abrirse, y sin ella
+ *  no hay donde guardar el vinculo. */
+async function columnaPuertaEnPaneles(tab){
+  const d = await api(`/values/${encodeURIComponent(rangoPestana(tab, "A1:AZ1"))}`);
+  const enc = ((d.values || [])[0] || []).map(v => String(v ?? "").trim().toUpperCase());
+  return enc.indexOf(PANEL_PUERTA.encabezado);
+}
+
+/** Los paneles de cada puerta: Map(codigoPuerta -> {op, lineas, listo}).
+ *  `listo` es que todas sus lineas esten PARA PUERTA (o ya despachadas con la
+ *  puerta). Las anuladas no cuentan. */
+async function panelesDePuertas(tab){
+  const colP = await columnaPuertaEnPaneles(tab);
+  const out = new Map();
+  if(colP < 0) return out;
+  const K = MODELO_PANELES.col;
+  const ultima = A1(Math.max(colP, K.DESP));
+  const d = await api(`/values/${encodeURIComponent(rangoPestana(tab, `A2:${ultima}`))}`);
+  (d.values || []).forEach((c, i) => {
+    const puerta = String(c[colP] ?? "").trim();
+    if(!puerta) return;
+    const estado = String(c[K.DESP] ?? "").trim().toUpperCase();
+    if(estado === "ANULADA") return;
+    const e = out.get(puerta) || {op: opBase(c[K.OP]), lineas: [], listo: true};
+    e.lineas.push({op: String(c[K.OP] ?? "").trim(), estado, fila: i + 2});
+    if(estado !== PANEL_PUERTA.estado && estado !== "DESPACHADO") e.listo = false;
+    out.set(puerta, e);
+  });
+  return out;
+}
+
+/** Una fila de panel para una puerta, lista para tramosFila(MODELO_PANELES, …).
+ *  Nace sin estado —el flujo de planta la pone EN PROCESO al marcar el primer
+ *  paso— y con los tres procesos como casilla sin marcar. */
+function filaPanelDePuerta(d, colPuerta){
+  const MP = MODELO_PANELES, K = MP.col;
+  const c = new Array(MP.ncol).fill("");
+  c[K.FECHA] = d.fecha;
+  c[K.CLI]   = d.cliente;
+  c[K.OP]    = d.op;
+  c[K.PRIO]  = d.prio || "";
+  c[K.CANT]  = numCell(d.cant);
+  c[K.LARGO] = numCell(d.largo);
+  c[K.PROD]  = d.prod || "";
+  c[K.RANU]  = d.ranu || "";
+  c[K.CARA_A]= d.caraA || "";
+  c[K.CARA_B]= d.caraB || "";
+  c[K.DESP]  = "";
+  MP.procs.forEach(p => { c[p.i] = false; });
+  if(colPuerta >= 0 && colPuerta < MP.ncol) c[colPuerta] = d.puerta;
+  return c;
 }
 
 /** El modelo de ESTA pagina. Todo lo demas lee de aqui. */

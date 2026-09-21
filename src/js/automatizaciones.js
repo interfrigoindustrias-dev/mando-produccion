@@ -74,44 +74,114 @@ function diasSinTocar(r, c){
    se los pisa. */
 const COLUMNAS_NUEVAS = [
   {a1:"AN1", t:"COTIZACION"},
-  {a1:"AO1", t:"ORDEN DE COMPRA"}
+  {a1:"AO1", t:"ORDEN DE COMPRA"},
+  /* La programacion de la produccion: que dia se empieza cada OP y en que
+     puesto de ese dia. Van en la hoja y no en el navegador porque las lee
+     planta desde otra pantalla. */
+  {a1:"AP1", t:"ORDEN PROGRAMADO"},
+  {a1:"AQ1", t:"FECHA PROGRAMADA"},
+  /* El numero de la OP de paneles que se creo para esta puerta («540»): es lo
+     que la marca como puerta con panel. El vinculo de verdad lo guarda cada
+     linea de panel en su OP PUERTA; esto es la marca del lado de puertas. */
+  {a1:"AR1", t:"OP PANEL"}
 ];
+
+/* Si la programacion puede guardar, y si no, por que. Lo lee programa.js para
+   decirlo arriba del tablero en vez de fallar al soltar una ficha. */
+let PROG_COLUMNAS = {ok:false, motivo:"todavía no se ha comprobado la hoja"};
+/* OP PANEL confirmada: solo entonces se escribe la marca en la puerta. */
+let PANEL_COL_OK = false;
+
+/* Columnas propias que no se han podido confirmar. tramosFila (modelo.js) las
+   salta al crear una fila: si AP o AQ tuvieran datos de otra cosa, escribirles
+   la cadena vacia de una ficha nueva los borraria. Mientras no se confirmen
+   —tambien antes de comprobarlas, al arrancar— no se tocan. Mismo nombre y
+   contrato que en paneles; las dos paginas no se cargan juntas. */
+function columnasPropiasSinReservar(){
+  const out = [];
+  if(!PROG_COLUMNAS.ok) out.push(C.PROG_ORDEN, C.PROG_FECHA);
+  if(!PANEL_COL_OK) out.push(C.PANEL);
+  return out.filter(i => i !== undefined);
+}
+
+const idxA1 = a1 => {                          // "AN1" -> indice 0-based
+  const L = a1.replace(/\d+$/, "");
+  return [...L].reduce((n,ch)=>n*26 + (ch.charCodeAt(0)-64), 0) - 1;
+};
+const normaEncabezado = t => String(t ?? "").trim().toUpperCase()
+  .normalize("NFD").replace(/[̀-ͯ]/g, "");
+
 async function migrarColumnas(){
-  if(CFG.auto===false) return 0;
+  /* Comprobar los encabezados no es una automatizacion: se hace siempre. Solo
+     CREAR columnas depende de que las automatizaciones esten encendidas. */
+  const crear = CFG.auto !== false;
 
   /* Primero la rejilla. La hoja llegaba hasta AM —39 columnas— y escribir en
      AN o AO no es «celda vacia», es fuera del tablero: la API rechaza el rango
      entero. Como cada guardado escribe la fila completa de A a la ultima
      columna, sin esto NINGUN guardado funcionaria. */
-  try{
-    const gid = await ensureGid();
-    if(gid !== null){
-      const meta = await api("?fields=sheets.properties(title,sheetId,gridProperties.columnCount)");
-      const sh = (meta.sheets||[]).find(x=>x.properties.title===CFG.tab);
-      const hay = sh && sh.properties.gridProperties ? sh.properties.gridProperties.columnCount : 0;
-      if(hay && hay < NCOL){
-        await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:[
-          {appendDimension:{sheetId:gid, dimension:"COLUMNS", length: NCOL - hay}}]})});
+  if(crear){
+    try{
+      const gid = await ensureGid();
+      if(gid !== null){
+        const meta = await api("?fields=sheets.properties(title,sheetId,gridProperties.columnCount)");
+        const sh = (meta.sheets||[]).find(x=>x.properties.title===CFG.tab);
+        const hay = sh && sh.properties.gridProperties ? sh.properties.gridProperties.columnCount : 0;
+        if(hay && hay < NCOL){
+          await api(":batchUpdate", {method:"POST", body: JSON.stringify({requests:[
+            {appendDimension:{sheetId:gid, dimension:"COLUMNS", length: NCOL - hay}}]})});
+        }
       }
+    }catch(e){
+      console.warn("ampliar columnas:", e.message);
+      PROG_COLUMNAS = {ok:false, motivo:"no se pudo ampliar la hoja: " + e.message};
+      return 0;
     }
-  }catch(e){ console.warn("ampliar columnas:", e.message); return 0; }
+  }
 
   let cab;
   try{
-    const res = await api(`/values/${encodeURIComponent(CFG.tab)}!A1:AO1`);
+    const res = await api(`/values/${encodeURIComponent(CFG.tab)}!A1:${LAST_COL}1`);
     cab = (res.values && res.values[0]) || [];
-  }catch(e){ console.warn("migrar columnas:", e.message); return 0; }
+  }catch(e){
+    console.warn("migrar columnas:", e.message);
+    PROG_COLUMNAS = {ok:false, motivo:"no se pudo leer la fila de encabezados"};
+    return 0;
+  }
 
-  const idx = a1 => {                          // "AN1" -> indice 0-based
-    const L = a1.replace(/\d+$/, "");
-    return [...L].reduce((n,ch)=>n*26 + (ch.charCodeAt(0)-64), 0) - 1;
-  };
-  const faltan = COLUMNAS_NUEVAS.filter(x => !String(cab[idx(x.a1)] ?? "").trim());
-  if(!faltan.length) return 0;
-  try{
-    await writeCells(faltan.map(x=>({a1:x.a1, v:[[x.t]]})));
-    return faltan.length;
-  }catch(e){ console.warn("migrar columnas:", e.message); return 0; }
+  /* Solo se escribe donde no hay NADA. Si alguien ya puso otra cosa en esa
+     celda —o la llamo distinto— no se le pisa: esa columna puede tener datos. */
+  const faltan = COLUMNAS_NUEVAS.filter(x => idxA1(x.a1) < NCOL && !String(cab[idxA1(x.a1)] ?? "").trim());
+  let creadas = 0;
+  if(faltan.length && crear){
+    try{
+      await writeCells(faltan.map(x=>({a1:x.a1, v:[[x.t]]})));
+      faltan.forEach(x => { cab[idxA1(x.a1)] = x.t; });
+      creadas = faltan.length;
+    }catch(e){ console.warn("migrar columnas:", e.message); }
+  }
+
+  /* La programacion solo se da por lista si sus DOS columnas dicen exactamente
+     lo que tienen que decir. Leer AP y AQ a ciegas seria leer lo que otro haya
+     puesto ahi como si fueran dias y puestos. */
+  const prog = COLUMNAS_NUEVAS.filter(x => /^A[PQ]1$/.test(x.a1));
+  const mal = prog.find(x => normaEncabezado(cab[idxA1(x.a1)]) !== normaEncabezado(x.t));
+  const pan = COLUMNAS_NUEVAS.find(x => x.a1 === "AR1");
+  PANEL_COL_OK = C.PANEL !== undefined && normaEncabezado(cab[idxA1(pan.a1)]) === normaEncabezado(pan.t);
+  if(C.PROG_ORDEN === undefined || C.PROG_FECHA === undefined){
+    PROG_COLUMNAS = {ok:false, motivo:"esta versión de la aplicación todavía no conoce esas columnas"};
+  }else if(mal){
+    const hay = String(cab[idxA1(mal.a1)] ?? "").trim();
+    PROG_COLUMNAS = {ok:false, motivo: hay
+      ? `la columna ${mal.a1.replace(/\d+$/,"")} ya se llama «${hay}»`
+      : `falta la columna ${mal.a1.replace(/\d+$/,"")} y tu acceso no puede crearla`};
+  }else{
+    PROG_COLUMNAS = {ok:true, motivo:""};
+  }
+  // Si el tablero esta abierto, que diga ya si se puede guardar o no.
+  const vp = document.getElementById("v-programa");
+  if(vp && !vp.classList.contains("hide") && typeof renderPrograma === "function") renderPrograma();
+  return creadas;
 }
 
 /** Fecha de inicio de producción: la columna AB de la hoja.
@@ -121,16 +191,106 @@ async function marcarInicioProduccion(r){
   if(CFG.auto===false) return;
   const row = ROWS.find(x=>x.r===r);
   if(!row || anulada(row.c)) return;
-  if(String(row.c[C.FINI]??"").trim()) return;      // ya tiene fecha: no se toca
-  if(progreso(row.c).ok <= 0) return;               // aún no hay ningún proceso hecho
+  const c = row.c;
+  if(progreso(c).ok <= 0) return;                   // aún no hay ningún proceso hecho
 
+  /* Primer paso marcado: En proceso + comienzo. Dos reglas, iguales que en
+     paneles:
+       · el estado solo se pone si la puerta NO tenia ninguno. Marcar un
+         proceso en una devuelta la deja devuelta, y en una terminada no la
+         devuelve a produccion;
+       · el comienzo se sella UNA vez: si ya tenia fecha, ya se habia empezado.
+     Desmarcar despues no deshace ninguna de las dos. */
   const h = hoy();
-  row.c[C.FINI] = h;
+  const ups = [], logs = [];
+  const sinEstado = !String(c[C.DESP]??"").trim();
+  const sinComienzo = !String(c[C.FINI]??"").trim();
+  if(sinEstado){
+    ups.push({a1:`Y${r}`, v:[[EN_PROCESO]]});
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Estado despacho", antes:"", despues:EN_PROCESO});
+  }
+  if(sinComienzo){
+    ups.push({a1:`AB${r}`, v:[[h]]});
+    logs.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Inicio de producción", antes:"", despues:h});
+  }
+  if(!ups.length) return;
+  if(sinEstado) c[C.DESP] = EN_PROCESO;             // se ve ya; la hoja va detras
+  if(sinComienzo) c[C.FINI] = h;
   try{
-    await writeCells([{a1:`AB${r}`, v:[[h]]}]);
-    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r,
-              campo:"Inicio de producción", antes:"", despues:h}]);
-  }catch(e){ row.c[C.FINI]=""; console.warn("inicio produccion:", e.message); }
+    await writeCells(ups);
+    logBulk(logs);
+  }catch(e){
+    if(sinEstado) c[C.DESP] = "";
+    if(sinComienzo) c[C.FINI] = "";
+    console.warn("inicio produccion:", e.message);
+    toast("No se pudo poner En proceso: " + e.message, "err");
+  }
+}
+
+/** Pone «En proceso» a las puertas que ya estaban empezadas cuando nacio el
+ *  flujo de estados y siguen sin estado. Con el flujo, esas puertas solo
+ *  cambiarian al marcar su siguiente paso, y mientras tanto la hoja diria que
+ *  no se han empezado. El usuario pidio actualizarlas todas.
+ *
+ *  Tres cosas a proposito:
+ *    · solo toca el ESTADO, y solo si esta vacio y hay algun paso marcado;
+ *    · NO inventa el comienzo: si no tenia fecha, no se sabe cuando empezo, y
+ *      poner la de hoy seria escribir un dato falso;
+ *    · NO apunta cada puerta en el historial: el historial cuenta como «tocada»
+ *      cualquier fila con apunte y les reiniciaria el reloj de la subida de
+ *      prioridad a puertas que nadie ha mirado.
+ *  Idempotente: una vez puestas, no queda nada que hacer. */
+async function repairEnProceso(){
+  if(CFG.auto===false || busyWrites>0) return 0;
+  const cambiar = ROWS.filter(({c}) => rowActive(c) && !anulada(c) &&
+    !String(c[C.DESP]??"").trim() && progreso(c).ok > 0);
+  if(!cambiar.length) return 0;
+  cambiar.forEach(({c}) => { c[C.DESP] = EN_PROCESO; });
+  try{
+    await writeCells(cambiar.map(({r}) => ({a1:`Y${r}`, v:[[EN_PROCESO]]})));
+    lastHash = "";
+    render(); renderDashVisible();
+    return cambiar.length;
+  }catch(e){
+    cambiar.forEach(({c}) => { c[C.DESP] = ""; });
+    console.warn("en proceso:", e.message);
+    return 0;
+  }
+}
+
+/** Lo que hay que escribir ademas del estado al cambiarlo.
+ *    Terminado  -> FIN DE PROCESO (X) = hoy, y el comienzo si faltaba.
+ *    Despachado -> FECHA DE DESPACHO (Z) = hoy, si no tenia.
+ *
+ *  El fin se escribe SIEMPRE al terminar, no solo si esta vacio: antes la
+ *  columna X se reescribia con cada marca de proceso, asi que lo que tenga una
+ *  puerta sin terminar es la ultima vez que alguien marco algo, no su fin. Una
+ *  devuelta que se vuelve a terminar tambien estrena fecha: se termino otra vez.
+ *
+ *  Devuelve {ups, cambios} y ya deja los valores puestos en la fila. */
+function fechasAlCambiarEstado(row, nuevo){
+  const c = row.c, r = row.r, h = hoy();
+  const ups = [], cambios = [];
+  if(CFG.auto === false) return {ups, cambios};
+  if(nuevo === "Terminado"){
+    if(fmtDate(c[C.FPROC]) !== h){
+      ups.push({a1:`X${r}`, v:[[h]]});
+      cambios.push({campo:"Fin de proceso", antes:fmtDate(c[C.FPROC]), despues:h});
+      c[C.FPROC] = h;
+    }
+    // Terminada sin haber marcado nada: al menos queda cuando se empezo.
+    if(!String(c[C.FINI]??"").trim()){
+      ups.push({a1:`AB${r}`, v:[[h]]});
+      cambios.push({campo:"Inicio de producción", antes:"", despues:h});
+      c[C.FINI] = h;
+    }
+  }
+  if(nuevo === "Despachado" && !fmtDate(c[C.FDESP])){
+    ups.push({a1:`Z${r}`, v:[[h]]});
+    cambios.push({campo:"Fecha despacho", antes:"", despues:h});
+    c[C.FDESP] = h;
+  }
+  return {ups, cambios};
 }
 
 /** Sube a ALTA lo que ya agotó su margen de espera.
@@ -181,23 +341,13 @@ const hoy0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
    futura de una puerta sin empezar era escribir un dato falso.
 
    La prioridad ya no decide CUANDO aparece una puerta, decide en que orden se
-   hace. Quien sella la fecha sigue siendo tocarFechaProceso, con el dia en que
-   de verdad se toco. */
+   hace. La fecha de fin la sella pulsar Terminada (fechasAlCambiarEstado). */
 
-async function tocarFechaProceso(r, estabaCompleta){
-  if(CFG.auto===false) return;
-  const row = ROWS.find(x=>x.r===r);
-  if(!row || anulada(row.c)) return;
-  if(estabaCompleta && completa(row.c)) return;   // seguía terminada: fecha congelada
-
-  const h = hoy(), antes = fmtDate(row.c[C.FPROC]);
-  if(antes === h) return;
-  row.c[C.FPROC] = h;
-  try{
-    await writeCells([{a1:`X${r}`, v:[[h]]}]);
-    logBulk([{accion:"AUTO", op:row.c[C.OP], fila:r, campo:"Fecha proceso", antes, despues:h}]);
-  }catch(e){ row.c[C.FPROC] = antes; console.warn("fecha proceso:", e.message); }
-}
+/* Aqui vivia tocarFechaProceso, que reescribia la columna X con la fecha de
+   hoy cada vez que se marcaba un proceso. Con el flujo de estados X es el FIN
+   DE PROCESO y lo sella pulsar Terminada (fechasAlCambiarEstado): seguir
+   pisandola en cada marca haria que una puerta a medias pareciera acabada el
+   ultimo dia que alguien toco una casilla. */
 
 /* Nombres de los procesos, para reconocerlos en el historial. */
 const CAMPOS_PROCESO = new Set(PROCS.map(p => p.k));

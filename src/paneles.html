@@ -27,20 +27,23 @@
 <!-- ============================== LOGIN / CONFIG ============================== -->
 <div id="gate">
   <div class="card">
-    <div class="logo"></div>
-    <h1>Control de Paneles</h1>
-    <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
+    <div id="g-splash" class="g-splash"><div class="logo"></div></div>
+    <div id="g-form" class="hide">
+      <div class="logo"></div>
+      <h1>Control de Paneles</h1>
+      <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
 
-    <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
-      <span id="g-falta"></span>
-    </div>
+      <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
+        <span id="g-falta"></span>
+      </div>
 
-    <div style="display:flex;gap:8px;margin-top:20px">
-      <button class="btn pri grow" id="g-login">Entrar con Google</button>
-      <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      <div style="display:flex;gap:8px;margin-top:20px">
+        <button class="btn pri grow" id="g-login">Entrar con Google</button>
+        <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      </div>
+      <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
+      <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
     </div>
-    <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
-    <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
   </div>
 </div>
 
@@ -55,6 +58,7 @@
   </div>
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" data-view="control" aria-selected="true">Control de OPs</button>
+    <button class="tab" role="tab" data-view="programa" aria-selected="false">Programación</button>
     <button class="tab" role="tab" data-view="planta" aria-selected="false">Planta</button>
     <button class="tab" role="tab" data-view="resumen" aria-selected="false">Resumen</button>
     <button class="tab" role="tab" data-view="almacen" aria-selected="false">Almacén</button>
@@ -77,11 +81,17 @@
 <main>
   <!-- ---------- CONTROL DE OPS ---------- -->
   <section id="v-control">
-    <div class="kpis" id="kpis"></div>
-
     <div class="bar barfil">
       <label class="f wide"><span>Buscar</span>
         <input class="inp" id="f-q" placeholder="OP, cliente, producto&#8230;" autocomplete="off"></label>
+      <label class="f"><span>Ordenar</span><select class="inp" id="f-orden">
+        <option value="reciente" selected>Más reciente primero</option>
+        <option value="antigua">Más antigua primero</option>
+        <option value="cli-az">Cliente (A-Z)</option>
+        <option value="cli-za">Cliente (Z-A)</option>
+        <option value="prio">Prioridad (urgente primero)</option>
+        <option value="av-desc">Avance (mayor a menor)</option>
+        <option value="av-asc">Avance (menor a mayor)</option></select></label>
       <button type="button" class="btn sm filtros-btn" id="f-abrir"
         data-plegar="#f-caja">Filtros <b></b></button>
       <div class="filtros-caja" id="f-caja">
@@ -117,6 +127,14 @@
     </div>
   </section>
 
+  <!-- ---------- PROGRAMACION ---------- -->
+  <section id="v-programa" class="hide">
+    <div class="pg-linea" id="g-top"></div>
+    <div id="g-aviso" class="nota" hidden></div>
+    <div id="g-tablero" class="pg-tablero"
+      title="Arrastra cada OP al día en que se empieza; su puesto en el día es el orden. Planta fabrica primero lo programado. En tablet, mantén pulsada la ficha antes de moverla. Teclado: Alt + flechas."></div>
+  </section>
+
   <!-- ---------- PLANTA ---------- -->
   <section id="v-planta" class="hide">
     <div class="kpis" id="p-kpis"></div>
@@ -133,7 +151,9 @@
     </div>
     <div class="fichas hide" id="p-fichas"></div>
     <p class="expl">El orden no es alfab&#233;tico ni por fecha: es el orden en el que
-      <b>conviene fabricar</b>. Primero las urgentes, luego las ALTA que llevan d&#237;as
+      <b>conviene fabricar</b>. <b>Primero va lo programado</b> en la pesta&#241;a
+      Programaci&#243;n, por d&#237;a y en el puesto que se le dio. Despu&#233;s, lo que no est&#233;
+      programado: primero las urgentes, luego las ALTA que llevan d&#237;as
       paradas, y despu&#233;s ALTA, MEDIA y BAJA; dentro de cada escal&#243;n, por n&#250;mero de OP
       de menor a mayor. Manda la prioridad, y dentro de cada prioridad se agrupan
       los pedidos del mismo espesor para no reajustar la m&#225;quina a cada pieza. El grupo
@@ -145,6 +165,14 @@
   <!-- ---------- RESUMEN ---------- -->
   <section id="v-resumen" class="hide">
     <div class="kpis" id="r-kpis"></div>
+
+    <h2 class="dash-h">Programaci&#243;n de la producci&#243;n</h2>
+    <p class="expl">Lo que hay puesto por d&#237;a contra lo que la planta fabrica de verdad por d&#237;a
+      de trabajo, medido en los &#250;ltimos 60 d&#237;as. La <b>carga</b> por encima del 100 % es
+      trabajo que no cabe en ese d&#237;a: o se mueve, o se alarga la jornada.</p>
+    <div id="r-prog-nota" class="nota" hidden></div>
+    <div class="kpis" id="r-prog-kpis"></div>
+    <div class="sec"><div class="tw"><table id="r-prog-tabla" class="mini"></table></div></div>
 
     <div class="sec"><h2>Qu&#233; se le puede prometer a un cliente</h2>
       <div id="r-entrega"></div></div>
@@ -461,6 +489,7 @@
 <script src="js/paneles-filtros.js"></script>
 <script src="js/paneles-auto.js"></script>
 <script src="js/paneles-control.js"></script>
+<script src="js/paneles-programa.js"></script>
 <script src="js/paneles-ficha.js"></script>
 <script src="js/paneles-planta.js"></script>
 <script src="js/paneles-resumen.js"></script>

@@ -15,13 +15,24 @@
  *  las de puertas apuntan a otra cosa en la hoja de paneles. */
 const col = k => A1(C[k]);
 
-const ESTADO = {PROCESO:"EN PROCESO", TERMINADO:"TERMINADO",
+const ESTADO = {PROCESO:"EN PROCESO", TERMINADO:"TERMINADO", PARA_PUERTA:"PARA PUERTA",
                 DESPACHADO:"DESPACHADO", ANULADA:"ANULADA"};
 
 /** El estado que tiene ahora la linea, normalizado. */
 const estadoDe = c => String(c[C.DESP] ?? "").trim().toUpperCase();
 const anuladaP = c => estadoDe(c) === ESTADO.ANULADA;
 const despachadaP = c => estadoDe(c) === ESTADO.DESPACHADO;
+const paraPuertaP = c => estadoDe(c) === ESTADO.PARA_PUERTA;
+/* Terminada en planta: ya no es cola de fabricacion, aunque calidad/almacen
+   sigan teniendo trabajo con ella. La usa Programacion para saber que ya no
+   hay que ofrecerla ni contarla como abierta. */
+const hechaEnPlantaP = c => estadoDe(c) === ESTADO.TERMINADO || paraPuertaP(c);
+
+/** El codigo de la puerta que arma este panel, o "" si es un panel normal.
+ *  Solo se lee si la columna OP PUERTA esta reservada: si no, AB podria tener
+ *  cualquier otra cosa. */
+const puertaDe = c => (typeof columnaLista === "function" && columnaLista("PUERTA"))
+  ? String(c[C.PUERTA] ?? "").trim() : "";
 
 /* ------------------------------ 1. escalado de prioridad ------------------------------
    POR ESCALONES, NO DE UN SALTO. BAJA espera 8 dias sin tocarse y se vuelve
@@ -81,16 +92,36 @@ async function tocarFechaProceso(r){
   if(!row) return;
   const c = row.c;
   if(progreso(c).ok === 0) return;                  // aun no se ha empezado
-  if(String(c[C.FINI] ?? "").trim()) return;        // ya estaba sellado
 
   const h = hoy();
+  const ups = [], log = [];
+  const sinEstado = !estadoDe(c);
+  if(sinEstado){
+    ups.push({a1: `${col("DESP")}${r}`, v: [[ESTADO.PROCESO]]});
+    log.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Estado", antes:"", despues:ESTADO.PROCESO});
+  }
+  if(!String(c[C.FINI] ?? "").trim()){
+    ups.push({a1: `${col("FINI")}${r}`, v: [[h]]});
+    log.push({accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso", antes:"", despues:h});
+  }
+  if(!ups.length) return;
+
+  const previoEstado = c[C.DESP], previoIni = c[C.FINI];
+  if(sinEstado) c[C.DESP] = ESTADO.PROCESO;          // optimista: se ve ya
+  if(!String(c[C.FINI] ?? "").trim()) c[C.FINI] = h;
+  // El desplegable de estado de Control de OPs, si esa fila esta a la vista.
+  const sel = document.querySelector(`#tb tr[data-r="${r}"] [data-edit-estado]`);
+  if(sel && sinEstado) sel.value = ESTADO.PROCESO;
   try{
-    await writeCells([{a1: `${col("FINI")}${r}`, v: [[h]]}]);
-    logBulk([{accion:"AUTO", op:c[C.OP], fila:r, campo:"Comienzo proceso",
-              antes:"", despues:h}]);
-    c[C.FINI] = h;
+    await writeCells(ups);
+    logBulk(log);
     lastHash = "";
-  }catch(e){ console.warn("comienzo proceso:", e.message); }
+  }catch(e){
+    c[C.DESP] = previoEstado; c[C.FINI] = previoIni;
+    if(sel && sinEstado) sel.value = previoEstado || "";
+    console.warn("comienzo proceso:", e.message);
+    if(typeof toast === "function") toast("No se pudo poner EN PROCESO: " + e.message, "err");
+  }
 }
 
 /* ------------------------------ 3. fin del proceso ------------------------------ */
@@ -107,6 +138,10 @@ async function ponerEstado(r, valor){
   const row = ROWS.find(x => x.r === r);
   if(!row) return;
   const c = row.c;
+  /* Un panel que es para una puerta no se termina «para almacen»: se termina
+     para armar su puerta. Terminar lo lleva a PARA PUERTA, y por eso no
+     aparece en almacen ni se ofrece para despachar. */
+  if(String(valor).trim().toUpperCase() === ESTADO.TERMINADO && puertaDe(c)) valor = ESTADO.PARA_PUERTA;
   const antes = String(c[C.DESP] ?? "");
   if(antes === valor) return;
   const ups = [{a1: `${col("DESP")}${r}`, v: [[valor]]}];
@@ -115,7 +150,7 @@ async function ponerEstado(r, valor){
   const v = String(valor).trim().toUpperCase();
   const h = hoy();
 
-  if(v === ESTADO.TERMINADO && !String(c[C.FFIN] ?? "").trim()){
+  if((v === ESTADO.TERMINADO || v === ESTADO.PARA_PUERTA) && !String(c[C.FFIN] ?? "").trim()){
     ups.push({a1: `${col("FFIN")}${r}`, v: [[h]]});
     cambios.push({campo:"Fin proceso", antes:"", despues:h});
     c[C.FFIN] = h;
@@ -142,5 +177,29 @@ async function ponerEstado(r, valor){
     c[C.DESP] = antes; c[C.FFIN] = previaFin; c[C.FDESP] = previaDesp;
     toast(e.message, "err");
     throw e;
+  }
+}
+
+/** Recalcula todos los tableros que dependen del estado de una linea, y si
+ *  alguno falla lo dice en vez de dejar la pantalla a medio actualizar en
+ *  silencio. Cada vista se salta si no esta en esta pagina (su ancla no
+ *  existe) o si su funcion de pintado aun no cargo. */
+function recalcularTableros(){
+  const tableros = [
+    ["la programación",   "renderPrograma","g-tablero"],
+    ["la cola de planta", "renderPlanta",  "p-lista"],
+    ["el resumen",        "renderResumen", "v-resumen"],
+    ["el almacén",        "renderAlmacen", "a-lista"],
+    ["la tabla",          "render",        "tb"]
+  ];
+  for(const [nombre, fn, ancla] of tableros){
+    if(!document.getElementById(ancla)) continue;
+    if(typeof window[fn] !== "function") continue;
+    try{ window[fn](); }
+    catch(e){
+      console.error("recalcular/"+fn, e);
+      if(typeof toast === "function")
+        toast("No se pudo recalcular "+nombre+": "+e.message, "err");
+    }
   }
 }

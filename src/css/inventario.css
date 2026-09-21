@@ -1,0 +1,208 @@
+/* Inventario de almacen
+   Proyecto: Control de Puertas - Interfrigo
+   Se carga despues de componentes.css y dashboards.css: reutiliza sus clases
+   (.tw, .tag, .kpi, .pc, .sec) y solo anade lo propio del kardex. */
+
+/* Saldos: el signo se lee por color antes que por el numero. */
+#i-tabla .num.neg,
+#k-tabla .num.neg { color: var(--bad); font-weight: 700 }
+#k-tabla .num.pos { color: var(--ok);  font-weight: 700 }
+#i-tabla .num.z   { color: var(--tx3); font-weight: 400 }
+
+/* Fila bajo minimo o en negativo: se ve sin tener que leer la columna Estado. */
+#i-tabla tbody tr.low td { background: color-mix(in srgb, var(--warn) 11%, var(--bg2)) }
+#i-tabla tbody tr.low:hover td { background: color-mix(in srgb, var(--warn) 18%, var(--bg2)) }
+#i-tabla tbody tr.low td.stick { box-shadow: inset 4px 0 0 var(--warn) }
+
+/* Codigos con movimientos pero sin ficha en el catalogo. */
+#i-tabla tr.otras td { background: color-mix(in srgb, var(--info) 12%, var(--bg2)) }
+#i-tabla tr.otras:hover td { background: color-mix(in srgb, var(--info) 20%, var(--bg2)) }
+
+/* El selector de tipo reutiliza .pc, donde el icono solo se ve al marcar.
+   Aqui el icono distingue los tipos, asi que se ve siempre. */
+#mv-tipos .pc .bx { color: var(--tx2); font-size: 13px }
+#mv-tipos .pc.on { background: color-mix(in srgb, var(--acc) 13%, transparent);
+  border-color: color-mix(in srgb, var(--acc) 50%, transparent) }
+#mv-tipos .pc.on .bx { background: var(--acc); border-color: var(--acc); color: #fff }
+
+#mv-saldo b { color: var(--tx); font-weight: 700; font-family: var(--mono) }
+
+/* En movil la tabla de existencias se sale: que ruede ella, no la pagina. */
+@media (max-width: 720px) {
+  #i-tabla, #k-tabla { min-width: 640px }
+}
+
+/* ---------- buscador de insumo ---------- */
+/* Con muchas referencias, un desplegable obliga a recordar el codigo exacto.
+   Esta lista busca por codigo y por nombre, y muestra la existencia de cada uno
+   para decidir sin salir del formulario. */
+#ov-mov label.f { position: relative }
+
+.combo {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  max-height: 300px; overflow-y: auto;
+  background: var(--bg2); border: 1px solid var(--line2);
+  border-radius: var(--r); box-shadow: var(--sh); margin-top: 4px;
+}
+.combo-op {
+  display: grid; grid-template-columns: 130px 1fr auto; gap: 10px;
+  align-items: center; padding: 8px 12px; cursor: pointer;
+  border-bottom: 1px solid var(--line); font-size: 13px;
+}
+.combo-op:last-child { border-bottom: 0 }
+.combo-op b { font-family: var(--mono); font-weight: 700; font-size: 12.5px }
+.combo-op span { color: var(--tx2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.combo-op i { font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--tx3) }
+/* La existencia en rojo avisa antes de elegir: evita pedir lo que no hay. */
+.combo-op i.flojo { color: var(--bad); font-weight: 700 }
+.combo-op:hover, .combo-op.on { background: color-mix(in srgb, var(--acc) 12%, transparent) }
+.combo-op.on { box-shadow: inset 3px 0 0 var(--acc) }
+.combo-vacio { padding: 12px; color: var(--tx2); font-size: 12.5px }
+
+/* Existencia por encima del maximo: capital parado, avisa pero no alarma. */
+#i-tabla tbody tr.alta td { background: color-mix(in srgb, var(--acc) 8%, var(--bg2)) }
+#i-tabla tbody tr.alta:hover td { background: color-mix(in srgb, var(--acc) 14%, var(--bg2)) }
+#i-tabla tbody tr.alta td.stick { box-shadow: inset 4px 0 0 var(--acc) }
+
+@media (max-width: 720px) {
+  .combo-op { grid-template-columns: 90px 1fr; }
+  .combo-op i { grid-column: 2; text-align: right }
+}
+
+/* ---------- requisiciones ---------- */
+/* Cuanto llego de cada linea, editable dentro de la tabla del detalle. */
+.mini-num {
+  width: 92px; padding: 4px 8px; font-size: 12.5px; height: 28px;
+  text-align: right; font-family: var(--mono);
+}
+#dr-tabla td, #r-tabla td { vertical-align: middle }
+/* Una requisicion cerrada no invita a tocarla. */
+#r-tabla tbody tr:has(.t-anu) td { opacity: .55 }
+#nr-lineas table { width: 100% }
+#nr-lineas .btn.dan { padding: 2px 8px; font-size: 11px }
+
+/* ---------- avisos flotantes ---------- */
+/* Estos estilos viven en planta.css, que esta pagina no carga: sin ellos el
+   aviso se queda en el flujo normal y aparece DETRAS del modal. Se repiten
+   aqui, y por encima de las ventanas (.ov es z-index 100), porque el aviso mas
+   importante —"no puedes aprobar tu propia requisicion"— llega justo cuando hay
+   una ventana abierta. */
+#toast {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  z-index: 500; display: flex; flex-direction: column; gap: 8px;
+  align-items: center; pointer-events: none;
+}
+.tst {
+  background: var(--bg3); border: 1px solid var(--line2);
+  border-left: 3px solid var(--acc); border-radius: var(--r);
+  padding: 10px 16px; box-shadow: var(--sh); font-size: 13px;
+  max-width: 90vw; animation: tst-up .2s;
+}
+.tst.ok  { border-left-color: var(--ok) }
+.tst.err { border-left-color: var(--bad) }
+@keyframes tst-up { from { opacity: 0; transform: translateY(10px) } }
+
+/* ---------- buscador dentro de una barra estrecha ---------- */
+/* .bar .f.wide mide 210 px, y con eso el nombre del insumo no cabia: solo se
+   veia el codigo. La lista se ensancha por su cuenta, que es lo que hace falta
+   para reconocer el producto. */
+#nr-fila { display: grid; grid-template-columns: minmax(280px, 1fr) 130px auto;
+  gap: 10px; align-items: end; margin-bottom: 12px }
+#nr-fila .f { width: auto; position: relative }
+#nr-lista { min-width: 420px }
+@media (max-width: 720px) {
+  #nr-fila { grid-template-columns: 1fr }
+  #nr-lista { min-width: 0 }
+}
+
+/* ---------- existencia por bodega en el formulario ---------- */
+/* Se decide de que bodega sacar el material sin salir del formulario. */
+.saldos{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.saldo{display:inline-flex;flex-direction:column;gap:1px;padding:6px 11px;
+  border:1px solid var(--line);border-radius:9px;background:var(--bg);min-width:84px}
+.saldo i{font-style:normal;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--tx3);font-weight:700}
+.saldo b{font-family:var(--mono);font-size:14px;font-weight:700}
+.saldo.z b{color:var(--tx3);font-weight:400}
+.saldo.neg b{color:var(--bad)}
+.saldo.tot{background:var(--bg3);border-color:var(--line2)}
+.saldo.pres{background:color-mix(in srgb,var(--acc) 10%,transparent);
+  border-color:color-mix(in srgb,var(--acc) 35%,transparent)}
+
+/* ---------- ensamble ---------- */
+#mv-ens-fila{display:grid;grid-template-columns:minmax(260px,1fr) 130px auto;
+  gap:10px;align-items:end;margin-top:12px}
+#mv-ens-fila .f{width:auto;position:relative}
+#me-lista{min-width:420px}
+#mv-ens-lista table{width:100%}
+#mv-ens-lista .btn.dan{padding:2px 8px;font-size:11px}
+#mv-merma b{color:var(--tx);font-family:var(--mono)}
+#mv-conv b{color:var(--acc);font-family:var(--mono)}
+@media (max-width:720px){
+  #mv-ens-fila{grid-template-columns:1fr}
+  #me-lista{min-width:0}
+}
+
+/* Insumos sin movimiento en el periodo: presentes pero apagados. */
+#inf-tabla tbody tr.quieto td{opacity:.5}
+#inf-tabla .num.pos{color:var(--ok);font-weight:700}
+#inf-tabla .num.z{color:var(--tx3)}
+#inf-tabla input[type=checkbox]{accent-color:var(--acc);width:16px;height:16px;cursor:pointer}
+
+/* ---------- despiece: las piezas que salen de un corte ----------
+   Contadores en vez de un buscador. El largo va primero y en grande porque es
+   lo que decide el operario: no piensa «IGO00535», piensa «uno de 3,5». */
+.despz{display:grid;gap:8px;margin-top:10px}
+.despz .pz{
+  display:grid;grid-template-columns:74px 96px 1fr auto;gap:10px;align-items:center;
+  padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg)}
+.despz .pz.on{border-color:var(--acc);background:var(--bg3)}
+.despz .lg{font-size:15px;font-weight:800;color:var(--acc);white-space:nowrap}
+.despz .cd{font-family:var(--mono);font-size:12px;color:var(--tx2)}
+.despz .nm{font-size:12px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.despz .stp{display:flex;align-items:center;gap:4px}
+.despz .stp .btn{width:30px;padding:0;height:30px;font-size:15px;line-height:1}
+.despz .stp .inp{width:58px;text-align:center;font-weight:700;padding:5px 4px}
+
+/* Despieces que no dejan retal. Se calculan al vuelo, no se guardan. */
+.sugs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.sugs .sug{font-family:var(--mono);font-size:12px}
+.sugs .sug:hover{border-color:var(--acc);color:var(--acc)}
+
+/* El cuadre del corte: verde si sale exacto, y si no, por qué no. */
+.cu-ok{color:var(--ok);font-weight:700}
+.cu-av{color:var(--warn);font-weight:700}
+.cu-mal{color:var(--bad);font-weight:700}
+
+/* En el telefono cada pieza sigue en UNA linea: apilarla en tres la hacia mas
+   alta, que es justo lo contrario de lo que hace falta. Se sacrifica el codigo
+   —ya va dentro del nombre— y el nombre se corta si no cabe. */
+@media (max-width:720px){
+  .despz .pz{grid-template-columns:52px 1fr auto;gap:8px;padding:7px 8px}
+  /* El nombre largo se corta a "RIEL INTERNO S..." en las tres piezas y deja de
+     distinguir nada. El codigo si cabe entero y ya identifica. */
+  .despz .nm{display:none}
+  .despz .cd{font-size:11px}
+  .despz .lg{font-size:13px}
+  .despz .stp .btn{width:34px;height:34px}
+  .despz .stp .inp{width:48px}
+  .sugs{gap:5px}
+}
+
+/* Tipo de movimiento: seis tarjetas en dos filas se comen media pantalla. */
+@media (max-width:720px){
+  #mv-tipos{grid-template-columns:repeat(3,1fr);gap:5px}
+  #mv-tipos .pc{flex-direction:column;gap:3px;padding:7px 4px;text-align:center}
+  #mv-tipos .pc .nm{font-size:9.5px;letter-spacing:0;line-height:1.15}
+  #mv-ayuda{margin-top:8px !important;font-size:11.5px}
+}
+
+
+/* Las bodegas en cero, detras de un boton. */
+.saldo.mas{cursor:pointer;border-style:dashed}
+.saldo.mas:hover{border-color:var(--acc);color:var(--acc)}
+
+/* El atributo hidden lo pisa el display:inline-flex de .btn, asi que los
+   botones de paso salian los cuatro a la vez. La regla del navegador no basta
+   cuando otra regla con mas peso fija un display. */
+.sticky-actions .btn[hidden]{display:none}

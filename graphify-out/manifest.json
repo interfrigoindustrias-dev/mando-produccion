@@ -1,0 +1,68 @@
+{
+  "src/js/paneles-programa.js": {
+    "mtime": 1789571364.0998414,
+    "seen": 1789572290.9360015,
+    "ast_hash": "6886fed104453eb8c1db59284b3c4717",
+    "semantic_hash": "6886fed104453eb8c1db59284b3c4717"
+  },
+  "src/js/paneles-planta.js": {
+    "mtime": 1789571364.0998414,
+    "seen": 1789572290.9360058,
+    "ast_hash": "47bef4139961d41e1d9f2d8ffa000145",
+    "semantic_hash": "47bef4139961d41e1d9f2d8ffa000145"
+  },
+  "src/js/paneles-control.js": {
+    "mtime": 1789763530.6210003,
+    "seen": 1789763881.298633,
+    "ast_hash": "999d5ef5c8871d2c39ac24d5323c440e",
+    "semantic_hash": "999d5ef5c8871d2c39ac24d5323c440e"
+  },
+  "src/js/datos.js": {
+    "mtime": 1789571364.0998414,
+    "seen": 1789572290.9360087,
+    "ast_hash": "64acf30604ee79ae4b5c04f325d5b8a4",
+    "semantic_hash": "64acf30604ee79ae4b5c04f325d5b8a4"
+  },
+  "tools/humo.js": {
+    "mtime": 1789763676.02972,
+    "seen": 1789763881.2986422,
+    "ast_hash": "69ac90552faaf8a9bb29400fc3bb3312",
+    "semantic_hash": "69ac90552faaf8a9bb29400fc3bb3312"
+  },
+  "docs/PANELES.md": {
+    "mtime": 1789571364.0998414,
+    "seen": 1789572290.9360106,
+    "ast_hash": "24f5e4b2536eb44100e290d4d68a744c",
+    "semantic_hash": "24f5e4b2536eb44100e290d4d68a744c"
+  },
+  "src/js/dashboards.js": {
+    "mtime": 1789739405.890504,
+    "seen": 1789739546.4097073,
+    "ast_hash": "493838069b04a7ed0fc19f9053afa81f",
+    "semantic_hash": "493838069b04a7ed0fc19f9053afa81f"
+  },
+  "src/js/constantes.js": {
+    "mtime": 1789671201.7942634,
+    "seen": 1789671994.1212747,
+    "ast_hash": "175fab9f4469b1c80f0fe27cde32d79b",
+    "semantic_hash": "175fab9f4469b1c80f0fe27cde32d79b"
+  },
+  "src/puertas.html": {
+    "mtime": 1789671446.5327346,
+    "seen": 1789671994.1212766,
+    "ast_hash": "85e4f03870474e468103d9e01eecc02d",
+    "semantic_hash": "85e4f03870474e468103d9e01eecc02d"
+  },
+  "src/js/control.js": {
+    "mtime": 1789763530.6210003,
+    "seen": 1789763881.298614,
+    "ast_hash": "6b3eba3b94e90986b3388d0f73b1ce93",
+    "semantic_hash": "6b3eba3b94e90986b3388d0f73b1ce93"
+  },
+  "src/js/ficha.js": {
+    "mtime": 1789678044.6887324,
+    "seen": 1789678279.757476,
+    "ast_hash": "c53d0dee3bae63adf5fa1ffbab9567d1",
+    "semantic_hash": "c53d0dee3bae63adf5fa1ffbab9567d1"
+  }
+}

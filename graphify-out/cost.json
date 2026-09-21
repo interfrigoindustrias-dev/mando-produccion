@@ -1,0 +1,66 @@
+{
+  "runs": [
+    {
+      "date": "2026-09-16T15:24:50.937680+00:00",
+      "input_tokens": 91322,
+      "output_tokens": 0,
+      "files": 6
+    },
+    {
+      "date": "2026-09-17T19:06:44.283351+00:00",
+      "input_tokens": 97760,
+      "output_tokens": 0,
+      "files": 3
+    },
+    {
+      "date": "2026-09-17T19:54:09.328929+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 1
+    },
+    {
+      "date": "2026-09-17T20:34:20.585098+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 2
+    },
+    {
+      "date": "2026-09-17T20:51:19.760254+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 2
+    },
+    {
+      "date": "2026-09-17T21:01:37.788439+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 1
+    },
+    {
+      "date": "2026-09-17T21:29:11.671946+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 1
+    },
+    {
+      "date": "2026-09-18T13:52:26.412999+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 1
+    },
+    {
+      "date": "2026-09-18T19:56:16.048229+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 1
+    },
+    {
+      "date": "2026-09-18T20:38:01.302619+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 3
+    }
+  ],
+  "total_input_tokens": 189082,
+  "total_output_tokens": 0
+}

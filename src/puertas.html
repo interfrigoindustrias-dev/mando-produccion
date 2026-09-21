@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/componentes.css">
 <link rel="stylesheet" href="css/dashboards.css">
 <link rel="stylesheet" href="css/planta.css">
+<link rel="stylesheet" href="css/programa.css">
 <link rel="stylesheet" href="css/impresion.css">
 <link rel="stylesheet" href="css/movil.css">
 </head>
@@ -26,20 +27,23 @@
 <!-- ============================== LOGIN / CONFIG ============================== -->
 <div id="gate">
   <div class="card">
-    <div class="logo"></div>
-    <h1>Control de Puertas</h1>
-    <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
+    <div id="g-splash" class="g-splash"><div class="logo"></div></div>
+    <div id="g-form" class="hide">
+      <div class="logo"></div>
+      <h1>Control de Puertas</h1>
+      <p class="mut">Producción y despacho — hoja <b id="g-sheet">OP PUERTA</b></p>
 
-    <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
-      <span id="g-falta"></span>
-    </div>
+      <div id="g-cfgwarn" class="hide" style="margin-top:18px;padding:12px;border:1px solid var(--warn);border-radius:var(--r);background:color-mix(in srgb,var(--warn) 10%,transparent);font-size:13px">
+        <span id="g-falta"></span>
+      </div>
 
-    <div style="display:flex;gap:8px;margin-top:20px">
-      <button class="btn pri grow" id="g-login">Entrar con Google</button>
-      <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      <div style="display:flex;gap:8px;margin-top:20px">
+        <button class="btn pri grow" id="g-login">Entrar con Google</button>
+        <button class="btn" id="g-cfg" title="Configuración">⚙</button>
+      </div>
+      <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
+      <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
     </div>
-    <button class="btn sm hide" id="btn-instalar-gate" style="width:100%;margin-top:10px">⤓ Instalar como aplicación</button>
-    <p class="mut" style="margin-top:14px;font-size:12px" id="g-msg"></p>
   </div>
 </div>
 
@@ -54,6 +58,7 @@
   </div>
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" data-view="control" aria-selected="true">Control de OPs</button>
+    <button class="tab" role="tab" data-view="programa" aria-selected="false">Programación</button>
     <button class="tab" role="tab" data-view="planta" aria-selected="false">Planta</button>
     <button class="tab" role="tab" data-view="resumen" aria-selected="false">Resumen</button>
     <button class="tab" role="tab" data-view="calidad" aria-selected="false">Calidad</button>
@@ -79,10 +84,16 @@
 <main>
   <!-- ---------- VISTA CONTROL ---------- -->
   <section id="v-control">
-    <div class="kpis" id="kpis"></div>
-
     <div class="bar">
       <label class="f wide"><span>Buscar</span><input class="inp" id="f-q" placeholder="OP, cliente, ensamble, obs…" autocomplete="off"></label>
+      <label class="f"><span>Ordenar</span><select class="inp" id="f-orden">
+        <option value="reciente" selected>Más reciente primero</option>
+        <option value="antigua">Más antigua primero</option>
+        <option value="cli-az">Cliente (A-Z)</option>
+        <option value="cli-za">Cliente (Z-A)</option>
+        <option value="prio">Prioridad (urgente primero)</option>
+        <option value="av-desc">Avance (mayor a menor)</option>
+        <option value="av-asc">Avance (menor a mayor)</option></select></label>
       <label class="f"><span>Progreso</span><select class="inp" id="f-prog">
         <option value="" selected>Todas</option><option value="pend">Sin iniciar (0%)</option>
         <option value="wip">En proceso</option><option value="done">Completa (100%)</option>
@@ -112,7 +123,8 @@
       <thead><tr>
         <th class="stick"><input type="checkbox" id="ck-all" title="Seleccionar todo"></th>
         <th class="stick" style="left:34px">OP</th>
-        <th>Cliente</th><th>Tipo</th><th>Material</th><th>Medidas</th><th>Esp</th>
+        <th>Cliente</th><th title="Marca la puerta como STOCK: sin cliente asignado, para inventario">Stock</th>
+        <th>Tipo</th><th>Material</th><th>Medidas</th><th>Esp</th>
         <th>Ap.</th><th>Pts</th><th>Prio</th>
         <th title="Corte perfil">CP</th><th title="Inyección">IN</th><th title="Accesorios">AC</th>
         <th title="Corte marco">CM</th><th title="Marco">MA</th><th title="Corte riel">CR</th>
@@ -155,6 +167,36 @@
     <p class="mut hide" id="q-empty" style="padding:26px 2px">Nada pendiente de revisar. </p>
   </section>
 
+  <!-- ---------- PROGRAMACIÓN ---------- -->
+  <section id="v-programa" class="hide">
+    <div class="pg-barra">
+      <div class="pg-nav">
+        <button class="btn sm" id="pg-prev" title="Semana anterior" aria-label="Semana anterior">‹</button>
+        <button class="btn sm" id="pg-hoy">Hoy</button>
+        <button class="btn sm" id="pg-next" title="Semana siguiente" aria-label="Semana siguiente">›</button>
+        <span class="pg-semana" id="pg-semana"></span>
+        <span class="pg-despues hide" id="pg-despues"></span>
+      </div>
+      <div class="kpis pg-kpis" id="pg-kpis"></div>
+      <div class="pg-meta" title="Se guarda en la pestaña META de la hoja">
+        <span>Meta</span>
+        <input class="inp" id="pg-meta-pts" type="number" min="1" step="any" inputmode="decimal" aria-label="Puntos de la meta">
+        <span>pts en</span>
+        <input class="inp" id="pg-meta-dias" type="number" min="1" max="90" step="1" inputmode="numeric" aria-label="Días hábiles de la meta">
+        <span>días</span>
+        <b id="pg-meta-dia"></b>
+        <button class="btn pri sm hide" id="pg-meta-guardar">Guardar</button>
+      </div>
+      <div class="pg-acc">
+        <button class="btn sm" id="pg-proponer"
+          title="Mete lo que no tiene día en los próximos días hábiles, hasta llenar la meta de cada uno. Lo ya programado no se mueve.">Proponer</button>
+        <button class="btn sm" id="pg-print" title="Hoja carta con las OP sin programar, para decidir en papel">🖨 Imprimir</button>
+      </div>
+    </div>
+    <div id="pg-aviso" class="aviso hide"></div>
+    <div id="pg-tablero" class="pg-tablero"></div>
+  </section>
+
   <!-- ---------- PLANTA (tablet del jefe de planta) ---------- -->
   <section id="v-planta" class="hide">
     <div class="bar">
@@ -175,7 +217,6 @@
         <option value="pts">Más puntos primero</option>
         <option value="avance">Menos avance primero</option></select></label>
       <div class="grow"></div>
-      <button class="btn sm" id="btn-crono" title="Repartir lo pendiente en días">🗓 Cronograma</button>
       <span class="cnt" id="p-cnt"></span>
     </div>
     <div id="p-resumen" class="presumen"></div>
@@ -195,6 +236,8 @@
     <div class="kpis" id="r-prod"></div>
     <h2 class="dash-h">Inventario</h2>
     <div class="kpis" id="r-inv"></div>
+    <h2 class="dash-h">Programación</h2>
+    <div class="kpis" id="r-prog"></div>
     <h2 class="dash-h">Plazo de entrega</h2>
     <p class="expl">Lo que se le puede prometer hoy a un cliente que llame preguntando,
       calculado con lo que de verdad ha tardado esta planta y con la cola que ya hay
@@ -259,6 +302,7 @@
     <div class="sec">
       <h2>Inventario por modelo
         <span class="mut" style="text-transform:none;letter-spacing:0;font-weight:400">— solo puertas marcadas STOCK</span>
+        <button class="btn sm" id="m-print" style="margin-left:auto">🖨 Imprimir</button>
       </h2>
       <div class="tw" style="max-height:none"><table id="m-tabla"></table></div>
     </div>
@@ -270,7 +314,8 @@
       <label class="f"><span>Apertura</span><select class="inp" id="s-ap"></select></label>
       <label class="f"><span>Dimensiones</span><select class="inp" id="s-med"></select></label>
       <label class="f"><span>Estado</span><select class="inp" id="s-est">
-        <option value="">Todos</option><option>En Almacén</option><option>Separado</option>
+        <option value="">Todos</option><option value="__disp">Disponibles</option>
+        <option>En Almacén</option><option>Separado</option>
         <option>Anulada</option><option value="__none">Sin estado</option></select></label>
       <label class="f"><span>Avance</span><select class="inp" id="s-av">
         <option value="">Todos</option><option value="done">Terminadas</option><option value="open">En proceso</option></select></label>
@@ -349,19 +394,14 @@
           <label class="proc"><input type="checkbox" id="n-panel"><span>Esta puerta lleva panel</span></label>
         </div>
         <div id="n-panel-campos" class="hide">
-          <p class="expl">Se creará <b>una línea</b> en la hoja de Paneles con el mismo
-            número de OP, cliente, fecha y prioridad que esta puerta — es el número de OP
-            lo que después las empareja. Para un cerramiento con varias referencias,
-            créalo desde el módulo Paneles.</p>
-          <div class="grid">
-            <label class="f"><span class="req">Cantidad</span>
-              <input class="inp" id="np-cant" type="number" step="1" min="1" inputmode="numeric"></label>
-            <label class="f"><span class="req">Largo (m)</span>
-              <input class="inp" id="np-largo" type="number" step="any" inputmode="decimal"></label>
-            <label class="f"><span class="req">Producto</span><select class="inp" id="np-prod"></select></label>
-            <label class="f"><span>Ranurado</span><select class="inp" id="np-ranu"></select></label>
-            <label class="f"><span>Cara A</span><select class="inp" id="np-cara-a"></select></label>
-            <label class="f"><span>Cara B</span><select class="inp" id="np-cara-b"></select></label>
+          <p class="expl">Se crea una <b>OP nueva en Paneles</b> —el siguiente número de
+            paneles— con estas líneas <b>para cada puerta</b> de la ficha. La puerta queda
+            marcada con esa OP, y el panel no sale a despacho: al terminarlo pasa a
+            <b>PARA PUERTA</b>, y la tarjeta de Planta avisa cuando está listo.</p>
+          <div id="np-lineas" class="np-lineas"></div>
+          <div class="np-pie">
+            <button type="button" class="btn sm" id="np-mas">＋ Añadir línea de panel</button>
+            <span class="mut" id="np-resumen"></span>
           </div>
         </div>
       </div>
@@ -518,40 +558,6 @@
   </div>
 </div></div>
 
-<!-- ============================== CRONOGRAMA ============================== -->
-<div class="ov hide" id="ov-crono"><div class="mod mod-ancho">
-  <header style="display:flex;align-items:flex-start;gap:12px">
-    <div class="grow">
-      <h1 style="margin:0;font-size:17px">Cronograma de planta</h1>
-      <p class="mut" style="margin:4px 0 0">Reparto del trabajo pendiente, agrupado por
-        cliente y tipo para no cambiar de montaje a media jornada.</p>
-    </div>
-    <button class="x" data-close>×</button>
-  </header>
-
-  <!-- La meta manda sobre el reparto. Vive en la pestaña META de la hoja, así que
-       quien la cambie la cambia para todos. -->
-  <div class="crmeta">
-    <span class="crml">Quiero</span>
-    <input class="inp" id="cr-meta-pts" type="number" min="1" step="any" style="width:92px">
-    <span class="crml">puntos en</span>
-    <input class="inp" id="cr-meta-dias" type="number" min="1" max="90" step="1" style="width:78px">
-    <span class="crml">días hábiles</span>
-    <button class="btn pri sm hide" id="cr-guardar">Guardar meta</button>
-    <span class="mut crmn">Se guarda en la pestaña <b>META</b> de la hoja</span>
-  </div>
-
-  <div class="crkpis" id="cr-kpis"></div>
-  <div class="aviso" id="cr-veredicto"></div>
-
-  <div class="tw" style="max-height:56vh"><table id="cr-tabla" class="crtabla"></table></div>
-
-  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
-    <button class="btn" id="cr-print">Imprimir</button>
-    <button class="btn pri" data-close>Cerrar</button>
-  </div>
-</div></div>
-
 <!-- ============================== MODELO ============================== -->
 <div class="ov hide" id="ov-modelo"><div class="mod mod-ancho">
   <header style="display:flex;align-items:flex-start;gap:12px">
@@ -671,7 +677,7 @@
 <script src="js/meta.js"></script>
 <script src="js/campos.js"></script>
 <script src="js/informes.js"></script>
-<script src="js/cronograma.js"></script>
+<script src="js/programa.js"></script>
 <script src="js/calidad.js"></script>
 <script src="js/usuarios.js"></script>
 <script src="js/avisos.js"></script>

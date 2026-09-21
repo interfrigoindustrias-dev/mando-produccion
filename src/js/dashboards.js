@@ -51,9 +51,8 @@ function pintarEntrega(F){
   const ptsRecientes = recientes.reduce((a,x)=>a+puntos(x.c), 0);
   const ritmo = ptsRecientes / 60;                       // puntos por dia natural
 
-  // La cola: lo que hay pedido y sin terminar. Es lo que va DELANTE del pedido
-  // nuevo, y por eso cuenta tanto como lo que se tarda en hacerlo.
-  const pend = F.filter(({c})=>!completa(c) && !despachada(c) && !anulada(c));
+  // La cola es la de planta: lo que va DELANTE de un pedido nuevo.
+  const pend = F.filter(({c})=>enColaPlanta(c));
   const ptsPend = pend.reduce((a,x)=>a+puntos(x.c), 0);
   const diasCola = ritmo > 0 ? Math.ceil(ptsPend / ritmo) : null;
 
@@ -93,6 +92,32 @@ function pintarEntrega(F){
     </div>`;
 }
 
+/** El estado de la programacion, en el resumen. Lo que interesa desde aqui no
+ *  es mover fichas sino saber si la planta tiene trabajo decidido: cuanto hay
+ *  programado, cuanto no, y si la semana cabe en la meta. */
+function pintarProgramaResumen(){
+  const caja = $("#r-prog"); if(!caja) return;
+  if(typeof metricasPrograma !== "function"){ caja.innerHTML = ""; return; }
+  const M = metricasPrograma();
+  const n = v => (Math.round((v || 0) * 10) / 10).toLocaleString("es-CO");
+  if(!M.listo){
+    kpiCards("#r-prog", [["Programación", "—",
+      "Todavía no se puede guardar: faltan las columnas en la hoja. Ábrela en la pestaña Programación para ver por qué"]]);
+    return;
+  }
+  const carga = M.semana.cap ? Math.round(M.semana.pts / M.semana.cap * 100) : null;
+  kpiCards("#r-prog", [
+    ["Programadas",   `${M.programadas.n} · ${n(M.programadas.pts)} pts`, "OP con día y puesto: planta las hace primero"],
+    ["Sin programar", `${M.sinProgramar.n} · ${n(M.sinProgramar.pts)} pts`,
+     "Planta las hace después, con el orden de siempre", M.sinProgramar.n > 0],
+    ["Atrasadas",     M.atrasadas.n, "Programadas para un día que ya pasó y todavía en proceso", M.atrasadas.n > 0],
+    ["Para hoy",      `${M.hoy.n} · ${n(M.hoy.pts)} pts`, "Lo programado para empezar hoy"],
+    ["Carga de la semana", carga === null ? "—" : carga + " %",
+     `${n(M.semana.pts)} de ${n(M.semana.cap)} puntos de meta en lo que queda de semana`,
+     carga !== null && carga > 100]
+  ]);
+}
+
 function renderResumen(){
   const dia = toDate($("#r-dia").value) || new Date();
   const l = lunes(dia), d7 = new Date(l); d7.setDate(d7.getDate()+6);
@@ -120,20 +145,34 @@ function renderResumen(){
   ]);
 
   pintarEntrega(F);
+  pintarProgramaResumen();
 
   const alm = F.filter(({c})=>completa(c) && desp(c)==="En Almacén");
-  const prod= F.filter(({c})=>enProduccion(c));
-  const stk = F.filter(({c})=>enStock(c));
+  /* «En produccion» es la cola de planta, la misma definicion en las tres
+     vistas. Antes contaba «avance menor al 100 % sin despachar ni almacenar»,
+     y por eso el resumen y planta daban cifras distintas: dejaba fuera las
+     puertas al 100 % esperando Terminada y las devueltas por calidad, y metia
+     las terminadas a medias que ya estaban en calidad. */
+  const prod= F.filter(({c})=>enColaPlanta(c));
+  const cal = F.filter(({c})=>terminada(c));
+  /* Stock: marcada STOCK y ni terminada ni despachada. «En proceso» cuenta —
+     antes una puerta empezada no tenia estado y entraba; con el flujo nuevo
+     tiene uno y se habria caido del stock sin que nadie la moviera. */
+  const stk = F.filter(({c})=>tri(c[C.STOCK])===true && ["", EN_PROCESO, "En Almacén"].includes(desp(c)));
   const abiertasTodas = F.filter(({c})=>!completa(c));
   const avg = prod.length ? Math.round(prod.reduce((a,x)=>a+progreso(x.c).pct,0)/prod.length*100) : 0;
   kpiCards("#r-inv",[
     ["En almacén",      alm.length,  "Terminadas (100%) con estado En Almacén", 0, alm],
-    ["En producción",   prod.length, "Avance <100%, sin despachar ni almacenar, no anuladas", 1, prod],
+    ["En producción",   prod.length, "Lo mismo que ve Planta: sin estado, más devueltas por calidad y vendidas sin terminar", 1, prod],
+    ["En calidad",      cal.length,  "Terminadas en planta, esperando que calidad las apruebe", 0, cal],
     ["Stock total",     stk.length,  "Marcadas STOCK, en almacén o sin estado", 0, stk],
     ["Avance promedio", avg+"%",     "Promedio de avance de las que están en producción", 0, prod],
     // El Excel suma PUNTOS de TODA fila con avance <100%, sin excluir almacén ni despacho
-    ["Puntos en prod.", sum(abiertasTodas), "Suma de PUNTOS de toda puerta con avance menor al 100%", 0, abiertasTodas],
-    ["Total en empresa",alm.length+prod.length, "En almacén + en producción"]
+    /* Se llamaba «Puntos en prod.» y quedaba al lado de «En produccion» con otra
+       cifra: esta sigue la formula del Excel —toda puerta por debajo del 100 %,
+       tambien las que estan en almacen—, que no es la cola de planta. */
+    ["Puntos sin terminar", sum(abiertasTodas), "Toda puerta con avance menor al 100 %, esté donde esté (incluye almacén). Es la cuenta del Excel, no la cola de Planta", 0, abiertasTodas],
+    ["Total en empresa",alm.length+cal.length+prod.length, "En producción + en calidad + en almacén"]
   ]);
 
   /* ---- Ritmo, antigüedad y proyección ----
@@ -225,7 +264,7 @@ function renderResumen(){
   const carga = PROCS.map(p=>[p.k, prod.filter(({c})=>tri(c[p.i])===false).length]);
   barras("#r-carga", carga, undefined, true);
 
-  const lista = activas().filter(x=>enProduccion(x.c))
+  const lista = activas().filter(x=>enColaPlanta(x.c))
     .sort((a,b)=>progreso(b.c).pct-progreso(a.c).pct);
   $("#r-nprod").textContent = `— ${lista.length} puertas`;
   tablaMini("#r-tabla", ["OP","Cliente","Tipo","Material","Medidas","Avance","Faltan","Prioridad"],
@@ -344,7 +383,7 @@ function renderAlmacen(){
     ["Total en almacén", B.length, "Terminadas y almacenadas, más las separadas", 1],
     ["En almacén", B.filter(c=>desp(c)==="En Almacén").length, "Avance 100% con estado En Almacén"],
     ["Separadas",  B.filter(separada).length, "Apartadas para un comprador (columna SEPARADA PARA)"],
-    ["En producción", A.filter(enProduccion).length, "Avance <100% sin despachar ni almacenar"],
+    ["En producción", A.filter(enColaPlanta).length, "Lo mismo que ve Planta"],
     ["Listadas",   L.length, "Filas mostradas con el filtro actual"]
   ]);
   tablaMini("#a-tabla", ["","OP","Cliente","Material","Tipo","Vano (A × H)","Esp","Ap.","F. proceso","Compl.","Stock","Estado","Separada para"],
@@ -502,19 +541,20 @@ async function guardarDespacho(r, val){
   if(antes===val) return false;
 
   const ups=[{a1:`Y${r}`, v:[[val]]}], cambios=[{campo:"Estado despacho", antes, despues:val}];
-  if(val==="Despachado" && !fmtDate(row.c[C.FDESP]) && CFG.auto!==false){
-    const h=hoy();
-    ups.push({a1:`Z${r}`, v:[[h]]});
-    cambios.push({campo:"Fecha despacho", antes:"", despues:h});
-    row.c[C.FDESP]=h;
-  }
+  // Terminado sella el fin de proceso; Despachado, la fecha de despacho.
+  const previas = {x: row.c[C.FPROC], ab: row.c[C.FINI], z: row.c[C.FDESP]};
+  const f = fechasAlCambiarEstado(row, val);
+  ups.push(...f.ups); cambios.push(...f.cambios);
   writeSeq++; row.c[C.DESP]=val;
   try{
     await writeCells(ups);
     logChanges("EDITA", row.c[C.OP], r, cambios);
     lastHash=""; setSync("","Guardado");
     return true;
-  }catch(e){ row.c[C.DESP]=antes; toast(e.message,"err"); return false; }
+  }catch(e){
+    row.c[C.DESP]=antes; row.c[C.FPROC]=previas.x; row.c[C.FINI]=previas.ab; row.c[C.FDESP]=previas.z;
+    toast(e.message,"err"); return false;
+  }
 }
 $("#a-tabla").addEventListener("change", async ev=>{
   // Selección para imprimir. No toca la hoja: solo elige qué se imprime.
@@ -588,7 +628,36 @@ function esModelo(c, m, conPrio){
   if(conPrio && m.prio && String(c[C.PRIO]??"").trim().toUpperCase()!==m.prio) return false;
   return true;
 }
-function renderModelos(){
+/** Cuenta de un grupo de puertas para una fila del inventario por modelo.
+ *  Compartida por la tabla en pantalla, la impresion y el total: los tres
+ *  tienen que salir siempre del mismo calculo, o los numeros no cuadran. */
+function contarGrupo(hay){
+  const abiertas = hay.filter(c=>!completa(c));
+  return {
+    alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
+    // Disponible: en almacén Y sin separar. "En almacén" solo dice donde
+    // esta la puerta; sin este dato, una vendida-pero-sin-entregar parecia
+    // tan libre para vender como una que de verdad nadie ha pedido.
+    disp: hay.filter(disponible).length,
+    // Terminada = fabricada y esperando el visto bueno de calidad. Estaba
+    // contada dentro del total pero sin columna propia, asi que las puertas
+    // que salian de planta parecian haberse evaporado hasta llegar a almacen.
+    term: hay.filter(c=>terminada(c)).length,
+    sep:  hay.filter(separada).length,
+    // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
+    prod: abiertas.filter(c=>progreso(c).ok > 0).length,
+    proy: abiertas.filter(c=>progreso(c).ok === 0).length,
+    tot:  hay.length,
+    av:   abiertas.length
+      ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—",
+  };
+}
+
+/** El inventario por modelo entero: una fila por modelo del catalogo, la fila
+ *  de lo que no encaja en ninguno, y el total. Lo usan tanto la tabla en
+ *  pantalla como la version para imprimir, para no calcularlo dos veces ni
+ *  arriesgarse a que un dia digan cosas distintas. */
+function calcularModelos(){
   // La prioridad no interviene: el modelo se identifica por tipo, espesor,
   // apertura y medidas, que es lo que define fisicamente la puerta.
   const base = stockBase().map(x=>x.c);          // marcadas STOCK y sin despachar
@@ -603,25 +672,35 @@ function renderModelos(){
 
   const filas = modelos.map(m=>{
     const hay = base.filter(c=>esModelo(c,m,false));
-    return {m, hay,
-      alm:  hay.filter(c=>completa(c) && desp(c)==="En Almacén").length,
-      // Terminada = fabricada y esperando el visto bueno de calidad. Estaba
-      // contada dentro del total pero sin columna propia, asi que las puertas
-      // que salian de planta parecian haberse evaporado hasta llegar a almacen.
-      term: hay.filter(c=>terminada(c)).length,
-      sep:  hay.filter(separada).length,
-      // En producción = ya empezada. Proyectada = creada pero sin tocar aún.
-      prod: hay.filter(c=>!completa(c) && progreso(c).ok > 0).length,
-      proy: hay.filter(c=>!completa(c) && progreso(c).ok === 0).length,
-      tot:  hay.length};
+    return {m, hay, ...contarGrupo(hay)};
   });
-  const T = filas.reduce((a,f)=>({alm:a.alm+f.alm, term:a.term+f.term, sep:a.sep+f.sep,
-                                  prod:a.prod+f.prod, proy:a.proy+f.proy, tot:a.tot+f.tot}),
-                         {alm:0,term:0,sep:0,prod:0,proy:0,tot:0});
+
+  // Todo lo que esta en stock pero no encaja en ningun modelo del catalogo,
+  // para que los totales cuadren y se vea que falta por definir. Con un tipo
+  // elegido, esta fila solo cuenta las de ese tipo: si no, el total de la
+  // tabla no cuadraria con lo que se esta viendo.
+  const otrasPuertas = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)))
+    .filter(c=>!fTipo || String(c[C.TIPO] ?? "").trim() === fTipo);
+  const otras = otrasPuertas.length ? {
+    hay: otrasPuertas, ...contarGrupo(otrasPuertas),
+    det: otrasPuertas.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n"),
+  } : null;
+
+  const grupos = otras ? [...filas, otras] : filas;
+  const T = grupos.reduce((a,f)=>({alm:a.alm+f.alm, disp:a.disp+f.disp, term:a.term+f.term,
+    sep:a.sep+f.sep, prod:a.prod+f.prod, proy:a.proy+f.proy, tot:a.tot+f.tot}),
+    {alm:0,disp:0,term:0,sep:0,prod:0,proy:0,tot:0});
+
+  return {fTipo, filas, otras, T};
+}
+
+function renderModelos(){
+  const {filas, otras, T} = calcularModelos();
   const n = (v,cls) => `<td class="n ${v?(cls||""):"z"}">${v}</td>`;
   $("#m-tabla").innerHTML =
     `<thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
       <th title="Marcadas STOCK, terminadas y con estado En Almacén">En almacén</th>
+      <th title="En almacén y todavía sin separar: listas para vender ya">Disponibles</th>
       <th title="Fabricadas y en estado Terminado: esperan revisión de calidad">Terminadas</th>
       <th title="Marcadas STOCK en estado Separado">Separadas</th>
       <th title="Empezadas: tienen al menos un proceso marcado">En producción</th>
@@ -629,46 +708,117 @@ function renderModelos(){
       <th title="Todas las marcadas STOCK sin despachar">Total</th>
       <th title="Avance promedio de las que están en producción">Avance</th>
       <th></th></tr></thead><tbody>`+
-    filas.map(({m,hay,alm,term,sep,prod,proy,tot})=>{
-      const abiertas = hay.filter(c=>!completa(c));
-      const av = abiertas.length
-        ? Math.round(abiertas.reduce((a,c)=>a+progreso(c).pct,0)/abiertas.length*100)+"%" : "—";
-      return `<tr>
-      <td class="mod">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
+    filas.map(({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
+      <td class="mnom">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
       <td class="num">${m.ancho??"—"}×${m.alto??"—"}</td><td class="num">${m.esp??"—"}</td>
       <td>${esc(m.ap||"—")}</td>
-      ${n(alm)}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
+      ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
       <td class="num">${av}</td>
-      <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`;
-    }).join("")+
-    // Todo lo que esta en stock pero no encaja en ningun modelo del catalogo,
-    // para que los totales cuadren y se vea que falta por definir.
-    (()=>{
-      // Con un tipo elegido, esta fila solo cuenta las de ese tipo: si no, el
-      // total de la tabla no cuadraria con lo que se esta viendo.
-      const otras = base.filter(c=>!MODELOS.some(m=>esModelo(c,m,false)))
-        .filter(c=>!fTipo || String(c[C.TIPO] ?? "").trim() === fTipo);
-      if(!otras.length) return "";
-      const oAlm = otras.filter(c=>completa(c) && desp(c)==="En Almacén").length;
-      const oTer = otras.filter(c=>terminada(c)).length;
-      const oSep = otras.filter(separada).length;
-      const oPro = otras.filter(c=>!completa(c) && progreso(c).ok > 0).length;
-      const oProy= otras.filter(c=>!completa(c) && progreso(c).ok === 0).length;
-      const ab   = otras.filter(c=>!completa(c));
-      const av   = ab.length ? Math.round(ab.reduce((a,c)=>a+progreso(c).pct,0)/ab.length*100)+"%" : "—";
-      const det  = otras.map(c=>`OP ${c[C.OP]}: ${c[C.TIPO]} ${num(c[C.ANCHO])}×${num(c[C.ALTO])} ${c[C.AP]} ${c[C.ESP]}mm`).join("\n");
-      T.alm+=oAlm; T.term+=oTer; T.sep+=oSep; T.prod+=oPro; T.proy+=oProy; T.tot+=otras.length;
-      return `<tr class="otras" title="${esc(det)}">
-        <td class="mod">Sin modelo definido</td>
-        <td colspan="4" class="sub">${otras.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
-        ${n(oAlm)}${n(oTer)}${n(oSep)}${n(oPro)}${n(oProy)}${n(otras.length)}
-        <td class="num">${av}</td><td></td></tr>`;
-    })()+
+      <td><button class="btn sm" data-mod="${esc(m.nombre)}">+ Crear</button></td></tr>`).join("")+
+    (otras ? `<tr class="otras" title="${esc(otras.det)}">
+        <td class="mnom">Sin modelo definido</td>
+        <td colspan="4" class="sub">${otras.hay.length} puerta(s) en stock que no coinciden con ningún modelo — pasa el mouse para verlas</td>
+        ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
+        <td class="num">${otras.av}</td><td></td></tr>` : "")+
     `<tr class="tot"><td>TOTAL</td><td colspan="4"></td>
-      <td class="n">${T.alm}</td><td class="n">${T.term}</td><td class="n">${T.sep}</td>
+      <td class="n">${T.alm}</td><td class="n">${T.disp}</td><td class="n">${T.term}</td><td class="n">${T.sep}</td>
       <td class="n">${T.prod}</td><td class="n">${T.proy}</td><td class="n">${T.tot}</td>
       <td colspan="2"></td></tr></tbody>`;
 }
+
+/* Imprimir el inventario por modelo —con el filtro de Tipo que este puesto—
+   en una hoja aparte, construida desde los mismos datos que la tabla en
+   pantalla (calcularModelos), nunca clonando el DOM: clonar #m-tabla traia
+   su mismo id y las reglas de pantalla de dashboards.css —pensadas para tema
+   oscuro y una tabla que se desplaza dentro de su caja— se colaban en el
+   papel y desbordaban cada fila a su propia hoja. Sigue el mismo patron que
+   ya usan Programa y Paneles para imprimir (.pg-print, en programa.css). */
+function imprimirModelos(){
+  const {fTipo, filas, otras, T} = calcularModelos();
+  if(!filas.length && !otras){ toast("Nada que imprimir","err"); return; }
+  const n = (v,cls) => `<td class="n${v?" "+(cls||""):" z"}">${v}</td>`;
+  const filaHTML = ({m,alm,disp,term,sep,prod,proy,tot,av})=>`<tr>
+    <td class="mnom">${esc(m.nombre||"—")}</td><td>${esc(m.tipo)}</td>
+    <td class="n">${m.ancho??"—"}×${m.alto??"—"}</td><td class="n">${m.esp??"—"}</td>
+    <td>${esc(m.ap||"—")}</td>
+    ${n(alm)}${n(disp,"disp")}${n(term)}${n(sep)}${n(prod)}${n(proy)}${n(tot)}
+    <td class="n">${av}</td></tr>`;
+  // En pantalla el detalle de "sin modelo" se lee al pasar el mouse; en papel
+  // eso no existe, asi que aqui va escrito debajo, en la misma fila.
+  const otrasHTML = otras ? `<tr class="im-otras">
+    <td class="mnom" colspan="5">Sin modelo definido
+      <span class="im-det">${esc(otras.hay.map(c=>`OP ${c[C.OP]}`).join(" · "))}</span></td>
+    ${n(otras.alm)}${n(otras.disp,"disp")}${n(otras.term)}${n(otras.sep)}${n(otras.prod)}${n(otras.proy)}${n(otras.tot)}
+    <td class="n">${otras.av}</td></tr>` : "";
+
+  const MARGEN_MM = 12, ANCHO_MM = 279.4, ALTO_MM = 215.9;     // carta horizontal
+  let rule = $("#page-rule");
+  if(!rule){ rule=document.createElement("style"); rule.id="page-rule"; document.head.appendChild(rule); }
+  // Margen en 0: se lo pinta esta misma caja (ver el porque en impresion.css,
+  // junto a .im-print). Pedirle margen a @page fue lo que, en una impresora
+  // real, salia pintado de negro en vez de blanco.
+  rule.textContent = `@page{size:letter landscape;margin:0}`;
+  $("#print").innerHTML = `<div class="im-print" style="width:${ANCHO_MM}mm;height:${ALTO_MM}mm;padding:${MARGEN_MM}mm">
+    <div class="im-cab">
+      <span class="c-logo"></span>
+      <div class="im-tit"><b>Inventario por modelo</b>
+        <span>Solo puertas marcadas STOCK${fTipo?" · "+esc(fTipo):""}</span></div>
+      <div class="im-meta">Impreso ${esc(fmt(new Date()))}</div>
+    </div>
+    <table>
+      <colgroup><col class="im-c-mod"><col class="im-c-tipo"><col class="im-c-med">
+        <col class="im-c-esp"><col class="im-c-ap"><col class="im-c-n"><col class="im-c-n">
+        <col class="im-c-n"><col class="im-c-n"><col class="im-c-n"><col class="im-c-n">
+        <col class="im-c-n"><col class="im-c-n"></colgroup>
+      <thead><tr><th>Modelo</th><th>Tipo</th><th>Medidas</th><th>Esp</th><th>Ap.</th>
+        <th>En almacén</th><th>Disponibles</th><th>Terminadas</th><th>Separadas</th>
+        <th>En producción</th><th>Proyectadas</th><th>Total</th><th>Avance</th></tr></thead>
+      <tbody>${filas.map(filaHTML).join("")}${otrasHTML}</tbody>
+      <tfoot><tr><td>TOTAL</td><td colspan="4"></td>
+        <td class="n">${T.alm}</td><td class="n disp">${T.disp}</td><td class="n">${T.term}</td>
+        <td class="n">${T.sep}</td><td class="n">${T.prod}</td><td class="n">${T.proy}</td>
+        <td class="n">${T.tot}</td><td></td></tr></tfoot>
+    </table>
+  </div>`;
+
+  /* No basta con que la tabla "quepa" a ojo: en un dispositivo real (no en
+     el Chrome headless de prueba) el dialogo de impresion seguia repartiendo
+     mal las filas aunque el CSS ya no tuviera break-inside:avoid, y `zoom`
+     —que en la prueba SI reducia el alto para el motor de impresion— resulto
+     no servir ahi: el dialogo de impresion de un equipo real lo ignoraba y
+     la tabla salia en su tamaño de siempre. Cambiar el font-size de verdad
+     (con el padding en `em` en impresion.css, para que baje con el) funciona
+     igual en cualquier motor de impresion, porque es tipografia basica, no
+     un truco visual. Se mide la altura real fuera de pantalla y, si no cabe,
+     se encoge la letra hasta que quepa en una sola hoja. */
+  const caja = $("#print .im-print");
+  const tabla = caja.querySelector("table");
+  const cab = caja.querySelector(".im-cab");
+  const pxPorMm = 96/25.4;
+  const altoDisp = (ALTO_MM - MARGEN_MM*2) * pxPorMm;   // alto util, dentro del padding
+  const printEl = $("#print");
+  const prevCss = printEl.style.cssText;
+  printEl.style.cssText = "display:block!important;position:fixed;left:-99999px;top:0;visibility:hidden";
+  const altoCab = cab.getBoundingClientRect().height;
+  const altoTablaNatural = tabla.getBoundingClientRect().height;
+  // El 0.94 es margen de seguridad: medido fuera de pantalla y ya con la
+  // letra encogida no dan exactamente el mismo alto (redondeos de sub-pixel),
+  // y sin este colchon una tabla que "apenas" cabia terminaba desbordando una
+  // fila a una segunda hoja de todos modos. No mas abajo del 50%: mas
+  // encogido que eso deja de leerse, y a esa altura ya es mas sano aceptar
+  // una segunda hoja que entregar un cuadro ilegible.
+  const disponibleTabla = altoDisp*0.94 - altoCab;
+  const escala = Math.max(0.5, Math.min(1, disponibleTabla/altoTablaNatural));
+  if(escala < 1) tabla.style.fontSize = (8.5*escala).toFixed(2) + "pt";
+  printEl.style.cssText = prevCss;
+
+  // Sin esta espera, Chrome paginaba con las filas todavia sin medir de verdad
+  // porque innerHTML e imprimir en el mismo tick no le da tiempo al motor de
+  // impresion a calcular la altura real de la tabla. Es lo mismo que ya hace
+  // imprimirPrograma() (programa.js) para esto mismo.
+  setTimeout(()=> window.print(), 60);
+}
+$("#m-print").onclick = imprimirModelos;
 
 /* Modelo abierto en el modal. Se guarda para poder repintarlo cuando cambia algo
    —un estado, una separacion— sin que el modal se cierre bajo la mano. */
@@ -714,6 +864,8 @@ function pintarModeloModal(){
   $("#mm-kpis").innerHTML =
     cuenta("En almacén", L.filter(({c})=>completa(c) && desp(c)==="En Almacén").length,
            "Terminadas y con estado En Almacén") +
+    cuenta("Disponibles", L.filter(({c})=>disponible(c)).length,
+           "En almacén y todavía sin separar: listas para vender ya") +
     cuenta("Terminadas", L.filter(({c})=>terminada(c)).length,
            "Fabricadas, esperando revisión de calidad") +
     cuenta("Separadas",  L.filter(({c})=>separada(c)).length,
@@ -738,7 +890,7 @@ function pintarModeloModal(){
         `<button class="btn sm" data-ver-ficha="${r}">Ficha</button>`
       ];
     }),
-    L.map(({c}) => separadaPara(c) ? "sep" : ""));
+    L.map(({c}) => separadaPara(c) ? "sep" : (disponible(c) ? "disp" : "")));
 
   $("#mm-vacio").classList.toggle("hide", L.length > 0);
   }
@@ -820,7 +972,9 @@ function stockList(){
     if(!eq(c[C.ESP],g("s-esp")) || !eq(c[C.AP],g("s-ap"))) return false;
     if(!eq(medidaDe(c), g("s-med"))) return false;
     const fe=g("s-est");
-    if(fe==="__none"){ if(desp(c)!=="") return false; } else if(!eq(desp(c),fe)) return false;
+    if(fe==="__disp"){ if(!disponible(c)) return false; }
+    else if(fe==="__none"){ if(desp(c)!=="") return false; }
+    else if(!eq(desp(c),fe)) return false;
     const fa=g("s-av");
     if(fa==="done" && !completa(c)) return false;
     if(fa==="open" &&  completa(c)) return false;
@@ -828,10 +982,12 @@ function stockList(){
   });
 }
 function renderStock(){
-  const L=stockList(), B=stockBase().map(x=>x.c);
+  const L=stockList(), Br=stockBase(), B=Br.map(x=>x.c);
   kpiCards("#s-kpis",[
     ["En inventario",   B.length, "Marcadas STOCK y sin despachar", 1],
     ["Stock en almacén",B.filter(c=>desp(c)==="En Almacén").length, "De las anteriores, con estado En Almacén"],
+    ["Disponibles",     B.filter(disponible).length, "En almacén, terminadas y todavía sin separar", 1,
+     Br.filter(({c})=>disponible(c))],
     ["Stock terminado", B.filter(completa).length, "Stock con avance 100%"],
     ["Stock en proceso",B.filter(c=>!completa(c)).length, "Stock con avance menor al 100%"],
     ["Listadas",        L.length, "Filas mostradas con el filtro actual"]
@@ -851,7 +1007,7 @@ function renderStock(){
         selDesp(r, c[C.DESP]),
         celdaSeparar(r, para)];
     }),
-    L.map(({c})=> separadaPara(c) ? "sep" : ""));
+    L.map(({c})=> separadaPara(c) ? "sep" : (disponible(c) ? "disp" : "")));
   contador("#s-cnt", L.length, B.length,
            ["s-mat","s-tipo","s-esp","s-ap","s-med","s-est","s-av"], "s-q");
   pintarChipModelo();

@@ -225,7 +225,38 @@ Todas las columnas, con prioridad y estado editables en línea. Los contadores
 no cuentan unidades: cuentan **m² pendientes** y **kg de poliuretano
 pendientes**, que es lo que se pide al proveedor.
 
+### Programación — `paneles-programa.js`
+
+Un tablero de arrastrar y soltar: cada línea abierta es una ficha que se lleva
+a un día, y su posición dentro del día es el orden. Lo programado manda sobre
+`secuencia.js` —ver «El orden de planta» en `paneles-programa.js`—, así que
+planta fabrica primero lo que aquí se decidió, en ese orden.
+
+La cabecera lleva, además de las líneas y los m² programados, el **poliuretano
+y la lámina que hace falta para fabricar toda la programación**: la suma de
+`kgDe()` y `laminaDe()` de cada línea con día puesto, sea cual sea la semana.
+Es lo que se pide al proveedor para cumplir lo ya decidido, y por eso va en la
+misma ficha y no en el Resumen —que cuenta lo que ya se gastó, no lo que hace
+falta para lo programado—.
+
+**Lo atrasado rueda solo.** Una línea con día puesto que ese día ya pasó y que
+sigue abierta no espera a que alguien la arrastre: `autoReprogramarAtrasadas()`
+la mueve al primer día útil que queda por delante —hoy, o el lunes si hoy es
+domingo—, la pone de primera, y corre un puesto a lo que ya estuviera ese día.
+Se dispara en cada refresco de datos (`datos.js`), igual que el escalado de
+prioridad. Si sigue sin terminarse, al día siguiente vuelve a estar atrasada y
+rueda otra vez: por eso lo atrasado siempre aparece primero en el día en que de
+verdad se puede fabricar. En cuanto una persona la acomoda a mano en el
+programador dejar de estar atrasada, y este automatismo no vuelve a tocarla.
+
 ### Planta — `paneles-planta.js`
+
+**Solo aparece lo programado.** Planta no decide el orden por su cuenta: lo
+fija quien planifica en Programación, y una línea sin día puesto todavía no
+está lista para bajar a máquina. Si la pestaña Programación no está disponible
+—faltan sus columnas en la hoja— exigir día dejaría planta vacía sin remedio,
+así que en ese caso se vuelve a enseñar la cola con la secuencia de siempre,
+como antes de que existiera Programación.
 
 Enseña la cola en el orden que calcula `secuencia.js` y **anuncia cada cambio de
 montaje** en el sitio exacto donde toca hacerlo, cerrando la tanda anterior con

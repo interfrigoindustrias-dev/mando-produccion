@@ -10,7 +10,7 @@ const path = require("path");
 const vm = require("vm");
 const { JSDOM } = require("jsdom");
 
-const RAIZ = "C:\\Users\\User\\Proyectos\\mando-produccion\\src";
+const RAIZ = path.resolve(__dirname, "..", "src");
 const SHEET = "HOJA_DE_PRUEBA";
 
 /* ------------------------------ hoja falsa ------------------------------ */
@@ -24,12 +24,6 @@ const CAB_PANEL = ["FECHA","CLIENTE","OP","PRIORIDAD","CANT","LARGO","PRODUCTO",
   "COMIENZO PROCESO","FIN PROCESO","ESTADO","FECHA DE DESPACHO",
   "LAMINA CARA A","LAMINA CARA B"];
 
-const filaPanel = (f,cli,op,prio,cant,largo,prod,uni,tot,procs,m2,est,fini,ffin,caraA,caraB) =>
-  [f,cli,op,prio,cant,largo,prod,"RANURADO",caraA||"9002",caraB||"9002",uni,tot,
-   procs[0],procs[1],procs[2],m2,0,fini||"",ffin||"",est||"","",
-   // metros lineales de lamina: el largo por la cantidad, que es lo que se corta
-   (cant*largo), (cant*largo)];
-
 /* Fechas relativas a hoy: con fechas fijas la prueba caducaria sola, y un dia
    empezaria a fallar sin que nadie hubiera tocado nada. */
 const hace = d => {
@@ -37,6 +31,22 @@ const hace = d => {
   const p = n => String(n).padStart(2, "0");
   return `${p(f.getDate())}/${p(f.getMonth()+1)}/${f.getFullYear()}`;
 };
+const P2 = n => String(n).padStart(2, "0");
+const isoDe = d => `${d.getFullYear()}-${P2(d.getMonth()+1)}-${P2(d.getDate())}`;
+const HOY_ISO = isoDe(new Date());
+
+/* Hasta la W la forma de siempre. De la X en adelante van las columnas que la
+   aplicacion añade sola: COTIZ y OC se dejan vacias (que las cree ella), y
+   PROG_FECHA se deja en HOY para que Planta —que ahora SOLO enseña lo
+   programado— siga viendo cada fila de la prueba. Con eso el orden de la cola
+   no cambia: todas comparten fecha y ninguna trae ORDEN PROGRAMADO, asi que
+   sigue decidiendo la secuencia de siempre —ver el desempate en `ordenPlanta`. */
+const filaPanel = (f,cli,op,prio,cant,largo,prod,uni,tot,procs,m2,est,fini,ffin,caraA,caraB) =>
+  [f,cli,op,prio,cant,largo,prod,"RANURADO",caraA||"9002",caraB||"9002",uni,tot,
+   procs[0],procs[1],procs[2],m2,0,fini||"",ffin||"",est||"","",
+   // metros lineales de lamina: el largo por la cantidad, que es lo que se corta
+   (cant*largo), (cant*largo),
+   "", "", "", HOY_ISO];
 
 const DATOS = {
   "PANEL": [CAB_PANEL,
@@ -60,6 +70,14 @@ const DATOS = {
     filaPanel(hace(30), "URGENTE VIEJA","14","URGENTE",10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
     filaPanel(hace(6),  "ALTA PARADA",  "15","ALTA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
     filaPanel(hace(20), "BAJA TOCADA",  "16","BAJA",   10,2,'PANEL 3"',7,70,  [false,false,false],23.2,"EN PROCESO"),
+
+    /* Fila 14: sin día en Programación todavía. Planta solo enseña lo
+       programado, así que esta línea tiene que verse en Programación —en «sin
+       programar»— y NO en la cola de Planta. */
+    (()=>{ const g = filaPanel(hace(1), "SIN PROGRAMAR AUN", "17", "ALTA",
+             10, 2, 'PANEL 3"', 7, 70, [false,false,false], 23.2, "EN PROCESO");
+           g[25] = ""; g[26] = "";               // Z, AA: sin puesto ni día
+           return g; })(),
   ],
   "OP PUERTA": [new Array(39).fill("H"),
     (()=>{ const c=new Array(39).fill(""); c[0]="01/08/2026"; c[1]="900"; c[2]="FRIO";
@@ -87,6 +105,9 @@ let ANCHO_PANEL_HOJA = 23;
 /** Lo que la aplicacion escribio, para poder comprobarlo despues. */
 let ESCRITURAS = [];
 let VALIDACIONES = [];
+/** Simula que el servidor no tiene sesion (auth.php responde 401), para
+ *  probar la pantalla de login de verdad en vez del arranque normal. */
+let SIN_SESION = false;
 
 function celdasDe(rango){                 // "'PANEL'!A1:U"  ->  {tab, a1}
   const m = String(rango).match(/^'?([^'!]+)'?!(.+)$/);
@@ -146,6 +167,8 @@ function hacerFetch(){
     const ok = obj => ({ok:true, status:200, json: async()=>obj, text: async()=>JSON.stringify(obj)});
 
     if(u.includes("auth.php")){
+      // Para probar la pantalla de login de verdad, sin sesion en el servidor.
+      if(SIN_SESION) return {ok:false, status:401, json: async()=>({}), text: async()=>""};
       return ok({access_token:"t0k3n", expires_in:3600, email:"yo@interfrigo.com.co"});
     }
     // Añadir al final: es como se escribe el historial.
@@ -255,7 +278,7 @@ function hacerFetch(){
 }
 
 /* ------------------------------ arranque ------------------------------ */
-async function arrancar(pagina, tab){
+async function arrancar(pagina){
   ESCRITURAS = []; VALIDACIONES = [];
   const html = fs.readFileSync(path.join(RAIZ, pagina), "utf8");
   const dom = new JSDOM(html, {
@@ -275,8 +298,10 @@ async function arrancar(pagina, tab){
   try{ delete w.navigator.serviceWorker; }catch(e){}
   w.CONFIG_SERVIDOR = {
     clientId: "prueba.apps.googleusercontent.com",
+    // Fijo, igual que en produccion (config-app.js): la pestaña de paneles no
+    // cambia segun que pagina se este cargando en la prueba.
     modulos: {puertas:{sheetId:"HOJA", tab:"OP PUERTA"},
-              paneles:{sheetId:"HOJA", tab: tab}}
+              paneles:{sheetId:"HOJA", tab:"PANEL"}}
   };
 
   const fallos = [];
@@ -329,7 +354,7 @@ function comprueba(nombre, cond, detalle){
 (async ()=>{
   /* ============ PANELES ============ */
   console.log("\n=== paneles.html — arranque natural ===");
-  const {w, fallos, errConsola, leer} = await arrancar("paneles.html", "PANEL");
+  const {w, fallos, errConsola, leer} = await arrancar("paneles.html");
   const $ = s => w.document.querySelector(s);
   const $$ = s => [...w.document.querySelectorAll(s)];
   ROWS_LAMINA = () => leer("ROWS").filter(x => Number(x.c[21]) > 0).length;
@@ -345,18 +370,20 @@ function comprueba(nombre, cond, detalle){
   comprueba("sin errores en consola", !errConsola.length, errConsola.join("\n        "));
   comprueba("entra a la aplicación sin pedir nada",
     $("#app") && !$("#app").classList.contains("hide"));
+  comprueba("con sesión de sobra, el formulario de login nunca se llega a enseñar",
+    $("#g-form") && $("#g-form").classList.contains("hide"));
   comprueba("la tabla se pinta sola", $$("#tb tr").length > 0,
     "filas pintadas: " + $$("#tb tr").length);
-  comprueba("los KPI se pintan solos", $$("#kpis .kpi").length > 0);
   comprueba("los filtros se pintan solos",
     $$("#f-filtros .filtro").length >= 5,
     $$("#f-filtros .filtro").length + " filtros: " +
       $$("#f-filtros .filtro-btn span").map(e=>e.textContent).join(" · "));
 
   console.log("\n=== las columnas que se escriben son las de PANELES ===");
+  // Y = cotizacion/OC; Z y AA son de Programacion; AB es OP PUERTA (panel-para-puerta).
   const fuera = ESCRITURAS.filter(e => e.tab === "PANEL")
-    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 24; });
-  comprueba("nada se escribe más allá de la columna Y", !fuera.length,
+    .filter(e => { const m = e.a1.match(/^([A-Z]+)/); return m && colNum(m[1]) > 27; });
+  comprueba("nada se escribe más allá de la columna AB", !fuera.length,
     fuera.map(e=>e.a1).join(", "));
   const valPanel = VALIDACIONES.filter(v => v.sheetId === Object.keys(DATOS).indexOf("PANEL"));
   const cols = [...new Set(valPanel.map(v=>v.startColumnIndex))].sort((a,b)=>a-b);
@@ -367,7 +394,11 @@ function comprueba(nombre, cond, detalle){
 
   console.log("\n=== marcar un proceso ===");
   ESCRITURAS = [];
-  const boton = $("#tb .p");
+  // Por OP, no por posicion: Control de OPs ahora se puede ordenar de varias
+  // formas (mas reciente primero por defecto), asi que la fila de prueba ya
+  // no es necesariamente la primera que pinta la tabla.
+  const filaOP = op => $$('#tb tr[data-r]').find(tr => tr.querySelector(".op")?.textContent.trim() === op);
+  const boton = filaOP("1")?.querySelector(".p");
   comprueba("hay botones de proceso", !!boton);
   if(boton){
     boton.dispatchEvent(new w.MouseEvent("click", {bubbles:true}));
@@ -385,7 +416,7 @@ function comprueba(nombre, cond, detalle){
      hecho, no que la linea este lista para almacen. Eso lo decide una persona
      con el boton Terminar. */
   ESCRITURAS = [];
-  const fila = $$('#tb tr[data-r]')[0];
+  const fila = filaOP("1");
   const rMarca = +fila.dataset.r;
   // Solo los que faltan: el paso anterior ya marco uno, y volver a pulsarlo
   // lo desmarcaria en vez de completar la linea.
@@ -785,9 +816,15 @@ function comprueba(nombre, cond, detalle){
     leer("MODELO.listas.PRODUCTOS").length + ": " + leer("MODELO.listas.PRODUCTOS").join(" · "));
   comprueba("acabados: los de la hoja", desdeHoja("CARAS", 8),
     leer("MODELO.listas.CARAS").length + ": " + leer("MODELO.listas.CARAS").join(" · "));
+  // ESTADOS lleva ademas "PARA PUERTA", que la aplicacion ofrece aunque la
+  // hoja todavia no lo traiga en su desplegable (ver ESTADOS_SIN_PARA_PUERTA).
+  const estadosEsperados = [...VALIDACION_HOJA[19], "PARA PUERTA"];
+  const estadosOk = leer("MODELO.listas.ESTADOS").length === estadosEsperados.length &&
+    leer("MODELO.listas.ESTADOS").every((v,i)=>v === estadosEsperados[i]);
   comprueba("ranurado y estado, también",
-    desdeHoja("RANURADOS", 7) && desdeHoja("ESTADOS", 19),
-    "ranurado: " + leer("MODELO.listas.RANURADOS").join(" · "));
+    desdeHoja("RANURADOS", 7) && estadosOk,
+    "ranurado: " + leer("MODELO.listas.RANURADOS").join(" · ") +
+    " | estado: " + leer("MODELO.listas.ESTADOS").join(" · "));
   comprueba("el buscador de producto se rehizo con la lista nueva",
     [...$("#dl-productos").querySelectorAll("option")].map(o=>o.value)
       .includes('PANEL 8"'),
@@ -811,7 +848,7 @@ function comprueba(nombre, cond, detalle){
     "columnas: " + [...new Set(casillas.map(v=>v.startColumnIndex))].join(", "));
 
   console.log("\n=== las demás vistas, entrando por las pestañas ===");
-  for(const vista of ["planta","resumen","almacen"]){
+  for(const vista of ["programa","planta","resumen","almacen"]){
     const antes = errConsola.length;
     const tab = $$(".tab").find(t => t.dataset.view === vista);
     comprueba(`existe la pestaña ${vista}`, !!tab);
@@ -828,6 +865,22 @@ function comprueba(nombre, cond, detalle){
   const cola = $$("#p-lista .pcard").length;
   comprueba("planta ordena la cola", cola > 0, "tarjetas: " + cola);
   comprueba("planta avisa de los cambios de montaje", $$("#p-lista .setup").length > 0);
+  /* Planta solo enseña lo programado: la línea 17 no tiene día puesto —ver la
+     hoja falsa— y por eso no debe estar en la cola, aunque siga ofreciéndose
+     en Programación para que alguien la reparta. */
+  const opsEnPlanta = $$("#p-lista .pcard .op").map(e => e.textContent.trim());
+  comprueba("planta no enseña lo que todavía no tiene día",
+    !opsEnPlanta.includes("17"), "OP en planta: " + opsEnPlanta.join(", "));
+  const opsSinProgramar = $$("#g-tablero .pg-sin .pg-op").map(e => e.textContent.trim());
+  comprueba("y esa línea sigue ofreciéndose en «sin programar»",
+    opsSinProgramar.includes("17"), "sin programar: " + opsSinProgramar.join(", "));
+  /* La ficha de Programación dice cuánto poliuretano y cuánta lámina hace
+     falta para fabricar toda la programación —no solo la semana a la vista—. */
+  const kpiEt = $$("#g-top .pg-kpi i").map(e => e.textContent.trim().toLowerCase());
+  comprueba("la programación dice el poliuretano que hace falta",
+    kpiEt.includes("kg poliuretano"), kpiEt.join(" · "));
+  comprueba("y la lámina que hace falta",
+    kpiEt.includes("m lámina"), kpiEt.join(" · "));
   /* Lo que se mira en la cola: cuantos paneles, de que largo, y el poliuretano
      de uno y de la linea entera. Con eso se prepara la maquina y se pide el
      material, asi que si algun dia desaparece de la tarjeta hay que enterarse. */
@@ -847,9 +900,55 @@ function comprueba(nombre, cond, detalle){
   comprueba("almacén agrupa por pedido", $$("#a-lista .pedido").length > 0,
     "pedidos: " + $$("#a-lista .pedido").length);
 
+  /* ============ PANELES: una línea atrasada rueda sola al día que toca ============
+     Hoja aparte y pequeña: mezclar esto en la hoja de arriba haría que TODAS
+     las líneas de «hoy» perdieran su empate por orden natural —el automatismo
+     les pondría un ORDEN PROGRAMADO explícito por fila— y se rompería el orden
+     por prioridad que comprueban «planta ordena la cola» y los cambios de
+     montaje. Aislada, se puede ver el automatismo sin tocar nada de eso. */
+  console.log("\n=== una línea atrasada rueda sola al día que toca ===");
+  {
+    const ayerIso = isoDe(new Date(Date.now() - 86400000));
+    const filaAtrasada = filaPanel(hace(5), "ATRASADA", "20", "ALTA",
+      10, 2, 'PANEL 3"', 7, 70, [false,false,false], 23.2, "EN PROCESO");
+    filaAtrasada[25] = 1; filaAtrasada[26] = ayerIso;          // Z, AA: ayer, puesto 1
+
+    const filaDeHoy = filaPanel(hace(2), "DE HOY YA", "21", "MEDIA",
+      10, 2, 'PANEL 3"', 7, 70, [false,false,false], 23.2, "EN PROCESO");
+    filaDeHoy[25] = 1;                                         // ya estaba de primeras hoy
+
+    const filaSinDia = filaPanel(hace(1), "SIN DIA", "22", "BAJA",
+      10, 2, 'PANEL 3"', 7, 70, [false,false,false], 23.2, "EN PROCESO");
+    filaSinDia[25] = ""; filaSinDia[26] = "";                  // sin programar
+
+    DATOS.PANEL = [CAB_PANEL, filaAtrasada, filaDeHoy, filaSinDia];
+
+    const pr = await arrancar("paneles.html");
+    comprueba("arranca sin errores", !pr.fallos.length, pr.fallos.join(" | "));
+    /* El automatismo corre solo en cada refresco de datos.js, pero cuando ese
+       refresco cae depende del sondeo —no de esta prueba—. Se llama aquí
+       directo, como se hace en el resto del archivo con `leer()`, para no
+       depender de que el reloj de fondo pase justo dentro de la espera. */
+    await pr.leer("autoReprogramarAtrasadas()");
+
+    const filaDe = op => DATOS.PANEL.find(f => String(f[2] ?? "").trim() === op);
+    const f20 = filaDe("20"), f21 = filaDe("21"), f22 = filaDe("22");
+    comprueba("la atrasada pasa a hoy",
+      f20 && f20[26] === HOY_ISO, f20 ? "AA=" + JSON.stringify(f20[26]) : "no se encontró la OP 20");
+    comprueba("y queda de primeras",
+      f20 && Number(f20[25]) === 1, f20 ? "Z=" + JSON.stringify(f20[25]) : "");
+    comprueba("lo que ya estaba hoy se corre un puesto",
+      f21 && f21[26] === HOY_ISO && Number(f21[25]) === 2,
+      f21 ? `AA=${JSON.stringify(f21[26])} Z=${JSON.stringify(f21[25])}` : "");
+    comprueba("lo que no tenía día sigue sin tenerlo",
+      f22 && !f22[26], f22 ? "AA=" + JSON.stringify(f22[26]) : "");
+    comprueba("queda anotado en el historial",
+      DATOS["LOG PANELES"].some(l => l[2] === "AUTO" && l[5] === "Programación"));
+  }
+
   /* ============ PUERTAS: que no se haya roto nada ============ */
   console.log("\n=== puertas.html — que siga igual ===");
-  const p = await arrancar("puertas.html", "OP PUERTA");
+  const p = await arrancar("puertas.html");
   comprueba("puertas carga sin errores", !p.fallos.length, p.fallos.join("\n        "));
   comprueba("puertas sin errores en consola", !p.errConsola.length,
     p.errConsola.join("\n        "));
@@ -858,11 +957,76 @@ function comprueba(nombre, cond, detalle){
     !p.w.document.getElementById("app").classList.contains("hide"));
   comprueba("puertas pinta su tabla",
     p.w.document.querySelectorAll("#tb tr").length > 0);
+  {
+    const antes = p.errConsola.length;
+    const tab = [...p.w.document.querySelectorAll(".tab")].find(t => t.dataset.view === "programa");
+    comprueba("puertas tiene la pestaña programa", !!tab);
+    if(tab){
+      let reventó = null;
+      try{ tab.dispatchEvent(new p.w.MouseEvent("click", {bubbles:true})); }
+      catch(e){ reventó = e.message; }
+      await new Promise(r => setTimeout(r, 250));
+      comprueba("programa (puertas) se pinta sin reventar",
+        !reventó && p.errConsola.length === antes,
+        reventó || p.errConsola.slice(antes).join(" | "));
+    }
+  }
   const valPuerta = VALIDACIONES.filter(v => v.tipo === "ONE_OF_LIST")
     .map(v=>v.startColumnIndex).filter(v=>v!==undefined);
   comprueba("puertas sigue escribiendo sus desplegables en M, Y y AM",
     [12,24,38].every(c => valPuerta.includes(c)),
     "columnas: " + JSON.stringify([...new Set(valPuerta)].sort((a,b)=>a-b)));
+
+  console.log("\n=== sin sesión, el formulario de login sí se enseña ===");
+  SIN_SESION = true;
+  const sinS = await arrancar("puertas.html");
+  await new Promise(r => setTimeout(r, 50));
+  SIN_SESION = false;
+  comprueba("no entra a la aplicación",
+    sinS.w.document.getElementById("app").classList.contains("hide"));
+  comprueba("el splash se esconde y el formulario de login aparece",
+    sinS.w.document.getElementById("g-splash").classList.contains("hide") &&
+    !sinS.w.document.getElementById("g-form").classList.contains("hide"));
+
+  console.log("\n=== crear una puerta con panel (contrato con Paneles) ===");
+  {
+    const $p  = s => p.w.document.querySelector(s);
+    const $$p = s => [...p.w.document.querySelectorAll(s)];
+    $p("#btn-nueva").dispatchEvent(new p.w.MouseEvent("click", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 60));
+    $p("#n-cli").value = "PUERTA DE PRUEBA";
+    $p("#n-mat").value = "PP 9002";
+    $p("#n-tipo").value = "SE12";
+    const opNueva = $p("#n-op").value;
+    $p("#n-panel").checked = true;
+    $p("#n-panel").dispatchEvent(new p.w.Event("change", {bubbles:true}));
+    await new Promise(r => setTimeout(r, 30));
+    const lineas = $$p("#np-lineas .np-linea");
+    comprueba("marcar «lleva panel» agrega una línea sola", lineas.length === 1,
+      "líneas: " + lineas.length);
+    if(lineas.length){
+      lineas[0].querySelector(".np-cant").value = "3";
+      lineas[0].querySelector(".np-largo").value = "2.2";
+      lineas[0].querySelector(".np-prod").value = 'PANEL 4"';
+    }
+    $p("#form-new").dispatchEvent(new p.w.Event("submit", {bubbles:true, cancelable:true}));
+    await new Promise(r => setTimeout(r, 500));
+
+    const filaPuerta = DATOS["OP PUERTA"].find(f => String(f[1]).trim() === opNueva);
+    comprueba("la puerta se creó", !!filaPuerta, "OP buscada: " + opNueva);
+    const opPanel = filaPuerta ? String(filaPuerta[43] ?? "").trim() : "";
+    comprueba("la puerta queda marcada con el OP de su panel (columna AR)",
+      !!opPanel, filaPuerta ? "AR=" + JSON.stringify(filaPuerta[43]) : "");
+    const filaPanel = opPanel ? DATOS.PANEL.find(f => String(f[2] ?? "").trim() === opPanel) : null;
+    comprueba("se creó la línea del panel en la hoja de Paneles",
+      !!filaPanel, "OP de panel buscada: " + opPanel);
+    comprueba("la línea de panel queda vinculada a la puerta (columna OP PUERTA)",
+      filaPanel && String(filaPanel[27] ?? "").trim() === opNueva,
+      filaPanel ? "AB=" + JSON.stringify(filaPanel[27]) : "");
+    comprueba("la línea de panel nace sin estado (Planta la pone EN PROCESO)",
+      filaPanel && String(filaPanel[19] ?? "").trim() === "",
+      filaPanel ? "estado=" + JSON.stringify(filaPanel[19]) : "");
+  }
 
   console.log(malas ? `\n${malas} comprobación(es) fallan\n` : "\nTodo correcto\n");
   process.exit(malas ? 1 : 0);

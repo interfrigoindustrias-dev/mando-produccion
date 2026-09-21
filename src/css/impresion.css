@@ -252,6 +252,82 @@
 .c-fir .f3{display:flex;gap:1.2mm;flex:1}
 .c-fir .f3 i{flex:1}
 
+/* ---------- Inventario por modelo: la tabla completa en papel ----------
+   Mismo patron que .pg-print (programa.css): tabla propia construida desde
+   los datos, nunca un clon de #m-tabla. Clonar traia su id y con el las
+   reglas de pantalla de dashboards.css —pensadas para tema oscuro y una
+   tabla que se desplaza dentro de su caja—, que desbordaban cada fila a su
+   propia hoja. El `*{color:#000!important}` es a proposito: nada de lo que
+   el tema oscuro le puso a estos nodos debe sobrevivir en papel. */
+/* El margen NO se deja en manos de @page: en una impresora real, con
+   "Márgenes" puesto en el dialogo de Chrome, esa franja alrededor de la hoja
+   salia en negro —no era CSS nuestro, era el driver de la impresora pintando
+   la diferencia entre el tamaño de pagina que pedia @page y su propio
+   margen no imprimible—. Aqui se pide @page con margen 0 y el margen de
+   verdad lo dibuja este mismo div, del tamaño exacto de la hoja y con su
+   propio fondo blanco: asi el papel entero es nuestro, no queda ninguna
+   franja para que el controlador de impresora decida de que color pintarla. */
+.im-print{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-size:8.5pt;
+  box-sizing:border-box}
+.im-print *{color:#000!important;background:transparent!important;box-shadow:none!important;text-shadow:none!important}
+.im-cab{display:flex;align-items:center;gap:5mm;border-bottom:.8mm solid #000;
+  padding-bottom:2mm;margin-bottom:3mm}
+.im-cab .c-logo{background:#000!important;width:32mm;height:8mm;flex:none}
+.im-tit{flex:1;min-width:0}
+.im-tit b{display:block;font-size:13pt;font-weight:900;letter-spacing:-.01em}
+.im-tit span{font-size:8pt;font-weight:600;color:#333!important}
+.im-meta{flex:none;font-size:8pt;font-weight:700}
+/* El tamaño de letra de la tabla se fija en JS (imprimirModelos), no aqui: es
+   lo que se encoge para que TODO quepa en una sola hoja sin importar cuantos
+   modelos haya. `zoom` no sirvio para esto — en un dispositivo real (fuera
+   del Chrome headless de prueba) el dialogo de impresion lo ignoraba y la
+   tabla salia en su tamaño de siempre. Cambiar el font-size de verdad si
+   funciona igual en cualquier motor de impresion: es tipografia basica, no
+   un truco visual. Por eso el padding va en `em` —relativo a ESE tamaño— en
+   vez de en mm fijos: si no, encoger la letra dejaba el padding intacto y la
+   fila apenas bajaba de alto. */
+.im-print table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.5pt;line-height:1.2}
+/* Gris fino, no negro: el borde de cada celda alcanzaba, con border-collapse,
+   a dibujar un marco negro grueso alrededor de toda la hoja —ademas de gastar
+   tinta de mas, una tabla no necesita verse enjaulada para leerse bien. */
+.im-print th,.im-print td{border:.2mm solid #bbb;padding:.43em .53em;text-align:left;
+  vertical-align:top;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.im-print td:not(.n){white-space:normal;overflow-wrap:anywhere}   /* Modelo, Tipo, Ap.: que quiebre en vez de recortar */
+.im-print thead{display:table-header-group}      /* la cabecera se repite en cada hoja */
+.im-print tfoot{display:table-row-group}         /* el total, solo al final */
+/* NO poner aqui `tr{break-inside:avoid}`: combinado con thead repetido y
+   border-collapse:collapse, Chrome manda cada fila a su propia hoja aunque
+   sobre papel de sobra — es un bug conocido del motor de impresion, no una
+   cuestion de medidas. Las filas son una sola linea de texto; no necesitan
+   proteccion contra partirse a la mitad. */
+.im-print th{background:#000!important;color:#fff!important;font-size:.75em;font-weight:700;
+  text-transform:uppercase;letter-spacing:.01em;text-align:right;white-space:normal;
+  line-height:1.15;overflow-wrap:anywhere;word-break:break-word}
+.im-print th:nth-child(-n+5){text-align:left}    /* Modelo..Ap.: texto, no numero */
+/* El ancho total se queda deliberadamente por debajo de lo que cabe hasta en
+   una hoja carta VERTICAL (no solo la horizontal que pide @page): si algun
+   controlador de impresora ignora el tamaño de pagina de la hoja de estilos,
+   la tabla no deberia entrar en el modo "ajustar al ancho" que es el que
+   dispara una fila por hoja. */
+.im-print col.im-c-mod{width:30mm}
+.im-print col.im-c-tipo{width:14mm}
+.im-print col.im-c-med{width:14mm}
+.im-print col.im-c-esp{width:8mm}
+.im-print col.im-c-ap{width:7mm}
+.im-print col.im-c-n{width:13.5mm}
+.im-print td.mnom{font-weight:700;white-space:normal}
+.im-print td.n{text-align:right;font-variant-numeric:tabular-nums}
+.im-print td.n.z{color:#999!important}
+.im-print td.n.disp{font-weight:900}
+.im-print tbody tr:nth-child(even) td{background:#f3f3f3!important}
+.im-print tr.im-otras td{font-style:italic}
+.im-print .im-det{display:block;font-style:normal;font-weight:400;font-size:.8em;
+  color:#444!important;white-space:normal;margin-top:.5mm}
+.im-print tfoot td{border-top:.4mm solid #333!important;font-weight:900;background:#e8e8e8!important}
+@media print{
+  .im-print th,.im-print tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+
 @media print{
   /* Sin esto Chrome omite los fondos: el logo y las franjas negras no se imprimen */
   *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}

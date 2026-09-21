@@ -10,6 +10,29 @@
 const FSEL = ["f-prog","f-desp","f-prio","f-ens","f-mat","f-tipo","f-esp","f-ap","f-med"];
 const medidaDe = c => (num(c[C.ANCHO])!==null && num(c[C.ALTO])!==null)
   ? `${num(c[C.ANCHO])}×${num(c[C.ALTO])}` : "";
+
+/* ------------------------------ orden ------------------------------
+   El numero de OP crece con cada ficha nueva (nextOp() siempre da el
+   siguiente), asi que ordenar por el equivale a ordenar por creacion —sin
+   depender de la fecha, que en la hoja a veces se escribe a mano. El numero
+   de fila es el desempate: mantiene "48-1" antes que "48-2" aunque las dos
+   compartan OP base. */
+const ordenPrio = v => { const i = PRIORIDADES.indexOf(String(v??"").trim().toUpperCase()); return i<0 ? 99 : i; };
+const ORDENES = {
+  reciente:  {etq:"Más reciente primero", cmp:(a,b)=> (opBase(b.c[C.OP])??-1)-(opBase(a.c[C.OP])??-1) || a.r-b.r},
+  antigua:   {etq:"Más antigua primero",  cmp:(a,b)=> (opBase(a.c[C.OP])??-1)-(opBase(b.c[C.OP])??-1) || a.r-b.r},
+  "cli-az":  {etq:"Cliente (A-Z)",        cmp:(a,b)=> String(a.c[C.CLI]??"").localeCompare(String(b.c[C.CLI]??""),"es") || a.r-b.r},
+  "cli-za":  {etq:"Cliente (Z-A)",        cmp:(a,b)=> String(b.c[C.CLI]??"").localeCompare(String(a.c[C.CLI]??""),"es") || a.r-b.r},
+  prio:      {etq:"Prioridad (urgente primero)", cmp:(a,b)=> ordenPrio(a.c[C.PRIO])-ordenPrio(b.c[C.PRIO]) || a.r-b.r},
+  "av-desc": {etq:"Avance (mayor a menor)", cmp:(a,b)=> progreso(b.c).pct-progreso(a.c).pct || a.r-b.r},
+  "av-asc":  {etq:"Avance (menor a mayor)", cmp:(a,b)=> progreso(a.c).pct-progreso(b.c).pct || a.r-b.r},
+};
+function ordenar(filas){
+  const sel = $("#f-orden");
+  const orden = ORDENES[sel?.value] || ORDENES.reciente;
+  return filas.slice().sort(orden.cmp);
+}
+
 function filtered(){
   // Un filtro que no existe en esta pagina no filtra. El de ensamble solo esta
   // en puertas, y darlo por hecho hacia que render() reventara entero en paneles
@@ -17,7 +40,7 @@ function filtered(){
   const g = id => { const e = $("#"+id); return e ? e.value : ""; };
   const q = $("#f-q").value.trim().toLowerCase();
   const eq = (v,f) => !f || String(v??"").trim()===f;
-  return ROWS.filter(({c})=>{
+  const base = ROWS.filter(({c})=>{
     if(!rowActive(c)) return false;
     if(!eq(c[C.MAT],  g("f-mat")))  return false;
     if(!eq(c[C.TIPO], g("f-tipo"))) return false;
@@ -52,6 +75,7 @@ function filtered(){
     }
     return true;
   });
+  return ordenar(base);
 }
 /** Describe los filtros activos, para la tarjeta «Filtradas». */
 function filtrosActivos(){
@@ -137,9 +161,13 @@ async function editCampo(r, idx, col, campo, val){
     await writeCells([{a1:`${col}${r}`, v:[[val]]}]);
     logChanges("EDITA", row.c[C.OP], r, [{campo, antes, despues:val}]);
     setSync("","Guardado"); lastHash="";
-    kpis(filtered());
   }catch(e){ row.c[idx]=antes; render(); toast(e.message,"err"); }
 }
+// Aparte de FSEL: "Limpiar" resetea los filtros, pero el orden no es un
+// filtro, es una preferencia de vista, y no tendria sentido que Limpiar
+// dejara la tabla desordenada.
+{ const o = $("#f-orden"); if(o) o.addEventListener("change", render); }
+
 $("#tb").addEventListener("change", ev=>{
   const p=ev.target.closest("[data-edit-prio]");
   if(p){
@@ -155,7 +183,9 @@ $("#tb").addEventListener("change", ev=>{
     return;
   }
   const e=ev.target.closest("[data-edit-ens]");
-  if(e) editCampo(+e.dataset.editEns, C.ENS, "AA", "N° ensamble", e.value.trim());
+  if(e){ editCampo(+e.dataset.editEns, C.ENS, "AA", "N° ensamble", e.value.trim()); return; }
+  const s=ev.target.closest("[data-edit-stock]");
+  if(s) editCampo(+s.dataset.editStock, C.STOCK, "E", "Stock", s.checked);
 });
 
 function render(){
@@ -174,9 +204,13 @@ function render(){
     return `<tr class="${pc>=100?"done":""}" data-r="${r}">
       <td class="stick"><input type="checkbox" class="cks" data-r="${r}" ${SEL.has(r)?"checked":""}></td>
       <td class="stick" style="left:34px"><span class="op">${esc(c[C.OP]??"")}</span>
+        <button class="op-copy" data-dup="${r}" title="Duplicar esta ficha en una puerta nueva">⧉ Duplicar</button>
+        ${(()=>{ const op = C.PANEL!==undefined ? String(c[C.PANEL]??"").trim() : "";
+          return op ? `<div class="op-panel">🚪 <b>${esc(op)}</b></div>` : ""; })()}
         <div class="sub">${esc(fmtDate(c[C.FECHA]))}</div></td>
       <td><span class="cli" title="${esc(c[C.CLI]??"")}">${esc(c[C.CLI]??"")}</span>
-        ${tri(c[C.COMP])?'<span class="sub">COMPL.</span>':""}${tri(c[C.STOCK])?'<span class="sub"> STOCK</span>':""}</td>
+        ${tri(c[C.COMP])?'<span class="sub">COMPL.</span>':""}</td>
+      <td style="text-align:center"><input type="checkbox" class="stockck" data-edit-stock="${r}" title="Marcar esta puerta como STOCK" ${tri(c[C.STOCK])===true?"checked":""}></td>
       <td>${esc(c[C.TIPO]??"")}</td><td>${esc(c[C.MAT]??"")}</td>
       <td class="num">${med}</td><td class="num">${esc(c[C.ESP]??"")}</td>
       <td>${selAp(r, c[C.AP])}</td><td class="num">${esc(c[C.PTS]??"")}</td>
@@ -191,32 +225,7 @@ function render(){
   }).join("");
   $("#tb-empty").classList.toggle("hide", rows.length>0);
   $("#cnt-rows").textContent = `${rows.length} de ${ROWS.filter(x=>rowActive(x.c)).length} puertas`;
-  kpis(rows);
   syncSel();
-}
-function kpis(rows){
-  const all = ROWS.filter(r=>rowActive(r.c));
-  const abiertas = all.filter(r=>progreso(r.c).pct<1 && !anulada(r.c));
-  const anuladas = all.filter(r=>anulada(r.c)).length;
-  const sinIniciar = abiertas.filter(r=>progreso(r.c).pct===0).length;
-  const alm = all.filter(r=>String(r.c[C.DESP]).trim()==="En Almacén").length;
-  const alta = abiertas.filter(r=>String(r.c[C.PRIO]).toUpperCase()==="ALTA").length;
-  const avg = abiertas.length? Math.round(abiertas.reduce((s,r)=>s+progreso(r.c).pct,0)/abiertas.length*100):0;
-  const act = filtrosActivos();
-  const porPrio = p => abiertas.filter(r=>String(r.c[C.PRIO]??"").trim().toUpperCase()===p).length;
-  const sinPrio = abiertas.filter(r=>!String(r.c[C.PRIO]??"").trim()).length;
-  const k=[["OP totales",all.length,""],["OP abiertas",abiertas.length,""],
-           ["OP sin iniciar",sinIniciar,""],["Avance medio OP abiertas",avg+"%",""],
-           ["OP prioridad ALTA",porPrio("ALTA"),"Puertas abiertas con prioridad ALTA"],
-           ["OP prioridad MEDIA",porPrio("MEDIA"),"Puertas abiertas con prioridad MEDIA"],
-           ["OP prioridad BAJA",porPrio("BAJA"),"Puertas abiertas con prioridad BAJA"],
-           ["OP sin prioridad",sinPrio,"Puertas abiertas sin prioridad asignada"],
-           ["OP en almacén",alm,""],
-           ["OP anuladas",anuladas,"Estado de despacho Anulada: fuera de producción, almacén y stock"],
-           [act.length?"OP filtradas":"OP sin filtrar", rows.length, act.join(" · ")]];
-  $("#kpis").innerHTML = k.map(([s,v,t])=>
-    `<div class="kpi ${t?"hi":""}" title="${esc(t)}"><b>${v}</b><span>${esc(s)}</span>`+
-    (t?`<em class="fdesc">${esc(t)}</em>`:"")+`</div>`).join("");
 }
 
 /* ------------------------------ toggle proceso ------------------------------ */
@@ -238,11 +247,9 @@ function paintRow(r){
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100?"full":""; }
   const pct = tr.querySelector(".pct"); if(pct) pct.textContent = pc+"%";
   tr.classList.toggle("done", pc>=100);
-  kpis(filtered());
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
-  const estabaCompleta = completa(row.c);
   const prev = row.c[i];
   writeSeq++;                                    // invalida lecturas en vuelo
   row.c[i] = next===null ? "" : next;            // optimista
@@ -258,11 +265,14 @@ async function setProc(r, i, next){
     const nom = v => v===true?"hecho" : v===false?"pendiente" : "no aplica";
     logChanges("EDITA", row.c[C.OP], r, [{campo:PROCS.find(p=>p.i===i).k,
       antes:nom(tri(prev)), despues:nom(next)}]);
-    await tocarFechaProceso(r, estabaCompleta);  // fecha de hoy, salvo si ya estaba terminada
-    await marcarInicioProduccion(r);             // AB: se sella la primera vez y ya no cambia
+    // Primer paso marcado: En proceso + comienzo (AB), una sola vez. La fecha de
+    // fin (X) ya no se toca aqui: la sella Terminada.
+    await marcarInicioProduccion(r);
   }catch(e){ row.c[i]=prev; paintRow(r); toast(e.message,"err"); }
 }
 $("#tb").addEventListener("click", ev=>{
+  const dup = ev.target.closest("[data-dup]");
+  if(dup){ duplicarFicha(+dup.dataset.dup); return; }
   const p = ev.target.closest(".p");
   if(p){
     const r=+p.dataset.r, i=+p.dataset.i, cur=tri(ROWS.find(x=>x.r===r).c[i]);

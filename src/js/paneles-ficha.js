@@ -183,7 +183,10 @@ $("#form-new").addEventListener("submit", async ev=>{
       PROCS.forEach(p=>{ c[p.i] = false; });
       c[C.M2] = m2Value(r, c);            // la formula de la hoja, no un numero
       c[C.STATUS] = statusValue(r, c);
-      c[C.DESP] = ESTADO.PROCESO;
+      /* SIN ESTADO. Crear la ficha no es empezar a fabricar: el estado pasa a
+         EN PROCESO cuando el operario marca el primer paso, y ese mismo gesto
+         sella el comienzo de proceso. Ver tocarFechaProceso. */
+      c[C.DESP] = "";
       if(hayColumnas){ c[C.COTIZ] = cotiz; c[C.OC] = oc; }
       /* K, L, V y W son formula de la hoja y NO se escriben. Dejarlas vacias no
          bastaba: escribir "" en una celda no la deja en paz, la borra, y con

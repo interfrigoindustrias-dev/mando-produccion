@@ -9,7 +9,7 @@
 /* Solo las vistas que EXISTEN en esta pagina. Puertas y paneles comparten este
    archivo pero no tienen los mismos tableros: dar por hecho que estan todas
    reventaba la navegacion entera en la pagina que no los tuviera. */
-const VIEWS = ["control","planta","calidad","resumen","almacen","stock"]
+const VIEWS = ["control","programa","planta","calidad","resumen","almacen","stock"]
   .filter(v => document.getElementById("v-"+v));
 
 function goto(v){
@@ -19,7 +19,7 @@ function goto(v){
   /* Cada vista la pinta el modulo de su producto. Se llama solo a la que
      existe: puertas y paneles no comparten tableros, y dar por hecho que
      estan todos rompia la navegacion en la pagina que no los tuviera. */
-  const pintar = {planta:"renderPlanta", calidad:"renderCalidad", resumen:"renderResumen",
+  const pintar = {programa:"renderPrograma", planta:"renderPlanta", calidad:"renderCalidad", resumen:"renderResumen",
                   almacen:"renderAlmacen", stock:"renderStock"}[v];
   if(pintar && typeof window[pintar] === "function") window[pintar]();
   if(v==="stock" && typeof renderModelos === "function") renderModelos();
@@ -132,6 +132,8 @@ async function enterApp(){
   await sincronizarValidacion();        // la hoja ofrece las mismas opciones
   await si("repairSeparadas",    n=>`${n} separada(s) pasadas a su propia columna`);
   await si("repairFechasFalsas", n=>`${n} fecha(s) de proceso restaurada(s)`);
+  // Solo puertas: las ya empezadas sin estado pasan a En proceso (una vez).
+  await si("repairEnProceso",    n=>`${n} puerta(s) empezada(s) pasada(s) a En proceso`);
   // El escalado va ANTES: subir una OP de prioridad cambia su fecha programada,
   // y si se hiciera después quedaría con la fecha de la prioridad vieja.
   await si("autoPrioridades", n=>`${n} OP subieron de prioridad por antigüedad`);
@@ -183,18 +185,19 @@ function explicarQueFalta(){
   // Si Google devolvió un problema, se dice en vez de dejar la pantalla muda.
   const err = new URLSearchParams(location.search).get("auth_error");
   if(err){
+    mostrarFormularioGate();
     $("#g-msg").textContent = err === "access_denied"
       ? "Se canceló el acceso. Vuelve a intentarlo."
       : "No se pudo entrar (" + err + ").";
     history.replaceState(null, "", location.pathname);
   }
 
-  if(!cfgOk()) return;
+  if(!cfgOk()){ mostrarFormularioGate(); return; }
 
-  // ¿Ya hay sesión en el servidor? Entonces se entra sin un solo clic.
-  $("#g-msg").textContent = "Conectando…";
+  // ¿Ya hay sesión en el servidor? Entonces se entra sin un solo clic, y sin
+  // que se vea el formulario de login en ningún momento.
   pedirToken().then(t=>{
     if(t){ enterApp(); }
-    else { $("#g-msg").textContent = ""; $("#g-login").focus(); }
-  }).catch(e=>{ $("#g-msg").textContent = e.message; });
+    else { mostrarFormularioGate(); $("#g-login").focus(); }
+  }).catch(e=>{ mostrarFormularioGate(); $("#g-msg").textContent = e.message; });
 })();

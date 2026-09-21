@@ -23,7 +23,7 @@ const USU_HEAD = ["CORREO", "NOMBRE", "ROL", "ACTIVO", "NOTAS"];
 /* Qué puede hacer cada rol. La primera columna es la más permisiva. */
 const ROLES = {
   admin:   {nombre:"Administrador", puede:["*"]},
-  oficina: {nombre:"Oficina",       puede:["ver","marcar","despachar","crear","editar","calidad"]},
+  oficina: {nombre:"Oficina",       puede:["ver","marcar","despachar","crear","editar","calidad","almacen"]},
   planta:  {nombre:"Planta",        puede:["ver.planta","marcar","despachar"]},
   lectura: {nombre:"Solo lectura",  puede:["ver"]}
 };
@@ -93,6 +93,9 @@ function aplicarRol(){
 
   const ocultar = (sel, cond) => $$(sel).forEach(e => e.classList.toggle("hide", !cond));
   ocultar("#btn-nueva",       puede("crear"));
+  ocultar("#i-nuevo",         puede("almacen"));
+  ocultar("#r-nueva",         puede("almacen"));
+  ocultar("#i-nuevoins",      puede("almacen"));
   ocultar("#btn-usuarios",    puede("usuarios") || puede("*"));
   ocultar("#btn-informes",    puede("crear"));
   ocultar("#btn-print-stk",   puede("ver"));
@@ -118,6 +121,7 @@ function sinAcceso(motivo){
                          .map(u => u.nombre || u.correo);
   $("#gate").classList.remove("hide");
   $("#app").classList.add("hide");
+  mostrarFormularioGate();
   $("#g-msg").innerHTML = motivo === "inactivo"
     ? `Tu acceso está <b>desactivado</b>.`
     : `La cuenta <b>${esc(userMail)}</b> no está en la lista de usuarios.`;
