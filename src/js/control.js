@@ -161,7 +161,6 @@ async function editCampo(r, idx, col, campo, val){
     await writeCells([{a1:`${col}${r}`, v:[[val]]}]);
     logChanges("EDITA", row.c[C.OP], r, [{campo, antes, despues:val}]);
     setSync("","Guardado"); lastHash="";
-    kpis(filtered());
   }catch(e){ row.c[idx]=antes; render(); toast(e.message,"err"); }
 }
 // Aparte de FSEL: "Limpiar" resetea los filtros, pero el orden no es un
@@ -226,32 +225,7 @@ function render(){
   }).join("");
   $("#tb-empty").classList.toggle("hide", rows.length>0);
   $("#cnt-rows").textContent = `${rows.length} de ${ROWS.filter(x=>rowActive(x.c)).length} puertas`;
-  kpis(rows);
   syncSel();
-}
-function kpis(rows){
-  const all = ROWS.filter(r=>rowActive(r.c));
-  const abiertas = all.filter(r=>progreso(r.c).pct<1 && !anulada(r.c));
-  const anuladas = all.filter(r=>anulada(r.c)).length;
-  const sinIniciar = abiertas.filter(r=>progreso(r.c).pct===0).length;
-  const alm = all.filter(r=>String(r.c[C.DESP]).trim()==="En Almacén").length;
-  const alta = abiertas.filter(r=>String(r.c[C.PRIO]).toUpperCase()==="ALTA").length;
-  const avg = abiertas.length? Math.round(abiertas.reduce((s,r)=>s+progreso(r.c).pct,0)/abiertas.length*100):0;
-  const act = filtrosActivos();
-  const porPrio = p => abiertas.filter(r=>String(r.c[C.PRIO]??"").trim().toUpperCase()===p).length;
-  const sinPrio = abiertas.filter(r=>!String(r.c[C.PRIO]??"").trim()).length;
-  const k=[["OP totales",all.length,""],["OP abiertas",abiertas.length,""],
-           ["OP sin iniciar",sinIniciar,""],["Avance medio OP abiertas",avg+"%",""],
-           ["OP prioridad ALTA",porPrio("ALTA"),"Puertas abiertas con prioridad ALTA"],
-           ["OP prioridad MEDIA",porPrio("MEDIA"),"Puertas abiertas con prioridad MEDIA"],
-           ["OP prioridad BAJA",porPrio("BAJA"),"Puertas abiertas con prioridad BAJA"],
-           ["OP sin prioridad",sinPrio,"Puertas abiertas sin prioridad asignada"],
-           ["OP en almacén",alm,""],
-           ["OP anuladas",anuladas,"Estado de despacho Anulada: fuera de producción, almacén y stock"],
-           [act.length?"OP filtradas":"OP sin filtrar", rows.length, act.join(" · ")]];
-  $("#kpis").innerHTML = k.map(([s,v,t])=>
-    `<div class="kpi ${t?"hi":""}" title="${esc(t)}"><b>${v}</b><span>${esc(s)}</span>`+
-    (t?`<em class="fdesc">${esc(t)}</em>`:"")+`</div>`).join("");
 }
 
 /* ------------------------------ toggle proceso ------------------------------ */
@@ -273,7 +247,6 @@ function paintRow(r){
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100?"full":""; }
   const pct = tr.querySelector(".pct"); if(pct) pct.textContent = pc+"%";
   tr.classList.toggle("done", pc>=100);
-  kpis(filtered());
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;

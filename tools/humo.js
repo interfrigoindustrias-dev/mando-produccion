@@ -374,7 +374,6 @@ function comprueba(nombre, cond, detalle){
     $("#g-form") && $("#g-form").classList.contains("hide"));
   comprueba("la tabla se pinta sola", $$("#tb tr").length > 0,
     "filas pintadas: " + $$("#tb tr").length);
-  comprueba("los KPI se pintan solos", $$("#kpis .kpi").length > 0);
   comprueba("los filtros se pintan solos",
     $$("#f-filtros .filtro").length >= 5,
     $$("#f-filtros .filtro").length + " filtros: " +

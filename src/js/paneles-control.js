@@ -181,7 +181,6 @@ async function editCampo(r, idx, campoModelo, nombre, val){
     await writeCells([{a1:`${col(campoModelo)}${r}`, v:[[val]]}]);
     logChanges("EDITA", row.c[C.OP], r, [{campo:nombre, antes, despues:val}]);
     setSync("", "Guardado"); lastHash = "";
-    kpis(filtered());
   }catch(e){ row.c[idx] = antes; render(); toast(e.message, "err"); }
 }
 $("#tb").addEventListener("change", async ev=>{
@@ -236,49 +235,7 @@ function render(){
   $("#tb-empty").classList.toggle("hide", rows.length > 0);
   const total = ROWS.filter(x=>rowActive(x.c)).length;
   $("#cnt-rows").textContent = `${rows.length} de ${total} líneas`;
-  kpis(rows);
   syncSel();
-}
-
-/** Lo que se mide en paneleria son metros y kilos, no unidades sueltas. */
-function kpis(rows){
-  const all = ROWS.filter(r=>rowActive(r.c));
-  const vivas = all.filter(r=>!anuladaP(r.c));
-  /* ABIERTA ES LO QUE NADIE HA DADO POR TERMINADO, igual que en Planta,
-     Programacion y Resumen. Contar por casillas (<100%) dejaba una linea al
-     100% pero sin pulsar Terminar fuera de "abiertas" aunque siguiera siendo
-     cola de planta. */
-  const abiertas = vivas.filter(r=>!hechaEnPlantaP(r.c) && !despachadaP(r.c));
-  const sum = (xs, f) => xs.reduce((s,x)=>s+(f(x.c)||0), 0);
-  const porPrio = p => abiertas.filter(r=>String(r.c[C.PRIO]??"").trim().toUpperCase()===p).length;
-  const avg = abiertas.length
-    ? Math.round(abiertas.reduce((s,r)=>s+progreso(r.c).pct,0)/abiertas.length*100) : 0;
-  const act = filtrosActivos();
-  const ops = new Set(vivas.map(r=>opBase(r.c[C.OP])).filter(v=>v!==null)).size;
-
-  const k = [
-    ["OP distintas", ops, "Números de OP con líneas vivas; una OP puede tener varias líneas"],
-    ["Líneas", vivas.length, "Cada fila de la hoja es una línea de fabricación"],
-    ["Líneas abiertas", abiertas.length, ""],
-    ["m² pendientes", n2(sum(abiertas, MODELO.metros)), "Metros que quedan por fabricar"],
-    ["kg poliuretano pendiente", n2(sum(abiertas, kgDe)),
-     "Lo que hay que tener en existencia para cubrir lo abierto"],
-    ["Avance medio", avg+"%", ""],
-    ["URGENTE", porPrio("URGENTE"), "Puestas urgentes a mano: no escalan ni caducan"],
-    ["ALTA", porPrio("ALTA"), ""],
-    ["MEDIA", porPrio("MEDIA"), "A los 4 días en este nivel suben a ALTA"],
-    ["BAJA", porPrio("BAJA"), "A los 8 días en este nivel suben a MEDIA"],
-    ["Terminadas", vivas.filter(r=>estadoDe(r.c)===ESTADO.TERMINADO).length,
-     "Fabricadas, esperando despacho"],
-    ["Para puerta", vivas.filter(r=>paraPuertaP(r.c)).length,
-     "Paneles terminados para armar una puerta: no van a despacho"],
-    ["Despachadas", vivas.filter(r=>despachadaP(r.c)).length, ""],
-    ["Anuladas", all.length - vivas.length, "Fuera de producción y de almacén"],
-    [act.length ? "Líneas filtradas" : "Sin filtrar", rows.length, act.join(" · ")]
-  ];
-  $("#kpis").innerHTML = k.map(([s,v,t])=>
-    `<div class="kpi ${t?"hi":""}" title="${esc(t)}"><b>${v}</b><span>${esc(s)}</span>` +
-    (t?`<em class="fdesc">${esc(t)}</em>`:"") + `</div>`).join("");
 }
 
 /* ------------------------------ marcar procesos ------------------------------ */
@@ -298,7 +255,6 @@ function paintRow(r){
   if(bar){ bar.style.width = pc+"%"; bar.className = pc>=100 ? "full" : ""; }
   const pct = tr.querySelector(".pct"); if(pct) pct.textContent = pc+"%";
   tr.classList.toggle("done", pc>=100);
-  kpis(filtered());
 }
 async function setProc(r, i, next){
   const row = ROWS.find(x=>x.r===r); if(!row) return;
